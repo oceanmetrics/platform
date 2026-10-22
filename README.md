@@ -15,9 +15,10 @@ rule or a reader is written once.
 
 - **Apps import these packages and never each other.** Shared code goes here; an app that needs something from another
   app asks for it to move into a package.
-- **Publishing.** The packages publish to npm as `@oceanmetrics/*` 0.1 on Day 5 (2026-10-26). Until then the apps link
-  to this checkout as a sibling folder (`"@oceanmetrics/status": "file:../platform/packages/status"`); run
-  `npm run build` here first, because the packages export from `dist/`.
+- **Publishing.** The packages publish to npm as `@oceanmetrics/*` on Day 5 (2026-10-26): places 0.5.1, status 0.1.0,
+  map 0.1.0, catalog 0.2.0 (see Publishing below). Until then the apps link to this checkout as a sibling folder
+  (`"@oceanmetrics/status": "file:../platform/packages/status"`); run `npm run build` here first, because the
+  packages export from `dist/`.
 - **Public from the first commit.** Nothing internal: no Marine Regions copies, no PPOW geometry, no private emails,
   no secrets. Fixtures are synthetic or from public sources.
 
@@ -31,6 +32,44 @@ npm run build            # tsc to packages/*/dist (types and JS)
 npm run size             # gzip budget per package, after build
 npx vitest run packages/status/src/quad.test.ts   # one file
 ```
+
+## Publishing
+
+Each package is public (`publishConfig.access`), ships `dist`, `src`, `README.md`, `CHANGELOG.md` and `LICENSE` (catalog
+also `schemas/`, never `fixtures/`), and runs `npm run build` on `prepack`, so a publish from a clean checkout always
+carries a fresh `dist/`. The npm account has 2FA on writes, so there is no root `publish` script that fires all four
+at once; `scripts/publish.sh` does it one package at a time.
+
+Day 5 steps (2026-10-26), from a clean `main`:
+
+1. `npm ci && npm test && npm run typecheck && npm run build && npm run size` (all green).
+2. `npm pack --dry-run -w packages/<name>` for each package: `dist/` is in the file list, catalog has
+   `schemas/*.schema.json` and no `fixtures/`.
+3. `npm whoami` is the owner of the `oceanmetrics` org; then `scripts/publish.sh <otp>` (or with an automation token
+   in `~/.npmrc` and no argument). It publishes status, places, map, catalog in that order, stops at the first
+   failure, and prints `npm view @oceanmetrics/<name> version` after each. An OTP lasts about 30 seconds: if a later
+   package fails with an OTP error, run `npm publish -w packages/<name> --access public --otp <new>` for the rest.
+4. Tag the release: `git tag status-v0.1.0 places-v0.5.1 map-v0.1.0 catalog-v0.2.0`, and push the tags.
+5. Switch the consumers from `file:` links to the registry (checklist below).
+
+A later release: bump the package's `version`, add its CHANGELOG entry in the same change, run the gates, then
+`npm publish -w packages/<name> --otp <otp>`.
+
+### Consumer switch (after the publish)
+
+Edit each repo in its own change; nothing here edits them.
+
+- [ ] **indicators**: `package.json` `@oceanmetrics/status` `file:../platform/packages/status` to `^0.1.0`, and add
+  `@oceanmetrics/catalog` `^0.2.0`. Drop the platform checkout step from `pages.yml`, `catalog.yml` and `requests.yml`;
+  keep `OM_SCHEMAS_DIR` pointing at `node_modules/@oceanmetrics/catalog/schemas` (now there, because indicators depends
+  on `@oceanmetrics/catalog`). Re-run `npm install` and its tests.
+- [ ] **places**: `web/package.json` `@oceanmetrics/places` to `^0.5.1`; remove the Vite alias and the
+  `server.fs.allow` entry for the platform checkout. Re-run `npm install`, the web build and tests.
+- [ ] **erddap-places**: `precompute/package.json` `@oceanmetrics/catalog` to `^0.2.0`, so its profile tests run on the
+  runner (no sibling checkout).
+- [ ] **atlas**: `package.json` gains `@oceanmetrics/catalog` `^0.2.0` for the pipeline's schema lookup
+  (`node_modules/@oceanmetrics/catalog/schemas`).
+- [ ] Update the `CLAUDE.md` of this repo and of each consumer: the `file:` link text becomes "from npm".
 
 ## Size budget
 

@@ -2,9 +2,28 @@
   "name": "@oceanmetrics/catalog",
   "version": "0.2.0",
   "description": "the Ocean Metrics catalogs: STAC layer profiles (JSON Schemas, types, a validator and the om-catalog CLI); the indicators manifest and values and the places index readers follow",
+  "keywords": [
+    "ocean",
+    "stac",
+    "json-schema",
+    "catalog",
+    "indicators",
+    "gazetteer"
+  ],
+  "homepage": "https://github.com/oceanmetrics/platform/tree/main/packages/catalog#readme",
+  "bugs": {
+    "url": "https://github.com/oceanmetrics/platform/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oceanmetrics/platform.git",
+    "directory": "packages/catalog"
+  },
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
-  "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -21,19 +40,6 @@
   "bin": {
     "om-catalog": "./dist/cli.js"
   },
-  "files": [
-    "dist",
-    "src",
-    "schemas",
-    "README.md",
-    "CHANGELOG.md"
-  ],
-  "sideEffects": false,
-  "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run --root ../.. packages/catalog"
-  },
   "dependencies": {
     "ajv": "^8.17.0",
     "ajv-formats": "^3.0.1"
@@ -42,5 +48,24 @@
     "@types/node": "^24.13.3",
     "typescript": "~5.9.0",
     "vitest": "^5.0.1"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/**/*.test.ts",
+    "schemas",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --root ../.. packages/catalog"
   }
 }

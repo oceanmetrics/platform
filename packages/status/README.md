@@ -27,4 +27,4 @@ Rscript fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-iea/ecoidx
 
 Moved from `oceanmetrics/indicators` `src/status/` at commit 8c40f6b on 2026-10-22, with its fixture folder
 (`fixtures/ecoidx/`). Source imports use `.js` specifiers so the emitted declarations resolve for every consumer.
-Not published to npm yet: it publishes as 0.1 on Day 5 (2026-10-26).
+Published to npm as `@oceanmetrics/status` 0.1.0 (see CHANGELOG.md).

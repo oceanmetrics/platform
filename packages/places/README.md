@@ -5,7 +5,7 @@ published `layers.json`, GeoParquet and PMTiles straight from object storage: no
 
 - Dependencies: `hyparquet` and `hyparquet-compressors` (parquet range reads). `pmtiles` is an optional peer, needed
   only to draw layers on a map. MapLibre GL is not a dependency: functions take your `map`.
-- ESM and TypeScript. Version 0.5.0 (see CHANGELOG.md), MIT, not published to npm yet (it publishes as 0.1 with the other `@oceanmetrics/*` packages on Day 5, 2026-10-26; until then link this folder: `file:../platform/packages/places` after `npm run build`). It lives in `oceanmetrics/platform`; it moved from `oceanmetrics/places` `client/` on 2026-10-22.
+- ESM and TypeScript. Version 0.5.1 (see CHANGELOG.md), MIT, published to npm as `@oceanmetrics/places` (its first npm release; the version continues from the places repo). It lives in `oceanmetrics/platform`; it moved from `oceanmetrics/places` `client/` on 2026-10-22.
 - Every function is available on the default client (`import { search } from '@oceanmetrics/places'`) and on
   `createClient(config)` for more than one base URL.
 
