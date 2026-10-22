@@ -38,7 +38,7 @@
     "./schemas/*": "./schemas/*"
   },
   "bin": {
-    "om-catalog": "./dist/cli.js"
+    "om-catalog": "dist/cli.js"
   },
   "dependencies": {
     "ajv": "^8.17.0",
