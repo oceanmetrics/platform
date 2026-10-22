@@ -1,0 +1,25 @@
+{
+  "name": "spike-map-consumer",
+  "private": true,
+  "type": "module",
+  "description": "build week 2 step 2a: @oceanmetrics/map 0.2.0 driven by a Vite page against real MapLibre 6, as an app will consume it",
+  "scripts": {
+    "data": "node scripts/build-data.mjs",
+    "cogs": "uv run --with rasterio --with numpy python scripts/make_cogs.py",
+    "build": "vite build",
+    "check": "node scripts/run.mjs",
+    "size": "node scripts/bundle.mjs"
+  },
+  "dependencies": {
+    "@oceanmetrics/map": "file:../../packages/map",
+    "maplibre-gl": "6.13.0",
+    "pmtiles": "4.5.0"
+  },
+  "devDependencies": {
+    "hyparquet": "1.31.5",
+    "hyparquet-compressors": "1.1.2",
+    "playwright": "1.64",
+    "typescript": "~5.9.0",
+    "vite": "8.3.5"
+  }
+}

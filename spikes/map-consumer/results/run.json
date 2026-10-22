@@ -1,0 +1,1628 @@
+{
+ "when": "2026-10-22T22:53:18.159Z",
+ "chrome": "156.0.8078.47",
+ "widths": [
+  1280,
+  390
+ ],
+ "points": {
+  "1@1280": {
+   "boot": {
+    "ids": [
+     "background",
+     "park_national_park",
+     "park_nature_reserve",
+     "water",
+     "gebco-far-relief",
+     "gebco-far-shade",
+     "gebco-relief",
+     "gebco-shade",
+     "gebco-contour-3",
+     "gebco-contour-2",
+     "gebco-contour-1",
+     "gebco-contour-0",
+     "gebco-contour-label",
+     "land",
+     "water-inland",
+     "landcover",
+     "landuse_residential",
+     "landuse",
+     "waterway",
+     "boundary_county",
+     "boundary_state",
+     "gebco-names-1",
+     "gebco-names-2",
+     "gebco-names-3",
+     "gebco-names-line",
+     "water_shadow",
+     "aeroway-runway",
+     "aeroway-taxiway",
+     "waterway_label",
+     "tunnel_service_case",
+     "tunnel_minor_case",
+     "tunnel_sec_case",
+     "tunnel_pri_case",
+     "tunnel_trunk_case",
+     "tunnel_mot_case",
+     "tunnel_path",
+     "tunnel_service_fill",
+     "tunnel_minor_fill",
+     "tunnel_sec_fill",
+     "tunnel_pri_fill",
+     "tunnel_trunk_fill",
+     "tunnel_mot_fill",
+     "tunnel_rail",
+     "tunnel_rail_dash",
+     "road_service_case",
+     "road_minor_case",
+     "road_pri_case_ramp",
+     "road_trunk_case_ramp",
+     "road_mot_case_ramp",
+     "road_sec_case_noramp",
+     "road_pri_case_noramp",
+     "road_trunk_case_noramp",
+     "road_mot_case_noramp",
+     "road_path",
+     "road_path_areas",
+     "road_service_fill",
+     "road_minor_fill",
+     "road_pri_fill_ramp",
+     "road_trunk_fill_ramp",
+     "road_mot_fill_ramp",
+     "road_sec_fill_noramp",
+     "road_pri_fill_noramp",
+     "road_trunk_fill_noramp",
+     "road_mot_fill_noramp",
+     "rail",
+     "rail_dash",
+     "bridge_service_case",
+     "bridge_minor_case",
+     "bridge_sec_case",
+     "bridge_pri_case",
+     "bridge_trunk_case",
+     "bridge_mot_case",
+     "bridge_path",
+     "bridge_service_fill",
+     "bridge_minor_fill",
+     "bridge_sec_fill",
+     "bridge_pri_fill",
+     "bridge_trunk_fill",
+     "bridge_mot_fill",
+     "building",
+     "building-top",
+     "boundary_country_outline",
+     "boundary_country_inner",
+     "watername_ocean",
+     "watername_sea",
+     "watername_lake",
+     "watername_lake_pois",
+     "watername_lake_line",
+     "place_hamlet",
+     "place_suburbs",
+     "place_villages",
+     "place_island",
+     "place_island_minor",
+     "place_town",
+     "place_country_2",
+     "place_country_1",
+     "place_state",
+     "place_continent",
+     "place_city_r6",
+     "place_city_r5",
+     "place_city_dot_r7",
+     "place_city_dot_r4",
+     "place_city_dot_r2",
+     "place_city_dot_z7",
+     "place_capital_dot_z7",
+     "poi_stadium",
+     "poi_park",
+     "roadname_minor",
+     "roadname_sec",
+     "roadname_pri",
+     "roadname_major",
+     "housenumber",
+     "p0:fill",
+     "p0:line"
+    ],
+    "mainProtocols": [
+     "pmtiles",
+     "cog"
+    ],
+    "errors": 5,
+    "loadMs": 110.89999997615814,
+    "loadUnnudged": null
+   },
+   "h3": {
+    "source": {
+     "type": "vector",
+     "tiles": [
+      "h3j://http%3A%2F%2Flocalhost%3A5210%2Fdata%2Fes5.pmtiles/{z}/{x}/{y}"
+     ],
+     "minzoom": 0,
+     "maxzoom": 6
+    },
+    "res": {
+     "features": 357,
+     "res": {
+      "4": 357
+     },
+     "tileZoom": 5
+    }
+   },
+   "pmtilesRequests": {
+    "page": 2,
+    "worker": 13
+   },
+   "h3WorkerModule": [
+    {
+     "target": "worker",
+     "worker": "http://localhost:5210/assets/maplibre-gl-worker-DOnTc6YO.mjs",
+     "url": "http://localhost:5210/assets/h3Worker-CWvSI4Hj.mjs"
+    }
+   ],
+   "workers": [
+    "http://localhost:5210/assets/maplibre-gl-worker-DOnTc6YO.mjs"
+   ],
+   "pageErrors": []
+  },
+  "stall": [
+   {
+    "loadMs": 6290,
+    "unnudged": false
+   },
+   {
+    "loadMs": 6296,
+    "unnudged": false
+   },
+   {
+    "loadMs": 6291,
+    "unnudged": false
+   },
+   {
+    "loadMs": 6279,
+    "unnudged": false
+   }
+  ],
+  "2@1280": {
+   "ids": [
+    "background",
+    "park_national_park",
+    "park_nature_reserve",
+    "water",
+    "gebco-far-relief",
+    "gebco-far-shade",
+    "gebco-relief",
+    "gebco-shade",
+    "gebco-contour-3",
+    "gebco-contour-2",
+    "gebco-contour-1",
+    "gebco-contour-0",
+    "gebco-contour-label",
+    "land",
+    "water-inland",
+    "landcover",
+    "landuse_residential",
+    "landuse",
+    "waterway",
+    "boundary_county",
+    "boundary_state",
+    "gebco-names-1",
+    "gebco-names-2",
+    "gebco-names-3",
+    "gebco-names-line",
+    "water_shadow",
+    "aeroway-runway",
+    "aeroway-taxiway",
+    "waterway_label",
+    "tunnel_service_case",
+    "tunnel_minor_case",
+    "tunnel_sec_case",
+    "tunnel_pri_case",
+    "tunnel_trunk_case",
+    "tunnel_mot_case",
+    "tunnel_path",
+    "tunnel_service_fill",
+    "tunnel_minor_fill",
+    "tunnel_sec_fill",
+    "tunnel_pri_fill",
+    "tunnel_trunk_fill",
+    "tunnel_mot_fill",
+    "tunnel_rail",
+    "tunnel_rail_dash",
+    "road_service_case",
+    "road_minor_case",
+    "road_pri_case_ramp",
+    "road_trunk_case_ramp",
+    "road_mot_case_ramp",
+    "road_sec_case_noramp",
+    "road_pri_case_noramp",
+    "road_trunk_case_noramp",
+    "road_mot_case_noramp",
+    "road_path",
+    "road_path_areas",
+    "road_service_fill",
+    "road_minor_fill",
+    "road_pri_fill_ramp",
+    "road_trunk_fill_ramp",
+    "road_mot_fill_ramp",
+    "road_sec_fill_noramp",
+    "road_pri_fill_noramp",
+    "road_trunk_fill_noramp",
+    "road_mot_fill_noramp",
+    "rail",
+    "rail_dash",
+    "bridge_service_case",
+    "bridge_minor_case",
+    "bridge_sec_case",
+    "bridge_pri_case",
+    "bridge_trunk_case",
+    "bridge_mot_case",
+    "bridge_path",
+    "bridge_service_fill",
+    "bridge_minor_fill",
+    "bridge_sec_fill",
+    "bridge_pri_fill",
+    "bridge_trunk_fill",
+    "bridge_mot_fill",
+    "building",
+    "building-top",
+    "boundary_country_outline",
+    "boundary_country_inner",
+    "watername_ocean",
+    "watername_sea",
+    "watername_lake",
+    "watername_lake_pois",
+    "watername_lake_line",
+    "place_hamlet",
+    "place_suburbs",
+    "place_villages",
+    "place_island",
+    "place_island_minor",
+    "place_town",
+    "place_country_2",
+    "place_country_1",
+    "place_state",
+    "place_continent",
+    "place_city_r6",
+    "place_city_r5",
+    "place_city_dot_r7",
+    "place_city_dot_r4",
+    "place_city_dot_r2",
+    "place_city_dot_z7",
+    "place_capital_dot_z7",
+    "poi_stadium",
+    "poi_park",
+    "roadname_minor",
+    "roadname_sec",
+    "roadname_pri",
+    "roadname_major",
+    "housenumber"
+   ],
+   "stack": true,
+   "waterColor": "#d4dadc",
+   "sea": [
+    212,
+    218,
+    220,
+    255
+   ],
+   "drawn": 7,
+   "tierErrors": 5
+  },
+  "2flip@1280": {
+   "grid": "land",
+   "flip": {
+    "before": [
+     "slot:grid:fill"
+    ],
+    "after": [
+     "slot:grid:fill"
+    ]
+   },
+   "diffOnly": [],
+   "pageErrors": []
+  },
+  "3@1280": {
+   "beforeId": "land",
+   "ok": 921,
+   "n": 925,
+   "holes": 19,
+   "holeOk": 19,
+   "bad": [
+    "-88.5,18.5#0 212,206,213≠49,104,141",
+    "-81.5,19.5#0 139,192,166≠56,183,119",
+    "-81.5,23.5#2 182,219,142≠144,214,67",
+    "-81.5,25.5#4 119,154,178≠49,104,141"
+   ],
+   "flash": {
+    "frames": 91,
+    "mixed": 0,
+    "switchAt": 4,
+    "last": "22222222"
+   },
+   "seam": {
+    "sok": 18,
+    "of": 18,
+    "rows": 292,
+    "covered": 278,
+    "straddle": 0,
+    "gap": 0
+   }
+  },
+  "4@1280": {
+   "am": {
+    "legend": {
+     "title": "am_native (AquaMaps native range, 3857 copy)",
+     "t": null,
+     "via": "COG, EPSG:3857 copy",
+     "problem": null,
+     "units": "probability %",
+     "ramp": {
+      "min": 1,
+      "max": 100,
+      "colors": [
+       "#440154",
+       "#433a81",
+       "#31688d",
+       "#21908c",
+       "#38b777",
+       "#90d643",
+       "#fde725"
+      ]
+     },
+     "classes": null,
+     "histogram": null,
+     "stats": {
+      "minimum": 1,
+      "maximum": 100,
+      "mean": 81.235,
+      "stddev": 27.069,
+      "valid_percent": 61.49
+     }
+    },
+    "beforeId": "land"
+   },
+   "two": {
+    "beforeId": "land"
+   },
+   "px": [
+    [
+     253,
+     231,
+     37
+    ],
+    [
+     250,
+     250,
+     248
+    ],
+    [
+     253,
+     231,
+     37
+    ],
+    [
+     253,
+     231,
+     37
+    ],
+    [
+     250,
+     250,
+     248
+    ],
+    [
+     186,
+     223,
+     39
+    ],
+    [
+     212,
+     218,
+     220
+    ],
+    [
+     250,
+     250,
+     248
+    ]
+   ],
+   "px2": [
+    [
+     50,
+     103,
+     141
+    ],
+    [
+     54,
+     182,
+     121
+    ],
+    [
+     68,
+     1,
+     84
+    ],
+    [
+     50,
+     103,
+     141
+    ],
+    [
+     54,
+     182,
+     121
+    ],
+    [
+     253,
+     231,
+     37
+    ],
+    [
+     212,
+     218,
+     220
+    ],
+    [
+     250,
+     250,
+     248
+    ]
+   ],
+   "base": [
+    [
+     212,
+     218,
+     220
+    ],
+    [
+     250,
+     250,
+     248
+    ],
+    [
+     212,
+     218,
+     220
+    ],
+    [
+     212,
+     218,
+     220
+    ],
+    [
+     250,
+     250,
+     248
+    ],
+    [
+     212,
+     218,
+     220
+    ],
+    [
+     212,
+     218,
+     220
+    ],
+    [
+     250,
+     250,
+     248
+    ]
+   ],
+   "visible": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+   ],
+   "refused": {
+    "error": "CogProjectionError",
+    "message": "cog asset \"am4326\" is EPSG:4326, not EPSG:3857: the cog protocol would draw it in the wrong place; draw its EPSG:3857 copy"
+   },
+   "lazy": [
+    {
+     "url": "http://localhost:5210/assets/esm-h_GWLP_A.js",
+     "t": 707
+    }
+   ],
+   "tMount": 705,
+   "pageErrors": []
+  },
+  "5@1280": {
+   "res": {
+    "archive": {
+     "z1": {
+      "features": 862,
+      "res": {
+       "1": 862
+      },
+      "tileZoom": 1
+     },
+     "z7": {
+      "features": 212,
+      "res": {
+       "5": 212
+      },
+      "tileZoom": 7
+     }
+    },
+    "memory": {
+     "z1": {
+      "features": 125,
+      "res": {
+       "1": 125
+      },
+      "tileZoom": 1
+     },
+     "z7": {
+      "features": 212,
+      "res": {
+       "5": 212
+      },
+      "tileZoom": 7
+     }
+    }
+   },
+   "seam": {
+    "archive/fiji": {
+     "rows": 381,
+     "covered": 114,
+     "straddle": 74,
+     "gap": 0,
+     "feats": 357,
+     "problem": null
+    },
+    "archive/pmnm": {
+     "rows": 393,
+     "covered": 45,
+     "straddle": 33,
+     "gap": 0,
+     "feats": 112,
+     "problem": null
+    },
+    "memory/fiji": {
+     "rows": 381,
+     "covered": 114,
+     "straddle": 74,
+     "gap": 0,
+     "feats": 357,
+     "problem": null
+    },
+    "memory/pmnm": {
+     "rows": 393,
+     "covered": 45,
+     "straddle": 33,
+     "gap": 0,
+     "feats": 112,
+     "problem": null
+    },
+    "relative/fiji": {
+     "rows": 381,
+     "covered": 114,
+     "straddle": 74,
+     "gap": 0,
+     "feats": 357,
+     "problem": null
+    }
+   },
+   "frames": {
+    "archive": {
+     "interval": 16.700000000000045,
+     "frames": 302,
+     "meanMs": 16.665894039735136,
+     "p95Ms": 16.799999999999272,
+     "maxMs": 16.800000000000182
+    },
+    "memory": {
+     "interval": 16.699999999999818,
+     "frames": 302,
+     "meanMs": 16.6658940397351,
+     "p95Ms": 16.799999999999272,
+     "maxMs": 16.80000000000109
+    }
+   },
+   "timeouts": [],
+   "pageErrors": []
+  },
+  "1@390": {
+   "boot": {
+    "ids": [
+     "background",
+     "park_national_park",
+     "park_nature_reserve",
+     "water",
+     "gebco-far-relief",
+     "gebco-far-shade",
+     "gebco-relief",
+     "gebco-shade",
+     "gebco-contour-3",
+     "gebco-contour-2",
+     "gebco-contour-1",
+     "gebco-contour-0",
+     "gebco-contour-label",
+     "land",
+     "water-inland",
+     "landcover",
+     "landuse_residential",
+     "landuse",
+     "waterway",
+     "boundary_county",
+     "boundary_state",
+     "gebco-names-1",
+     "gebco-names-2",
+     "gebco-names-3",
+     "gebco-names-line",
+     "water_shadow",
+     "aeroway-runway",
+     "aeroway-taxiway",
+     "waterway_label",
+     "tunnel_service_case",
+     "tunnel_minor_case",
+     "tunnel_sec_case",
+     "tunnel_pri_case",
+     "tunnel_trunk_case",
+     "tunnel_mot_case",
+     "tunnel_path",
+     "tunnel_service_fill",
+     "tunnel_minor_fill",
+     "tunnel_sec_fill",
+     "tunnel_pri_fill",
+     "tunnel_trunk_fill",
+     "tunnel_mot_fill",
+     "tunnel_rail",
+     "tunnel_rail_dash",
+     "road_service_case",
+     "road_minor_case",
+     "road_pri_case_ramp",
+     "road_trunk_case_ramp",
+     "road_mot_case_ramp",
+     "road_sec_case_noramp",
+     "road_pri_case_noramp",
+     "road_trunk_case_noramp",
+     "road_mot_case_noramp",
+     "road_path",
+     "road_path_areas",
+     "road_service_fill",
+     "road_minor_fill",
+     "road_pri_fill_ramp",
+     "road_trunk_fill_ramp",
+     "road_mot_fill_ramp",
+     "road_sec_fill_noramp",
+     "road_pri_fill_noramp",
+     "road_trunk_fill_noramp",
+     "road_mot_fill_noramp",
+     "rail",
+     "rail_dash",
+     "bridge_service_case",
+     "bridge_minor_case",
+     "bridge_sec_case",
+     "bridge_pri_case",
+     "bridge_trunk_case",
+     "bridge_mot_case",
+     "bridge_path",
+     "bridge_service_fill",
+     "bridge_minor_fill",
+     "bridge_sec_fill",
+     "bridge_pri_fill",
+     "bridge_trunk_fill",
+     "bridge_mot_fill",
+     "building",
+     "building-top",
+     "boundary_country_outline",
+     "boundary_country_inner",
+     "watername_ocean",
+     "watername_sea",
+     "watername_lake",
+     "watername_lake_pois",
+     "watername_lake_line",
+     "place_hamlet",
+     "place_suburbs",
+     "place_villages",
+     "place_island",
+     "place_island_minor",
+     "place_town",
+     "place_country_2",
+     "place_country_1",
+     "place_state",
+     "place_continent",
+     "place_city_r6",
+     "place_city_r5",
+     "place_city_dot_r7",
+     "place_city_dot_r4",
+     "place_city_dot_r2",
+     "place_city_dot_z7",
+     "place_capital_dot_z7",
+     "poi_stadium",
+     "poi_park",
+     "roadname_minor",
+     "roadname_sec",
+     "roadname_pri",
+     "roadname_major",
+     "housenumber",
+     "p0:fill",
+     "p0:line"
+    ],
+    "mainProtocols": [
+     "pmtiles",
+     "cog"
+    ],
+    "errors": 5,
+    "loadMs": 113.79999995231628,
+    "loadUnnudged": null
+   },
+   "h3": {
+    "source": {
+     "type": "vector",
+     "tiles": [
+      "h3j://http%3A%2F%2Flocalhost%3A5210%2Fdata%2Fes5.pmtiles/{z}/{x}/{y}"
+     ],
+     "minzoom": 0,
+     "maxzoom": 6
+    },
+    "res": {
+     "features": 168,
+     "res": {
+      "3": 168
+     },
+     "tileZoom": 4
+    }
+   },
+   "pmtilesRequests": {
+    "page": 2,
+    "worker": 7
+   },
+   "h3WorkerModule": [
+    {
+     "target": "worker",
+     "worker": "http://localhost:5210/assets/maplibre-gl-worker-DOnTc6YO.mjs",
+     "url": "http://localhost:5210/assets/h3Worker-CWvSI4Hj.mjs"
+    }
+   ],
+   "workers": [
+    "http://localhost:5210/assets/maplibre-gl-worker-DOnTc6YO.mjs"
+   ],
+   "pageErrors": []
+  },
+  "2@390": {
+   "ids": [
+    "background",
+    "park_national_park",
+    "park_nature_reserve",
+    "water",
+    "gebco-far-relief",
+    "gebco-far-shade",
+    "gebco-relief",
+    "gebco-shade",
+    "gebco-contour-3",
+    "gebco-contour-2",
+    "gebco-contour-1",
+    "gebco-contour-0",
+    "gebco-contour-label",
+    "land",
+    "water-inland",
+    "landcover",
+    "landuse_residential",
+    "landuse",
+    "waterway",
+    "boundary_county",
+    "boundary_state",
+    "gebco-names-1",
+    "gebco-names-2",
+    "gebco-names-3",
+    "gebco-names-line",
+    "water_shadow",
+    "aeroway-runway",
+    "aeroway-taxiway",
+    "waterway_label",
+    "tunnel_service_case",
+    "tunnel_minor_case",
+    "tunnel_sec_case",
+    "tunnel_pri_case",
+    "tunnel_trunk_case",
+    "tunnel_mot_case",
+    "tunnel_path",
+    "tunnel_service_fill",
+    "tunnel_minor_fill",
+    "tunnel_sec_fill",
+    "tunnel_pri_fill",
+    "tunnel_trunk_fill",
+    "tunnel_mot_fill",
+    "tunnel_rail",
+    "tunnel_rail_dash",
+    "road_service_case",
+    "road_minor_case",
+    "road_pri_case_ramp",
+    "road_trunk_case_ramp",
+    "road_mot_case_ramp",
+    "road_sec_case_noramp",
+    "road_pri_case_noramp",
+    "road_trunk_case_noramp",
+    "road_mot_case_noramp",
+    "road_path",
+    "road_path_areas",
+    "road_service_fill",
+    "road_minor_fill",
+    "road_pri_fill_ramp",
+    "road_trunk_fill_ramp",
+    "road_mot_fill_ramp",
+    "road_sec_fill_noramp",
+    "road_pri_fill_noramp",
+    "road_trunk_fill_noramp",
+    "road_mot_fill_noramp",
+    "rail",
+    "rail_dash",
+    "bridge_service_case",
+    "bridge_minor_case",
+    "bridge_sec_case",
+    "bridge_pri_case",
+    "bridge_trunk_case",
+    "bridge_mot_case",
+    "bridge_path",
+    "bridge_service_fill",
+    "bridge_minor_fill",
+    "bridge_sec_fill",
+    "bridge_pri_fill",
+    "bridge_trunk_fill",
+    "bridge_mot_fill",
+    "building",
+    "building-top",
+    "boundary_country_outline",
+    "boundary_country_inner",
+    "watername_ocean",
+    "watername_sea",
+    "watername_lake",
+    "watername_lake_pois",
+    "watername_lake_line",
+    "place_hamlet",
+    "place_suburbs",
+    "place_villages",
+    "place_island",
+    "place_island_minor",
+    "place_town",
+    "place_country_2",
+    "place_country_1",
+    "place_state",
+    "place_continent",
+    "place_city_r6",
+    "place_city_r5",
+    "place_city_dot_r7",
+    "place_city_dot_r4",
+    "place_city_dot_r2",
+    "place_city_dot_z7",
+    "place_capital_dot_z7",
+    "poi_stadium",
+    "poi_park",
+    "roadname_minor",
+    "roadname_sec",
+    "roadname_pri",
+    "roadname_major",
+    "housenumber"
+   ],
+   "stack": true,
+   "waterColor": "#d4dadc",
+   "sea": [
+    212,
+    218,
+    220,
+    255
+   ],
+   "drawn": 8,
+   "tierErrors": 5
+  },
+  "2flip@390": {
+   "grid": "land",
+   "flip": {
+    "before": [
+     "slot:grid:fill"
+    ],
+    "after": [
+     "slot:grid:fill"
+    ]
+   },
+   "diffOnly": [],
+   "pageErrors": []
+  },
+  "3@390": {
+   "beforeId": "land",
+   "ok": 919,
+   "n": 925,
+   "holes": 19,
+   "holeOk": 19,
+   "bad": [
+    "-88.5,18.5#0 153,172,189≠49,104,141",
+    "-87.5,18.5#1 160,196,195≠33,144,140",
+    "-81.5,22.5#3 42,149,145≠33,144,140",
+    "-81.5,22.5#4 124,182,180≠33,144,140",
+    "-81.5,23.5#1 176,207,146≠144,214,67",
+    "-81.5,23.5#2 182,220,141≠144,214,67"
+   ],
+   "flash": {
+    "frames": 91,
+    "mixed": 0,
+    "switchAt": 4,
+    "last": "22222222"
+   },
+   "seam": {
+    "sok": 18,
+    "of": 18,
+    "rows": 146,
+    "covered": 139,
+    "straddle": 0,
+    "gap": 0
+   }
+  },
+  "4@390": {
+   "am": {
+    "legend": {
+     "title": "am_native (AquaMaps native range, 3857 copy)",
+     "t": null,
+     "via": "COG, EPSG:3857 copy",
+     "problem": null,
+     "units": "probability %",
+     "ramp": {
+      "min": 1,
+      "max": 100,
+      "colors": [
+       "#440154",
+       "#433a81",
+       "#31688d",
+       "#21908c",
+       "#38b777",
+       "#90d643",
+       "#fde725"
+      ]
+     },
+     "classes": null,
+     "histogram": null,
+     "stats": {
+      "minimum": 1,
+      "maximum": 100,
+      "mean": 81.235,
+      "stddev": 27.069,
+      "valid_percent": 61.49
+     }
+    },
+    "beforeId": "land"
+   },
+   "two": {
+    "beforeId": "land"
+   },
+   "px": [
+    [
+     253,
+     231,
+     37
+    ],
+    [
+     250,
+     250,
+     248
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     253,
+     231,
+     37
+    ],
+    [
+     250,
+     250,
+     246
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     250,
+     250,
+     248
+    ]
+   ],
+   "px2": [
+    [
+     50,
+     103,
+     141
+    ],
+    [
+     54,
+     182,
+     121
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     50,
+     103,
+     141
+    ],
+    [
+     54,
+     182,
+     121
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     250,
+     250,
+     248
+    ]
+   ],
+   "base": [
+    [
+     212,
+     218,
+     220
+    ],
+    [
+     250,
+     250,
+     248
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     212,
+     218,
+     220
+    ],
+    [
+     250,
+     250,
+     248
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     0,
+     0,
+     0
+    ],
+    [
+     250,
+     250,
+     248
+    ]
+   ],
+   "visible": [
+    true,
+    true,
+    false,
+    true,
+    true,
+    false,
+    false,
+    true
+   ],
+   "refused": {
+    "error": "CogProjectionError",
+    "message": "cog asset \"am4326\" is EPSG:4326, not EPSG:3857: the cog protocol would draw it in the wrong place; draw its EPSG:3857 copy"
+   },
+   "lazy": [
+    {
+     "url": "http://localhost:5210/assets/esm-h_GWLP_A.js",
+     "t": 676
+    }
+   ],
+   "tMount": 674,
+   "pageErrors": []
+  },
+  "5@390": {
+   "res": {
+    "archive": {
+     "z1": {
+      "features": 355,
+      "res": {
+       "1": 355
+      },
+      "tileZoom": 1
+     },
+     "z7": {
+      "features": 115,
+      "res": {
+       "5": 115
+      },
+      "tileZoom": 7
+     }
+    },
+    "memory": {
+     "z1": {
+      "features": 125,
+      "res": {
+       "1": 125
+      },
+      "tileZoom": 1
+     },
+     "z7": {
+      "features": 115,
+      "res": {
+       "5": 115
+      },
+      "tileZoom": 7
+     }
+    }
+   },
+   "seam": {
+    "archive/fiji": {
+     "rows": 191,
+     "covered": 102,
+     "straddle": 91,
+     "gap": 0,
+     "feats": 168,
+     "problem": null
+    },
+    "archive/pmnm": {
+     "rows": 196,
+     "covered": 93,
+     "straddle": 90,
+     "gap": 0,
+     "feats": 71,
+     "problem": null
+    },
+    "memory/fiji": {
+     "rows": 191,
+     "covered": 102,
+     "straddle": 91,
+     "gap": 0,
+     "feats": 168,
+     "problem": null
+    },
+    "memory/pmnm": {
+     "rows": 196,
+     "covered": 93,
+     "straddle": 90,
+     "gap": 0,
+     "feats": 67,
+     "problem": null
+    },
+    "relative/fiji": {
+     "rows": 191,
+     "covered": 102,
+     "straddle": 91,
+     "gap": 0,
+     "feats": 168,
+     "problem": null
+    }
+   },
+   "frames": {
+    "archive": {
+     "interval": 16.699999999999818,
+     "frames": 302,
+     "meanMs": 16.666225165562928,
+     "p95Ms": 16.700000000000728,
+     "maxMs": 16.800000000000182
+    },
+    "memory": {
+     "interval": 16.699999999999818,
+     "frames": 302,
+     "meanMs": 16.6658940397351,
+     "p95Ms": 16.700000000000728,
+     "maxMs": 16.80000000000109
+    }
+   },
+   "timeouts": [],
+   "pageErrors": []
+  }
+ },
+ "rows": [
+  {
+   "point": "1",
+   "width": 1280,
+   "check": "vector part renders after setupMapLibre (GeoJSON parsed in the worker)",
+   "pass": true,
+   "number": "pixel 230,0,126 vs 230,0,126; CARTO water features drawn 7",
+   "shot": "shots/p1-setup-part-1280.jpg"
+  },
+  {
+   "point": "1",
+   "width": 1280,
+   "check": "h3 tiles from the worker: no h3j protocol on the main thread, archive reads in the worker",
+   "pass": true,
+   "number": "main-thread protocols [pmtiles,cog]; 357 hexagons drawn; es5.pmtiles requests page 2 / worker 13; h3Worker module requested by worker",
+   "shot": "shots/p1-h3-worker-fiji-1280.jpg"
+  },
+  {
+   "point": "1",
+   "width": 390,
+   "check": "vector part renders after setupMapLibre (GeoJSON parsed in the worker)",
+   "pass": true,
+   "number": "pixel 230,0,126 vs 230,0,126; CARTO water features drawn 8",
+   "shot": "shots/p1-setup-part-390.jpg"
+  },
+  {
+   "point": "1",
+   "width": 390,
+   "check": "h3 tiles from the worker: no h3j protocol on the main thread, archive reads in the worker",
+   "pass": true,
+   "number": "main-thread protocols [pmtiles,cog]; 168 hexagons drawn; es5.pmtiles requests page 2 / worker 7; h3Worker module requested by worker",
+   "shot": "shots/p1-h3-worker-fiji-390.jpg"
+  },
+  {
+   "point": "2",
+   "width": 1280,
+   "check": "`load` with the composed style at construction and every tier failing (MapLibre schedules no frame on a failed source)",
+   "pass": true,
+   "number": "load without a repaint nudge in 0 of 4 boots (6290, 6296, 6291, 6279 ms); the README flow (boot dem: false, setStyle on load) never stalled",
+   "shot": null
+  },
+  {
+   "point": "2",
+   "width": 1280,
+   "check": "positron composed, tiers 404: base and land layers draw, stack order",
+   "pass": true,
+   "number": "112 layers; background < water < gebco-far-relief < gebco-relief < gebco-contour-3 < land < water-inland < landcover < first symbol: true; CARTO features drawn 7; sea pixel 212,218,220 (water #d4dadc); 5 tier errors",
+   "shot": "shots/p2-positron-tiers-404-1280.jpg"
+  },
+  {
+   "point": "2",
+   "width": 1280,
+   "check": "theme flip setStyle(composeStyle(dark), { diff: true, transformStyle: carrySlots }) keeps the slot; the slot under the land mask shows over the open sea (water-inland fix)",
+   "pass": true,
+   "number": "slot ids before [slot:grid:fill] after [slot:grid:fill], under land; cell pixel light 253,231,37 dark 253,231,37 (expected 253,231,37); basemap ids the same set across themes: true (order differs: true)",
+   "shot": "shots/p2-flip-dark-carrySlots-1280.jpg"
+  },
+  {
+   "point": "2",
+   "width": 1280,
+   "check": "regression evidence: the 0.2.0 README flip (diff alone) drops the slot",
+   "pass": true,
+   "number": "diff alone: slot ids before [slot:grid:fill] after [] (MapLibre's diff removes every layer the next style does not name)",
+   "shot": "shots/p2-flip-light-diff-only-1280.jpg"
+  },
+  {
+   "point": "2",
+   "width": 390,
+   "check": "positron composed, tiers 404: base and land layers draw, stack order",
+   "pass": true,
+   "number": "112 layers; background < water < gebco-far-relief < gebco-relief < gebco-contour-3 < land < water-inland < landcover < first symbol: true; CARTO features drawn 8; sea pixel 212,218,220 (water #d4dadc); 5 tier errors",
+   "shot": "shots/p2-positron-tiers-404-390.jpg"
+  },
+  {
+   "point": "2",
+   "width": 390,
+   "check": "theme flip setStyle(composeStyle(dark), { diff: true, transformStyle: carrySlots }) keeps the slot; the slot under the land mask shows over the open sea (water-inland fix)",
+   "pass": true,
+   "number": "slot ids before [slot:grid:fill] after [slot:grid:fill], under land; cell pixel light 253,231,37 dark 253,231,37 (expected 253,231,37); basemap ids the same set across themes: true (order differs: true)",
+   "shot": "shots/p2-flip-dark-carrySlots-390.jpg"
+  },
+  {
+   "point": "2",
+   "width": 390,
+   "check": "regression evidence: the 0.2.0 README flip (diff alone) drops the slot",
+   "pass": true,
+   "number": "diff alone: slot ids before [slot:grid:fill] after [] (MapLibre's diff removes every layer the next style does not name)",
+   "shot": "shots/p2-flip-light-diff-only-390.jpg"
+  },
+  {
+   "point": "3",
+   "width": 1280,
+   "check": "squares on the lattice: cell centre and ±0.35° inside each cell = the ramp stop of its value",
+   "pass": true,
+   "number": "921/925 points (99.6%) on 185 cells; misses: -88.5,18.5#0 212,206,213≠49,104,141; -81.5,19.5#0 139,192,166≠56,183,119; -81.5,23.5#2 182,219,142≠144,214,67; -81.5,25.5#4 119,154,178≠49,104,141",
+   "shot": "shots/p3-grid-gulf-t1-1280.jpg"
+  },
+  {
+   "point": "3",
+   "width": 1280,
+   "check": "holes transparent: a null cell shows the basemap pixel underneath",
+   "pass": true,
+   "number": "19/19 hole centres equal the unmounted pixel",
+   "shot": "shots/p3-grid-gulf-t1-1280.jpg"
+  },
+  {
+   "point": "3",
+   "width": 1280,
+   "check": "update(t) without a flash: every frame t1 or t2 at 8 cells, then two screenshots 50 ms apart identical",
+   "pass": true,
+   "number": "91 frames sampled, 0 mixed or blank, all-t2 from frame 4; screenshots identical: true",
+   "shot": "shots/p3-grid-gulf-t2-1280.jpg"
+  },
+  {
+   "point": "3",
+   "width": 1280,
+   "check": "grid across ±180 (PMNM lattice 170.5°E..170.5°W): cells either side of the seam in place, no gap",
+   "pass": true,
+   "number": "18/18 cells at 179.5°E/179.5°W (read at 180.5°) on their colour; seam column: 278/292 rows coloured, 0 gap rows",
+   "shot": "shots/p3-grid-pmnm-180-1280.jpg"
+  },
+  {
+   "point": "3",
+   "width": 390,
+   "check": "squares on the lattice: cell centre and ±0.35° inside each cell = the ramp stop of its value",
+   "pass": true,
+   "number": "919/925 points (99.4%) on 185 cells; misses: -88.5,18.5#0 153,172,189≠49,104,141; -87.5,18.5#1 160,196,195≠33,144,140; -81.5,22.5#3 42,149,145≠33,144,140; -81.5,22.5#4 124,182,180≠33,144,140; -81.5,23.5#1 176,207,146≠144,214,67; -81.5,23.5#2 182,220,141≠144,214,67",
+   "shot": "shots/p3-grid-gulf-t1-390.jpg"
+  },
+  {
+   "point": "3",
+   "width": 390,
+   "check": "holes transparent: a null cell shows the basemap pixel underneath",
+   "pass": true,
+   "number": "19/19 hole centres equal the unmounted pixel",
+   "shot": "shots/p3-grid-gulf-t1-390.jpg"
+  },
+  {
+   "point": "3",
+   "width": 390,
+   "check": "update(t) without a flash: every frame t1 or t2 at 8 cells, then two screenshots 50 ms apart identical",
+   "pass": true,
+   "number": "91 frames sampled, 0 mixed or blank, all-t2 from frame 4; screenshots identical: true",
+   "shot": "shots/p3-grid-gulf-t2-390.jpg"
+  },
+  {
+   "point": "3",
+   "width": 390,
+   "check": "grid across ±180 (PMNM lattice 170.5°E..170.5°W): cells either side of the seam in place, no gap",
+   "pass": true,
+   "number": "18/18 cells at 179.5°E/179.5°W (read at 180.5°) on their colour; seam column: 139/146 rows coloured, 0 gap rows",
+   "shot": "shots/p3-grid-pmnm-180-390.jpg"
+  },
+  {
+   "point": "4",
+   "width": 1280,
+   "check": "COG (AquaMaps native, 3857 copy) in place: inside the range coloured, outside transparent",
+   "pass": true,
+   "number": "inside -18.81,48.11 (value 100) 253,231,37 vs ramp 253,231,37; outside 85.96,60.5 (nodata) 250,250,248 = basemap 250,250,248; legend 81.235 mean from STAC",
+   "shot": "shots/p4-cog-am-native-1280.jpg"
+  },
+  {
+   "point": "4",
+   "width": 1280,
+   "check": "COG protocol lazy: its chunk arrives on the first cog:// request, not at setup",
+   "pass": true,
+   "number": "cog protocol chunk requests before mount 0, after 1 (esm-h_GWLP_A.js, at +2 ms after mount)",
+   "shot": "shots/p4-cog-am-native-1280.jpg"
+  },
+  {
+   "point": "4",
+   "width": 1280,
+   "check": "atlas:bidx 2 draws band 2 (four stripes 0/33/66/100), not band 1 (10 everywhere); nodata 255 transparent",
+   "pass": true,
+   "number": "4/4 stripes on band 2's colour (-135°: 68,1,84 vs 68,1,84; -45°: 50,103,141 vs 50,103,141; 45°: 54,182,121 vs 54,182,121; 135°: 253,231,37 vs 253,231,37); band 1 would paint 72,37,118; nodata rows at 70°S = basemap: true",
+   "shot": "shots/p4-cog-two-band-bidx2-1280.jpg"
+  },
+  {
+   "point": "4",
+   "width": 1280,
+   "check": "a 4326 asset is refused with CogProjectionError naming the asset",
+   "pass": true,
+   "number": "CogProjectionError: cog asset \"am4326\" is EPSG:4326, not EPSG:3857: the cog protocol would draw it in the wrong place; draw its EPSG:3857 copy",
+   "shot": null
+  },
+  {
+   "point": "4",
+   "width": 390,
+   "check": "COG (AquaMaps native, 3857 copy) in place: inside the range coloured, outside transparent",
+   "pass": true,
+   "number": "inside -18.81,48.11 (value 100) 253,231,37 vs ramp 253,231,37; outside 85.96,60.5 (nodata) 250,250,248 = basemap 250,250,248; legend 81.235 mean from STAC",
+   "shot": "shots/p4-cog-am-native-390.jpg"
+  },
+  {
+   "point": "4",
+   "width": 390,
+   "check": "COG protocol lazy: its chunk arrives on the first cog:// request, not at setup",
+   "pass": true,
+   "number": "cog protocol chunk requests before mount 0, after 1 (esm-h_GWLP_A.js, at +2 ms after mount)",
+   "shot": "shots/p4-cog-am-native-390.jpg"
+  },
+  {
+   "point": "4",
+   "width": 390,
+   "check": "atlas:bidx 2 draws band 2 (four stripes 0/33/66/100), not band 1 (10 everywhere); nodata 255 transparent",
+   "pass": true,
+   "number": "2/2 stripes on band 2's colour (-45°: 50,103,141 vs 50,103,141; 45°: 54,182,121 vs 54,182,121); band 1 would paint 72,37,118; nodata rows at 70°S = basemap: true",
+   "shot": "shots/p4-cog-two-band-bidx2-390.jpg"
+  },
+  {
+   "point": "4",
+   "width": 390,
+   "check": "a 4326 asset is refused with CogProjectionError naming the asset",
+   "pass": true,
+   "number": "CogProjectionError: cog asset \"am4326\" is EPSG:4326, not EPSG:3857: the cog protocol would draw it in the wrong place; draw its EPSG:3857 copy",
+   "shot": null
+  },
+  {
+   "point": "5",
+   "width": 1280,
+   "check": "h3 archive at fiji, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "357 hexagons; seam column 114/381 rows coloured, 74 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-archive-fiji-1280.jpg"
+  },
+  {
+   "point": "5",
+   "width": 1280,
+   "check": "h3 archive at pmnm, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "112 hexagons; seam column 45/393 rows coloured, 33 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-archive-pmnm-1280.jpg"
+  },
+  {
+   "point": "5",
+   "width": 1280,
+   "check": "RES_FOR_ZOOM (archive): zoom 1 draws res 1, zoom 7 res 5",
+   "pass": true,
+   "number": "z1: {\"1\":862} (tile z1); z7: {\"5\":212}",
+   "shot": "shots/p5-h3-archive-z7-1280.jpg"
+  },
+  {
+   "point": "5",
+   "width": 1280,
+   "check": "h3 memory at fiji, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "357 hexagons; seam column 114/381 rows coloured, 74 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-memory-fiji-1280.jpg"
+  },
+  {
+   "point": "5",
+   "width": 1280,
+   "check": "h3 memory at pmnm, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "112 hexagons; seam column 45/393 rows coloured, 33 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-memory-pmnm-1280.jpg"
+  },
+  {
+   "point": "5",
+   "width": 1280,
+   "check": "RES_FOR_ZOOM (memory): zoom 1 draws res 1, zoom 7 res 5",
+   "pass": true,
+   "number": "z1: {\"1\":125} (tile z1); z7: {\"5\":212}",
+   "shot": "shots/p5-h3-memory-z7-1280.jpg"
+  },
+  {
+   "point": "5",
+   "width": 1280,
+   "check": "h3 relative at fiji, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "357 hexagons; seam column 114/381 rows coloured, 74 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-relative-fiji-1280.jpg"
+  },
+  {
+   "point": "5",
+   "width": 1280,
+   "check": "frame time p95 during a 5 s pan at Fiji (archive)",
+   "pass": true,
+   "number": "p95 16.8 ms, mean 16.67, max 16.8, 302 frames (display interval 16.7 ms)",
+   "shot": null
+  },
+  {
+   "point": "5",
+   "width": 1280,
+   "check": "frame time p95 during a 5 s pan at Fiji (memory)",
+   "pass": true,
+   "number": "p95 16.8 ms, mean 16.67, max 16.8, 302 frames (display interval 16.7 ms)",
+   "shot": null
+  },
+  {
+   "point": "5",
+   "width": 390,
+   "check": "h3 archive at fiji, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "168 hexagons; seam column 102/191 rows coloured, 91 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-archive-fiji-390.jpg"
+  },
+  {
+   "point": "5",
+   "width": 390,
+   "check": "h3 archive at pmnm, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "71 hexagons; seam column 93/196 rows coloured, 90 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-archive-pmnm-390.jpg"
+  },
+  {
+   "point": "5",
+   "width": 390,
+   "check": "RES_FOR_ZOOM (archive): zoom 1 draws res 1, zoom 7 res 5",
+   "pass": true,
+   "number": "z1: {\"1\":355} (tile z1); z7: {\"5\":115}",
+   "shot": "shots/p5-h3-archive-z7-390.jpg"
+  },
+  {
+   "point": "5",
+   "width": 390,
+   "check": "h3 memory at fiji, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "168 hexagons; seam column 102/191 rows coloured, 91 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-memory-fiji-390.jpg"
+  },
+  {
+   "point": "5",
+   "width": 390,
+   "check": "h3 memory at pmnm, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "67 hexagons; seam column 93/196 rows coloured, 90 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-memory-pmnm-390.jpg"
+  },
+  {
+   "point": "5",
+   "width": 390,
+   "check": "RES_FOR_ZOOM (memory): zoom 1 draws res 1, zoom 7 res 5",
+   "pass": true,
+   "number": "z1: {\"1\":125} (tile z1); z7: {\"5\":115}",
+   "shot": "shots/p5-h3-memory-z7-390.jpg"
+  },
+  {
+   "point": "5",
+   "width": 390,
+   "check": "h3 relative at fiji, centred on ±180: no gap at the seam",
+   "pass": true,
+   "number": "168 hexagons; seam column 102/191 rows coloured, 91 rows with one hexagon across the seam, 0 gap rows",
+   "shot": "shots/p5-h3-relative-fiji-390.jpg"
+  },
+  {
+   "point": "5",
+   "width": 390,
+   "check": "frame time p95 during a 5 s pan at Fiji (archive)",
+   "pass": true,
+   "number": "p95 16.7 ms, mean 16.67, max 16.8, 302 frames (display interval 16.7 ms)",
+   "shot": null
+  },
+  {
+   "point": "5",
+   "width": 390,
+   "check": "frame time p95 during a 5 s pan at Fiji (memory)",
+   "pass": true,
+   "number": "p95 16.7 ms, mean 16.67, max 16.8, 302 frames (display interval 16.7 ms)",
+   "shot": null
+  },
+  {
+   "point": "6",
+   "width": 0,
+   "check": "eager gzip per provider over base (expected about 4 kB)",
+   "pass": true,
+   "number": "grid +3559 B, cogSlot +3410 B (+21606 B with pointValue and overviewHistogram: geotiff's core), h3 +3365 B; all three +5817 B; base +5061 B over maplibre-gl and pmtiles",
+   "shot": null
+  },
+  {
+   "point": "6",
+   "width": 0,
+   "check": "the COG protocol lazy, the h3 worker chunk about 76 kB",
+   "pass": true,
+   "number": "cog protocol on demand 112613 B; h3Worker.mjs 76400 B; maplibre-gl-worker.mjs 143630 B",
+   "shot": null
+  },
+  {
+   "point": "6",
+   "width": 0,
+   "check": "the README snippet passes the namespace object (keeps every maplibre-gl export)",
+   "pass": true,
+   "number": "+11480 B gzip over named imports",
+   "shot": null
+  }
+ ]
+}

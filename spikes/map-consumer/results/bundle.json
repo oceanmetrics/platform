@@ -1,0 +1,203 @@
+{
+ "entries": {
+  "zero": {
+   "eagerGzip": 273771,
+   "eagerFiles": 1,
+   "onDemand": [],
+   "workers": {
+    "maplibre-gl-worker.mjs": 143630
+   }
+  },
+  "pmtiles": {
+   "eagerGzip": 280885,
+   "eagerFiles": 1,
+   "onDemand": [],
+   "workers": {
+    "maplibre-gl-worker.mjs": 143630
+   }
+  },
+  "ns": {
+   "eagerGzip": 297426,
+   "eagerFiles": 3,
+   "onDemand": [
+    {
+     "src": "@geomatico/maplibre-cog-protocol/dist/esm/index.js",
+     "gzip": 126726
+    },
+    {
+     "src": "_globals-Bg5xiAy0.js",
+     "gzip": 2391
+    }
+   ],
+   "workers": {
+    "maplibre-gl-worker.mjs": 143630
+   }
+  },
+  "base": {
+   "eagerGzip": 285946,
+   "eagerFiles": 2,
+   "onDemand": [
+    {
+     "src": "@geomatico/maplibre-cog-protocol/dist/esm/index.js",
+     "gzip": 126723
+    },
+    {
+     "src": "_globals-BzgPNLsn.js",
+     "gzip": 2718
+    }
+   ],
+   "workers": {
+    "maplibre-gl-worker.mjs": 143630
+   }
+  },
+  "grid": {
+   "eagerGzip": 289505,
+   "eagerFiles": 2,
+   "onDemand": [
+    {
+     "src": "@geomatico/maplibre-cog-protocol/dist/esm/index.js",
+     "gzip": 126723
+    },
+    {
+     "src": "_globals-BzgPNLsn.js",
+     "gzip": 2718
+    }
+   ],
+   "workers": {
+    "maplibre-gl-worker.mjs": 143630
+   }
+  },
+  "cogslot": {
+   "eagerGzip": 289356,
+   "eagerFiles": 2,
+   "onDemand": [
+    {
+     "src": "@geomatico/maplibre-cog-protocol/dist/esm/index.js",
+     "gzip": 126723
+    },
+    {
+     "src": "_globals-BzgPNLsn.js",
+     "gzip": 2718
+    }
+   ],
+   "workers": {
+    "maplibre-gl-worker.mjs": 143630
+   }
+  },
+  "cog": {
+   "eagerGzip": 307552,
+   "eagerFiles": 3,
+   "onDemand": [
+    {
+     "src": "@geomatico/maplibre-cog-protocol/dist/esm/index.js",
+     "gzip": 112613
+    },
+    {
+     "src": "geotiff/dist-module/compression/lerc.js",
+     "gzip": 37490
+    },
+    {
+     "src": "geotiff/dist-module/compression/zstd.js",
+     "gzip": 32386
+    },
+    {
+     "src": "_pako.esm-BuOLpFkC.js",
+     "gzip": 14549
+    },
+    {
+     "src": "geotiff/dist-module/compression/jpeg.js",
+     "gzip": 3998
+    },
+    {
+     "src": "geotiff/dist-module/compression/lzw.js",
+     "gzip": 820
+    },
+    {
+     "src": "_basedecoder-BuG7fe0q.js",
+     "gzip": 699
+    },
+    {
+     "src": "geotiff/dist-module/compression/webimage.js",
+     "gzip": 520
+    },
+    {
+     "src": "geotiff/dist-module/compression/packbits.js",
+     "gzip": 253
+    },
+    {
+     "src": "geotiff/dist-module/compression/deflate.js",
+     "gzip": 165
+    },
+    {
+     "src": "geotiff/dist-module/compression/raw.js",
+     "gzip": 120
+    }
+   ],
+   "workers": {
+    "maplibre-gl-worker.mjs": 143630
+   }
+  },
+  "h3": {
+   "eagerGzip": 289311,
+   "eagerFiles": 3,
+   "onDemand": [
+    {
+     "src": "@geomatico/maplibre-cog-protocol/dist/esm/index.js",
+     "gzip": 126723
+    },
+    {
+     "src": "@oceanmetrics/map/dist/h3Tiles.js",
+     "gzip": 70357
+    },
+    {
+     "src": "_globals-BzgPNLsn.js",
+     "gzip": 2718
+    }
+   ],
+   "workers": {
+    "h3Worker.mjs": 76400,
+    "maplibre-gl-worker.mjs": 143630
+   }
+  },
+  "all": {
+   "eagerGzip": 291763,
+   "eagerFiles": 3,
+   "onDemand": [
+    {
+     "src": "@geomatico/maplibre-cog-protocol/dist/esm/index.js",
+     "gzip": 126723
+    },
+    {
+     "src": "@oceanmetrics/map/dist/h3Tiles.js",
+     "gzip": 70357
+    },
+    {
+     "src": "_globals-BzgPNLsn.js",
+     "gzip": 2718
+    }
+   ],
+   "workers": {
+    "h3Worker.mjs": 76400,
+    "maplibre-gl-worker.mjs": 143630
+   }
+  }
+ },
+ "package": {
+  "base over maplibre-gl": 12175,
+  "base over maplibre-gl + pmtiles": 5061,
+  "namespace import over named (the 0.2.0 README snippet)": 11480,
+  "grid over base": 3559,
+  "cogSlot over base": 3410,
+  "cogSlot + pointValue + overviewHistogram over base": 21606,
+  "h3 over base": 3365,
+  "all three over base": 5817
+ },
+ "workers": {
+  "h3Worker.mjs": 76400,
+  "maplibre-gl-worker.mjs": 143630
+ },
+ "cogProtocol": {
+  "src": "@geomatico/maplibre-cog-protocol/dist/esm/index.js",
+  "gzip": 112613
+ }
+}
