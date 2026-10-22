@@ -1,0 +1,2216 @@
+[
+ {
+  "file": "score_risk",
+  "source": "4326 S3 (as published)",
+  "view": "world",
+  "reps": 3,
+  "firstTileMs": 670.5,
+  "idleMs": 928.2999999523163,
+  "bytes": 132643,
+  "requests": 2,
+  "tiles": 4,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -0.0016169675114151385,
+    -0.0008084837556894436,
+    0.0016169675114151385,
+    0.0008084837556767214
+   ],
+   "minzoom": 0,
+   "maxzoom": 22,
+   "tiles": [
+    "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 670.5,
+    "idleMs": 942.3999999761581,
+    "tiles": 4,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0008084837556894436,
+      0.0016169675114151385,
+      0.0008084837556767214
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 132603,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 588,
+    "idleMs": 851.2999999523163,
+    "tiles": 4,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0008084837556894436,
+      0.0016169675114151385,
+      0.0008084837556767214
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 132643,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 671.5,
+    "idleMs": 928.2999999523163,
+    "tiles": 4,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0008084837556894436,
+      0.0016169675114151385,
+      0.0008084837556767214
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 132643,
+    "requests": 2
+   }
+  ]
+ },
+ {
+  "file": "score_risk",
+  "source": "4326 S3 (as published)",
+  "view": "z8",
+  "reps": 3,
+  "firstTileMs": null,
+  "idleMs": 679.2999999523163,
+  "bytes": 66319,
+  "requests": 1,
+  "tiles": 0,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -0.0016169675114151385,
+    -0.0008084837556894436,
+    0.0016169675114151385,
+    0.0008084837556767214
+   ],
+   "minzoom": 0,
+   "maxzoom": 22,
+   "tiles": [
+    "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": null,
+    "idleMs": 583.5,
+    "tiles": 0,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0008084837556894436,
+      0.0016169675114151385,
+      0.0008084837556767214
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -121.2778125000008,
+      32.91252382727643,
+      -117.76218750000064,
+      34.737734659355326
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 66319,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": null,
+    "idleMs": 679.2999999523163,
+    "tiles": 0,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0008084837556894436,
+      0.0016169675114151385,
+      0.0008084837556767214
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -121.2778125000008,
+      32.91252382727643,
+      -117.76218750000064,
+      34.737734659355326
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 66319,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": null,
+    "idleMs": 716,
+    "tiles": 0,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0008084837556894436,
+      0.0016169675114151385,
+      0.0008084837556767214
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -121.2778125000008,
+      32.91252382727643,
+      -117.76218750000064,
+      34.737734659355326
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 66319,
+    "requests": 1
+   }
+  ]
+ },
+ {
+  "file": "score_risk",
+  "source": "3857 copy, local",
+  "view": "world",
+  "reps": 3,
+  "firstTileMs": 68.5,
+  "idleMs": 163.59999990463257,
+  "bytes": 395101,
+  "requests": 5,
+  "tiles": 24,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -85.0511287798066,
+    180,
+    85.0511287798066
+   ],
+   "minzoom": 0,
+   "maxzoom": 5,
+   "tiles": [
+    "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 68.89999997615814,
+    "idleMs": 166.60000002384186,
+    "tiles": 24,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 395101,
+    "requests": 5
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 67.69999992847443,
+    "idleMs": 163.39999997615814,
+    "tiles": 24,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 395101,
+    "requests": 5
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 68.5,
+    "idleMs": 163.59999990463257,
+    "tiles": 24,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 395101,
+    "requests": 5
+   }
+  ]
+ },
+ {
+  "file": "score_risk",
+  "source": "3857 copy, local",
+  "view": "z8",
+  "reps": 3,
+  "firstTileMs": 66.5,
+  "idleMs": 68.60000002384186,
+  "bytes": 131824,
+  "requests": 2,
+  "tiles": 1,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -85.0511287798066,
+    180,
+    85.0511287798066
+   ],
+   "minzoom": 0,
+   "maxzoom": 5,
+   "tiles": [
+    "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 61.89999997615814,
+    "idleMs": 67.89999997615814,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -121.2778125000008,
+      32.91252382727643,
+      -117.76218750000064,
+      34.737734659355326
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 131824,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 66.5,
+    "idleMs": 68.60000002384186,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -121.2778125000008,
+      32.91252382727643,
+      -117.76218750000064,
+      34.737734659355326
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 131824,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 66.5,
+    "idleMs": 85.80000007152557,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -121.2778125000008,
+      32.91252382727643,
+      -117.76218750000064,
+      34.737734659355326
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 131824,
+    "requests": 2
+   }
+  ]
+ },
+ {
+  "file": "score_risk",
+  "source": "3857 copy, local + S3-like network",
+  "view": "world",
+  "reps": 3,
+  "firstTileMs": 360.2999999523163,
+  "idleMs": 788.6000000238419,
+  "bytes": 395101,
+  "requests": 5,
+  "tiles": 24,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -85.0511287798066,
+    180,
+    85.0511287798066
+   ],
+   "minzoom": 0,
+   "maxzoom": 5,
+   "tiles": [
+    "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 361.1999999284744,
+    "idleMs": 793.5,
+    "tiles": 24,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 395101,
+    "requests": 5
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 359.2000000476837,
+    "idleMs": 786.1000000238419,
+    "tiles": 24,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 395101,
+    "requests": 5
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 360.2999999523163,
+    "idleMs": 788.6000000238419,
+    "tiles": 24,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 395101,
+    "requests": 5
+   }
+  ]
+ },
+ {
+  "file": "score_risk",
+  "source": "3857 copy, local + S3-like network",
+  "view": "z8",
+  "reps": 3,
+  "firstTileMs": 358.3000000715256,
+  "idleMs": 360.3000000715256,
+  "bytes": 131824,
+  "requests": 2,
+  "tiles": 1,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -85.0511287798066,
+    180,
+    85.0511287798066
+   ],
+   "minzoom": 0,
+   "maxzoom": 5,
+   "tiles": [
+    "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 358.39999997615814,
+    "idleMs": 360.60000002384186,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -121.2778125000008,
+      32.91252382727643,
+      -117.76218750000064,
+      34.737734659355326
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 131824,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 354.8000000715256,
+    "idleMs": 356.8000000715256,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -121.2778125000008,
+      32.91252382727643,
+      -117.76218750000064,
+      34.737734659355326
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 131824,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 358.3000000715256,
+    "idleMs": 360.3000000715256,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -85.0511287798066,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/score_risk.tif/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -121.2778125000008,
+      32.91252382727643,
+      -117.76218750000064,
+      34.737734659355326
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 131824,
+    "requests": 2
+   }
+  ]
+ },
+ {
+  "file": "am_native",
+  "source": "4326 S3 (as published)",
+  "view": "world",
+  "reps": 3,
+  "firstTileMs": 506.10000002384186,
+  "idleMs": 521.2999999523163,
+  "bytes": 56706,
+  "requests": 1,
+  "tiles": 4,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -0.0016169675114151385,
+    -0.0005569554761543389,
+    0.0016169675114151385,
+    0.0007141606508462863
+   ],
+   "minzoom": 0,
+   "maxzoom": 18,
+   "tiles": [
+    "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 698.3999999761581,
+    "idleMs": 717.6000000238419,
+    "tiles": 4,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0005569554761543389,
+      0.0016169675114151385,
+      0.0007141606508462863
+     ],
+     "minzoom": 0,
+     "maxzoom": 18,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 56706,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 506.10000002384186,
+    "idleMs": 517.8000000715256,
+    "tiles": 4,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0005569554761543389,
+      0.0016169675114151385,
+      0.0007141606508462863
+     ],
+     "minzoom": 0,
+     "maxzoom": 18,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 56706,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 502.7999999523163,
+    "idleMs": 521.2999999523163,
+    "tiles": 4,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0005569554761543389,
+      0.0016169675114151385,
+      0.0007141606508462863
+     ],
+     "minzoom": 0,
+     "maxzoom": 18,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 56686,
+    "requests": 1
+   }
+  ]
+ },
+ {
+  "file": "am_native",
+  "source": "4326 S3 (as published)",
+  "view": "z8",
+  "reps": 3,
+  "firstTileMs": null,
+  "idleMs": 528.6999999284744,
+  "bytes": 56686,
+  "requests": 1,
+  "tiles": 0,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -0.0016169675114151385,
+    -0.0005569554761543389,
+    0.0016169675114151385,
+    0.0007141606508462863
+   ],
+   "minzoom": 0,
+   "maxzoom": 18,
+   "tiles": [
+    "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": null,
+    "idleMs": 539,
+    "tiles": 0,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0005569554761543389,
+      0.0016169675114151385,
+      0.0007141606508462863
+     ],
+     "minzoom": 0,
+     "maxzoom": 18,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      109.04218749999978,
+      -6.293094778734684,
+      112.55781249999961,
+      -4.105004099648298
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 56686,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": null,
+    "idleMs": 528.6999999284744,
+    "tiles": 0,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0005569554761543389,
+      0.0016169675114151385,
+      0.0007141606508462863
+     ],
+     "minzoom": 0,
+     "maxzoom": 18,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      109.04218749999978,
+      -6.293094778734684,
+      112.55781249999961,
+      -4.105004099648298
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 56686,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": null,
+    "idleMs": 516.2999999523163,
+    "tiles": 0,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.0005569554761543389,
+      0.0016169675114151385,
+      0.0007141606508462863
+     ],
+     "minzoom": 0,
+     "maxzoom": 18,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      109.04218749999978,
+      -6.293094778734684,
+      112.55781249999961,
+      -4.105004099648298
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 56686,
+    "requests": 1
+   }
+  ]
+ },
+ {
+  "file": "am_native",
+  "source": "3857 copy, local",
+  "view": "world",
+  "reps": 3,
+  "firstTileMs": 21.700000047683716,
+  "idleMs": 54.700000047683716,
+  "bytes": 88602,
+  "requests": 2,
+  "tiles": 18,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -66.51326044311185,
+    180,
+    85.0511287798066
+   ],
+   "minzoom": 0,
+   "maxzoom": 2,
+   "tiles": [
+    "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 21.700000047683716,
+    "idleMs": 54.700000047683716,
+    "tiles": 18,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 36,
+    "idleMs": 70.10000002384186,
+    "tiles": 18,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 18.5,
+    "idleMs": 50.699999928474426,
+    "tiles": 18,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   }
+  ]
+ },
+ {
+  "file": "am_native",
+  "source": "3857 copy, local",
+  "view": "z8",
+  "reps": 3,
+  "firstTileMs": 40.10000002384186,
+  "idleMs": 47.799999952316284,
+  "bytes": 88602,
+  "requests": 2,
+  "tiles": 1,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -66.51326044311185,
+    180,
+    85.0511287798066
+   ],
+   "minzoom": 0,
+   "maxzoom": 2,
+   "tiles": [
+    "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 28.700000047683716,
+    "idleMs": 35.799999952316284,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      109.04218749999978,
+      -6.293094778734684,
+      112.55781249999961,
+      -4.105004099648298
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 41.799999952316284,
+    "idleMs": 54.199999928474426,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      109.04218749999978,
+      -6.293094778734684,
+      112.55781249999961,
+      -4.105004099648298
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 40.10000002384186,
+    "idleMs": 47.799999952316284,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      109.04218749999978,
+      -6.293094778734684,
+      112.55781249999961,
+      -4.105004099648298
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   }
+  ]
+ },
+ {
+  "file": "am_native",
+  "source": "3857 copy, local + S3-like network",
+  "view": "world",
+  "reps": 3,
+  "firstTileMs": 169.60000002384186,
+  "idleMs": 337.8000000715256,
+  "bytes": 88602,
+  "requests": 2,
+  "tiles": 18,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -66.51326044311185,
+    180,
+    85.0511287798066
+   ],
+   "minzoom": 0,
+   "maxzoom": 2,
+   "tiles": [
+    "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 169.60000002384186,
+    "idleMs": 339.3000000715256,
+    "tiles": 18,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 173.39999997615814,
+    "idleMs": 337.8000000715256,
+    "tiles": 18,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 168.10000002384186,
+    "idleMs": 330.60000002384186,
+    "tiles": 18,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   }
+  ]
+ },
+ {
+  "file": "am_native",
+  "source": "3857 copy, local + S3-like network",
+  "view": "z8",
+  "reps": 3,
+  "firstTileMs": 319.2999999523163,
+  "idleMs": 322.7999999523163,
+  "bytes": 88602,
+  "requests": 2,
+  "tiles": 1,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -66.51326044311185,
+    180,
+    85.0511287798066
+   ],
+   "minzoom": 0,
+   "maxzoom": 2,
+   "tiles": [
+    "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 318.2000000476837,
+    "idleMs": 321.90000009536743,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      109.04218749999978,
+      -6.293094778734684,
+      112.55781249999961,
+      -4.105004099648298
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 319.2999999523163,
+    "idleMs": 322.7999999523163,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      109.04218749999978,
+      -6.293094778734684,
+      112.55781249999961,
+      -4.105004099648298
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 324.3000000715256,
+    "idleMs": 327.60000002384186,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -66.51326044311185,
+      180,
+      85.0511287798066
+     ],
+     "minzoom": 0,
+     "maxzoom": 2,
+     "tiles": [
+      "cog://http://localhost:8787/3857/729c63f1d05d0515.tif#color:BrewerYlGnBu9,1,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      109.04218749999978,
+      -6.293094778734684,
+      112.55781249999961,
+      -4.105004099648298
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 88602,
+    "requests": 2
+   }
+  ]
+ },
+ {
+  "file": "mst",
+  "source": "4326 S3 (as published)",
+  "view": "world",
+  "reps": 3,
+  "firstTileMs": 545.2999999523163,
+  "idleMs": 566.6000000238419,
+  "bytes": 51268,
+  "requests": 1,
+  "tiles": 4,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -0.0016169675114151385,
+    -0.00015900180530085723,
+    0.0016169675114151385,
+    0.0005430315892406207
+   ],
+   "minzoom": 0,
+   "maxzoom": 22,
+   "tiles": [
+    "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 545.2999999523163,
+    "idleMs": 566.6000000238419,
+    "tiles": 4,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.00015900180530085723,
+      0.0016169675114151385,
+      0.0005430315892406207
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 51268,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 513.7000000476837,
+    "idleMs": 533.7000000476837,
+    "tiles": 4,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.00015900180530085723,
+      0.0016169675114151385,
+      0.0005430315892406207
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 51268,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 550,
+    "idleMs": 572.1000000238419,
+    "tiles": 4,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.00015900180530085723,
+      0.0016169675114151385,
+      0.0005430315892406207
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 51248,
+    "requests": 1
+   }
+  ]
+ },
+ {
+  "file": "mst",
+  "source": "4326 S3 (as published)",
+  "view": "z8",
+  "reps": 3,
+  "firstTileMs": null,
+  "idleMs": 516.6999999284744,
+  "bytes": 51248,
+  "requests": 1,
+  "tiles": 0,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -0.0016169675114151385,
+    -0.00015900180530085723,
+    0.0016169675114151385,
+    0.0005430315892406207
+   ],
+   "minzoom": 0,
+   "maxzoom": 22,
+   "tiles": [
+    "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": null,
+    "idleMs": 563.5,
+    "tiles": 0,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.00015900180530085723,
+      0.0016169675114151385,
+      0.0005430315892406207
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -86.38281249999957,
+      26.445566333990314,
+      -82.86718749999976,
+      28.395822358730854
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 51248,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": null,
+    "idleMs": 498.59999990463257,
+    "tiles": 0,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.00015900180530085723,
+      0.0016169675114151385,
+      0.0005430315892406207
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -86.38281249999957,
+      26.445566333990314,
+      -82.86718749999976,
+      28.395822358730854
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 51248,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": null,
+    "idleMs": 516.6999999284744,
+    "tiles": 0,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -0.0016169675114151385,
+      -0.00015900180530085723,
+      0.0016169675114151385,
+      0.0005430315892406207
+     ],
+     "minzoom": 0,
+     "maxzoom": 22,
+     "tiles": [
+      "cog://https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -86.38281249999957,
+      26.445566333990314,
+      -82.86718749999976,
+      28.395822358730854
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 51248,
+    "requests": 1
+   }
+  ]
+ },
+ {
+  "file": "mst",
+  "source": "3857 copy, local",
+  "view": "world",
+  "reps": 3,
+  "firstTileMs": 36.60000002384186,
+  "idleMs": 50.700000047683716,
+  "bytes": 65905,
+  "requests": 1,
+  "tiles": 12,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -21.94304553343819,
+    180,
+    61.60639637138628
+   ],
+   "minzoom": 0,
+   "maxzoom": 5,
+   "tiles": [
+    "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 36.60000002384186,
+    "idleMs": 55.39999997615814,
+    "tiles": 12,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 65905,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 22.199999928474426,
+    "idleMs": 37.09999990463257,
+    "tiles": 12,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 65905,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 36.800000071525574,
+    "idleMs": 50.700000047683716,
+    "tiles": 12,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 65905,
+    "requests": 1
+   }
+  ]
+ },
+ {
+  "file": "mst",
+  "source": "3857 copy, local",
+  "view": "z8",
+  "reps": 3,
+  "firstTileMs": 25.300000071525574,
+  "idleMs": 36.799999952316284,
+  "bytes": 87152,
+  "requests": 2,
+  "tiles": 1,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -21.94304553343819,
+    180,
+    61.60639637138628
+   ],
+   "minzoom": 0,
+   "maxzoom": 5,
+   "tiles": [
+    "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 25.300000071525574,
+    "idleMs": 35.39999997615814,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -86.38281249999957,
+      26.445566333990314,
+      -82.86718749999976,
+      28.395822358730854
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 87152,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 43.89999997615814,
+    "idleMs": 47.700000047683716,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -86.38281249999957,
+      26.445566333990314,
+      -82.86718749999976,
+      28.395822358730854
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 87152,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 25.100000023841858,
+    "idleMs": 36.799999952316284,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -86.38281249999957,
+      26.445566333990314,
+      -82.86718749999976,
+      28.395822358730854
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 87152,
+    "requests": 2
+   }
+  ]
+ },
+ {
+  "file": "mst",
+  "source": "3857 copy, local + S3-like network",
+  "view": "world",
+  "reps": 3,
+  "firstTileMs": 171,
+  "idleMs": 190.30000007152557,
+  "bytes": 65905,
+  "requests": 1,
+  "tiles": 12,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -21.94304553343819,
+    180,
+    61.60639637138628
+   ],
+   "minzoom": 0,
+   "maxzoom": 5,
+   "tiles": [
+    "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 167,
+    "idleMs": 187.29999995231628,
+    "tiles": 12,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 65905,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 171,
+    "idleMs": 193.60000002384186,
+    "tiles": 12,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 65905,
+    "requests": 1
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 172.70000004768372,
+    "idleMs": 190.30000007152557,
+    "tiles": 12,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -182.75678918015393,
+      -67.98389958041328,
+      182.75678918015473,
+      79.10386515226105
+     ],
+     "zoom": 1.3,
+     "width": 1280
+    },
+    "bytes": 65905,
+    "requests": 1
+   }
+  ]
+ },
+ {
+  "file": "mst",
+  "source": "3857 copy, local + S3-like network",
+  "view": "z8",
+  "reps": 3,
+  "firstTileMs": 326.89999997615814,
+  "idleMs": 330.5,
+  "bytes": 87152,
+  "requests": 2,
+  "tiles": 1,
+  "errors": [],
+  "tilejson": {
+   "bounds": [
+    -180,
+    -21.94304553343819,
+    180,
+    61.60639637138628
+   ],
+   "minzoom": 0,
+   "maxzoom": 5,
+   "tiles": [
+    "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+   ]
+  },
+  "runs": [
+   {
+    "id": "cog1",
+    "firstTileMs": 327.89999997615814,
+    "idleMs": 331.60000002384186,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -86.38281249999957,
+      26.445566333990314,
+      -82.86718749999976,
+      28.395822358730854
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 87152,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 326.89999997615814,
+    "idleMs": 330.5,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -86.38281249999957,
+      26.445566333990314,
+      -82.86718749999976,
+      28.395822358730854
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 87152,
+    "requests": 2
+   },
+   {
+    "id": "cog1",
+    "firstTileMs": 320.7999999523163,
+    "idleMs": 324.2999999523163,
+    "tiles": 1,
+    "errors": [],
+    "tilejson": {
+     "bounds": [
+      -180,
+      -21.94304553343819,
+      180,
+      61.60639637138628
+     ],
+     "minzoom": 0,
+     "maxzoom": 5,
+     "tiles": [
+      "cog://http://localhost:8787/3857/9fe6f75498affae1.tif#color:BrewerOrRd9,15,100,c/{z}/{x}/{y}"
+     ]
+    },
+    "view": {
+     "bounds": [
+      -86.38281249999957,
+      26.445566333990314,
+      -82.86718749999976,
+      28.395822358730854
+     ],
+     "zoom": 8,
+     "width": 1280
+    },
+    "bytes": 87152,
+    "requests": 2
+   }
+  ]
+ }
+]

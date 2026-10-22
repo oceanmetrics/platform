@@ -1,0 +1,1225 @@
+[
+ {
+  "file": "score_risk",
+  "method": "protocol locationValues, 3857 copy, S3-like",
+  "lonlat": [
+   -119.52,
+   33.83
+  ],
+  "near": [
+   -119.22,
+   34.03
+  ],
+  "values": [
+   30,
+   96,
+   0,
+   null,
+   12,
+   null,
+   null,
+   12,
+   4
+  ],
+  "nearValues": [
+   30,
+   99,
+   0,
+   null,
+   10,
+   null,
+   null,
+   11,
+   4
+  ],
+  "coldMs": 370.59999990463257,
+  "warmMs": 0.10000002384185791,
+  "coldBytes": 131824,
+  "warmBytes": 0,
+  "runs": [
+   {
+    "cold": {
+     "values": [
+      30,
+      96,
+      0,
+      null,
+      12,
+      null,
+      null,
+      12,
+      4
+     ],
+     "ms": 375.7000000476837
+    },
+    "coldBytes": 131824,
+    "warm": {
+     "values": [
+      30,
+      99,
+      0,
+      null,
+      10,
+      null,
+      null,
+      11,
+      4
+     ],
+     "ms": 0.20000004768371582
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "values": [
+      30,
+      96,
+      0,
+      null,
+      12,
+      null,
+      null,
+      12,
+      4
+     ],
+     "ms": 369.60000002384186
+    },
+    "coldBytes": 131824,
+    "warm": {
+     "values": [
+      30,
+      99,
+      0,
+      null,
+      10,
+      null,
+      null,
+      11,
+      4
+     ],
+     "ms": 0.10000002384185791
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "values": [
+      30,
+      96,
+      0,
+      null,
+      12,
+      null,
+      null,
+      12,
+      4
+     ],
+     "ms": 370.59999990463257
+    },
+    "coldBytes": 131824,
+    "warm": {
+     "values": [
+      30,
+      99,
+      0,
+      null,
+      10,
+      null,
+      null,
+      11,
+      4
+     ],
+     "ms": 0.10000002384185791
+    },
+    "warmBytes": 0
+   }
+  ]
+ },
+ {
+  "file": "score_risk",
+  "method": "geotiff.js window, 3857 copy, S3-like",
+  "lonlat": [
+   -119.52,
+   33.83
+  ],
+  "near": [
+   -119.22,
+   34.03
+  ],
+  "values": [
+   30,
+   96,
+   0,
+   null,
+   12,
+   null,
+   null,
+   12,
+   4
+  ],
+  "nearValues": [
+   30,
+   99,
+   0,
+   null,
+   10,
+   null,
+   null,
+   11,
+   4
+  ],
+  "coldMs": 477.59999990463257,
+  "warmMs": 2.899999976158142,
+  "coldBytes": 66288,
+  "warmBytes": 0,
+  "runs": [
+   {
+    "cold": {
+     "url": "http://localhost:8787/3857/score_risk.tif",
+     "col": 1376,
+     "row": 3277,
+     "values": [
+      30,
+      96,
+      0,
+      null,
+      12,
+      null,
+      null,
+      12,
+      4
+     ],
+     "ms": {
+      "open": 166.10000002384186,
+      "read": 306.1999999284744,
+      "total": 472.2999999523163
+     },
+     "bytes": 65536,
+     "requests": 2
+    },
+    "coldBytes": 66288,
+    "warm": {
+     "url": "http://localhost:8787/3857/score_risk.tif",
+     "col": 1383,
+     "row": 3271,
+     "values": [
+      30,
+      99,
+      0,
+      null,
+      10,
+      null,
+      null,
+      11,
+      4
+     ],
+     "ms": {
+      "open": 0.19999992847442627,
+      "read": 2.8000000715255737,
+      "total": 3
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "http://localhost:8787/3857/score_risk.tif",
+     "col": 1376,
+     "row": 3277,
+     "values": [
+      30,
+      96,
+      0,
+      null,
+      12,
+      null,
+      null,
+      12,
+      4
+     ],
+     "ms": {
+      "open": 169.80000007152557,
+      "read": 309.39999997615814,
+      "total": 479.2000000476837
+     },
+     "bytes": 65536,
+     "requests": 2
+    },
+    "coldBytes": 66288,
+    "warm": {
+     "url": "http://localhost:8787/3857/score_risk.tif",
+     "col": 1383,
+     "row": 3271,
+     "values": [
+      30,
+      99,
+      0,
+      null,
+      10,
+      null,
+      null,
+      11,
+      4
+     ],
+     "ms": {
+      "open": 0.09999990463256836,
+      "read": 2.8000000715255737,
+      "total": 2.899999976158142
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "http://localhost:8787/3857/score_risk.tif",
+     "col": 1376,
+     "row": 3277,
+     "values": [
+      30,
+      96,
+      0,
+      null,
+      12,
+      null,
+      null,
+      12,
+      4
+     ],
+     "ms": {
+      "open": 169.5,
+      "read": 308.09999990463257,
+      "total": 477.59999990463257
+     },
+     "bytes": 65536,
+     "requests": 2
+    },
+    "coldBytes": 66288,
+    "warm": {
+     "url": "http://localhost:8787/3857/score_risk.tif",
+     "col": 1383,
+     "row": 3271,
+     "values": [
+      30,
+      99,
+      0,
+      null,
+      10,
+      null,
+      null,
+      11,
+      4
+     ],
+     "ms": {
+      "open": 0.10000002384185791,
+      "read": 2.5,
+      "total": 2.600000023841858
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   }
+  ]
+ },
+ {
+  "file": "score_risk",
+  "method": "geotiff.js window, 4326 S3",
+  "lonlat": [
+   -119.52,
+   33.83
+  ],
+  "near": [
+   -119.22,
+   34.03
+  ],
+  "values": [
+   30,
+   96,
+   0,
+   null,
+   12,
+   null,
+   null,
+   12,
+   4
+  ],
+  "nearValues": [
+   30,
+   99,
+   0,
+   null,
+   10,
+   null,
+   null,
+   11,
+   4
+  ],
+  "coldMs": 711.4000000953674,
+  "warmMs": 6.899999976158142,
+  "coldBytes": 99838,
+  "warmBytes": 0,
+  "runs": [
+   {
+    "cold": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif",
+     "col": 1209,
+     "row": 1123,
+     "values": [
+      30,
+      96,
+      0,
+      null,
+      12,
+      null,
+      null,
+      12,
+      4
+     ],
+     "ms": {
+      "open": 458.6999999284744,
+      "read": 291.5,
+      "total": 750.1999999284744
+     },
+     "bytes": 98304,
+     "requests": 2
+    },
+    "coldBytes": 99838,
+    "warm": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif",
+     "col": 1215,
+     "row": 1119,
+     "values": [
+      30,
+      99,
+      0,
+      null,
+      10,
+      null,
+      null,
+      11,
+      4
+     ],
+     "ms": {
+      "open": 0.09999990463256836,
+      "read": 6.900000095367432,
+      "total": 7
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif",
+     "col": 1209,
+     "row": 1123,
+     "values": [
+      30,
+      96,
+      0,
+      null,
+      12,
+      null,
+      null,
+      12,
+      4
+     ],
+     "ms": {
+      "open": 425.39999997615814,
+      "read": 281.5,
+      "total": 706.8999999761581
+     },
+     "bytes": 98304,
+     "requests": 2
+    },
+    "coldBytes": 99838,
+    "warm": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif",
+     "col": 1215,
+     "row": 1119,
+     "values": [
+      30,
+      99,
+      0,
+      null,
+      10,
+      null,
+      null,
+      11,
+      4
+     ],
+     "ms": {
+      "open": 0.10000002384185791,
+      "read": 6.299999952316284,
+      "total": 6.399999976158142
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif",
+     "col": 1209,
+     "row": 1123,
+     "values": [
+      30,
+      96,
+      0,
+      null,
+      12,
+      null,
+      null,
+      12,
+      4
+     ],
+     "ms": {
+      "open": 424.40000009536743,
+      "read": 287,
+      "total": 711.4000000953674
+     },
+     "bytes": 98304,
+     "requests": 2
+    },
+    "coldBytes": 99878,
+    "warm": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif",
+     "col": 1215,
+     "row": 1119,
+     "values": [
+      30,
+      99,
+      0,
+      null,
+      10,
+      null,
+      null,
+      11,
+      4
+     ],
+     "ms": {
+      "open": 0,
+      "read": 6.899999976158142,
+      "total": 6.899999976158142
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   }
+  ]
+ },
+ {
+  "file": "score_risk",
+  "method": "titiler /cog/point (Node fetch)",
+  "lonlat": [
+   -119.52,
+   33.83
+  ],
+  "values": [
+   30,
+   96,
+   0,
+   null,
+   12,
+   null,
+   null,
+   12,
+   4
+  ],
+  "coldMs": 126.70308300000033,
+  "runs": [
+   388.8802919999998,
+   125.43854100000044,
+   126.70308300000033
+  ]
+ },
+ {
+  "file": "am_native",
+  "method": "protocol locationValues, 3857 copy, S3-like",
+  "lonlat": [
+   110.8,
+   -5.2
+  ],
+  "near": [
+   111.1,
+   -5
+  ],
+  "values": [
+   91
+  ],
+  "nearValues": [
+   91
+  ],
+  "coldMs": 312.60000002384186,
+  "warmMs": 0.19999992847442627,
+  "coldBytes": 88602,
+  "warmBytes": 0,
+  "runs": [
+   {
+    "cold": {
+     "values": [
+      91
+     ],
+     "ms": 310.7000000476837
+    },
+    "coldBytes": 88602,
+    "warm": {
+     "values": [
+      91
+     ],
+     "ms": 0.19999992847442627
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "values": [
+      91
+     ],
+     "ms": 312.60000002384186
+    },
+    "coldBytes": 88602,
+    "warm": {
+     "values": [
+      91
+     ],
+     "ms": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "values": [
+      91
+     ],
+     "ms": 315.10000002384186
+    },
+    "coldBytes": 88602,
+    "warm": {
+     "values": [
+      91
+     ],
+     "ms": 0.20000004768371582
+    },
+    "warmBytes": 0
+   }
+  ]
+ },
+ {
+  "file": "am_native",
+  "method": "geotiff.js window, 3857 copy, S3-like",
+  "lonlat": [
+   110.8,
+   -5.2
+  ],
+  "near": [
+   111.1,
+   -5
+  ],
+  "values": [
+   91
+  ],
+  "nearValues": [
+   91
+  ],
+  "coldMs": 444.5,
+  "warmMs": 2.299999952316284,
+  "coldBytes": 39450,
+  "warmBytes": 0,
+  "runs": [
+   {
+    "cold": {
+     "url": "http://localhost:8787/3857/729c63f1d05d0515.tif",
+     "col": 827,
+     "row": 526,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 145,
+      "read": 299.5,
+      "total": 444.5
+     },
+     "bytes": 38708,
+     "requests": 2
+    },
+    "coldBytes": 39450,
+    "warm": {
+     "url": "http://localhost:8787/3857/729c63f1d05d0515.tif",
+     "col": 828,
+     "row": 526,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 0.09999990463256836,
+      "read": 2.200000047683716,
+      "total": 2.299999952316284
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "http://localhost:8787/3857/729c63f1d05d0515.tif",
+     "col": 827,
+     "row": 526,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 146.70000004768372,
+      "read": 300,
+      "total": 446.7000000476837
+     },
+     "bytes": 38708,
+     "requests": 2
+    },
+    "coldBytes": 39450,
+    "warm": {
+     "url": "http://localhost:8787/3857/729c63f1d05d0515.tif",
+     "col": 828,
+     "row": 526,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 0.20000004768371582,
+      "read": 2.200000047683716,
+      "total": 2.4000000953674316
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "http://localhost:8787/3857/729c63f1d05d0515.tif",
+     "col": 827,
+     "row": 526,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 138.30000007152557,
+      "read": 294.5,
+      "total": 432.8000000715256
+     },
+     "bytes": 38708,
+     "requests": 2
+    },
+    "coldBytes": 39450,
+    "warm": {
+     "url": "http://localhost:8787/3857/729c63f1d05d0515.tif",
+     "col": 828,
+     "row": 526,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 0.19999992847442627,
+      "read": 2,
+      "total": 2.1999999284744263
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   }
+  ]
+ },
+ {
+  "file": "am_native",
+  "method": "geotiff.js window, 4326 S3",
+  "lonlat": [
+   110.8,
+   -5.2
+  ],
+  "near": [
+   111.1,
+   -5
+  ],
+  "values": [
+   91
+  ],
+  "nearValues": [
+   91
+  ],
+  "coldMs": 566.1999999284744,
+  "warmMs": 1.1999999284744263,
+  "coldBytes": 41107,
+  "warmBytes": 0,
+  "runs": [
+   {
+    "cold": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif",
+     "col": 581,
+     "row": 169,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 411,
+      "read": 155.19999992847443,
+      "total": 566.1999999284744
+     },
+     "bytes": 39541,
+     "requests": 2
+    },
+    "coldBytes": 41107,
+    "warm": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif",
+     "col": 582,
+     "row": 169,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 0.10000002384185791,
+      "read": 1,
+      "total": 1.100000023841858
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif",
+     "col": 581,
+     "row": 169,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 408.1999999284744,
+      "read": 158.20000004768372,
+      "total": 566.3999999761581
+     },
+     "bytes": 39541,
+     "requests": 2
+    },
+    "coldBytes": 41107,
+    "warm": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif",
+     "col": 582,
+     "row": 169,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 0.20000004768371582,
+      "read": 1.2999999523162842,
+      "total": 1.5
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif",
+     "col": 581,
+     "row": 169,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 389.89999997615814,
+      "read": 154.70000004768372,
+      "total": 544.6000000238419
+     },
+     "bytes": 39541,
+     "requests": 2
+    },
+    "coldBytes": 41107,
+    "warm": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/native/am/729c63f1d05d0515.tif",
+     "col": 582,
+     "row": 169,
+     "values": [
+      91
+     ],
+     "ms": {
+      "open": 0.09999990463256836,
+      "read": 1.100000023841858,
+      "total": 1.1999999284744263
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   }
+  ]
+ },
+ {
+  "file": "am_native",
+  "method": "titiler /cog/point (Node fetch)",
+  "lonlat": [
+   110.8,
+   -5.2
+  ],
+  "values": [
+   91
+  ],
+  "coldMs": 127.19245799999953,
+  "runs": [
+   373.6462499999998,
+   127.19245799999953,
+   126.44937500000015
+  ]
+ },
+ {
+  "file": "mst",
+  "method": "protocol locationValues, 3857 copy, S3-like",
+  "lonlat": [
+   -84.625,
+   27.425
+  ],
+  "near": [
+   -84.325,
+   27.625
+  ],
+  "values": [
+   100
+  ],
+  "nearValues": [
+   100
+  ],
+  "coldMs": 331.39999997615814,
+  "warmMs": 0.10000002384185791,
+  "coldBytes": 87152,
+  "warmBytes": 0,
+  "runs": [
+   {
+    "cold": {
+     "values": [
+      100
+     ],
+     "ms": 330.2000000476837
+    },
+    "coldBytes": 87152,
+    "warm": {
+     "values": [
+      100
+     ],
+     "ms": 0.10000002384185791
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "values": [
+      100
+     ],
+     "ms": 331.39999997615814
+    },
+    "coldBytes": 87152,
+    "warm": {
+     "values": [
+      100
+     ],
+     "ms": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "values": [
+      100
+     ],
+     "ms": 333.59999990463257
+    },
+    "coldBytes": 87152,
+    "warm": {
+     "values": [
+      100
+     ],
+     "ms": 0.2999999523162842
+    },
+    "warmBytes": 0
+   }
+  ]
+ },
+ {
+  "file": "mst",
+  "method": "geotiff.js window, 3857 copy, S3-like",
+  "lonlat": [
+   -84.625,
+   27.425
+  ],
+  "near": [
+   -84.325,
+   27.625
+  ],
+  "values": [
+   100
+  ],
+  "nearValues": [
+   100
+  ],
+  "coldMs": 443.89999997615814,
+  "warmMs": 1,
+  "coldBytes": 33510,
+  "warmBytes": 0,
+  "runs": [
+   {
+    "cold": {
+     "url": "http://localhost:8787/3857/9fe6f75498affae1.tif",
+     "col": 2170,
+     "row": 1142,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 147.10000002384186,
+      "read": 297.6999999284744,
+      "total": 444.7999999523163
+     },
+     "bytes": 32768,
+     "requests": 2
+    },
+    "coldBytes": 33510,
+    "warm": {
+     "url": "http://localhost:8787/3857/9fe6f75498affae1.tif",
+     "col": 2177,
+     "row": 1137,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 0.10000002384185791,
+      "read": 0.8999999761581421,
+      "total": 1
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "http://localhost:8787/3857/9fe6f75498affae1.tif",
+     "col": 2170,
+     "row": 1142,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 147.20000004768372,
+      "read": 294.89999997615814,
+      "total": 442.10000002384186
+     },
+     "bytes": 32768,
+     "requests": 2
+    },
+    "coldBytes": 33510,
+    "warm": {
+     "url": "http://localhost:8787/3857/9fe6f75498affae1.tif",
+     "col": 2177,
+     "row": 1137,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 0.10000002384185791,
+      "read": 1,
+      "total": 1.100000023841858
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "http://localhost:8787/3857/9fe6f75498affae1.tif",
+     "col": 2170,
+     "row": 1142,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 147.10000002384186,
+      "read": 296.7999999523163,
+      "total": 443.89999997615814
+     },
+     "bytes": 32768,
+     "requests": 2
+    },
+    "coldBytes": 33510,
+    "warm": {
+     "url": "http://localhost:8787/3857/9fe6f75498affae1.tif",
+     "col": 2177,
+     "row": 1137,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 0.09999990463256836,
+      "read": 0.9000000953674316,
+      "total": 1
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   }
+  ]
+ },
+ {
+  "file": "mst",
+  "method": "geotiff.js window, 4326 S3",
+  "lonlat": [
+   -84.625,
+   27.425
+  ],
+  "near": [
+   -84.325,
+   27.625
+  ],
+  "values": [
+   100
+  ],
+  "nearValues": [
+   100
+  ],
+  "coldMs": 554.6000000238419,
+  "warmMs": 1.100000023841858,
+  "coldBytes": 34278,
+  "warmBytes": 0,
+  "runs": [
+   {
+    "cold": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif",
+     "col": 1907,
+     "row": 660,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 405.2999999523163,
+      "read": 149.30000007152557,
+      "total": 554.6000000238419
+     },
+     "bytes": 32768,
+     "requests": 2
+    },
+    "coldBytes": 34278,
+    "warm": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif",
+     "col": 1913,
+     "row": 656,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 0.10000002384185791,
+      "read": 1,
+      "total": 1.100000023841858
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif",
+     "col": 1907,
+     "row": 660,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 417.09999990463257,
+      "read": 156.60000002384186,
+      "total": 573.6999999284744
+     },
+     "bytes": 32768,
+     "requests": 2
+    },
+    "coldBytes": 34238,
+    "warm": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif",
+     "col": 1913,
+     "row": 656,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 0.10000002384185791,
+      "read": 1.100000023841858,
+      "total": 1.2000000476837158
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   },
+   {
+    "cold": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif",
+     "col": 1907,
+     "row": 660,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 394.3000000715256,
+      "read": 158.59999990463257,
+      "total": 552.8999999761581
+     },
+     "bytes": 32768,
+     "requests": 2
+    },
+    "coldBytes": 34278,
+    "warm": {
+     "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/marine-atlas/cog/usa05/9fe6f75498affae1.tif",
+     "col": 1913,
+     "row": 656,
+     "values": [
+      100
+     ],
+     "ms": {
+      "open": 0,
+      "read": 1,
+      "total": 1
+     },
+     "bytes": 0,
+     "requests": 0
+    },
+    "warmBytes": 0
+   }
+  ]
+ },
+ {
+  "file": "mst",
+  "method": "titiler /cog/point (Node fetch)",
+  "lonlat": [
+   -84.625,
+   27.425
+  ],
+  "values": [
+   100
+  ],
+  "coldMs": 123.03287500000079,
+  "runs": [
+   353.98783399999957,
+   120.5871670000015,
+   123.03287500000079
+  ]
+ }
+]
