@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "generated": "2026-10-20T12:00:03Z",
+  "base": "https://storage.oceanmetrics.io/gazetteer/",
+  "base_direct": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/gazetteer/",
+  "layers": [
+    {
+      "slug": "noaa_maritime_limits",
+      "title": "U.S. maritime limits and boundaries (lines)",
+      "collection": "noaa_maritime_limits",
+      "kind": "vector",
+      "raster": null,
+      "display": null,
+      "pmtiles": "https://storage.oceanmetrics.io/gazetteer/noaa_maritime_limits/places.pmtiles",
+      "source_layer": "noaa_maritime_limits",
+      "geom_type": "MultiLineString",
+      "n": 246,
+      "updated": "2026-10-16T08:06:50Z",
+      "version": "1.0.2",
+      "paint": {
+        "line": {
+          "line-color": "#0b6e99",
+          "line-width": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            3,
+            1,
+            10,
+            2.5
+          ]
+        }
+      },
+      "authority": "NOAA-OCS",
+      "place_type": "maritime_limit",
+      "bbox": [
+        141.197506687,
+        -17.555000001999986,
+        296.111111065,
+        74.70884000400002
+      ],
+      "attribution": "Department of Commerce (DOC), National Oceanic and Atmospheric Administration (NOAA), National Ocean Service (NOS), Office of Coast Survey (OCS). Public domain; not for legal use. Processed by Ocean Metrics.",
+      "attribution_html": "Department of Commerce (DOC), National Oceanic and Atmospheric Administration (NOAA), National Ocean Service (NOS), Office of Coast Survey (OCS). Public domain; not for legal use. Processed by Ocean Metrics.",
+      "license": "CC-PDDC",
+      "license_url": "https://www.copyright.gov/title17/92chap1.html#105",
+      "citation": "Department of Commerce (DOC), National Oceanic and Atmospheric Administration (NOAA), National Ocean Service (NOS), Office of Coast Survey (OCS). Public domain; not for legal use. Processed by Ocean Metrics. U.S. maritime limits and boundaries (lines), v1.0.2. Ocean Metrics gazetteer, 2026. https://storage.oceanmetrics.io/gazetteer/noaa_maritime_limits/",
+      "source_link": {
+        "href": "https://nauticalcharts.noaa.gov/data/us-maritime-limits-and-boundaries.html",
+        "title": "NOAA Office of Coast Survey"
+      },
+      "status": null,
+      "status_history": null,
+      "status_label": null,
+      "search_rank": 0,
+      "created": "2026-10-08",
+      "source_date": null,
+      "parquet": "https://storage.oceanmetrics.io/gazetteer/noaa_maritime_limits/places.parquet",
+      "parquet_sha256": "0befc5326708b343e6595ad97872b949a640177d0b879829e1d55254078f9cd1",
+      "h3": null
+    },
+    {
+      "slug": "noaa_sanctuaries",
+      "title": "NOAA National Marine Sanctuaries",
+      "collection": "noaa_sanctuaries",
+      "kind": "vector",
+      "raster": null,
+      "display": null,
+      "pmtiles": "https://storage.oceanmetrics.io/gazetteer/noaa_sanctuaries/places.pmtiles",
+      "source_layer": "noaa_sanctuaries",
+      "geom_type": "MultiPolygon",
+      "n": 47,
+      "updated": "2026-10-16T08:06:21Z",
+      "version": "1.1.1",
+      "paint": {
+        "fill": {
+          "fill-color": "#e08a1e",
+          "fill-opacity": 0.45
+        },
+        "line": {
+          "line-color": "#a85f00",
+          "line-width": 1
+        }
+      },
+      "authority": "ONMS",
+      "place_type": "protected_area",
+      "bbox": [
+        177.84420801263903,
+        -15.386142388115019,
+        289.96493604001387,
+        48.50589527436556
+      ],
+      "attribution": "National Oceanic and Atmospheric Administration (NOAA), Office of National Marine Sanctuaries (ONMS), via MarineCadastre.gov. Public domain. Processed by Ocean Metrics.",
+      "attribution_html": "National Oceanic and Atmospheric Administration (NOAA), Office of National Marine Sanctuaries (ONMS), via MarineCadastre.gov. Public domain. Processed by Ocean Metrics.",
+      "license": "CC-PDDC",
+      "license_url": "https://www.copyright.gov/title17/92chap1.html#105",
+      "citation": "National Oceanic and Atmospheric Administration (NOAA), Office of National Marine Sanctuaries (ONMS), via MarineCadastre.gov. Public domain. Processed by Ocean Metrics. NOAA National Marine Sanctuaries, v1.1.1. Ocean Metrics gazetteer, 2026. https://storage.oceanmetrics.io/gazetteer/noaa_sanctuaries/",
+      "source_link": {
+        "href": "https://www.arcgis.com/home/item.html?id=da25ca98e26b495a8a06cb72f120dfa6",
+        "title": "NOAA Office of National Marine Sanctuaries (ONMS)"
+      },
+      "status": null,
+      "status_history": null,
+      "status_label": null,
+      "search_rank": 0,
+      "created": "2026-10-08",
+      "source_date": null,
+      "parquet": "https://storage.oceanmetrics.io/gazetteer/noaa_sanctuaries/places.parquet",
+      "parquet_sha256": "02ffaf962f240293b7aa34a2ef5c8a3a22fb6fb909b8fb31b270a619c653271a",
+      "h3": "https://storage.oceanmetrics.io/gazetteer/noaa_sanctuaries/h3/membership.json",
+      "access": "public"
+    }
+  ]
+}
