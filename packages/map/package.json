@@ -1,0 +1,27 @@
+{
+  "name": "@oceanmetrics/map",
+  "version": "0.1.0",
+  "description": "the map stack of the Ocean Metrics apps: MapLibre 6, PMTiles, the bathymetric basemap, COG and H3 sources",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --root ../.. packages/map"
+  }
+}
