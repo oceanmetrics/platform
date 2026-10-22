@@ -114,7 +114,7 @@
         "source_date": { "$ref": "#/$defs/nullableString", "description": "latest upstream data edit date" },
         "parquet": { "$ref": "#/$defs/nullableUrl", "description": "absolute URL of places.parquet; null for raster and derived rows" },
         "parquet_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
-        "h3": { "$ref": "#/$defs/nullableUrl", "description": "URL of <slug>/h3/membership.json, only while built from this row's parquet_sha256; see the rule on polygon vector rows" },
+        "h3": { "$ref": "#/$defs/nullableUrl", "description": "URL of <slug>/h3/membership.json, only while built from this row's parquet_sha256. Required on every polygon vector row (the rule below); a mixed-geometry collection that holds polygons (gebco_undersea, geom_type MultiLineString) may carry one; points and lines have null" },
         "access": { "enum": ["public", "unlisted"], "description": "public: listed and searchable; unlisted: reachable by link, never listed or searched" }
       },
       "allOf": [
@@ -123,8 +123,7 @@
             "properties": { "kind": { "const": "vector" }, "geom_type": { "enum": ["Polygon", "MultiPolygon"] } },
             "required": ["kind", "geom_type"]
           },
-          "then": { "properties": { "h3": { "type": "string" } } },
-          "else": { "properties": { "h3": { "type": "null" } } }
+          "then": { "properties": { "h3": { "type": "string" } } }
         }
       ]
     },
