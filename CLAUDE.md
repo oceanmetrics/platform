@@ -33,7 +33,14 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
 - **`catalog` holds the STAC layer profiles** and the values contract (`values-row`, `values-provenance`): one self-contained JSON Schema per profile in `packages/catalog/schemas/`,
   read at run time by `@oceanmetrics/catalog/validate` (ajv, Node only, never imported by the index) and by the Python
   `om_extract.schemas`. Fixtures in `fixtures/<name>/{valid,invalid}/`, the expected errors in `invalid.json`; the test
-  discovers every schema. **`map` is a scaffold** (a `PACKAGE` constant and one test); its README says what fills in.
+  discovers every schema.
+- **`map` is the map stack** (0.2.0): the `LayerSlot` contract (`slot.ts`, moved from indicators), `setupMapLibre`, the
+  basemap (`composeStyle`, ported from CalCOFI explore), the ramps, and the `grid`, `cog` and `h3` providers. It never
+  imports `maplibre-gl` at run time (the app passes its module to `setupMapLibre`; types only elsewhere), so tests run
+  without MapLibre; the COG protocol loads lazily and the h3 tile builder runs in MapLibre's worker
+  (`@oceanmetrics/map/h3-worker`). The spike conditions are tests: geojson-vt `tolerance: 0`, the antimeridian unwrap on
+  `fixtures/h3/crossing55.json`, the 3857 guard, legends from STAC only. The basemap tiers come from
+  `scripts/basemap/build_gebco.sh`.
 - Source imports use `.js` specifiers (`./grid.js`) so the emitted declarations and `dist/*.js` resolve for every consumer
   and for plain Node ESM (places 0.5.1 shipped without them); `scripts/esm-load.test.ts` builds and loads each `dist/index.js` in Node.
 

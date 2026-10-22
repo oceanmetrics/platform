@@ -8,7 +8,7 @@ rule or a reader is written once.
 |---|---|---|
 | [`@oceanmetrics/places`](packages/places/) | client for the places gazetteer: layers manifest, MapLibre layers from PMTiles, parquet search and lookups, credits | moved in at 0.5.0 from `oceanmetrics/places` `client/` |
 | [`@oceanmetrics/status`](packages/status/) | the status methods (`iea-sd`, `names-pct`, `values`), the period grid, sentences and alt text, the quadrant plot rules | moved in at 0.1.0 from `oceanmetrics/indicators` `src/status/`, with the ecoidx cross-check fixture |
-| [`@oceanmetrics/map`](packages/map/) | the map stack: MapLibre 6, PMTiles, the bathymetric basemap, COG and H3 sources | scaffold only; gains the renderer (grid slice, COG, H3 source) and the basemap in build week 2, 2026-11-06 to 11-12 |
+| [`@oceanmetrics/map`](packages/map/) | the map stack: MapLibre 6 setup, the bathymetric basemap, the ramps, the layer slot contract and its providers (grid slice, COG, H3) | 0.2.0 (2026-10-23, build week 2 step 1; 0.1.0 was the scaffold); the basemap tiers are built by `scripts/basemap/build_gebco.sh`, not uploaded yet |
 | [`@oceanmetrics/catalog`](packages/catalog/) | the catalog contracts: the STAC layer profiles (JSON Schemas, types, a validator, the `om-catalog` CLI), then the indicators manifest and values and the places index readers | 0.2.0: the six STAC layer profiles; gains the values and manifest readers in build week 1 (2026-10-30 to 11-05) |
 
 ## Rules
