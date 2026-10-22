@@ -1,0 +1,22 @@
+[
+ {
+  "cam": "fiji-seam-z7",
+  "bc": true,
+  "ccw": true
+ },
+ {
+  "cam": "fiji-z5",
+  "bc": true,
+  "ccw": true
+ },
+ {
+  "cam": "pacific-z2",
+  "bc": false,
+  "ccw": false
+ },
+ {
+  "cam": "world-z1",
+  "bc": true,
+  "ccw": true
+ }
+]

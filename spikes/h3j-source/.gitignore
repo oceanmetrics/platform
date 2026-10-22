@@ -1,0 +1,6 @@
+node_modules/
+dist/
+dist-*/
+data/
+public/*.json
+public/*.pmtiles

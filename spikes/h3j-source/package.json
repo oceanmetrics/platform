@@ -1,0 +1,32 @@
+{
+  "name": "spike-h3j-source",
+  "private": true,
+  "type": "module",
+  "description": "Day 7 spike 1: H3 hexagons drawn by a MapLibre source (h3j, PMTiles) against deck.gl H3HexagonLayer",
+  "scripts": {
+    "data": "node scripts/extract.mjs",
+    "tiles": "node scripts/build-pmtiles.mjs",
+    "build": "vite build",
+    "bundle": "node scripts/bundle-size.mjs",
+    "measure": "node scripts/measure.mjs"
+  },
+  "dependencies": {
+    "@deck.gl/core": "9.4.0",
+    "@deck.gl/geo-layers": "9.4.0",
+    "@deck.gl/layers": "9.4.0",
+    "@deck.gl/mapbox": "9.4.0",
+    "@maplibre/geojson-vt": "6.3.0",
+    "@maplibre/vt-pbf": "4.3.2",
+    "h3-js": "4.4.0",
+    "maplibre-gl": "6.13.0",
+    "pmtiles": "4.5.0"
+  },
+  "devDependencies": {
+    "@types/geojson": "7946.0.16",
+    "hyparquet": "1.31.5",
+    "hyparquet-compressors": "1.1.2",
+    "playwright": "1.64",
+    "typescript": "~5.9.0",
+    "vite": "8.3.3"
+  }
+}

@@ -1,0 +1,77 @@
+{
+ "variants": {
+  "zero": {
+   "mainGzKB": 268.3,
+   "workerGzKB": 140.3,
+   "files": {
+    "maplibre-gl-worker-DOnTc6YO.mjs": 140.3,
+    "zero-D13nmw5Z.js": 268.3
+   },
+   "deltaMainKB": 0,
+   "deltaWorkerKB": 0
+  },
+  "a": {
+   "mainGzKB": 563.2,
+   "workerGzKB": 140.3,
+   "files": {
+    "a-Do-n_YKe.js": 514,
+    "array-utils-flat-BL8Cekj1.js": 9.2,
+    "expression-C4x9yiMU.js": 28.2,
+    "get-attribute-from-layouts-Dd2gixpo.js": 5.4,
+    "maplibre-gl-worker-DOnTc6YO.mjs": 140.3,
+    "webgl-CzjspdHp.js": 6.4
+   },
+   "deltaMainKB": 294.9,
+   "deltaWorkerKB": 0
+  },
+  "b": {
+   "mainGzKB": 330.9,
+   "workerGzKB": 140.3,
+   "files": {
+    "b-Da8thJ1z.js": 330.9,
+    "maplibre-gl-worker-DOnTc6YO.mjs": 140.3
+   },
+   "deltaMainKB": 62.6,
+   "deltaWorkerKB": 0
+  },
+  "c": {
+   "mainGzKB": 336.1,
+   "workerGzKB": 140.3,
+   "files": {
+    "c-B80N8zXr.js": 336.1,
+    "maplibre-gl-worker-DOnTc6YO.mjs": 140.3
+   },
+   "deltaMainKB": 67.8,
+   "deltaWorkerKB": 0
+  },
+  "bw": {
+   "mainGzKB": 268.8,
+   "workerGzKB": 209,
+   "files": {
+    "bw-bBprWtBY.js": 268.8,
+    "h3jWorker-BGPo51yT.mjs": 68.8,
+    "maplibre-gl-worker-DOnTc6YO.mjs": 140.3
+   },
+   "deltaMainKB": 0.5,
+   "deltaWorkerKB": 68.7
+  },
+  "cw": {
+   "mainGzKB": 268.8,
+   "workerGzKB": 209,
+   "files": {
+    "cw-C7TNp5bc.js": 268.8,
+    "h3jWorker-BGPo51yT.mjs": 68.8,
+    "maplibre-gl-worker-DOnTc6YO.mjs": 140.3
+   },
+   "deltaMainKB": 0.5,
+   "deltaWorkerKB": 68.7
+  }
+ },
+ "deps": {
+  "deck": 327.2,
+  "h3": 60.6,
+  "vt": 7.3,
+  "pmtiles": 8,
+  "port": 68.9
+ }
+}

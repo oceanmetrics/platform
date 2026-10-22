@@ -1,0 +1,5 @@
+{
+ "es": { "tiles": 4351, "zooms": "0-6", "rawJsonMB": 29.81, "archiveBytes": 6423418, "rootDirBytes": 7056, "leafDirBytes": 0, "tileType": "unknown (h3j, columnar JSON)", "tileCompression": "gzip -9" },
+ "n": { "tiles": 5311, "zooms": "0-6", "rawJsonMB": 190.83, "archiveBytes": 31567421, "rootDirBytes": 9532, "leafDirBytes": 0, "tileType": "unknown (h3j, columnar JSON)", "tileCompression": "gzip -9" },
+ "cellsJson": { "es": { "bytes": 2401708, "gzWireKB": 478 }, "n": { "bytes": 15497478, "gzWireKB": 2533 } }
+}
