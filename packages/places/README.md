@@ -25,7 +25,14 @@ Calling `configure` clears the caches.
 The manifest written by `scripts/build_layers_json.py`: one row per map layer (`slug`, `title`, `collection`,
 `pmtiles`, `source_layer`, `geom_type`, `n`, `updated`, `version`, `paint`, `authority`, `place_type`, `bbox`,
 `attribution`, `attribution_html`, `license`, `license_url`, `citation`, and since 0.1.3 `status`, `status_history`,
-`status_label`, `created`, `source_date`, `parquet`, `parquet_sha256`). Cached; `{ refresh: true }` re-fetches.
+`status_label`, `created`, `source_date`, `parquet`, `parquet_sha256`, and since 0.5.1 `h3` and `access`). Cached;
+`{ refresh: true }` re-fetches.
+
+Access: `access` is `'public'` or `'unlisted'` (required in the manifest since 0.5.1; a row from an older manifest has
+none and counts as public). `listLayers()` drops unlisted rows; `listLayers({ includeUnlisted: true })` keeps them. An
+unlisted layer is hidden from lists, not from a link: `getLayer(slug)`, `addLayer`, `getPlace(id, { slug })` and
+`creditsFor` still find it, and its places are not in the search index. `h3` is the URL of a polygon layer's place x H3
+membership (`<slug>/h3/membership.json`), null for other layers.
 A layer's `bbox` follows the index convention below: for a layer with places cut at the antimeridian it is unwrapped
 (east beyond 180, e.g. `[177.8, -15.4, 295.5, 48.5]`), so `fitBounds` takes it as is.
 

@@ -1,0 +1,301 @@
+{
+  "schema": 1,
+  "generated": "2026-10-20T12:00:03Z",
+  "base": "https://storage.oceanmetrics.io/gazetteer/",
+  "base_direct": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/gazetteer/",
+  "layers": [
+    {
+      "slug": "calcofi_stations",
+      "title": "CalCOFI stations",
+      "collection": "calcofi_stations",
+      "kind": "vector",
+      "raster": null,
+      "display": null,
+      "pmtiles": "https://storage.oceanmetrics.io/gazetteer/calcofi_stations/places.pmtiles",
+      "source_layer": "calcofi_stations",
+      "geom_type": "Point",
+      "n": 113,
+      "updated": "2026-10-08T17:36:01Z",
+      "version": "1.0.1",
+      "paint": {
+        "circle": {
+          "circle-color": "#0b6e99",
+          "circle-radius": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            3,
+            2,
+            8,
+            5,
+            12,
+            7
+          ],
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-width": 1,
+          "circle-opacity": 0.9
+        }
+      },
+      "authority": "CALCOFI",
+      "place_type": "station",
+      "bbox": [
+        -126.48559,
+        29.84637,
+        -117.27357,
+        37.84743
+      ],
+      "attribution": "California Cooperative Oceanic Fisheries Investigations (CalCOFI), calcofi.org. CC BY 4.0. Processed by Ocean Metrics.",
+      "attribution_html": "<a href=\"https://calcofi.org/\">California Cooperative Oceanic Fisheries Investigations (CalCOFI)</a>, calcofi.org. CC BY 4.0. Processed by Ocean Metrics.",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "citation": "California Cooperative Oceanic Fisheries Investigations (CalCOFI), calcofi.org. CC BY 4.0. Processed by Ocean Metrics. CalCOFI stations, v1.0.1. Ocean Metrics gazetteer, 2026. https://storage.oceanmetrics.io/gazetteer/calcofi_stations/",
+      "source_link": {
+        "href": "https://calcofi.org/sampling-info/station-positions/",
+        "title": "California Cooperative Oceanic Fisheries Investigations (CalCOFI)"
+      },
+      "status": null,
+      "status_history": null,
+      "status_label": null,
+      "search_rank": 0,
+      "created": "2026-10-08",
+      "source_date": "2022-02-06",
+      "parquet": "https://storage.oceanmetrics.io/gazetteer/calcofi_stations/places.parquet",
+      "parquet_sha256": "66cd7735b352523b3a3346f0d7bc389abb331fcbbc9b58fde03ab2e6b9014385",
+      "h3": null,
+      "access": "public"
+    },
+    {
+      "slug": "fao_high_seas",
+      "title": "High Seas by FAO Major Fishing Area",
+      "collection": "fao_high_seas",
+      "kind": "derived",
+      "raster": null,
+      "display": {
+        "via": "fao_major_areas",
+        "id_from": "fao_id"
+      },
+      "pmtiles": null,
+      "source_layer": null,
+      "geom_type": "MultiPolygon",
+      "n": 18,
+      "updated": "2026-10-20T11:21:22Z",
+      "version": "1.0.0",
+      "paint": {
+        "fill": {
+          "fill-color": "#e08a1e",
+          "fill-opacity": 0.45
+        },
+        "line": {
+          "line-color": "#a85f00",
+          "line-width": 1
+        }
+      },
+      "authority": "FAOHS",
+      "place_type": "high_seas_area",
+      "bbox": [
+        -180.0,
+        -85.5625,
+        180.0,
+        90.0
+      ],
+      "attribution": "Flanders Marine Institute (2024). Maritime Boundaries Geodatabase: High Seas, version 2. Available online at https://www.marineregions.org/. https://doi.org/10.14284/696. FAO. 2024. FAO Major Fishing Areas for Statistical Purposes. In: FAO Fisheries and Aquaculture Division [online]. https://www.fao.org/fishery/geonetwork?uuid=ac02a460-da52-11dc-9d70-0017f293bd28. CC BY 4.0. Intersection by Ocean Metrics.",
+      "attribution_html": "Flanders Marine Institute (2024). Maritime Boundaries Geodatabase: High Seas, version 2. Available online at https://www.marineregions.org/. https://doi.org/10.14284/696. FAO. 2024. FAO Major Fishing Areas for Statistical Purposes. In: FAO Fisheries and Aquaculture Division [online]. https://www.fao.org/fishery/geonetwork?uuid=ac02a460-da52-11dc-9d70-0017f293bd28. CC BY 4.0. Intersection by Ocean Metrics.",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "citation": "Flanders Marine Institute (2024). Maritime Boundaries Geodatabase: High Seas, version 2. Available online at https://www.marineregions.org/. https://doi.org/10.14284/696. FAO. 2024. FAO Major Fishing Areas for Statistical Purposes. In: FAO Fisheries and Aquaculture Division [online]. https://www.fao.org/fishery/geonetwork?uuid=ac02a460-da52-11dc-9d70-0017f293bd28. CC BY 4.0. Intersection by Ocean Metrics. High Seas by FAO Major Fishing Area, v1.0.0. Ocean Metrics gazetteer, 2026. https://storage.oceanmetrics.io/gazetteer/fao_high_seas/",
+      "source_link": {
+        "href": "https://www.marineregions.org/",
+        "title": "Marine Regions (VLIZ) and FAO"
+      },
+      "status": null,
+      "status_history": null,
+      "status_label": null,
+      "search_rank": 0,
+      "created": "2026-10-20",
+      "source_date": null,
+      "parquet": null,
+      "parquet_sha256": null,
+      "h3": null,
+      "access": "public"
+    },
+    {
+      "slug": "mr_eez",
+      "title": "Marine Regions Exclusive Economic Zones (200 NM)",
+      "collection": "mr_eez",
+      "kind": "raster",
+      "raster": {
+        "tiles": [
+          "https://geo.vliz.be/geoserver/MarineRegions/gwc/service/wmts?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER=eez&STYLE=&TILEMATRIXSET=EPSG:900913&TILEMATRIX=EPSG:900913:{z}&TILEROW={y}&TILECOL={x}&FORMAT=image/png"
+        ],
+        "tile_size": 256,
+        "minzoom": 0,
+        "maxzoom": 12,
+        "link": "https://doi.org/10.14284/632",
+        "feature_url": "https://geo.vliz.be/geoserver/MarineRegions/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=MarineRegions:eez&outputFormat=application/json&srsName=EPSG:4326&CQL_FILTER=mrgid={source_id}",
+        "info_url": "https://geo.vliz.be/geoserver/MarineRegions/wms?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo&LAYERS=MarineRegions:eez&QUERY_LAYERS=MarineRegions:eez&STYLES=&SRS=EPSG:4326&BBOX={bbox}&WIDTH=101&HEIGHT=101&X=50&Y=50&INFO_FORMAT=application/json&FEATURE_COUNT=5&PROPERTYNAME=mrgid,geoname",
+        "info_id": "mrgid"
+      },
+      "display": null,
+      "pmtiles": null,
+      "source_layer": null,
+      "geom_type": "MultiPolygon",
+      "n": 285,
+      "updated": "2026-10-08T14:14:40Z",
+      "version": "1.0.1",
+      "paint": {
+        "raster": {
+          "raster-opacity": 0.8
+        },
+        "fill": {
+          "fill-color": "#e08a1e",
+          "fill-opacity": 0.45
+        },
+        "line": {
+          "line-color": "#a85f00",
+          "line-width": 1
+        }
+      },
+      "authority": "MRGID",
+      "place_type": "eez",
+      "bbox": [
+        -180.0,
+        -62.78834217,
+        180.0,
+        86.99400535
+      ],
+      "attribution": "Flanders Marine Institute (2023). Maritime Boundaries Geodatabase: Maritime Boundaries and Exclusive Economic Zones (200NM), version 12. Available online at https://www.marineregions.org/. https://doi.org/10.14284/632. Database: Flanders Marine Institute (2026): MarineRegions.org. Available online at www.marineregions.org. Consulted on 2026-10-08. CC BY 4.0. Processed by Ocean Metrics.",
+      "attribution_html": "Flanders Marine Institute (2023). Maritime Boundaries Geodatabase: Maritime Boundaries and Exclusive Economic Zones (200NM), version 12. Available online at https://www.marineregions.org/. https://doi.org/10.14284/632. Database: Flanders Marine Institute (2026): MarineRegions.org. Available online at www.marineregions.org. Consulted on 2026-10-08. CC BY 4.0. Processed by Ocean Metrics.",
+      "license": "CC-BY-4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "citation": "Flanders Marine Institute (2023). Maritime Boundaries Geodatabase: Maritime Boundaries and Exclusive Economic Zones (200NM), version 12. Available online at https://www.marineregions.org/. https://doi.org/10.14284/632. Database: Flanders Marine Institute (2026): MarineRegions.org. Available online at www.marineregions.org. Consulted on 2026-10-08. CC BY 4.0. Processed by Ocean Metrics. Marine Regions Exclusive Economic Zones (200 NM), v1.0.1. Ocean Metrics gazetteer, 2026. https://storage.oceanmetrics.io/gazetteer/mr_eez/",
+      "source_link": {
+        "href": "https://www.marineregions.org/",
+        "title": "Marine Regions (VLIZ)"
+      },
+      "status": null,
+      "status_history": null,
+      "status_label": null,
+      "search_rank": 0,
+      "created": "2026-10-19",
+      "source_date": "2023-10-25",
+      "parquet": null,
+      "parquet_sha256": null,
+      "h3": null,
+      "access": "public"
+    },
+    {
+      "slug": "noaa_maritime_limits",
+      "title": "U.S. maritime limits and boundaries (lines)",
+      "collection": "noaa_maritime_limits",
+      "kind": "vector",
+      "raster": null,
+      "display": null,
+      "pmtiles": "https://storage.oceanmetrics.io/gazetteer/noaa_maritime_limits/places.pmtiles",
+      "source_layer": "noaa_maritime_limits",
+      "geom_type": "MultiLineString",
+      "n": 246,
+      "updated": "2026-10-16T08:06:50Z",
+      "version": "1.0.2",
+      "paint": {
+        "line": {
+          "line-color": "#0b6e99",
+          "line-width": [
+            "interpolate",
+            [
+              "linear"
+            ],
+            [
+              "zoom"
+            ],
+            3,
+            1,
+            10,
+            2.5
+          ]
+        }
+      },
+      "authority": "NOAA-OCS",
+      "place_type": "maritime_limit",
+      "bbox": [
+        141.197506687,
+        -17.555000001999986,
+        296.111111065,
+        74.70884000400002
+      ],
+      "attribution": "Department of Commerce (DOC), National Oceanic and Atmospheric Administration (NOAA), National Ocean Service (NOS), Office of Coast Survey (OCS). Public domain; not for legal use. Processed by Ocean Metrics.",
+      "attribution_html": "Department of Commerce (DOC), National Oceanic and Atmospheric Administration (NOAA), National Ocean Service (NOS), Office of Coast Survey (OCS). Public domain; not for legal use. Processed by Ocean Metrics.",
+      "license": "CC-PDDC",
+      "license_url": "https://www.copyright.gov/title17/92chap1.html#105",
+      "citation": "Department of Commerce (DOC), National Oceanic and Atmospheric Administration (NOAA), National Ocean Service (NOS), Office of Coast Survey (OCS). Public domain; not for legal use. Processed by Ocean Metrics. U.S. maritime limits and boundaries (lines), v1.0.2. Ocean Metrics gazetteer, 2026. https://storage.oceanmetrics.io/gazetteer/noaa_maritime_limits/",
+      "source_link": {
+        "href": "https://nauticalcharts.noaa.gov/data/us-maritime-limits-and-boundaries.html",
+        "title": "NOAA Office of Coast Survey"
+      },
+      "status": null,
+      "status_history": null,
+      "status_label": null,
+      "search_rank": 0,
+      "created": "2026-10-08",
+      "source_date": null,
+      "parquet": "https://storage.oceanmetrics.io/gazetteer/noaa_maritime_limits/places.parquet",
+      "parquet_sha256": "0befc5326708b343e6595ad97872b949a640177d0b879829e1d55254078f9cd1",
+      "h3": null,
+      "access": "public"
+    },
+    {
+      "slug": "noaa_sanctuaries",
+      "title": "NOAA National Marine Sanctuaries",
+      "collection": "noaa_sanctuaries",
+      "kind": "vector",
+      "raster": null,
+      "display": null,
+      "pmtiles": "https://storage.oceanmetrics.io/gazetteer/noaa_sanctuaries/places.pmtiles",
+      "source_layer": "noaa_sanctuaries",
+      "geom_type": "MultiPolygon",
+      "n": 47,
+      "updated": "2026-10-16T08:06:21Z",
+      "version": "1.1.1",
+      "paint": {
+        "fill": {
+          "fill-color": "#e08a1e",
+          "fill-opacity": 0.45
+        },
+        "line": {
+          "line-color": "#a85f00",
+          "line-width": 1
+        }
+      },
+      "authority": "ONMS",
+      "place_type": "protected_area",
+      "bbox": [
+        177.84420801263903,
+        -15.386142388115019,
+        289.96493604001387,
+        48.50589527436556
+      ],
+      "attribution": "National Oceanic and Atmospheric Administration (NOAA), Office of National Marine Sanctuaries (ONMS), via MarineCadastre.gov. Public domain. Processed by Ocean Metrics.",
+      "attribution_html": "National Oceanic and Atmospheric Administration (NOAA), Office of National Marine Sanctuaries (ONMS), via MarineCadastre.gov. Public domain. Processed by Ocean Metrics.",
+      "license": "CC-PDDC",
+      "license_url": "https://www.copyright.gov/title17/92chap1.html#105",
+      "citation": "National Oceanic and Atmospheric Administration (NOAA), Office of National Marine Sanctuaries (ONMS), via MarineCadastre.gov. Public domain. Processed by Ocean Metrics. NOAA National Marine Sanctuaries, v1.1.1. Ocean Metrics gazetteer, 2026. https://storage.oceanmetrics.io/gazetteer/noaa_sanctuaries/",
+      "source_link": {
+        "href": "https://www.arcgis.com/home/item.html?id=da25ca98e26b495a8a06cb72f120dfa6",
+        "title": "NOAA Office of National Marine Sanctuaries (ONMS)"
+      },
+      "status": null,
+      "status_history": null,
+      "status_label": null,
+      "search_rank": 0,
+      "created": "2026-10-08",
+      "source_date": null,
+      "parquet": "https://storage.oceanmetrics.io/gazetteer/noaa_sanctuaries/places.parquet",
+      "parquet_sha256": "02ffaf962f240293b7aa34a2ef5c8a3a22fb6fb909b8fb31b270a619c653271a",
+      "h3": "https://storage.oceanmetrics.io/gazetteer/noaa_sanctuaries/h3/membership.json",
+      "access": "public"
+    }
+  ]
+}

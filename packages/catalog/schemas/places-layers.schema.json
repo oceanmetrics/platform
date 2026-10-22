@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/places-layers/v1.0.0/schema.json",
+  "title": "places layers.json",
+  "description": "The layers.json manifest of the Ocean Metrics places gazetteer (published at https://storage.oceanmetrics.io/gazetteer/index/layers.json, written by oceanmetrics/places scripts/build_layers_json.py, read by @oceanmetrics/places). One row per map layer. Beyond the keys: (a) a vector row with a Polygon or MultiPolygon geom_type has `h3`, the URL of its place x H3 membership, every other row has h3 null; (b) every row has `access`, public or unlisted (an unlisted layer is reachable by link and never listed or searched).",
+  "type": "object",
+  "required": ["schema", "generated", "base", "base_direct", "layers"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": 1, "description": "manifest format version" },
+    "generated": { "type": "string", "format": "date-time", "description": "UTC timestamp of the build" },
+    "base": { "type": "string", "format": "uri", "description": "canonical storage host prefix, ends in /" },
+    "base_direct": { "type": "string", "format": "uri", "description": "the bucket's own host, no redirect; apps may swap it for `base` in pmtiles URLs" },
+    "layers": { "type": "array", "items": { "$ref": "#/$defs/layer" } }
+  },
+  "$defs": {
+    "nullableString": { "type": ["string", "null"] },
+    "url": { "type": "string", "pattern": "^https?://\\S+$" },
+    "nullableUrl": { "type": ["string", "null"], "pattern": "^https?://\\S+$" },
+    "layer": {
+      "type": "object",
+      "required": [
+        "slug", "title", "collection", "kind", "raster", "display", "pmtiles", "source_layer", "geom_type", "n",
+        "updated", "version", "paint", "authority", "place_type", "bbox", "attribution", "attribution_html",
+        "license", "license_url", "citation", "source_link", "status", "status_history", "status_label",
+        "search_rank", "created", "source_date", "parquet", "parquet_sha256", "h3", "access"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "layer id, the collection id" },
+        "title": { "type": "string", "minLength": 1 },
+        "collection": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$", "description": "STAC collection id, equal to slug" },
+        "kind": { "enum": ["vector", "raster", "derived"], "description": "vector: our PMTiles; raster: the publisher's tiles (a reference collection); derived: pieces of a reference collection drawn by another layer's PMTiles" },
+        "raster": {
+          "description": "tile source of a raster row, null otherwise",
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["tiles", "tile_size", "minzoom", "maxzoom", "link", "feature_url", "info_url", "info_id"],
+              "additionalProperties": false,
+              "properties": {
+                "tiles": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "description": "XYZ tile URL templates with {z} {x} {y}" },
+                "tile_size": { "type": "integer", "minimum": 1 },
+                "minzoom": { "type": "integer", "minimum": 0 },
+                "maxzoom": { "type": "integer", "minimum": 0 },
+                "link": { "$ref": "#/$defs/nullableString" },
+                "feature_url": { "$ref": "#/$defs/nullableString", "description": "one place's boundary from the publisher, takes {source_id}" },
+                "info_url": { "$ref": "#/$defs/nullableString", "description": "WMS GetFeatureInfo template taking {bbox}" },
+                "info_id": { "$ref": "#/$defs/nullableString", "description": "response field holding the place's source_id" }
+              }
+            }
+          ]
+        },
+        "display": {
+          "description": "a derived row is drawn by the PMTiles of collection `via`, each place in that layer's feature whose place_id is the place's source_id (held in the `id_from` column); null otherwise",
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["via", "id_from"],
+              "additionalProperties": false,
+              "properties": {
+                "via": { "type": "string", "minLength": 1 },
+                "id_from": { "type": "string", "minLength": 1 }
+              }
+            }
+          ]
+        },
+        "pmtiles": { "$ref": "#/$defs/nullableUrl", "description": "canonical PMTiles URL; null for raster and derived rows" },
+        "source_layer": { "$ref": "#/$defs/nullableString", "description": "vector tile layer name; null for raster and derived rows" },
+        "geom_type": { "type": "string", "minLength": 1, "description": "Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon or Mixed" },
+        "n": { "type": ["integer", "null"], "minimum": 0, "description": "feature count" },
+        "updated": { "type": ["string", "null"], "description": "the current build's timestamp" },
+        "version": { "$ref": "#/$defs/nullableString", "description": "collection version (semver)" },
+        "paint": { "type": "object", "description": "MapLibre paint properties by layer type (fill, line, circle, raster)" },
+        "authority": { "$ref": "#/$defs/nullableString" },
+        "place_type": { "$ref": "#/$defs/nullableString" },
+        "bbox": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "array", "minItems": 4, "maxItems": 4, "items": { "type": "number" }, "description": "[west, south, east, north], east beyond 180 for a layer crossing the antimeridian" }
+          ]
+        },
+        "attribution": { "type": "string" },
+        "attribution_html": { "type": "string" },
+        "license": { "$ref": "#/$defs/nullableString", "description": "SPDX id" },
+        "license_url": { "$ref": "#/$defs/nullableString" },
+        "citation": { "type": "string" },
+        "source_link": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "required": ["href", "title"],
+              "additionalProperties": false,
+              "properties": {
+                "href": { "type": "string", "minLength": 1 },
+                "title": { "type": "string", "minLength": 1 }
+              }
+            }
+          ]
+        },
+        "status": {
+          "description": "layer-level status, null when none",
+          "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/statusEvent" }]
+        },
+        "status_history": {
+          "oneOf": [{ "type": "null" }, { "type": "array", "items": { "$ref": "#/$defs/statusEvent" } }]
+        },
+        "status_label": { "$ref": "#/$defs/nullableString", "description": "'rescinded 2025-07-30'" },
+        "search_rank": { "type": "integer", "description": "higher ranks win when one place is in several layers" },
+        "created": { "$ref": "#/$defs/nullableString", "description": "ISO date of the first published version" },
+        "source_date": { "$ref": "#/$defs/nullableString", "description": "latest upstream data edit date" },
+        "parquet": { "$ref": "#/$defs/nullableUrl", "description": "absolute URL of places.parquet; null for raster and derived rows" },
+        "parquet_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+        "h3": { "$ref": "#/$defs/nullableUrl", "description": "URL of <slug>/h3/membership.json, only while built from this row's parquet_sha256. Required on every polygon vector row (the rule below); a mixed-geometry collection that holds polygons (gebco_undersea, geom_type MultiLineString) may carry one; points and lines have null" },
+        "access": { "enum": ["public", "unlisted"], "description": "public: listed and searchable; unlisted: reachable by link, never listed or searched" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "kind": { "const": "vector" }, "geom_type": { "enum": ["Polygon", "MultiPolygon"] } },
+            "required": ["kind", "geom_type"]
+          },
+          "then": { "properties": { "h3": { "type": "string" } } }
+        }
+      ]
+    },
+    "statusEvent": {
+      "type": "object",
+      "required": ["value", "date"],
+      "additionalProperties": false,
+      "properties": {
+        "value": { "type": "string", "minLength": 1 },
+        "date": { "type": "string" },
+        "source": { "type": ["string", "null"] },
+        "note": { "type": ["string", "null"] }
+      }
+    }
+  }
+}
