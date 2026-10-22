@@ -1,0 +1,5 @@
+{
+  "bad-role.json": "/sources/1/role",
+  "empty-sources.json": "/sources",
+  "v12-without-dataset.json": "dataset"
+}

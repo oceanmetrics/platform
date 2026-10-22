@@ -1,0 +1,33 @@
+{
+  "contract": "1.2.0",
+  "indicator": "erddap:dhw_5km:CRW_SST:mean",
+  "coll": "places",
+  "producer": { "name": "erddap-places", "url": "https://github.com/oceanmetrics/erddap-places", "version": "1.0.0" },
+  "sources": [
+    {
+      "href": "https://example.org/erddap-places/stats/dhw_5km/CRW_SST/places.parquet",
+      "title": "dhw_5km CRW_SST by place",
+      "updated": "2026-10-19T20:59:51Z",
+      "end_datetime": "2026-10-18T12:00:00Z",
+      "checksum": null,
+      "item": "https://example.org/erddap-places/stac/dhw_5km/items/CRW_SST.json",
+      "role": "data"
+    },
+    { "href": "https://example.org/places/places.pmtiles", "item": null, "role": "geometry" }
+  ],
+  "source_version": "gazetteer/stats updated 2026-10-19T20:59:51Z",
+  "method": "area-weighted mean of the daily grid cells inside each place, then the mean of the days in each month",
+  "code": { "name": "om-indicators", "version": "0.1.0", "commit": null, "adapter": "erddap_places" },
+  "created": "2026-10-20T00:00:00Z",
+  "license": "CC-BY-4.0",
+  "rows": 2,
+  "dataset": {
+    "id": "dhw_5km",
+    "title": "Daily Global 5km SST + DHW",
+    "via": "https://example.org/erddap/info/dhw_5km",
+    "providers": [{ "name": "NOAA Coral Reef Watch (CRW)", "roles": ["producer"] }],
+    "license": "CC0-1.0",
+    "citation": null,
+    "doi": null
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "contract": "1.1.0",
+  "indicator": "sdg:ER_MRN_MPA",
+  "coll": "mr_eez",
+  "producer": { "name": "places/proto/eez_indicators", "url": "https://github.com/oceanmetrics/places" },
+  "sources": [{ "href": "https://example.org/sdg/ER_MRN_MPA.json" }],
+  "method": "the UN SDG country value assigned to each EEZ of that country",
+  "code": { "name": "om-indicators", "version": "0.1.0", "adapter": "sdg" },
+  "created": "2026-10-20T00:00:00Z",
+  "license": "CC-BY-4.0",
+  "rows": 1
+}

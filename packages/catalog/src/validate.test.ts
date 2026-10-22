@@ -397,6 +397,73 @@ describe('sdm-dossier rules', () => {
   })
 })
 
+// ---- values-row ----
+
+describe('values-row rules', () => {
+  const cont = fixture('values-row', 'continuous')
+  const all = fixture('values-row', 'all-grain')
+  const P = 'values-row'
+
+  it('requires the nine 1.1 columns and leaves sd optional (a 1.1 row has none)', () => {
+    for (const k of ['place_id', 'coll', 'indicator', 'time_grain', 'time', 'class', 'value', 'n', 'unit'])
+      fails(P, edit(cont, d => delete d[k]), `'${k}'`)
+    passes(P, edit(cont, d => delete d.sd))
+  })
+  it('names a place as <authority>:<source_id>', () => {
+    fails(P, edit(cont, d => { d.place_id = 'NMS: CINMS' }), '/place_id: must match pattern')
+  })
+  it('reads the indicator id as <family>:<parts>', () => {
+    for (const id of ['sdg:ER_MRN_MPA', 'obis:sp:seaTurtles', 'cmems:cmems_obs-oc:CHL:mean']) passes(P, edit(cont, d => { d.indicator = id }))
+    fails(P, edit(cont, d => { d.indicator = 'SST mean' }), '/indicator: must match pattern')
+  })
+  it('reads time_grain from all, decade, year, month, day', () => {
+    fails(P, edit(cont, d => { d.time_grain = 'week' }), '/time_grain: must be equal to one of the allowed values: "all", "decade", "year", "month", "day"')
+  })
+  it('gives time as null exactly when time_grain is all', () => {
+    fails(P, edit(all, d => { d.time = '2020-01-01' }), '/time: must be null')
+    fails(P, edit(cont, d => { d.time = null }), '/time: must be string')
+    fails(P, edit(cont, d => { d.time = '2020-7-1' }), '/time: must match pattern')
+  })
+  it('keeps sd and n at or above 0, or null', () => {
+    fails(P, edit(cont, d => { d.sd = -0.5 }), '/sd: must be >= 0')
+    passes(P, edit(cont, d => { d.sd = null; d.n = null }))
+  })
+  it('lets only x_* extra columns through', () => {
+    passes(P, edit(cont, d => { d.x_m49 = 56 }))
+    fails(P, edit(cont, d => { d.basis = 'territory' }), 'must NOT have additional properties: "basis"')
+  })
+})
+
+// ---- values-provenance ----
+
+describe('values-provenance rules', () => {
+  const v12 = fixture('values-provenance', 'v12-erddap')
+  const v11 = fixture('values-provenance', 'v11-without-dataset')
+  const P = 'values-provenance'
+
+  it('reads contract as a 1.x semver', () => {
+    fails(P, edit(v11, d => { d.contract = '2.0.0' }), '/contract: must match pattern')
+    fails(P, edit(v11, d => { d.contract = '1.1' }), '/contract: must match pattern')
+  })
+  it('requires dataset from contract 1.2 on, not before', () => {
+    for (const c of ['1.2.0', '1.3.1']) fails(P, edit(v12, d => { d.contract = c; delete d.dataset }), "/: must have required property 'dataset'")
+    for (const c of ['1.0.0', '1.1.9']) passes(P, edit(v11, d => { d.contract = c }))
+  })
+  it('gives a source an href, a STAC item url or null, and a role', () => {
+    fails(P, edit(v12, d => delete d.sources[0].href), "/sources/0: must have required property 'href'")
+    fails(P, edit(v12, d => { d.sources[0].item = 7 }), '/sources/0/item: must be string,null')
+    for (const r of ['data', 'geometry', 'product', 'manifest']) passes(P, edit(v12, d => { d.sources[1].role = r }))
+  })
+  it('stamps created to the second in UTC and keeps method a sentence', () => {
+    fails(P, edit(v12, d => { d.created = '2026-10-20' }), '/created: must match pattern')
+    fails(P, edit(v12, d => { d.method = 'mean' }), '/method: must NOT have fewer than 10 characters')
+  })
+  it('allows no extra key at the top level or in dataset', () => {
+    fails(P, edit(v12, d => { d.notes = 'x' }), 'must NOT have additional properties: "notes"')
+    fails(P, edit(v12, d => { d.dataset.url = 'x' }), '/dataset: must NOT have additional properties: "url"')
+  })
+})
+
 // ---- the command line ----
 
 describe('om-catalog', () => {

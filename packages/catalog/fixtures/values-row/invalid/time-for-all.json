@@ -1,0 +1,12 @@
+{
+  "place_id": "MRGID:8371",
+  "coll": "mr_eez",
+  "indicator": "sdg:ER_MRN_MPA",
+  "time_grain": "all",
+  "time": "2020-01-01",
+  "class": null,
+  "value": 12.5,
+  "n": null,
+  "unit": "%",
+  "x_basis": "territory"
+}

@@ -1,0 +1,12 @@
+{
+  "place_id": "NMS:CINMS",
+  "coll": "places",
+  "indicator": "erddap:dhw_5km:CRW_SST:mean",
+  "time_grain": "month",
+  "time": "2020-07-01",
+  "class": null,
+  "value": 17.25,
+  "n": -1,
+  "sd": 0.5,
+  "unit": "degree_C"
+}

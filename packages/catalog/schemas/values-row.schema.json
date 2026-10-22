@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/values-row/v1.0.0/schema.json",
+  "title": "Ocean Metrics indicator value: one row of the value contract",
+  "description": "Contract 1.2.0. Every producer writes rows of this shape to values/indicator=<indicator>/coll=<coll>/data.parquet, one file per (indicator, place collection). A row is one value of one indicator for one place over one period. The file's key-value metadata carries its provenance under the key om:provenance (values-provenance.schema.json). `time` is null exactly when `time_grain` is `all` (the if/then/else below). Rules a row-by-row schema cannot state are in om_extract.contract (oceanmetrics/extract) and its README: a `time` is the first day of its period; (place_id, indicator, time_grain, time, class) is unique within a file; every row of a file has the file's indicator and coll; `sd` is null where `value` is null or where `n` is 0. A file of contract 1.1.x has no `sd` column and stays valid (its rows are read as sd null).",
+  "type": "object",
+  "required": [
+    "place_id",
+    "coll",
+    "indicator",
+    "time_grain",
+    "time",
+    "class",
+    "value",
+    "n",
+    "unit"
+  ],
+  "properties": {
+    "place_id": {
+      "description": "Gazetteer place id, `<authority>:<source_id>`, as the gazetteer index publishes it (e.g. NMS:CINMS, MRGID:8371, ONMS:monterey-bay-national-marine-sanctuary).",
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*:\\S+$"
+    },
+    "coll": {
+      "description": "Gazetteer collection slug the place belongs to (e.g. places, noaa_sanctuaries, mr_eez). Together with place_id it names the polygon the value was computed over.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "indicator": {
+      "description": "Stable indicator id, `<producer family>:<id parts>`: erddap:<dataset>:<variable>:<stat>, cmems:<dataset>:<variable>:mean, sdg:<series>, obis:<metric> or obis:<metric>:<eov>. Listed in indicators.json.",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*:[A-Za-z0-9_.\\-]+(:[A-Za-z0-9_.\\-]+)*$"
+    },
+    "time_grain": {
+      "description": "The period a value summarises.",
+      "enum": [
+        "all",
+        "decade",
+        "year",
+        "month",
+        "day"
+      ]
+    },
+    "time": {
+      "description": "First day of the period (ISO date; Parquet DATE). Null for time_grain `all`. Year: YYYY-01-01. Decade: YYY0-01-01. Month: YYYY-MM-01.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "class": {
+      "description": "Categorical indicators only (manifest kind `categorical`): the class this row's value is the share of. Null for continuous indicators.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "value": {
+      "description": "The value, in `unit`. For a categorical indicator, the area-weighted share (0 to 1) of the place in `class` over the period. Null only when the period exists but has no value (never NaN or infinite).",
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "n": {
+      "description": "Size of what the value summarises, as the indicator's manifest entry defines it (`n_meaning`): native time steps for gridded data, records for OBIS. Null when the producer gives none (e.g. a UN SDG country value).",
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "sd": {
+      "description": "Contract 1.2. The sample standard deviation (n - 1) of the layer's cell values across the place's cells at that time step, in `unit`: the spread inside the place that the area-weighted `value` hides. Finite and >= 0, or null: null where `value` is null, where `n` is 0, and wherever the row summarises several time steps (an SD of means is not the cell SD) or the producer has no cells (OBIS, UN SDG).",
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "unit": {
+      "description": "Unit of `value`, UDUNITS-style where one exists (e.g. degree_C, mg m-3, %, 1).",
+      "type": "string"
+    }
+  },
+  "patternProperties": {
+    "^x_[a-z0-9_]+$": {
+      "description": "Producer-specific extra columns (e.g. x_basis for the SDG country-to-EEZ rule). Consumers may ignore them."
+    }
+  },
+  "additionalProperties": false,
+  "if": {
+    "properties": {
+      "time_grain": {
+        "const": "all"
+      }
+    },
+    "required": [
+      "time_grain"
+    ]
+  },
+  "then": {
+    "properties": {
+      "time": {
+        "description": "Null for time_grain `all`.",
+        "type": "null"
+      }
+    }
+  },
+  "else": {
+    "properties": {
+      "time": {
+        "description": "A date for every grain but `all`.",
+        "type": "string"
+      }
+    }
+  }
+}

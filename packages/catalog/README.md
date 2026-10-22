@@ -1,8 +1,8 @@
 # @oceanmetrics/catalog
 
 The catalog contracts of Ocean Metrics. Today: the **STAC layer profiles**, one JSON Schema per kind of layer, with
-their TypeScript types, a validator and the `om-catalog` command. The values and manifest readers follow in build
-week 1 (2026-10-30 to 11-05).
+their TypeScript types, a validator and the `om-catalog` command, and the **values contract** (`values-row`,
+`values-provenance`). The values and manifest readers follow in build week 1 (2026-10-30 to 11-05).
 
 Each profile constrains only `type`, `stac_version`, `id` and its own fields. STAC core (links, extent, geometry ...) is
 checked elsewhere (rashid), so every other key passes through at the top level and in `properties`; the objects the
@@ -68,6 +68,23 @@ profiles define themselves (`atlas:flower`, `h3:layout`, `sdm:evaluation` ...) a
   length, and so do a curve's `x`, `y` and `density`.
 - **`om-notebook`** (not a STAC profile): the `om:` block in a workflow notebook's front matter, read by `om-extract
   notebooks`.
+- **`values-row`** (not a STAC profile): one row of the values contract 1.2.0, the table every indicator producer writes
+  to `values/indicator=<id>/coll=<slug>/data.parquet` (one file per indicator and place collection). Written by
+  `om_extract.contract.write_values` (oceanmetrics/extract), which every indicators adapter calls; read by the indicators
+  coverage builder, the indicators viewer and Python (`om_extract.contract.read_values`, `validate_file`). Rules:
+  `place_id` (`<authority>:<source_id>`), `coll`, `indicator` (`<family>:<parts>`), `time_grain` (all, decade, year,
+  month, day), `time`, `class`, `value`, `n` and `unit` are required, `sd` (contract 1.2) is optional so a 1.1 row stays
+  valid; `time` is null exactly when `time_grain` is `all` and otherwise an ISO date; `n` and `sd` are >= 0 or null;
+  extra columns are named `x_*`. Rules across rows or with arithmetic (a `time` is the first day of its period, unique
+  keys, one indicator and coll per file, finite values, `sd` null where `value` is null or `n` is 0) are reader checks
+  in `om_extract.contract.validate_rows`.
+- **`values-provenance`** (not a STAC profile): the JSON a values file carries in its Parquet key-value metadata under
+  `om:provenance`: producer, sources, method, code, created stamp, licence, row count and the original `dataset`.
+  Same writer and readers as `values-row`. Rules: `contract` is a 1.x semver; from 1.2 on `dataset` (`id`, `title`,
+  `providers`, `license`) is required, a 1.1 file stays valid without it (the `if`/`then`); `sources` has at least one
+  entry, each with an `href`, maybe the STAC `item` that describes it and a `role` (data, geometry, product, manifest);
+  `created` is `YYYY-MM-DDTHH:MM:SSZ`; no extra keys. A reader check: from 1.2 at least one source has the role `data`
+  (an absent role counts as `data`).
 
 Today's producers were checked against the profiles on 2026-10-22: the 18 live erddap-places collections pass
 `erddap-grid`, the atlas `aquamaps_eov` items pass `atlas-item`. COG items written today do not yet pass `cog`: none

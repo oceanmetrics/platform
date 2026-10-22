@@ -1,0 +1,12 @@
+{
+  "place_id": "MRGID:8371",
+  "coll": "mr_eez",
+  "indicator": "erddap:dhw_5km:CRW_BAA:share",
+  "time_grain": "year",
+  "time": "2020-01-01",
+  "class": "1",
+  "value": 0.25,
+  "n": 366,
+  "sd": null,
+  "unit": "1"
+}
