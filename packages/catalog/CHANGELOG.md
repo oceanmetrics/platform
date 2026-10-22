@@ -1,3 +1,7 @@
+# @oceanmetrics/catalog 0.2.1 (unreleased)
+
+- `h3` profile: `h3:species_table.columns.name_key` (richness counts species names, several aphiaids may share one) and `h3:species_table.heads` (the pre-aggregated heads JSON), both optional; found by the obis-h3 exporter of build week 1.
+
 # Changelog
 
 ## 0.2.0

@@ -4,24 +4,58 @@
   "title": "h3: a STAC Collection for a layer on the H3 grid",
   "description": "A STAC Collection for a layer whose native grid is H3: the obis-h3 release as an atlas collection (build week 4), the hex twins of gridded layers, BioTrack. It says which resolutions exist, how a file path is built from a resolution (and a parent cell, a period or other keys), which columns hold the cell id and the metrics, and optionally where the species x hex x count table is (the answer to the h3t service). STAC core is out of scope: only type, stac_version, id and the profile's own fields are constrained, and other keys pass through.",
   "type": "object",
-  "required": ["type", "stac_version", "id", "h3:resolutions", "h3:cell_column", "h3:cell_type", "h3:layout", "table:columns"],
+  "required": [
+    "type",
+    "stac_version",
+    "id",
+    "h3:resolutions",
+    "h3:cell_column",
+    "h3:cell_type",
+    "h3:layout",
+    "table:columns"
+  ],
   "properties": {
-    "type": { "description": "a STAC Collection", "const": "Collection" },
-    "stac_version": { "description": "the STAC version, e.g. 1.1.0", "type": "string" },
-    "id": { "description": "the collection id", "type": "string", "minLength": 1 },
+    "type": {
+      "description": "a STAC Collection",
+      "const": "Collection"
+    },
+    "stac_version": {
+      "description": "the STAC version, e.g. 1.1.0",
+      "type": "string"
+    },
+    "id": {
+      "description": "the collection id",
+      "type": "string",
+      "minLength": 1
+    },
     "h3:resolutions": {
       "description": "the H3 resolutions published, each 0 to 15",
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/res" }
+      "items": {
+        "$ref": "#/$defs/res"
+      }
     },
-    "h3:cell_column": { "description": "the column holding the cell id; by convention h3", "type": "string", "minLength": 1, "default": "h3" },
-    "h3:cell_type": { "description": "how the cell id is stored: string (hex, e.g. 872830828ffffff) or uint64", "enum": ["string", "uint64"] },
+    "h3:cell_column": {
+      "description": "the column holding the cell id; by convention h3",
+      "type": "string",
+      "minLength": 1,
+      "default": "h3"
+    },
+    "h3:cell_type": {
+      "description": "how the cell id is stored: string (hex, e.g. 872830828ffffff) or uint64",
+      "enum": [
+        "string",
+        "uint64"
+      ]
+    },
     "h3:layout": {
       "description": "how a file path (relative to the collection) is built",
       "type": "object",
-      "required": ["template"],
+      "required": [
+        "template"
+      ],
       "additionalProperties": false,
       "properties": {
         "template": {
@@ -32,31 +66,68 @@
         "parent_template": {
           "description": "the path of one parent cell's split at one resolution, e.g. all/res={res}/p={parent}/data_0.parquet",
           "type": "string",
-          "allOf": [{ "pattern": "\\{res\\}" }, { "pattern": "\\{parent\\}" }]
+          "allOf": [
+            {
+              "pattern": "\\{res\\}"
+            },
+            {
+              "pattern": "\\{parent\\}"
+            }
+          ]
         },
         "parent_res": {
           "description": "the resolution of the parent cell a resolution is split by, e.g. {\"6\": 2, \"7\": 3}; the parent is coarser (a reader check)",
           "type": "object",
-          "propertyNames": { "pattern": "^([0-9]|1[0-5])$" },
-          "additionalProperties": { "$ref": "#/$defs/res" }
+          "propertyNames": {
+            "pattern": "^([0-9]|1[0-5])$"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/res"
+          }
         },
         "keys": {
           "description": "the other placeholders of the templates, e.g. eov or taxon",
           "type": "array",
           "uniqueItems": true,
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         }
       }
     },
     "h3:periods": {
       "description": "the time periods published, when the layer has more than one",
       "type": "object",
-      "required": ["grain", "values", "placeholder"],
+      "required": [
+        "grain",
+        "values",
+        "placeholder"
+      ],
       "additionalProperties": false,
       "properties": {
-        "grain": { "description": "the length of a period", "enum": ["decade", "year", "month", "all"] },
-        "values": { "description": "the periods, as they appear in a path (e.g. 1990s, 2000s)", "type": "array", "minItems": 1, "items": { "type": "string" } },
-        "placeholder": { "description": "the template placeholder a period fills, e.g. period", "type": "string", "minLength": 1 }
+        "grain": {
+          "description": "the length of a period",
+          "enum": [
+            "decade",
+            "year",
+            "month",
+            "all"
+          ]
+        },
+        "values": {
+          "description": "the periods, as they appear in a path (e.g. 1990s, 2000s)",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "placeholder": {
+          "description": "the template placeholder a period fills, e.g. period",
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "table:columns": {
@@ -65,18 +136,38 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["name", "type"],
+        "required": [
+          "name",
+          "type"
+        ],
         "properties": {
-          "name": { "description": "the column name", "type": "string", "minLength": 1 },
-          "type": { "description": "the column type, e.g. VARCHAR, BIGINT, DOUBLE", "type": "string", "minLength": 1 },
-          "description": { "description": "what the column holds", "type": "string" }
+          "name": {
+            "description": "the column name",
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "description": "the column type, e.g. VARCHAR, BIGINT, DOUBLE",
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "description": "what the column holds",
+            "type": "string"
+          }
         }
       }
     },
     "h3:species_table": {
       "description": "the species x hex x count table: which species were recorded in a cell and how often, partitioned so a click or a place reads one file",
       "type": "object",
-      "required": ["href_template", "resolutions", "partition_by", "columns", "lookup"],
+      "required": [
+        "href_template",
+        "resolutions",
+        "partition_by",
+        "columns",
+        "lookup"
+      ],
       "additionalProperties": false,
       "properties": {
         "href_template": {
@@ -89,52 +180,120 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "items": { "$ref": "#/$defs/res" }
+          "items": {
+            "$ref": "#/$defs/res"
+          }
         },
         "partition_by": {
           "description": "the hive partition columns, e.g. [\"class\"]",
           "type": "array",
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "sorted_by": {
           "description": "the columns the rows are sorted by within a file, so a cell reads one row group",
           "type": "array",
-          "items": { "type": "string", "minLength": 1 },
-          "default": ["h3"]
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "default": [
+            "h3"
+          ]
         },
         "columns": {
           "description": "the column names of the table",
           "type": "object",
-          "required": ["cell", "species", "count"],
+          "required": [
+            "cell",
+            "species",
+            "count"
+          ],
           "additionalProperties": false,
           "properties": {
-            "cell": { "description": "the cell id column", "type": "string", "minLength": 1 },
-            "species": { "description": "the species id column (e.g. aphiaid)", "type": "string", "minLength": 1 },
-            "count": { "description": "the record count column (e.g. records)", "type": "string", "minLength": 1 },
-            "year": { "description": "the year column, when counts are per year", "type": "string", "minLength": 1 }
+            "cell": {
+              "description": "the cell id column",
+              "type": "string",
+              "minLength": 1
+            },
+            "species": {
+              "description": "the species id column (e.g. aphiaid)",
+              "type": "string",
+              "minLength": 1
+            },
+            "count": {
+              "description": "the record count column (e.g. records)",
+              "type": "string",
+              "minLength": 1
+            },
+            "year": {
+              "description": "the year column, when counts are per year",
+              "type": "string",
+              "minLength": 1
+            },
+            "name_key": {
+              "description": "an integer key per distinct species name, so richness counts names as h3t does (several aphiaids may share a name)",
+              "type": "string",
+              "minLength": 1
+            }
           }
         },
         "lookup": {
           "description": "the species lookup: one row per species, with its names and lineage",
           "type": "object",
-          "required": ["href", "key", "lineage_column"],
+          "required": [
+            "href",
+            "key",
+            "lineage_column"
+          ],
           "additionalProperties": false,
           "properties": {
-            "href": { "description": "the lookup Parquet, relative to the collection", "type": "string", "minLength": 1 },
-            "key": { "description": "the column joined to columns.species", "type": "string", "minLength": 1 },
-            "lineage_column": { "description": "the column holding the array of ancestor ids of each species, for a taxon filter", "type": "string", "minLength": 1 },
+            "href": {
+              "description": "the lookup Parquet, relative to the collection",
+              "type": "string",
+              "minLength": 1
+            },
+            "key": {
+              "description": "the column joined to columns.species",
+              "type": "string",
+              "minLength": 1
+            },
+            "lineage_column": {
+              "description": "the column holding the array of ancestor ids of each species, for a taxon filter",
+              "type": "string",
+              "minLength": 1
+            },
             "rank_columns": {
               "description": "the column holding each rank's name, by rank (phylum, class ... species)",
               "type": "object",
-              "additionalProperties": { "type": "string", "minLength": 1 }
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+              }
             },
-            "name_column": { "description": "the column holding the scientific name", "type": "string", "minLength": 1 }
+            "name_column": {
+              "description": "the column holding the scientific name",
+              "type": "string",
+              "minLength": 1
+            }
           }
+        },
+        "heads": {
+          "description": "href of a JSON listing the pre-aggregated heads (all, EOV, phylum to family, Animalia and every taxon spanning several classes) that answer the heavy subtrees without the table",
+          "type": "string",
+          "minLength": 1
         }
       }
     }
   },
   "$defs": {
-    "res": { "description": "an H3 resolution", "type": "integer", "minimum": 0, "maximum": 15 }
+    "res": {
+      "description": "an H3 resolution",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 15
+    }
   }
 }

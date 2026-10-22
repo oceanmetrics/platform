@@ -5,24 +5,87 @@
   "title": "OBIS biodiversity indicators on H3 (synthetic, obis-h3-like)",
   "description": "synthetic fixture modelled on the obis-h3 release layout: records, species, Shannon, Simpson and ES50 per H3 cell, with the species x hex x count table exported from occ_h3.",
   "license": "CC-BY-4.0",
-  "extent": { "spatial": { "bbox": [[-180, -90, 180, 90]] }, "temporal": { "interval": [[null, null]] } },
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -180,
+          -90,
+          180,
+          90
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          null,
+          null
+        ]
+      ]
+    }
+  },
   "links": [],
-  "h3:resolutions": [1, 2, 3, 4, 5, 6, 7],
+  "h3:resolutions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
   "h3:cell_column": "h3",
   "h3:cell_type": "string",
   "h3:layout": {
     "template": "all/res={res}/data_0.parquet",
     "parent_template": "all/res={res}/p={parent}/data_0.parquet",
-    "parent_res": { "6": 2, "7": 3 }
+    "parent_res": {
+      "6": 2,
+      "7": 3
+    }
   },
-  "h3:periods": { "grain": "decade", "values": ["1990s", "2000s", "2010s", "2020s"], "placeholder": "period" },
+  "h3:periods": {
+    "grain": "decade",
+    "values": [
+      "1990s",
+      "2000s",
+      "2010s",
+      "2020s"
+    ],
+    "placeholder": "period"
+  },
   "table:columns": [
-    { "name": "h3", "type": "VARCHAR", "description": "H3 cell id, hex string" },
-    { "name": "cell_id", "type": "BIGINT", "description": "H3 cell id, 64-bit integer" },
-    { "name": "n", "type": "BIGINT", "description": "number of occurrence records" },
-    { "name": "sp", "type": "BIGINT", "description": "number of species" },
-    { "name": "shannon", "type": "DOUBLE", "description": "Shannon diversity index" },
-    { "name": "simpson", "type": "DOUBLE", "description": "Simpson diversity index" },
+    {
+      "name": "h3",
+      "type": "VARCHAR",
+      "description": "H3 cell id, hex string"
+    },
+    {
+      "name": "cell_id",
+      "type": "BIGINT",
+      "description": "H3 cell id, 64-bit integer"
+    },
+    {
+      "name": "n",
+      "type": "BIGINT",
+      "description": "number of occurrence records"
+    },
+    {
+      "name": "sp",
+      "type": "BIGINT",
+      "description": "number of species"
+    },
+    {
+      "name": "shannon",
+      "type": "DOUBLE",
+      "description": "Shannon diversity index"
+    },
+    {
+      "name": "simpson",
+      "type": "DOUBLE",
+      "description": "Simpson diversity index"
+    },
     {
       "name": "es",
       "type": "DOUBLE",
@@ -31,10 +94,24 @@
   ],
   "h3:species_table": {
     "href_template": "species/res={res}/class={class}/data_0.parquet",
-    "resolutions": [3, 5, 7],
-    "partition_by": ["class"],
-    "sorted_by": ["cell_id"],
-    "columns": { "cell": "cell_id", "species": "aphiaid", "count": "records", "year": "date_year" },
+    "resolutions": [
+      3,
+      5,
+      7
+    ],
+    "partition_by": [
+      "class"
+    ],
+    "sorted_by": [
+      "cell_id"
+    ],
+    "columns": {
+      "cell": "cell_id",
+      "species": "aphiaid",
+      "count": "records",
+      "year": "date_year",
+      "name_key": "name_key"
+    },
     "lookup": {
       "href": "species/taxa.parquet",
       "key": "aphiaid",
@@ -48,7 +125,16 @@
         "species": "species"
       },
       "name_column": "scientificname"
-    }
+    },
+    "heads": "species/heads.json"
   },
-  "assets": { "all": { "href": "./all/", "title": "hive folders, one per resolution", "roles": ["data"] } }
+  "assets": {
+    "all": {
+      "href": "./all/",
+      "title": "hive folders, one per resolution",
+      "roles": [
+        "data"
+      ]
+    }
+  }
 }
