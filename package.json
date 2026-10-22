@@ -1,0 +1,21 @@
+{
+  "name": "oceanmetrics-platform",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared TypeScript packages of the Ocean Metrics platform: places, status, map, catalog",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": ["packages/*"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "npm run typecheck --workspaces",
+    "build": "npm run build --workspaces",
+    "size": "node scripts/size-budget.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "typescript": "~5.9.0",
+    "vitest": "^5.0.1"
+  }
+}
