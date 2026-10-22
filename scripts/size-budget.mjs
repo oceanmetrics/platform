@@ -10,7 +10,9 @@ const ROOT = new URL('../packages/', import.meta.url).pathname
 // the h3 worker module and the archive writer all counted), so 39_000; the 5_000 it held was the scaffold's provisional
 // budget. catalog holds only constants and types in the browser (404 B on 2026-10-22, its validator and CLI left out
 // below): its 5_000 budget is provisional and gets set from a measurement once its readers land (build week 1).
-const BUDGET = { places: 18_000, status: 12_000, map: 39_000, catalog: 5_000 }
+// engine: 26_794 on 2026-10-23 (0.1.0: the mask, the ERDDAP and dataset modules, the engine, the preview and the five
+// SQL templates as strings; DuckDB-WASM and Apache Arrow are peers and not counted), so 40_000.
+const BUDGET = { places: 18_000, status: 12_000, map: 39_000, catalog: 5_000, engine: 40_000 }
 
 // files a browser never loads, left out of a package's measure: catalog's validator (ajv) and CLI are Node only,
 // reached through the @oceanmetrics/catalog/validate subpath and the om-catalog bin, never from the package index

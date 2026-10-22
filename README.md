@@ -9,6 +9,7 @@ rule or a reader is written once.
 | [`@oceanmetrics/places`](packages/places/) | client for the places gazetteer: layers manifest, MapLibre layers from PMTiles, parquet search and lookups, credits | moved in at 0.5.0 from `oceanmetrics/places` `client/` |
 | [`@oceanmetrics/status`](packages/status/) | the status methods (`iea-sd`, `names-pct`, `values`), the period grid, sentences and alt text, the quadrant plot rules | moved in at 0.1.0 from `oceanmetrics/indicators` `src/status/`, with the ecoidx cross-check fixture |
 | [`@oceanmetrics/map`](packages/map/) | the map stack: MapLibre 6 setup, the bathymetric basemap, the ramps, the layer slot contract and its providers (grid slice, COG, H3) | 0.2.0 (2026-10-23, build week 2 step 1; 0.1.0 was the scaffold); the basemap tiers are built by `scripts/basemap/build_gebco.sh`, not uploaded yet |
+| [`@oceanmetrics/engine`](packages/engine/) | the browser engine: the place mask, the lobes, ERDDAP requests, the SQL templates shared with `om_extract`, DuckDB-WASM statistics, the chunked live preview and the map's grid slice | 0.1.0 (2026-10-23, build week 2 step 2b): moved from erddap-places (the frozen original); `indicators` is its first consumer (step 2c); not in the Day 5 publish |
 | [`@oceanmetrics/catalog`](packages/catalog/) | the catalog contracts: the STAC layer profiles (JSON Schemas, types, a validator, the `om-catalog` CLI), then the indicators manifest and values and the places index readers | 0.2.0: the six STAC layer profiles; gains the values and manifest readers in build week 1 (2026-10-30 to 11-05) |
 
 ## Rules
@@ -78,7 +79,9 @@ Edit each repo in its own change; nothing here edits them.
 status 12 000 B (measured 7 997); map 39 000 B (measured 26 014 on 2026-10-23, when 0.2.0 replaced the scaffold and its
 provisional 5 000 B: every module counts, the h3 worker module and the COG code included; packages/map/README.md has
 what an app pays per provider); catalog holds a provisional 5 000 B until it has code (measured 404 B on 2026-10-22,
-its Node-only validator and CLI left out: they never reach a browser). Raise a budget only with the reason written here.
+its Node-only validator and CLI left out: they never reach a browser); engine 40 000 B (measured 26 794 on 2026-10-23
+at 0.1.0, the five SQL templates included; DuckDB-WASM and Apache Arrow are peers and not counted; packages/engine/README.md
+has what an app pays per entry). Raise a budget only with the reason written here.
 
 ## Licence
 
