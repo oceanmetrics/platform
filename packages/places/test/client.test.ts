@@ -29,6 +29,39 @@ describe('listLayers', () => {
     const { status, status_label, ...old } = stations
     expect(layerLabel(old)).toBe('Fixture stations')
   })
+  describe('unlisted layers (access)', () => {
+    // the fixture manifest with fx_aoa unlisted and fx_stations from an older manifest (no `access` key at all)
+    const withAccess = async () => {
+      const j = await (await fetch(srv.base + 'index/layers.json')).json()
+      j.layers.find((l: any) => l.slug === 'fx_aoa').access = 'unlisted'
+      delete j.layers.find((l: any) => l.slug === 'fx_stations').access
+      return j
+    }
+    const clientWith = async () => {
+      const j = await withAccess()
+      const f = ((url: any, init?: any) =>
+        String(url).endsWith('index/layers.json') ? Promise.resolve(Response.json(j)) : fetch(url, init)) as typeof fetch
+      return createClient({ base: srv.base, fetch: f })
+    }
+    it('the fixture rows are all public', async () => {
+      expect((await c.listLayers()).map((l) => l.access)).toEqual(Array(6).fill('public'))
+    })
+    it('listLayers drops unlisted rows by default; a row without access counts as public', async () => {
+      const u = await clientWith()
+      expect((await u.listLayers()).map((l) => l.slug)).toEqual(['fx_leases', 'fx_stations', 'fx_lines', 'fx_ref', 'fx_hs'])
+    })
+    it('listLayers({ includeUnlisted: true }) keeps them, in manifest order', async () => {
+      const u = await clientWith()
+      expect((await u.listLayers({ includeUnlisted: true })).map((l) => l.slug)).toEqual(['fx_leases', 'fx_aoa', 'fx_stations', 'fx_lines', 'fx_ref', 'fx_hs'])
+      expect((await u.listLayers()).length).toBe(5)           // the option does not leak into the cache
+    })
+    it('an unlisted layer is hidden from lists, not from a link: getLayer, getPlace and creditsFor still find it', async () => {
+      const u = await clientWith()
+      expect((await u.getLayer('fx_aoa')).access).toBe('unlisted')
+      expect((await u.getPlace('AOA:N1', { slug: 'fx_aoa' }))?.id).toBe('AOA:N1')
+      expect(await u.creditsFor('fx_aoa')).toBe('NOAA AOA program. Processed by Ocean Metrics.')
+    })
+  })
   it('getLayer rejects an unknown slug', async () => {
     await expect(c.getLayer('nope')).rejects.toThrow(/unknown layer "nope"/)
   })

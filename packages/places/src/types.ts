@@ -102,6 +102,10 @@ export interface Layer {
   /** URL of `<slug>/h3/membership.json`: the place x H3 membership (res 1-7, the share of each cell inside each
    *  place), set only while it was built from this `parquet_sha256`; null for points, lines and stale builds. */
   h3?             : string | null
+  /** 'public': listed and searchable; 'unlisted': in the manifest, so a link to the layer works, but `listLayers()` leaves
+   *  it out unless called with `{ includeUnlisted: true }` and its places are not in the search index (client 0.5.1).
+   *  a manifest written before 0.5.1 has no `access`: the client treats it as 'public'. */
+  access          : 'public' | 'unlisted'
 }
 
 /** one place of a derived layer, as the map needs it to show it in a feature of the `via` layer. */

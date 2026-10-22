@@ -138,8 +138,8 @@ export function createClient(initial: ClientConfig = {}) {
   }
 
   // layers ----
-  /** the layers manifest (layers.json), cached; `refresh` re-fetches. */
-  function listLayers(opts: { refresh?: boolean } = {}): Promise<Layer[]> {
+  /** every row of the layers manifest (layers.json), unlisted ones too, cached; `refresh` re-fetches. */
+  function allLayers(opts: { refresh?: boolean } = {}): Promise<Layer[]> {
     if (!layersP || opts.refresh) {
       const url = layersUrl(), alt = layersFallbackUrl()
       layersP = doFetch()(url).then(async (r) => {
@@ -156,8 +156,18 @@ export function createClient(initial: ClientConfig = {}) {
     return layersP
   }
 
+  /**
+   * the layers to list: the manifest without its `access: 'unlisted'` rows (a manifest from before 0.5.1 has no `access`:
+   * public), cached; `refresh` re-fetches, `includeUnlisted` keeps the unlisted rows. An unlisted layer is still found by
+   * `getLayer(slug)`, `addLayer`, `getPlace` and `creditsFor`: it is hidden from lists, not from a link.
+   */
+  async function listLayers(opts: { refresh?: boolean; includeUnlisted?: boolean } = {}): Promise<Layer[]> {
+    const all = await allLayers(opts)
+    return opts.includeUnlisted ? all : all.filter((l) => l.access !== 'unlisted')
+  }
+
   async function getLayer(slug: string): Promise<Layer> {
-    const l = (await listLayers()).find((x) => x.slug === slug)
+    const l = (await allLayers()).find((x) => x.slug === slug)
     if (!l) throw new Error(`unknown layer "${slug}"`)
     return l
   }
@@ -167,7 +177,7 @@ export function createClient(initial: ClientConfig = {}) {
    * null when the layer is not derived or `via` is not published (or has no PMTiles).
    */
   async function displaySource(slug: string): Promise<DisplaySource | null> {
-    const layers = await listLayers()
+    const layers = await allLayers()
     const layer = layers.find((x) => x.slug === slug)
     if (!layer || !isDerived(layer)) return null
     return derivedDisplay(layer, layers, await loadIndex())
@@ -244,7 +254,7 @@ export function createClient(initial: ClientConfig = {}) {
   /** a sort key for copies of one place: position in `prefer`, then the layer's `search_rank` (layers.json). */
   async function copyRank(prefer: string[] = []): Promise<(p: IndexPlace) => number> {
     let ranks = new Map<string, number>()
-    try { ranks = new Map((await listLayers()).map((l) => [l.collection, l.search_rank ?? 0])) } catch { /* no manifest: rank 0 */ }
+    try { ranks = new Map((await allLayers()).map((l) => [l.collection, l.search_rank ?? 0])) } catch { /* no manifest: rank 0 */ }
     return (p) => {
       const i = prefer.indexOf(p.collection)
       return (i < 0 ? prefer.length : i) * 100 + (ranks.get(p.collection) ?? 0)
@@ -268,7 +278,7 @@ export function createClient(initial: ClientConfig = {}) {
     const cached = found.get(id)
     if (cached) return [cached]
     const authority = id.split(':')[0]
-    const layers = await listLayers()
+    const layers = await allLayers()
     const rank = (l: Layer) => (l.authority === authority ? 0 : l.authority == null ? 1 : 2)
     // raster (reference) and derived layers have no parquet of ours: their places are not read here
     return [...layers].filter((l) => l.kind !== 'raster' && l.kind !== 'derived').sort((a, b) => rank(a) - rank(b)).map((l) => l.slug)
@@ -322,7 +332,7 @@ export function createClient(initial: ClientConfig = {}) {
    * null when it is but the layer offers no per-place geometry or the publisher has no such feature.
    */
   async function referencePlace(id: string, opts: GetPlaceOptions): Promise<PlaceFeature | null | undefined> {
-    const layers = await listLayers()
+    const layers = await allLayers()
     const isRef = (slug: string) => layers.some((l) => l.slug === slug && l.kind === 'raster')
     if (opts.slug && layers.some((l) => l.slug === opts.slug && isDerived(l))) return null     // pieces: no geometry of ours
     if (opts.slug && !isRef(opts.slug)) return undefined
@@ -384,7 +394,7 @@ export function createClient(initial: ClientConfig = {}) {
     const ids = list.filter((r) => typeof r !== 'string' || r.includes(':'))
     const parts: string[] = []
     if (slugs.length) {
-      const layers = await listLayers()
+      const layers = await allLayers()
       for (const s of slugs) {
         const l = layers.find((x) => x.slug === s)
         if (l) parts.push(opts.html ? l.attribution_html : l.attribution)

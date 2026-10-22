@@ -1,7 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.5.1
 
+- `Layer.access` (`'public' | 'unlisted'`, required): the new layers.json field from oceanmetrics/places (the source YAML's
+  `access:`, default public). `listLayers()` now drops unlisted rows; pass `{ includeUnlisted: true }` to keep them. An
+  unlisted layer is hidden from lists, not from a link: `getLayer(slug)`, `addLayer`, `getPlace`, `identify` and
+  `creditsFor` still find it. A manifest from before this version has no `access`; its rows count as public. The test
+  fixtures `test/fixtures/layers.json` and `test/fixtures/index/layers.json` gain `access: "public"` on every row.
 - moved from `oceanmetrics/places` `client/` at commit 9bcb15f (2026-10-22) into `oceanmetrics/platform` `packages/places/`; the places web app links to it from here. No behaviour change: the tests pass unchanged.
 - layers.json may hold a `kind: "derived"` row (new `Layer.display` = `{via, id_from}`): pieces computed from a reference
   collection, with no PMTiles or parquet of their own (the first is `fao_high_seas`, the high seas cut by FAO major
