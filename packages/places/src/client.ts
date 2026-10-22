@@ -1,18 +1,26 @@
-import { asyncBufferFromUrl, parquetMetadataAsync, parquetReadObjects } from 'hyparquet'
+import { asyncBufferFromUrl, parquetMetadata, parquetMetadataAsync, parquetReadObjects } from 'hyparquet'
 import type { AsyncBuffer, FileMetaData } from 'hyparquet'
 import { compressors } from 'hyparquet-compressors'
-import { addLayerSpec, derivedDisplay, isDerived, removeLayerSpec } from './map'
-import { geometryBBox, unwrapAntimeridian } from './unwrap'
-import { wkbToGeometry } from './wkb'
+import { addLayerSpec, derivedDisplay, isDerived, removeLayerSpec } from './map.js'
+import { geometryBBox, unwrapAntimeridian } from './unwrap.js'
+import { wkbToGeometry } from './wkb.js'
 import type { Geometry } from 'geojson'
 import type {
   AddLayerOptions, BBox, ClientConfig, CreditRef, DisplaySource, GetPlaceOptions, IndexPlace, Layer, MapLike, PlaceFeature, SearchOptions,
-} from './types'
+} from './types.js'
 
 export const DEFAULT_BASE = 'https://storage.oceanmetrics.io/gazetteer/'
 /** more row groups than this left by the place_id statistics: also prune by the place's bbox (read from the index). */
 const BBOX_PRUNE_ABOVE = 4
 const FOOTER_GUESS = 16 * 1024
+/**
+ * every column of places_index.parquet the client reads, in file order. `ClientConfig.indexColumns` takes a subset of these;
+ * a column the file lacks (an index from before `group_id`, `source_id`, `keywords`) is skipped, and reads as null.
+ */
+export const INDEX_COLUMNS = [
+  'place_id', 'name', 'authority', 'place_type', 'geom_type', 'collection', 'bbox', 'centroid_lon', 'centroid_lat', 'centroid',
+  'area_km2', 'license', 'attribution', 'version', 'updated', 'group_id', 'source_id', 'url', 'keywords',
+]
 const SUFFIX = /\s*Processed by Ocean Metrics\.?\s*$/i
 
 // helpers ----
@@ -194,10 +202,26 @@ export function createClient(initial: ClientConfig = {}) {
   const removeLayer = (map: MapLike, slug: string): void => removeLayerSpec(map, slug)
 
   // index + search ----
+  /**
+   * every row of places_index.parquet (one per place and collection), read once and cached; `configure` clears the cache.
+   * The file is downloaded with one GET (the index is read whole anyway, and hyparquet's range reads of it cost about 140
+   * sequential requests). With `ClientConfig.indexColumns` only those columns are decoded and the others are null.
+   * A column the file lacks reads as null, so an index from before `group_id` (or `source_id`, `keywords`) still loads.
+   */
   function loadIndex(): Promise<IndexPlace[]> {
     if (!indexP) {
-      indexP = open(indexUrl())
-        .then((f) => parquetReadObjects({ ...f, compressors, utf8: false }))
+      const url = indexUrl(), want = cfg.indexColumns
+      indexP = doFetch()(url)
+        .then(async (r) => {
+          if (!r.ok) throw new Error(`places_index.parquet: ${r.status} ${r.statusText} (${url})`)
+          return r.arrayBuffer()
+        })
+        .then((file) => {
+          // hyparquet throws on a column the file lacks, so ask only for the ones it has (place_id and collection always)
+          const have = new Set(parquetMetadata(file).schema.map((e) => e.name))
+          const columns = want ? INDEX_COLUMNS.filter((c) => have.has(c) && (want.includes(c) || c === 'place_id' || c === 'collection')) : undefined
+          return parquetReadObjects({ file, compressors, utf8: false, columns })
+        })
         .then((rows) => rows.map((r: any): IndexPlace => ({
           place_id: String(r.place_id), name: String(r.name ?? ''), authority: String(r.authority ?? ''),
           place_type: String(r.place_type ?? ''), geom_type: r.geom_type == null ? null : String(r.geom_type),
@@ -222,16 +246,19 @@ export function createClient(initial: ClientConfig = {}) {
    * query, word prefix, substring, then other keyword-only matches, larger areas first.
    * a place_id is unique within a collection, not across them (`BOEM:OCS-P 0562` is in two collections): every
    * (collection, place_id) is its own hit; pass the hit's `collection` to `getPlace` as `slug`.
+   * `geomType` keeps places of those geometry types before `limit` cuts the list (a hit with no geom_type matches none).
    */
   async function search(q: string, opts: SearchOptions = {}): Promise<IndexPlace[]> {
     const { bbox, limit = 20 } = opts
     const types = arr(opts.type).map(norm), auths = arr(opts.authority).map(norm), colls = new Set(arr(opts.collection))
+    const geoms = arr(opts.geomType).map(norm)
     const query = norm(q ?? ''), words = query.split(/\s+/).filter(Boolean)
     const scored: Array<[number, IndexPlace]> = []
     for (const p of await loadIndex()) {
       if (types.length && !types.includes(norm(p.place_type))) continue
       if (auths.length && !auths.includes(norm(p.authority))) continue
       if (colls.size && !colls.has(p.collection)) continue
+      if (geoms.length && !geoms.includes(norm(p.geom_type ?? ''))) continue
       if (bbox && p.bbox && !bboxIntersects(bbox, p.bbox)) continue
       let score = 0
       if (words.length) {
@@ -416,7 +443,7 @@ export function createClient(initial: ClientConfig = {}) {
     return creditLine(parts)
   }
 
-  return { configure, listLayers, getLayer, displaySource, addLayer, removeLayer, search, samePlace, getPlace, identify, creditsFor }
+  return { configure, listLayers, getLayer, displaySource, addLayer, removeLayer, loadIndex, search, samePlace, getPlace, identify, creditsFor }
 }
 
 // the default client ----
@@ -427,6 +454,7 @@ export const getLayer = def.getLayer
 export const displaySource = def.displaySource
 export const addLayer = def.addLayer
 export const removeLayer = def.removeLayer
+export const loadIndex = def.loadIndex
 export const search = def.search
 export const samePlace = def.samePlace
 export const getPlace = def.getPlace

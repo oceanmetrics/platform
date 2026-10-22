@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { statSync } from 'node:fs'
-import { candidateGroups, createClient, creditLine, layerLabel } from '../src/index'
+import { INDEX_COLUMNS, candidateGroups, createClient, creditLine, layerLabel, loadIndex } from '../src/index'
 import { serveFixtures, FIXTURES } from './server'
 
 let srv: Awaited<ReturnType<typeof serveFixtures>>
@@ -187,11 +187,95 @@ describe('search', () => {
     expect(r[0].place_id).toBe('FX:D-4')
     expect((await c.search('FX:Z-9'))[0].place_id).toBe('FX:Z-9')   // by place_id
   })
-  it('reads the zstd index with range requests, once', async () => {
-    const before = srv.requests.filter((r) => r.includes('places_index.parquet')).length
-    await c.search('alpha'); await c.search('bravo')
-    expect(srv.requests.filter((r) => r.includes('places_index.parquet')).length).toBe(before)   // cached
-    expect(srv.requests.some((r) => r.startsWith('GET index/places_index.parquet bytes='))).toBe(true)
+  it('downloads the zstd index with one GET (no range reads), once', async () => {
+    const mine = createClient({ base: srv.base })
+    const before = srv.requests.length
+    await mine.search('alpha'); await mine.search('bravo')
+    const idx = srv.requests.slice(before).filter((r) => r.includes('places_index.parquet'))
+    expect(idx).toEqual(['GET index/places_index.parquet'])   // cached after the first, and no `bytes=` range
+  })
+  it('throws a readable error when the index is missing, and retries on the next call', async () => {
+    const bad = createClient({ base: srv.base, indexUrl: `${srv.base}index/nope.parquet` })
+    await expect(bad.loadIndex()).rejects.toThrow(/places_index\.parquet: 404/)
+    await expect(bad.loadIndex()).rejects.toThrow(/404/)
+  })
+})
+
+describe('loadIndex and INDEX_COLUMNS', () => {
+  it('loadIndex is exported (default client and createClient) and returns every row, cached', async () => {
+    const rows = await c.loadIndex()
+    expect(rows).toHaveLength(15)
+    expect(await c.loadIndex()).toBe(rows)
+    expect(typeof loadIndex).toBe('function')
+    expect(createClient({ base: srv.base }).loadIndex).toBeTypeOf('function')
+  })
+  it('INDEX_COLUMNS lists every column the client reads', () => {
+    expect(INDEX_COLUMNS).toEqual(['place_id', 'name', 'authority', 'place_type', 'geom_type', 'collection', 'bbox', 'centroid_lon', 'centroid_lat',
+      'centroid', 'area_km2', 'license', 'attribution', 'version', 'updated', 'group_id', 'source_id', 'url', 'keywords'])
+  })
+  it('by default every column is decoded', async () => {
+    const z = (await c.loadIndex()).find((p) => p.place_id === 'FX:Z-9')!
+    expect([z.license, z.attribution, z.version, z.updated, z.group_id]).toEqual(['CC-PDDC', 'Fixture Agency, via MarineCadastre. Processed by Ocean Metrics.', '1.0.3', '2026-10-01T12:00:00Z', 'fx_aoa/AOA:Z9'])
+  })
+  it('`indexColumns` decodes only those columns: the others are null, place_id and collection are always read', async () => {
+    const lean = createClient({ base: srv.base, indexColumns: ['name', 'geom_type', 'bbox', 'centroid_lon', 'centroid_lat', 'area_km2'] })
+    const rows = await lean.loadIndex()
+    expect(rows).toHaveLength(15)
+    const z = rows.find((p) => p.place_id === 'FX:Z-9')!
+    expect(z).toMatchObject({ place_id: 'FX:Z-9', collection: 'fx_leases', name: 'Zulu lease', geom_type: 'Polygon', bbox: [-100, 25, -99, 26], centroid: [-99.5, 25.5] })
+    expect([z.authority, z.place_type]).toEqual(['', ''])
+    expect([z.license, z.attribution, z.version, z.updated, z.group_id, z.source_id, z.url, z.keywords]).toEqual(Array(8).fill(null))
+  })
+  it('search runs on a lean index', async () => {
+    const lean = createClient({ base: srv.base, indexColumns: ['name', 'geom_type'] })
+    expect((await lean.search('bravo')).map((p) => p.place_id)).toEqual(['FX:B-2'])
+    expect((await lean.search('', { geomType: 'MultiPolygon', limit: 100 })).length).toBe(6)
+  })
+  it('an index from before group_id, source_id, url and keywords loads, with those null (regression: erddap-places copy, 0.2.0)', async () => {
+    for (const indexColumns of [undefined, ['name', 'group_id', 'keywords']]) {
+      const old = createClient({ base: srv.base, indexUrl: `${srv.base}index_old/places_index.parquet`, indexColumns })
+      const rows = await old.loadIndex()
+      expect(rows).toHaveLength(15)
+      expect(rows.every((p) => p.group_id === null && p.source_id === null && p.url === null && p.keywords === null)).toBe(true)
+      expect(rows.find((p) => p.place_id === 'FX:A-1')!.name).toBe('Alpha lease')
+    }
+  })
+  it('an index without group_id searches and groups as ungrouped: both copies of a place stay', async () => {
+    const old = createClient({ base: srv.base, indexUrl: `${srv.base}index_old/places_index.parquet` })
+    expect((await old.search('zulu', { group: true })).map((p) => [p.collection, p.also])).toEqual([['fx_aoa', undefined], ['fx_leases', undefined]])
+    expect(await old.samePlace('FX:Z-9')).toEqual([])
+  })
+})
+
+describe('search geomType', () => {
+  const ids = async (o: object) => (await c.search('', { limit: 100, ...o })).map((p) => p.place_id).sort()
+  it('keeps places of one geometry type', async () => {
+    const poly = await c.search('', { geomType: 'Polygon', limit: 100 })
+    expect(poly).toHaveLength(9)
+    expect(poly.every((p) => p.geom_type === 'Polygon')).toBe(true)
+    expect(await ids({ geomType: 'MultiPolygon' })).toEqual(['FX:PM', 'FXH:A-1', 'FXH:B-2', 'FXR:1', 'FXR:2', 'FXR:3'])
+  })
+  it('takes several types, and an empty list is no filter', async () => {
+    expect((await ids({ geomType: ['MultiPolygon', 'Polygon'] })).length).toBe(15)
+    expect((await ids({ geomType: [] })).length).toBe(15)
+  })
+  it('ignores case and accents', async () => {
+    expect(await ids({ geomType: 'multipolygón' })).toEqual(await ids({ geomType: 'MultiPolygon' }))
+  })
+  it('matches none of a type the index lacks (no Point rows)', async () => {
+    expect(await ids({ geomType: 'Point' })).toEqual([])
+  })
+  it('is applied before `limit`, which then counts only matching hits (the largest place is a MultiPolygon)', async () => {
+    expect((await c.search('', { limit: 1 }))[0].geom_type).toBe('MultiPolygon')
+    const two = await c.search('', { geomType: 'Polygon', limit: 2 })
+    expect(two).toHaveLength(2)
+    expect(two.every((p) => p.geom_type === 'Polygon')).toBe(true)
+  })
+  it('combines with the other filters and with `group`', async () => {
+    expect(await ids({ geomType: 'MultiPolygon', collection: 'fx_ref' })).toEqual(['FXR:1', 'FXR:2', 'FXR:3'])
+    expect(await ids({ geomType: 'MultiPolygon', collection: 'fx_leases' })).toEqual(['FX:PM'])
+    expect(await ids({ geomType: 'Polygon', type: 'easement' })).toEqual(['FX:D-4'])
+    expect((await c.search('zulu', { geomType: 'Polygon', group: true })).map((p) => [p.collection, p.also?.length])).toEqual([['fx_leases', 1]])   // both copies are Polygons: grouped as without the filter
   })
 })
 

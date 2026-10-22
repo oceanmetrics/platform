@@ -94,6 +94,11 @@ COPY (
   ORDER BY collection, place_id
 ) TO 'index/places_index.parquet' (FORMAT parquet, ROW_GROUP_SIZE 4, COMPRESSION zstd);
 
+-- the same index as one written before group_id, source_id, url and keywords existed (the tests read it as index_old/)
+COPY (
+  SELECT * EXCLUDE (group_id, source_id, url, keywords) FROM read_parquet('index/places_index.parquet') ORDER BY collection, place_id
+) TO 'index_old/places_index.parquet' (FORMAT parquet, ROW_GROUP_SIZE 4, COMPRESSION zstd);
+
 -- a larger collection (600 small polygons) so a lookup by id can be shown to read a fraction of the file
 COPY (
   SELECT 'BIG:' || lpad(i::varchar, 4, '0') AS place_id, 'BIG' AS authority, i::varchar AS source_id,

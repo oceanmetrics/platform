@@ -5,7 +5,7 @@ published `layers.json`, GeoParquet and PMTiles straight from object storage: no
 
 - Dependencies: `hyparquet` and `hyparquet-compressors` (parquet range reads). `pmtiles` is an optional peer, needed
   only to draw layers on a map. MapLibre GL is not a dependency: functions take your `map`.
-- ESM and TypeScript. Version 0.5.1 (see CHANGELOG.md), MIT, published to npm as `@oceanmetrics/places` (its first npm release; the version continues from the places repo). It lives in `oceanmetrics/platform`; it moved from `oceanmetrics/places` `client/` on 2026-10-22.
+- ESM and TypeScript. Version 0.5.2 (see CHANGELOG.md), MIT, published to npm as `@oceanmetrics/places` (its first npm release; the version continues from the places repo). It lives in `oceanmetrics/platform`; it moved from `oceanmetrics/places` `client/` on 2026-10-22.
 - Every function is available on the default client (`import { search } from '@oceanmetrics/places'`) and on
   `createClient(config)` for more than one base URL.
 
@@ -89,12 +89,12 @@ map.on('load', async () => {
 
 ## search(q, opts?)
 
-Searches `places_index.parquet` (no geometry; one row per place across all layers). The index is read once with
-range requests (footer first) and kept in memory; searching is then local. Every word of `q` must occur in the name
+Searches `places_index.parquet` (no geometry; one row per place across all layers). The index is downloaded once (one GET) and kept in memory; searching is then local. Every word of `q` must occur in the name
 or place id (case and accent insensitive). Ranking: exact name or id, name prefix, word prefix, substring; ties by
 larger `area_km2`. Options: `bbox: [west, south, east, north]` (west > east crosses the antimeridian), `type`,
-`authority`, `collection` (each a string or array; `collection` = layer slug, to search within layers), `limit`
-(default 20). An empty `q` lists by filter.
+`authority`, `collection` (each a string or array; `collection` = layer slug, to search within layers), `geomType`
+(a string or array of index `geom_type` values, e.g. `['MultiPolygon', 'Polygon']`; case insensitive, applied before
+`limit`), `limit` (default 20). An empty `q` lists by filter.
 
 The same place can be in several layers (index `group_id`). `group: true` returns one hit per place, the copy with
 the lowest layers.json `search_rank` first and the other copies in `also`; `prefer: ['places']` puts an app's own
@@ -108,7 +108,10 @@ const hits = await search('humboldt', { type: 'lease', authority: 'BOEM', bbox: 
 
 Index columns the client reads (the live schema, written by `scripts/build_index.py`): `place_id, name, authority,
 place_type, geom_type, collection, bbox` (struct xmin/ymin/xmax/ymax), `centroid_lon, centroid_lat` (doubles; a
-pre-0.1.1 `centroid` list is still understood), `area_km2, license, attribution, version, updated`. `collection` is the
+pre-0.1.1 `centroid` list is still understood), `area_km2, license, attribution, version, updated, group_id, source_id, url,
+keywords` (the last four are null when the file lacks them). The list is exported as `INDEX_COLUMNS`; `loadIndex()` returns
+the rows, and `createClient({ indexColumns: [...] })` / `configure({ indexColumns })` decodes only the columns named
+(plus `place_id` and `collection`), leaving the rest null, for an app that needs a fast first paint and no credits. `collection` is the
 slug whose PMTiles layer and GeoParquet hold the place (`${base}${collection}/`), `geom_type` its geometry kind.
 
 - **bbox convention for places cut at the antimeridian:** the index bbox is *unwrapped*: parts west of the antimeridian are

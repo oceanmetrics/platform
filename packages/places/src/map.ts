@@ -1,4 +1,4 @@
-import type { AddLayerOptions, DerivedPiece, DisplaySource, IndexPlace, Layer, MapLike } from './types'
+import type { AddLayerOptions, DerivedPiece, DisplaySource, IndexPlace, Layer, MapLike } from './types.js'
 
 export type DrawKind = 'fill' | 'line' | 'circle' | 'raster'
 export const DRAW_KINDS: DrawKind[] = ['fill', 'line', 'circle', 'raster']

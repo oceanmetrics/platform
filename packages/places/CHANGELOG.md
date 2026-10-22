@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.5.2
+
+Absorbs the three edits `oceanmetrics/erddap-places` made to its vendored copy of the 0.2.0 client, so erddap-places can
+delete the copy and depend on this package.
+
+- `search(q, { geomType })`: keep places whose index `geom_type` is one of these (a string or an array: `'Polygon'`,
+  `['MultiPolygon', 'Polygon']`), case and accent insensitive. It is applied before `limit`, so a picker that wants
+  polygons only gets `limit` polygons, not `limit` hits cut to polygons afterwards. An empty array is no filter; a row
+  with no `geom_type` matches none. New `SearchOptions.geomType`.
+- `loadIndex()` is exported (default client and `createClient(...)`): every row of `places_index.parquet`, read once and
+  cached, the loader `search`, `samePlace` and `creditsFor` already used.
+- `INDEX_COLUMNS` is exported: every index column the client reads. New `ClientConfig.indexColumns` decodes only the
+  columns it names (`place_id` and `collection` are always read); the others are null on every row, so an app that
+  never shows credits skips license, attribution, version and updated. Default: every column, as before. The
+  erddap-places copy hard-wired an 11-column list; that list now belongs to erddap-places (`indexColumns`).
+- the index is downloaded with one GET instead of hyparquet range reads (about 140 sequential requests of 2.5 kB for the
+  live index, 10 s on a cold connection). Same rows; a failed load is retried on the next call.
+- an index from before `group_id`, `source_id`, `url` or `keywords` loads with those null, whether or not `indexColumns`
+  names them (a test now holds this; the unrestricted read already tolerated it, the column filter must too).
+- fix: `dist/index.js` imported its sibling modules without `.js` (`export * from './client'`), which Node's ESM loader
+  rejects ("Cannot find module .../dist/client"): a consumer's vitest or Node script failed unless it inlined the package;
+  bundlers hid it. Every relative import in `src` now carries `.js`. `scripts/esm-load.test.ts` builds all packages and
+  loads each `dist/index.js` in plain Node on every `npm test`. `status`, `catalog` and `map` were not affected.
+
 ## 0.5.1
 
 - `Layer.access` (`'public' | 'unlisted'`, required): the new layers.json field from oceanmetrics/places (the source YAML's

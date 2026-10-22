@@ -34,7 +34,8 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
   read at run time by `@oceanmetrics/catalog/validate` (ajv, Node only, never imported by the index) and by the Python
   `om_extract.schemas`. Fixtures in `fixtures/<name>/{valid,invalid}/`, the expected errors in `invalid.json`; the test
   discovers every schema. **`map` is a scaffold** (a `PACKAGE` constant and one test); its README says what fills in.
-- Source imports use `.js` specifiers (`./grid.js`) so the emitted declarations resolve for every consumer.
+- Source imports use `.js` specifiers (`./grid.js`) so the emitted declarations and `dist/*.js` resolve for every consumer
+  and for plain Node ESM (places 0.5.1 shipped without them); `scripts/esm-load.test.ts` builds and loads each `dist/index.js` in Node.
 
 ## Conventions
 

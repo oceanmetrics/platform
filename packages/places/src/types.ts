@@ -138,6 +138,10 @@ export interface ClientConfig {
   layersUrl?: string
   /** where the place index lives; default `${base}index/places_index.parquet`. */
   indexUrl? : string
+  /** decode only these columns of the place index (a subset of `INDEX_COLUMNS`; `place_id` and `collection` are always
+   *  read); the rest are null on every row, e.g. an app that never shows credits skips license, attribution, version and
+   *  updated. Default: every column. */
+  indexColumns?: string[]
   /** collection parquet for a slug; default `${base}${slug}/places.parquet`. */
   parquetUrl?: (slug: string) => string
   /** fetch implementation (default: global fetch). */
@@ -184,6 +188,9 @@ export interface SearchOptions {
   authority?: string | string[]
   /** keep places of these collection slugs (an index row's `collection`, a layers.json `collection`). */
   collection?: string | string[]
+  /** keep places of these geometry types (an index row's `geom_type`: 'Polygon', 'MultiPolygon', 'Point', ...), case and
+   *  accent insensitive. Filtered before `limit`, so `limit` counts only matching hits; a row with no geom_type matches none. */
+  geomType? : string | string[]
   limit?    : number
   /** one hit per place: copies sharing a `group_id` collapse into the preferred one, the rest go to its `also`. */
   group?    : boolean
