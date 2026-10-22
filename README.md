@@ -75,9 +75,10 @@ Edit each repo in its own change; nothing here edits them.
 
 `npm run size` gzips (level 9) the summed `dist/**/*.js` of each package and compares it with the budget in
 `scripts/size-budget.mjs`. Set on 2026-10-22 at about 1.5 times the measurement: places 18 000 B (measured 11 708 at 0.5.1, 12 492 at 0.5.2),
-status 12 000 B (measured 7 997); map and catalog hold a provisional 5 000 B each until they have code (catalog
-measured 404 B on 2026-10-22, its Node-only validator and CLI left out: they never reach a browser). Raise a budget
-only with the reason written here.
+status 12 000 B (measured 7 997); map 39 000 B (measured 26 024 on 2026-10-23, when 0.2.0 replaced the scaffold and its
+provisional 5 000 B: every module counts, the h3 worker module and the COG code included; packages/map/README.md has
+what an app pays per provider); catalog holds a provisional 5 000 B until it has code (measured 404 B on 2026-10-22,
+its Node-only validator and CLI left out: they never reach a browser). Raise a budget only with the reason written here.
 
 ## Licence
 
