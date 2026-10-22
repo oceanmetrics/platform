@@ -1,0 +1,278 @@
+{
+  "type": "Collection",
+  "id": "erddap/cmems_biogeochem_nutrients",
+  "stac_version": "1.1.0",
+  "description": "Monthly mean dissolved iron, nitrate, phosphate and silicate (fe, no3, po4, si) on 50 depth levels from the CMEMS global biogeochemistry analysis and forecast (0.25 degree). Hosted on the USF IMaRS ERDDAP (https://erddap.marine.usf.edu/erddap) and re-served with CORS and Parquet by erddap.oceanmetrics.io, referenced in place for computing place statistics in the browser via griddap.parquet. Variables on the 50-level depth axis are sliced at the surface level (erddap-places:depth = 0.49402538 m).",
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "agents",
+      "href": "./AGENTS.md",
+      "type": "text/markdown",
+      "title": "Agent/LLM usage guide"
+    },
+    {
+      "rel": "describedby",
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "Human-readable documentation"
+    },
+    {
+      "rel": "via",
+      "href": "https://erddap.marine.usf.edu/erddap/info/cmems_biogeochem_nutrients/index.html",
+      "type": "text/html",
+      "title": "cmems_biogeochem_nutrients (source, USF IMaRS ERDDAP)"
+    },
+    {
+      "rel": "about",
+      "href": "https://doi.org/10.48670/moi-00015",
+      "type": "text/html",
+      "title": "CMEMS GLOBAL_ANALYSISFORECAST_BGC_001_028"
+    },
+    {
+      "rel": "license",
+      "href": "https://marine.copernicus.eu/user-corner/service-commitments-and-licence",
+      "type": "text/html",
+      "title": "Copernicus Marine Service licence"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json",
+    "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json"
+  ],
+  "updated": "2026-10-07T00:00:00Z",
+  "title": "CMEMS Global Biogeochemistry — monthly nutrients",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -180,
+          -80,
+          179.75,
+          90
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2021-10-16T12:00:00Z",
+          "2025-02-15T00:00:00Z"
+        ]
+      ]
+    }
+  },
+  "license": "other",
+  "providers": [
+    {
+      "name": "Copernicus Marine Service (CMEMS) / Mercator Ocean International",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://marine.copernicus.eu"
+    },
+    {
+      "name": "USF Institute for Marine Remote Sensing (IMaRS), source ERDDAP",
+      "roles": [
+        "processor"
+      ],
+      "url": "https://erddap.marine.usf.edu/erddap"
+    },
+    {
+      "name": "Ocean Metrics LLC",
+      "roles": [
+        "processor",
+        "host"
+      ],
+      "url": "https://oceanmetrics.io"
+    }
+  ],
+  "cube:dimensions": {
+    "time": {
+      "type": "temporal",
+      "description": "Time (hours since 1950-01-01)",
+      "extent": [
+        "2021-10-16T12:00:00Z",
+        "2025-02-15T00:00:00Z"
+      ],
+      "step": "P1M"
+    },
+    "depth": {
+      "type": "spatial",
+      "axis": "z",
+      "description": "Depth (positive down; 50 levels)",
+      "extent": [
+        0.494025,
+        5727.917
+      ],
+      "unit": "m",
+      "step": null
+    },
+    "latitude": {
+      "type": "spatial",
+      "axis": "y",
+      "description": "Latitude",
+      "extent": [
+        -80,
+        90
+      ],
+      "step": 0.25,
+      "reference_system": 4326
+    },
+    "longitude": {
+      "type": "spatial",
+      "axis": "x",
+      "description": "Longitude",
+      "extent": [
+        -180,
+        179.75
+      ],
+      "step": 0.25,
+      "reference_system": 4326
+    }
+  },
+  "cube:variables": {
+    "fe": {
+      "dimensions": [
+        "time",
+        "depth",
+        "latitude",
+        "longitude"
+      ],
+      "type": "data",
+      "unit": "MMol' 'M-3",
+      "description": "Dissolved Iron"
+    },
+    "no3": {
+      "dimensions": [
+        "time",
+        "depth",
+        "latitude",
+        "longitude"
+      ],
+      "type": "data",
+      "unit": "MMol' 'M-3",
+      "description": "Nitrate"
+    },
+    "po4": {
+      "dimensions": [
+        "time",
+        "depth",
+        "latitude",
+        "longitude"
+      ],
+      "type": "data",
+      "unit": "MMol' 'M-3",
+      "description": "Phosphate"
+    },
+    "si": {
+      "dimensions": [
+        "time",
+        "depth",
+        "latitude",
+        "longitude"
+      ],
+      "type": "data",
+      "unit": "MMol' 'M-3",
+      "description": "Dissolved Silicate"
+    }
+  },
+  "erddap:base_url": "https://erddap.oceanmetrics.io/erddap",
+  "erddap:upstream_url": "https://erddap.marine.usf.edu/erddap",
+  "erddap:dataset_id": "cmems_biogeochem_nutrients",
+  "erddap:protocol": "griddap",
+  "erddap:version": "2.31.1",
+  "erddap:cors": true,
+  "erddap:formats": [
+    "parquet",
+    "csvp",
+    "json"
+  ],
+  "erddap:lon_range": [
+    -180,
+    179.75
+  ],
+  "erddap:lat_descending": false,
+  "erddap-places:depth": 0.49402538,
+  "assets": {
+    "griddap": {
+      "href": "https://erddap.oceanmetrics.io/erddap/griddap/cmems_biogeochem_nutrients.parquet?{variable}[({t0}):1:({t1})][(0.49402538):1:(0.49402538)][({lat_min}):1:({lat_max})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template (percent-encode each constraint separately); latitude ascends on this grid; the depth constraint is fixed at the surface level, 0.49402538 m",
+      "roles": [
+        "data",
+        "external"
+      ],
+      "table:columns": [
+        {
+          "name": "time",
+          "type": "timestamp",
+          "description": "Time (hours since 1950-01-01)"
+        },
+        {
+          "name": "depth",
+          "type": "double",
+          "description": "Depth, m (the one sliced level)"
+        },
+        {
+          "name": "latitude",
+          "type": "double",
+          "description": "Latitude, degrees_north"
+        },
+        {
+          "name": "longitude",
+          "type": "double",
+          "description": "Longitude, degrees_east"
+        },
+        {
+          "name": "fe",
+          "type": "double",
+          "description": "Dissolved Iron, MMol' 'M-3"
+        },
+        {
+          "name": "no3",
+          "type": "double",
+          "description": "Nitrate, MMol' 'M-3"
+        },
+        {
+          "name": "po4",
+          "type": "double",
+          "description": "Phosphate, MMol' 'M-3"
+        },
+        {
+          "name": "si",
+          "type": "double",
+          "description": "Dissolved Silicate, MMol' 'M-3"
+        }
+      ]
+    },
+    "griddap_upstream": {
+      "href": "https://erddap.marine.usf.edu/erddap/griddap/cmems_biogeochem_nutrients.parquet?{variable}[({t0}):1:({t1})][(0.49402538):1:(0.49402538)][({lat_min}):1:({lat_max})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template on the source USF IMaRS server",
+      "roles": [
+        "data",
+        "external"
+      ]
+    },
+    "metadata": {
+      "href": "https://erddap.oceanmetrics.io/erddap/info/cmems_biogeochem_nutrients/index.json",
+      "type": "application/json",
+      "title": "ERDDAP dataset metadata (info endpoint)",
+      "roles": [
+        "metadata",
+        "external"
+      ]
+    }
+  }
+}

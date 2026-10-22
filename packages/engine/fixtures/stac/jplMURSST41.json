@@ -1,0 +1,168 @@
+{
+  "type": "Collection",
+  "id": "erddap/jplmursst41",
+  "stac_version": "1.1.0",
+  "description": "JPL MUR (Multi-scale Ultra-high Resolution) SST v4.1, 0.01-degree daily global analysed sea surface temperature. Re-served from our own ERDDAP mirror (not yet live); upstream is NOAA CoastWatch. Referenced here for computing place statistics in the browser via griddap.parquet.",
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "agents",
+      "href": "./AGENTS.md",
+      "type": "text/markdown",
+      "title": "Agent/LLM usage guide"
+    },
+    {
+      "rel": "describedby",
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "Human-readable documentation"
+    },
+    {
+      "rel": "via",
+      "href": "https://coastwatch.pfeg.noaa.gov/erddap/info/jplMURSST41/index.html",
+      "type": "text/html",
+      "title": "JPL MUR SST v4.1 (upstream, NOAA CoastWatch)"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json",
+    "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json"
+  ],
+  "updated": "2026-09-15T00:00:00Z",
+  "title": "JPL MUR SST v4.1 (re-served)",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -179.99,
+          -89.99,
+          180.0,
+          89.99
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2002-06-01T09:00:00Z",
+          null
+        ]
+      ]
+    }
+  },
+  "license": "CC0-1.0",
+  "providers": [
+    {
+      "name": "NASA JPL PO.DAAC",
+      "roles": ["producer", "licensor"],
+      "url": "https://podaac.jpl.nasa.gov"
+    },
+    {
+      "name": "Ocean Metrics LLC",
+      "roles": ["processor"],
+      "url": "https://oceanmetrics.io"
+    },
+    {
+      "name": "NOAA CoastWatch",
+      "roles": ["host"],
+      "url": "https://coastwatch.pfeg.noaa.gov"
+    }
+  ],
+  "cube:dimensions": {
+    "time": {
+      "type": "temporal",
+      "description": "reference time of sst field",
+      "extent": ["2002-06-01T09:00:00Z", null],
+      "step": "P1D"
+    },
+    "latitude": {
+      "type": "spatial",
+      "axis": "y",
+      "description": "Latitude",
+      "extent": [-89.99, 89.99],
+      "step": 0.01,
+      "reference_system": 4326
+    },
+    "longitude": {
+      "type": "spatial",
+      "axis": "x",
+      "description": "Longitude",
+      "extent": [-179.99, 180.0],
+      "step": 0.01,
+      "reference_system": 4326
+    }
+  },
+  "cube:variables": {
+    "analysed_sst": {
+      "dimensions": ["time", "latitude", "longitude"],
+      "type": "data",
+      "unit": "degree_C",
+      "description": "Analysed Sea Surface Temperature (already in Celsius, not Kelvin)"
+    },
+    "analysis_error": {
+      "dimensions": ["time", "latitude", "longitude"],
+      "type": "data",
+      "unit": "degree_C",
+      "description": "Estimated Error Standard Deviation of analysed_sst"
+    },
+    "mask": {
+      "dimensions": ["time", "latitude", "longitude"],
+      "type": "data",
+      "unit": null,
+      "description": "Sea/Land Field Composite Mask (categorical byte)"
+    },
+    "sea_ice_fraction": {
+      "dimensions": ["time", "latitude", "longitude"],
+      "type": "data",
+      "unit": "1",
+      "description": "Sea Ice Area Fraction"
+    }
+  },
+  "erddap:base_url": "https://erddap.oceanmetrics.io/erddap",
+  "erddap:upstream_url": "https://coastwatch.pfeg.noaa.gov/erddap",
+  "erddap:dataset_id": "jplMURSST41",
+  "erddap:protocol": "griddap",
+  "erddap:version": "2.31.1",
+  "erddap:cors": true,
+  "erddap:formats": ["parquet", "csvp", "json"],
+  "erddap:lon_range": [-179.99, 180.0],
+  "erddap:lat_descending": false,
+  "assets": {
+    "griddap": {
+      "href": "https://erddap.oceanmetrics.io/erddap/griddap/jplMURSST41.parquet?{variable}[({t0}):1:({t1})][({lat_max}):1:({lat_min})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template (percent-encode each constraint separately); server not yet live",
+      "roles": ["data", "external"],
+      "table:columns": [
+        {"name": "time",      "type": "timestamp", "description": "reference time of sst field"},
+        {"name": "latitude",  "type": "double",     "description": "Latitude, degrees_north"},
+        {"name": "longitude", "type": "double",     "description": "Longitude, degrees_east"},
+        {"name": "analysed_sst",     "type": "double", "description": "Analysed Sea Surface Temperature, Celsius"},
+        {"name": "analysis_error",   "type": "double", "description": "Estimated Error Standard Deviation of analysed_sst, Celsius"},
+        {"name": "mask",             "type": "double", "description": "Sea/Land Field Composite Mask, categorical byte"},
+        {"name": "sea_ice_fraction", "type": "double", "description": "Sea Ice Area Fraction, 0-1"}
+      ]
+    },
+    "griddap_upstream": {
+      "href": "https://coastwatch.pfeg.noaa.gov/erddap/griddap/jplMURSST41.parquet?{variable}[({t0}):1:({t1})][({lat_max}):1:({lat_min})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template on upstream NOAA CoastWatch server (usable today)",
+      "roles": ["data", "external"]
+    },
+    "metadata": {
+      "href": "https://coastwatch.pfeg.noaa.gov/erddap/info/jplMURSST41/index.json",
+      "type": "application/json",
+      "title": "ERDDAP dataset metadata (info endpoint, upstream)",
+      "roles": ["metadata", "external"]
+    }
+  }
+}

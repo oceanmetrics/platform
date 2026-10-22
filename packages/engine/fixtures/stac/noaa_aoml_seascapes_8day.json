@@ -1,0 +1,271 @@
+{
+  "type": "Collection",
+  "id": "erddap/noaa_aoml_seascapes_8day",
+  "stac_version": "1.1.0",
+  "description": "NOAA AOML Seascapes: a global biogeographic framework in which space and time are classified simultaneously from synoptic satellite time series using hierarchical, topology-preserving machine learning. 8-day composites on a 0.05 degree global grid; CLASS is a categorical seascape label (1-33) and P is the associated probability. Upstream at NOAA AOML CoastWatch (cwcgom.aoml.noaa.gov); re-served with CORS and Parquet by erddap.oceanmetrics.io, and referenced in place for computing place statistics in the browser via griddap.parquet.",
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "agents",
+      "href": "./AGENTS.md",
+      "type": "text/markdown",
+      "title": "Agent/LLM usage guide"
+    },
+    {
+      "rel": "describedby",
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "Human-readable documentation"
+    },
+    {
+      "rel": "via",
+      "href": "https://cwcgom.aoml.noaa.gov/erddap/info/noaa_aoml_seascapes_8day/index.html",
+      "type": "text/html",
+      "title": "8_Day Global Seascapes (NOAA AOML)"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json",
+    "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json"
+  ],
+  "updated": "2026-09-15T00:00:00Z",
+  "title": "NOAA AOML Seascapes — 8-day Global (categorical)",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -180.0,
+          -89.975,
+          180.0,
+          89.975
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2002-08-29T12:00:00Z",
+          null
+        ]
+      ]
+    }
+  },
+  "license": "CC0-1.0",
+  "providers": [
+    {
+      "name": "NOAA Atlantic Oceanographic and Meteorological Laboratory (AOML)",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://www.aoml.noaa.gov"
+    },
+    {
+      "name": "Ocean Metrics LLC",
+      "roles": [
+        "processor",
+        "host"
+      ],
+      "url": "https://oceanmetrics.io"
+    }
+  ],
+  "cube:dimensions": {
+    "time": {
+      "type": "temporal",
+      "description": "Reference Time",
+      "extent": [
+        "2002-08-29T12:00:00Z",
+        null
+      ],
+      "step": "P8D"
+    },
+    "latitude": {
+      "type": "spatial",
+      "axis": "y",
+      "description": "Latitude",
+      "extent": [
+        -89.975,
+        89.975
+      ],
+      "step": 0.05,
+      "reference_system": 4326
+    },
+    "longitude": {
+      "type": "spatial",
+      "axis": "x",
+      "description": "Longitude",
+      "extent": [
+        -179.975,
+        179.975
+      ],
+      "step": 0.05,
+      "reference_system": 4326
+    }
+  },
+  "cube:variables": {
+    "CLASS": {
+      "dimensions": [
+        "time",
+        "latitude",
+        "longitude"
+      ],
+      "type": "data",
+      "unit": "1",
+      "description": "seascape class (categorical, 1-33)",
+      "erddap-places:categorical": true,
+      "erddap-places:classes": {
+        "1": "North Atlantic Spring, ACC Transition",
+        "2": "Subpolar Transition",
+        "3": "Tropical Subtropical Transition",
+        "4": "Western Warm Pool Subtropical",
+        "5": "Subtropical Gyre Transition",
+        "6": "ACC, Nutrient Stress",
+        "7": "Temperate Transition",
+        "8": "Indopacific Subtropical Gyre",
+        "9": "Equatorial Transition",
+        "10": "Highly Oligotrophic Subtropical Gyre",
+        "11": "Tropical/Subtropical Upwelling",
+        "12": "Subpolar",
+        "13": "Subtropical Gyre Mesoscale Influenced",
+        "14": "Temperate Blooms Upwelling",
+        "15": "Tropical Seas",
+        "16": "Meditteranean Red Sea",
+        "17": "Subtropical Transition Low Nutrient Stress",
+        "18": "Meditteranean Red Sea",
+        "19": "Artic/ Subpolar Shelves",
+        "20": "Subtropical, Fresh Influenced Coastal",
+        "21": "Warm, Blooms, High Nuts",
+        "22": "Arctic Late Summer",
+        "23": "Freshwater Influenced Polar/Subpolar Shelves",
+        "24": "Antarctic Shelves",
+        "25": "Ice Pack/Large Polynas",
+        "26": "Antarctic Ice Edge",
+        "27": "Hypersaline Eutrophic, Persian Gulf, Red Sea",
+        "28": "Arctic Ice Edge",
+        "29": "Antarctic",
+        "30": "Ice Edge Bloom",
+        "31": "1-30% Ice Present",
+        "32": "30-80% Marginal Ice",
+        "33": "Pack Ice"
+      }
+    },
+    "P": {
+      "dimensions": [
+        "time",
+        "latitude",
+        "longitude"
+      ],
+      "type": "data",
+      "unit": "1",
+      "description": "probability of the assigned seascape class"
+    }
+  },
+  "erddap:base_url": "https://erddap.oceanmetrics.io/erddap",
+  "erddap:upstream_url": "https://cwcgom.aoml.noaa.gov/erddap",
+  "erddap:dataset_id": "noaa_aoml_seascapes_8day",
+  "erddap:protocol": "griddap",
+  "erddap:version": "2.31.1",
+  "erddap:cors": true,
+  "erddap:formats": [
+    "parquet",
+    "csvp",
+    "json"
+  ],
+  "erddap:lon_range": [
+    -180,
+    180
+  ],
+  "erddap:lat_descending": false,
+  "assets": {
+    "griddap": {
+      "href": "https://erddap.oceanmetrics.io/erddap/griddap/noaa_aoml_seascapes_8day.parquet?{variable}[({t0}):1:({t1})][({lat_min}):1:({lat_max})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template (percent-encode each constraint separately); latitude ascends on this grid",
+      "roles": [
+        "data",
+        "external"
+      ],
+      "table:columns": [
+        {
+          "name": "time",
+          "type": "timestamp",
+          "description": "Reference Time"
+        },
+        {
+          "name": "latitude",
+          "type": "double",
+          "description": "Latitude, degrees_north"
+        },
+        {
+          "name": "longitude",
+          "type": "double",
+          "description": "Longitude, degrees_east"
+        },
+        {
+          "name": "CLASS",
+          "type": "double",
+          "description": "seascape class, categorical 1-33 (0 = fill)"
+        },
+        {
+          "name": "P",
+          "type": "double",
+          "description": "probability of the assigned class, 0-1"
+        }
+      ]
+    },
+    "griddap_upstream": {
+      "href": "https://cwcgom.aoml.noaa.gov/erddap/griddap/noaa_aoml_seascapes_8day.parquet?{variable}[({t0}):1:({t1})][({lat_min}):1:({lat_max})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template on the upstream NOAA AOML server (no CORS headers)",
+      "roles": [
+        "data",
+        "external"
+      ],
+      "table:columns": [
+        {
+          "name": "time",
+          "type": "timestamp",
+          "description": "Reference Time"
+        },
+        {
+          "name": "latitude",
+          "type": "double",
+          "description": "Latitude, degrees_north"
+        },
+        {
+          "name": "longitude",
+          "type": "double",
+          "description": "Longitude, degrees_east"
+        },
+        {
+          "name": "CLASS",
+          "type": "double",
+          "description": "seascape class, categorical 1-33 (0 = fill)"
+        },
+        {
+          "name": "P",
+          "type": "double",
+          "description": "probability of the assigned class, 0-1"
+        }
+      ]
+    },
+    "metadata": {
+      "href": "https://cwcgom.aoml.noaa.gov/erddap/info/noaa_aoml_seascapes_8day/index.json",
+      "type": "application/json",
+      "title": "ERDDAP dataset metadata (upstream info endpoint)",
+      "roles": [
+        "metadata",
+        "external"
+      ]
+    }
+  }
+}

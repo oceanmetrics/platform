@@ -1,0 +1,73 @@
+{
+  "name": "@oceanmetrics/engine",
+  "version": "0.1.0",
+  "description": "the browser engine of Ocean Metrics: the place mask, ERDDAP requests, the SQL shared with the Python engine, DuckDB-WASM statistics and the chunked live preview",
+  "keywords": [
+    "ocean",
+    "erddap",
+    "griddap",
+    "duckdb-wasm",
+    "zonal-statistics",
+    "mask"
+  ],
+  "homepage": "https://github.com/oceanmetrics/platform/tree/main/packages/engine#readme",
+  "bugs": {
+    "url": "https://github.com/oceanmetrics/platform/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oceanmetrics/platform.git",
+    "directory": "packages/engine"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/**/*.test.ts",
+    "sql",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/sql-templates.mjs && tsc -p tsconfig.build.json",
+    "prepack": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --root ../.. packages/engine"
+  },
+  "dependencies": {
+    "@turf/area": "7.4.0",
+    "@turf/bbox-clip": "7.4.0",
+    "@turf/boolean-point-in-polygon": "7.4.0",
+    "@turf/helpers": "7.4.0"
+  },
+  "peerDependencies": {
+    "@duckdb/duckdb-wasm": ">=1.29.0 <2",
+    "apache-arrow": ">=17"
+  },
+  "devDependencies": {
+    "@duckdb/duckdb-wasm": "1.29.0",
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^24.13.3",
+    "apache-arrow": "^17.0.0",
+    "typescript": "~5.9.0",
+    "vitest": "^5.0.1"
+  }
+}

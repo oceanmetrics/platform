@@ -1,0 +1,212 @@
+{
+  "type": "Collection",
+  "id": "erddap/moda_npp_mo_glob",
+  "stac_version": "1.1.0",
+  "description": "Monthly net primary productivity (npp) from the Vertically Generalized Production Model (VGPM) applied to MODIS-Aqua, Oregon State University Ocean Productivity, 9 km global. Hosted on the USF IMaRS ERDDAP (https://erddap.marine.usf.edu/erddap) and re-served with CORS and Parquet by erddap.oceanmetrics.io, referenced in place for computing place statistics in the browser via griddap.parquet.",
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "agents",
+      "href": "./AGENTS.md",
+      "type": "text/markdown",
+      "title": "Agent/LLM usage guide"
+    },
+    {
+      "rel": "describedby",
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "Human-readable documentation"
+    },
+    {
+      "rel": "via",
+      "href": "https://erddap.marine.usf.edu/erddap/info/moda_npp_mo_glob/index.html",
+      "type": "text/html",
+      "title": "moda_npp_mo_glob (source, USF IMaRS ERDDAP)"
+    },
+    {
+      "rel": "about",
+      "href": "http://sites.science.oregonstate.edu/ocean.productivity/",
+      "type": "text/html",
+      "title": "OSU Ocean Productivity"
+    },
+    {
+      "rel": "license",
+      "href": "http://sites.science.oregonstate.edu/ocean.productivity/",
+      "type": "text/html",
+      "title": "Ocean Productivity: free to use with attribution"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json",
+    "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json"
+  ],
+  "updated": "2026-10-07T00:00:00Z",
+  "title": "MODIS-Aqua net primary productivity (VGPM) — monthly global 9 km",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -180,
+          -90,
+          179.9167,
+          90
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2002-07-31T00:00:00Z",
+          "2023-12-31T00:00:00Z"
+        ]
+      ]
+    }
+  },
+  "license": "other",
+  "providers": [
+    {
+      "name": "Oregon State University Ocean Productivity (VGPM, from NASA MODIS-Aqua)",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "http://sites.science.oregonstate.edu/ocean.productivity/"
+    },
+    {
+      "name": "USF Institute for Marine Remote Sensing (IMaRS), source ERDDAP",
+      "roles": [
+        "processor"
+      ],
+      "url": "https://erddap.marine.usf.edu/erddap"
+    },
+    {
+      "name": "Ocean Metrics LLC",
+      "roles": [
+        "processor",
+        "host"
+      ],
+      "url": "https://oceanmetrics.io"
+    }
+  ],
+  "cube:dimensions": {
+    "time": {
+      "type": "temporal",
+      "description": "Time",
+      "extent": [
+        "2002-07-31T00:00:00Z",
+        "2023-12-31T00:00:00Z"
+      ],
+      "step": "P1M"
+    },
+    "latitude": {
+      "type": "spatial",
+      "axis": "y",
+      "description": "Latitude",
+      "extent": [
+        -90,
+        90
+      ],
+      "step": 0.083372,
+      "reference_system": 4326
+    },
+    "longitude": {
+      "type": "spatial",
+      "axis": "x",
+      "description": "Longitude",
+      "extent": [
+        -180,
+        179.9167
+      ],
+      "step": 0.083333,
+      "reference_system": 4326
+    }
+  },
+  "cube:variables": {
+    "npp": {
+      "dimensions": [
+        "time",
+        "latitude",
+        "longitude"
+      ],
+      "type": "data",
+      "unit": "mgC m^-2 day^-1",
+      "description": "Net Primary Productivity"
+    }
+  },
+  "erddap:base_url": "https://erddap.oceanmetrics.io/erddap",
+  "erddap:upstream_url": "https://erddap.marine.usf.edu/erddap",
+  "erddap:dataset_id": "moda_npp_mo_glob",
+  "erddap:protocol": "griddap",
+  "erddap:version": "2.31.1",
+  "erddap:cors": true,
+  "erddap:formats": [
+    "parquet",
+    "csvp",
+    "json"
+  ],
+  "erddap:lon_range": [
+    -180,
+    179.9167
+  ],
+  "erddap:lat_descending": true,
+  "assets": {
+    "griddap": {
+      "href": "https://erddap.oceanmetrics.io/erddap/griddap/moda_npp_mo_glob.parquet?{variable}[({t0}):1:({t1})][({lat_max}):1:({lat_min})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template (percent-encode each constraint separately); latitude descends on this grid",
+      "roles": [
+        "data",
+        "external"
+      ],
+      "table:columns": [
+        {
+          "name": "time",
+          "type": "timestamp",
+          "description": "Time"
+        },
+        {
+          "name": "latitude",
+          "type": "double",
+          "description": "Latitude, degrees_north"
+        },
+        {
+          "name": "longitude",
+          "type": "double",
+          "description": "Longitude, degrees_east"
+        },
+        {
+          "name": "npp",
+          "type": "double",
+          "description": "Net Primary Productivity, mgC m^-2 day^-1"
+        }
+      ]
+    },
+    "griddap_upstream": {
+      "href": "https://erddap.marine.usf.edu/erddap/griddap/moda_npp_mo_glob.parquet?{variable}[({t0}):1:({t1})][({lat_max}):1:({lat_min})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template on the source USF IMaRS server",
+      "roles": [
+        "data",
+        "external"
+      ]
+    },
+    "metadata": {
+      "href": "https://erddap.oceanmetrics.io/erddap/info/moda_npp_mo_glob/index.json",
+      "type": "application/json",
+      "title": "ERDDAP dataset metadata (info endpoint)",
+      "roles": [
+        "metadata",
+        "external"
+      ]
+    }
+  }
+}

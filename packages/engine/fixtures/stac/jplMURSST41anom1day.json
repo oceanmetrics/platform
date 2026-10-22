@@ -1,0 +1,222 @@
+{
+  "type": "Collection",
+  "id": "erddap/jplmursst41anom1day",
+  "stac_version": "1.1.0",
+  "description": "Daily sea surface temperature anomaly from the JPL MUR (Multi-scale Ultra-high Resolution) SST analysis v4.1, 0.01 degree global. Hosted on the USF IMaRS ERDDAP (https://erddap.marine.usf.edu/erddap) and re-served with CORS and Parquet by erddap.oceanmetrics.io, referenced in place for computing place statistics in the browser via griddap.parquet. Pending: not served by erddap.oceanmetrics.io yet (its upstream, NOAA CoastWatch, is down); described from the USF server. Not precomputed.",
+  "links": [
+    {
+      "rel": "root",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "agents",
+      "href": "./AGENTS.md",
+      "type": "text/markdown",
+      "title": "Agent/LLM usage guide"
+    },
+    {
+      "rel": "describedby",
+      "href": "./README.md",
+      "type": "text/markdown",
+      "title": "Human-readable documentation"
+    },
+    {
+      "rel": "via",
+      "href": "https://erddap.marine.usf.edu/erddap/info/jplMURSST41anom1day/index.html",
+      "type": "text/html",
+      "title": "jplMURSST41anom1day (source, USF IMaRS ERDDAP)"
+    },
+    {
+      "rel": "about",
+      "href": "https://podaac.jpl.nasa.gov/dataset/MUR-JPL-L4-GLOB-v4.1",
+      "type": "text/html",
+      "title": "MUR-JPL-L4-GLOB-v4.1"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json",
+    "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json"
+  ],
+  "updated": "2026-10-07T00:00:00Z",
+  "title": "JPL MUR SST v4.1 — daily anomaly (pending)",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -179.99,
+          -89.99,
+          180,
+          89.99
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2002-06-01T09:00:00Z",
+          "2026-09-30T09:00:00Z"
+        ]
+      ]
+    }
+  },
+  "license": "CC0-1.0",
+  "providers": [
+    {
+      "name": "NASA JPL PO.DAAC",
+      "roles": [
+        "producer",
+        "licensor"
+      ],
+      "url": "https://podaac.jpl.nasa.gov"
+    },
+    {
+      "name": "USF Institute for Marine Remote Sensing (IMaRS), source ERDDAP",
+      "roles": [
+        "processor"
+      ],
+      "url": "https://erddap.marine.usf.edu/erddap"
+    },
+    {
+      "name": "Ocean Metrics LLC",
+      "roles": [
+        "processor",
+        "host"
+      ],
+      "url": "https://oceanmetrics.io"
+    }
+  ],
+  "cube:dimensions": {
+    "time": {
+      "type": "temporal",
+      "description": "reference time of sst field",
+      "extent": [
+        "2002-06-01T09:00:00Z",
+        "2026-09-30T09:00:00Z"
+      ],
+      "step": "P1D"
+    },
+    "latitude": {
+      "type": "spatial",
+      "axis": "y",
+      "description": "Latitude",
+      "extent": [
+        -89.99,
+        89.99
+      ],
+      "step": 0.01,
+      "reference_system": 4326
+    },
+    "longitude": {
+      "type": "spatial",
+      "axis": "x",
+      "description": "Longitude",
+      "extent": [
+        -179.99,
+        180
+      ],
+      "step": 0.01,
+      "reference_system": 4326
+    }
+  },
+  "cube:variables": {
+    "sstAnom": {
+      "dimensions": [
+        "time",
+        "latitude",
+        "longitude"
+      ],
+      "type": "data",
+      "unit": "degree_C",
+      "description": "sea surface temperature anomaly"
+    },
+    "mask": {
+      "dimensions": [
+        "time",
+        "latitude",
+        "longitude"
+      ],
+      "type": "data",
+      "unit": null,
+      "description": "sea/land field composite mask"
+    }
+  },
+  "erddap:base_url": "https://erddap.oceanmetrics.io/erddap",
+  "erddap:upstream_url": "https://erddap.marine.usf.edu/erddap",
+  "erddap:dataset_id": "jplMURSST41anom1day",
+  "erddap:protocol": "griddap",
+  "erddap:version": "2.31.1",
+  "erddap:cors": true,
+  "erddap:formats": [
+    "parquet",
+    "csvp",
+    "json"
+  ],
+  "erddap:lon_range": [
+    -179.99,
+    180
+  ],
+  "erddap:lat_descending": false,
+  "erddap-places:status": "pending",
+  "assets": {
+    "griddap": {
+      "href": "https://erddap.oceanmetrics.io/erddap/griddap/jplMURSST41anom1day.parquet?{variable}[({t0}):1:({t1})][({lat_min}):1:({lat_max})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template (percent-encode each constraint separately); latitude ascends on this grid; server not yet live",
+      "roles": [
+        "data",
+        "external"
+      ],
+      "table:columns": [
+        {
+          "name": "time",
+          "type": "timestamp",
+          "description": "reference time of sst field"
+        },
+        {
+          "name": "latitude",
+          "type": "double",
+          "description": "Latitude, degrees_north"
+        },
+        {
+          "name": "longitude",
+          "type": "double",
+          "description": "Longitude, degrees_east"
+        },
+        {
+          "name": "sstAnom",
+          "type": "double",
+          "description": "sea surface temperature anomaly, degree_C"
+        },
+        {
+          "name": "mask",
+          "type": "double",
+          "description": "sea/land field composite mask"
+        }
+      ]
+    },
+    "griddap_upstream": {
+      "href": "https://erddap.marine.usf.edu/erddap/griddap/jplMURSST41anom1day.parquet?{variable}[({t0}):1:({t1})][({lat_min}):1:({lat_max})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template on the source USF IMaRS server",
+      "roles": [
+        "data",
+        "external"
+      ]
+    },
+    "metadata": {
+      "href": "https://erddap.marine.usf.edu/erddap/info/jplMURSST41anom1day/index.json",
+      "type": "application/json",
+      "title": "ERDDAP dataset metadata (info endpoint, source server)",
+      "roles": [
+        "metadata",
+        "external"
+      ]
+    }
+  }
+}
