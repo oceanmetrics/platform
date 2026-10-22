@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/om-notebook/v1.0.0/schema.json",
+  "title": "om: notebook block",
+  "description": "The `om:` block in the YAML front matter of a workflow notebook (oceanmetrics/workflows). One block per notebook names the target, its dependencies and the manifest it writes; the run order, the DAG and the index page are generated from the blocks (om-extract notebooks index). Modelled on the calcofi: and msens: blocks of the CalCOFI and MarineSensitivity workflows.",
+  "type": "object",
+  "required": ["target_name", "workflow_type", "output"],
+  "additionalProperties": false,
+  "properties": {
+    "target_name": {
+      "description": "the target id, unique across the repo; snake_case; by convention the notebook's file name without .qmd",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "workflow_type": {
+      "description": "what the notebook does; the index groups by it",
+      "enum": ["ingest", "extract", "publish", "release", "reference", "explore"]
+    },
+    "dependency": {
+      "description": "target_names this notebook reads from; they run first. Empty or absent for a root.",
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "output": {
+      "description": "the manifest the notebook writes when it finishes (relative to the repo root, or an s3:// or https:// URL); its existence is the target's done marker",
+      "type": "string",
+      "minLength": 1
+    },
+    "products": {
+      "description": "the files or catalogs the notebook publishes, for the index page",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["href", "kind"],
+        "additionalProperties": false,
+        "properties": {
+          "href": { "type": "string", "minLength": 1 },
+          "kind": { "enum": ["stac-collection", "stac-item", "values", "cog", "parquet", "pmtiles", "csv", "json", "other"] },
+          "title": { "type": "string" }
+        }
+      }
+    },
+    "schedule": {
+      "description": "when the notebook is meant to run: a five-field cron expression, or manual",
+      "type": "string",
+      "pattern": "^(manual|(\\S+\\s+){4}\\S+)$"
+    },
+    "status": {
+      "description": "active notebooks run and are listed first; archived ones are kept for the record and never run; draft ones are listed but not scheduled",
+      "enum": ["active", "archived", "draft"],
+      "default": "active"
+    },
+    "description": {
+      "description": "one sentence for the index card",
+      "type": "string"
+    }
+  }
+}
