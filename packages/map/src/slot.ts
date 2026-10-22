@@ -4,7 +4,7 @@
 // `grid` (a slab's step as squares, grid.ts), `cog` (a Cloud-Optimized GeoTIFF through the cog:// protocol, cog.ts) and
 // `h3` (hexagons from h3j tiles, h3.ts). the hash key is `layer=<kind>:<id>[:<variable>]` (`layer=grid:dhw_5km:CRW_SST`);
 // `erddap` (Day 6's ERDDAP WMS kind) still parses, as a deprecated alias of `grid`. plain rules, no MapLibre at run time.
-import type { Map as MlMap } from 'maplibre-gl'
+import type { Map as MlMap, StyleSpecification } from 'maplibre-gl'
 
 export type SlotKind = 'grid' | 'cog' | 'h3'
 export const SLOT_KINDS: readonly SlotKind[] = ['grid', 'cog', 'h3']
@@ -121,7 +121,8 @@ export function slotFor(spec: LayerSpec, opts: SlotOptions = {}): Promise<LayerS
 /** every layer and source a slot adds starts with this, so clear() removes it and a click never hits it */
 export const SLOT_PREFIX = 'slot:'
 export const isSlotLayer = (id: string) => id.startsWith(SLOT_PREFIX)
-/** what clear() removes in indicators: everything but its basemap (`base-*`), the slot's layers among it */
+/** what clear() removes in indicators: everything but its basemap (`base-*`), the slot's layers among it. no id of a
+ * composeStyle basemap starts with `base-`, so on it this clears everything: key on basemap.ts `basemapLayerIds` */
 export const clearsLayer = (id: string) => !id.startsWith('base-')
 /** the layers a click or the pointer tests: a part's, never the slot's */
 export const hitsLayer = (id: string) => !isSlotLayer(id) && clearsLayer(id)
@@ -143,3 +144,41 @@ export function slotBeforeId(
   const under = opts.under ?? isPartFill
   return ids.find(under) ?? ids[0] ?? opts.fallback ?? null
 }
+
+// ---- across a style change ----
+
+/**
+ * a `transformStyle` for `map.setStyle(next, { diff: true, transformStyle })` that carries the layers `keep` accepts
+ * (default the slot's, `slot:*`) and their sources from the previous style into the next, each under the layer it sat
+ * under. without it a theme flip drops them: setStyle's diff removes every layer the next style does not name, and
+ * composeStyle names only the basemap's (consumer check 2026-10-23). an app keeping its own parts too passes
+ * `carryLayers((id) => !basemap.has(id))` with basemap.ts `basemapLayerIds` of the style it set.
+ */
+export function carryLayers(keep: (id: string) => boolean = isSlotLayer) {
+  return (prev: StyleSpecification | undefined, next: StyleSpecification): StyleSpecification => {
+    if (!prev) return next
+    const named = new Set(next.layers.map((l) => l.id))
+    const carried = prev.layers.filter((l) => keep(l.id) && !named.has(l.id))
+    if (!carried.length) return next
+    const layers = [...next.layers]
+    const sources = { ...next.sources }
+    for (const l of carried) {
+      const src = (l as { source?: unknown }).source
+      if (typeof src === 'string' && !(src in sources) && prev.sources[src]) sources[src] = prev.sources[src]
+    }
+    // each carried layer goes before the first later layer of the previous style that the new one still has
+    prev.layers.forEach((l, i) => {
+      if (!carried.includes(l)) return
+      let at = layers.length
+      for (let j = i + 1; j < prev.layers.length; j++) {
+        const k = layers.findIndex((x) => x.id === prev.layers[j].id)
+        if (k >= 0) { at = k; break }
+      }
+      layers.splice(at, 0, l)
+    })
+    return { ...next, sources, layers }
+  }
+}
+
+/** carryLayers for the slot alone: `map.setStyle(composeStyle(base, { theme }), { diff: true, transformStyle: carrySlots })` */
+export const carrySlots = carryLayers()

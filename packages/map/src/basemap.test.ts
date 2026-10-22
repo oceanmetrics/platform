@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { StyleSpecification } from 'maplibre-gl'
-import { composeStyle, CONTOUR_LEVELS, DEFAULT_TILES, seaSurfaceId } from './basemap.js'
+import { basemapLayerIds, composeStyle, CONTOUR_LEVELS, DEFAULT_TILES, OPEN_WATER, seaSurfaceId } from './basemap.js'
+import { clearsLayer, isSlotLayer } from './slot.js'
 
 // a CARTO-shaped base (the layer ids and kinds composeStyle keys on), no network
 const BASE = {
@@ -92,5 +93,41 @@ describe('seaSurfaceId: where the data goes', () => {
     expect(seaSurfaceId(composeStyle(BASE, { theme: 'dark', land: false, names: false }))).toBe('water_shadow')
     expect(seaSurfaceId(BASE)).toBe('water_shadow')
     expect(seaSurfaceId({ layers: [] })).toBeNull()
+  })
+})
+
+describe('regression: water-inland on CARTO\'s protomaps tiles (consumer check 2026-10-23)', () => {
+  // CARTO's styles since 2026 read the protomaps schema: source `protomaps`, water polygons with `kind`, no `class`
+  const PROTOMAPS = structuredClone(BASE) as unknown as { sources: Record<string, unknown>; layers: Record<string, any>[] }
+  PROTOMAPS.sources = { protomaps: { type: 'vector', tiles: ['https://tiles.example.org/{z}/{x}/{y}.mvt'] } }
+  for (const l of PROTOMAPS.layers) if (l.source) l.source = 'protomaps'
+  PROTOMAPS.layers.find((l) => l.id === 'water')!.filter = ['==', ['geometry-type'], 'Polygon']
+  // the filter's own logic, for the two property shapes (the expression is exactly this, asserted below)
+  const inland = (p: { kind?: string; class?: string }) => !(OPEN_WATER as readonly string[]).includes(p.kind ?? p.class ?? '')
+  it('leaves out the open sea by kind (protomaps) or class (OpenMapTiles), so the mask never repaints the ocean over the data', () => {
+    const s = composeStyle(PROTOMAPS as unknown as StyleSpecification, { theme: 'light' })
+    const w = layer(s, 'water-inland')
+    expect(w.source).toBe('protomaps')
+    expect(w.filter).toEqual(['all', ['==', ['geometry-type'], 'Polygon'],
+      ['!', ['in', ['coalesce', ['get', 'kind'], ['get', 'class'], ''], ['literal', ['ocean', 'sea']]]]])
+    expect([{ kind: 'ocean' }, { kind: 'sea' }, { kind: 'lake' }, { class: 'ocean' }, { class: 'lake' }, {}].map(inland))
+      .toEqual([false, false, true, false, true, true])
+  })
+})
+
+describe('basemapLayerIds: the rule an app\'s clear() keys on', () => {
+  it('is every layer id of the composed style, the same in both themes', () => {
+    const dark = composeStyle(BASE, { theme: 'dark' })
+    expect([...basemapLayerIds(dark)]).toEqual(ids(dark))
+    expect(basemapLayerIds(composeStyle(BASE, { theme: 'light' }))).toEqual(basemapLayerIds(dark))
+  })
+  it('clear() removes the slot and the parts and keeps the basemap; a click tests the parts only (indicators\' base-* rule kept nothing)', () => {
+    const style = composeStyle(BASE, { theme: 'dark' })
+    const basemap = basemapLayerIds(style)
+    const onMap = [...ids(style).slice(0, 12), 'slot:grid:fill', ...ids(style).slice(12), 'p0:fill', 'p0:line']
+    expect(onMap.filter((id) => !basemap.has(id))).toEqual(['slot:grid:fill', 'p0:fill', 'p0:line'])
+    expect(onMap.filter((id) => !isSlotLayer(id) && !basemap.has(id))).toEqual(['p0:fill', 'p0:line'])
+    // the gap: the base-* rule would clear CARTO's whole style (no CARTO id starts with base-)
+    expect(onMap.filter(clearsLayer)).toEqual(onMap)
   })
 })

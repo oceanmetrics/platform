@@ -211,14 +211,21 @@ function sinkOcean(style: Style) {
   style.layers.splice(bg + 1, 0, ...parks, ...(water ? [water] : []))
 }
 
-/** the mask: the OSM land polygons in the theme's background colour, then CARTO's water without the ocean (lakes and
- * rivers sit inside the land polygons) */
+/** the water kinds the mask's `water-inland` leaves out (it repaints lakes and rivers over the mask, never the sea):
+ * CARTO's tiles since 2026 are the protomaps schema (`kind`: ocean, sea, lake ...), before that OpenMapTiles (`class`) */
+export const OPEN_WATER = ['ocean', 'sea'] as const
+
+/** the mask: the OSM land polygons in the theme's background colour, then CARTO's water without the open sea (lakes
+ * and rivers sit inside the land polygons) */
 function landLayers(style: Style, url: string): Layer[] {
   const bg = style.layers.find((l) => l.type === 'background')?.paint?.['background-color'] ?? '#fafaf8'
   style.sources['osm-land'] = { type: 'vector', url: `pmtiles://${url}`, attribution: LAND_ATTRIBUTION }
   const out: Layer[] = [{ id: LAND_LAYER, type: 'fill', source: 'osm-land', 'source-layer': SOURCE_LAYERS.land, paint: { 'fill-color': bg, 'fill-antialias': true } }]
   const water = style.layers.find((l) => l.id === 'water')
-  if (water) out.push({ ...structuredClone(water), id: 'water-inland', filter: ['all', ['==', '$type', 'Polygon'], ['!=', 'class', 'ocean']] })
+  // the open sea by either schema: a filter on OpenMapTiles' `class` alone passed every protomaps polygon (no `class`),
+  // so `water-inland` repainted the whole ocean over the data (consumer check 2026-10-23)
+  if (water) out.push({ ...structuredClone(water), id: 'water-inland', filter: ['all', ['==', ['geometry-type'], 'Polygon'],
+    ['!', ['in', ['coalesce', ['get', 'kind'], ['get', 'class'], ''], ['literal', [...OPEN_WATER]]]]] })
   return out
 }
 
@@ -270,6 +277,12 @@ function toneBaseLabels(style: Style, theme: Theme, opacity: number) {
     if (l.layout['text-size'] != null) l.layout['text-size'] = smaller(l.layout['text-size'])
   }
 }
+
+// ---- what is the basemap's ----
+
+/** the layer ids of a composed style (CARTO's and the sea floor's): what an app's clear() keeps and a click never
+ * tests; take it from the style given to setStyle (both themes have the same ids) */
+export const basemapLayerIds = (style: Pick<StyleSpecification, 'layers'>): Set<string> => new Set(style.layers.map((l: LayerSpecification) => l.id))
 
 // ---- where the data goes ----
 

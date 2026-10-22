@@ -41,8 +41,16 @@ export function decodeH3jTile(bytes: ArrayBuffer | Uint8Array | string): H3jTile
 
 // ---- the worker's urls ----
 
-/** the tile url template of an archive read in the worker: `h3j://<encoded absolute url>/{z}/{x}/{y}` */
-export const h3TileUrl = (archiveUrl: string): string => `${H3J_SCHEME}://${encodeURIComponent(archiveUrl)}/{z}/{x}/{y}`
+/** an archive url made absolute against the page: the worker resolves a relative url against its own script
+ * (`/assets/`), not the page, so `./data/x.pmtiles` 404ed there (consumer check 2026-10-23); as given without a base */
+export function absoluteArchiveUrl(url: string, base: string | undefined = globalThis.location?.href): string {
+  try { return base ? new URL(url, base).href : new URL(url).href } catch { return url }
+}
+
+/** the tile url template of an archive read in the worker: `h3j://<encoded absolute url>/{z}/{x}/{y}` (a relative url
+ * is made absolute against `base`, default the page) */
+export const h3TileUrl = (archiveUrl: string, base?: string): string =>
+  `${H3J_SCHEME}://${encodeURIComponent(absoluteArchiveUrl(archiveUrl, base))}/{z}/{x}/{y}`
 /** the archive url of an h3j tile request; null for another url */
 export function parseH3TileUrl(url: string): string | null {
   const m = new RegExp(`^${H3J_SCHEME}://([^/]+)/\\d+/\\d+/\\d+`).exec(url)
@@ -88,7 +96,7 @@ export function h3Slot(spec: LayerSpec, archive: H3Archive, opts: H3SlotOptions 
     if ('url' in archive) {
       let maxzoom = opts.maxzoom
       if (maxzoom === undefined || !domain) {
-        const p = new PMTiles(archive.url)
+        const p = new PMTiles(absoluteArchiveUrl(archive.url))
         const [h, meta] = await Promise.all([p.getHeader(), p.getMetadata() as Promise<{ domain?: [number, number] } | null>])
         maxzoom ??= h.maxZoom
         domain ??= meta?.domain ?? null

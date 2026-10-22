@@ -4,7 +4,7 @@ export const PACKAGE = { name: '@oceanmetrics/map', version: '0.2.0' } as const
 
 // ---- the slot contract ----
 export {
-  clearsLayer, formatLayerKey, hitsLayer, isPartFill, isSlotLayer, parseLayerKey, registerSlotKind, SLOT_KIND_ALIASES, SLOT_KINDS,
+  carryLayers, carrySlots, clearsLayer, formatLayerKey, hitsLayer, isPartFill, isSlotLayer, parseLayerKey, registerSlotKind, SLOT_KIND_ALIASES, SLOT_KINDS,
   SLOT_PREFIX, slotBeforeId, slotFor,
 } from './slot.js'
 export type { LayerSlot, LayerSpec, LegendClass, LegendSpec, LegendStats, SlotFactory, SlotKind, SlotOptions } from './slot.js'
@@ -18,9 +18,9 @@ export type { MapLibreModule, ProtocolName, SetupOptions } from './maplibre.js'
 
 // ---- the basemap and the ramps ----
 export {
-  BASEMAP_URL, baseLabelDefaultOpacity, baseStyle, BATHY_PARTS, BATHY_RAMP, bathyDefaultOpacity, CARTO_URL, composeStyle,
+  BASEMAP_URL, baseLabelDefaultOpacity, basemapLayerIds, baseStyle, BATHY_PARTS, BATHY_RAMP, bathyDefaultOpacity, CARTO_URL, composeStyle,
   CONTOUR_LABEL_MINZOOM, CONTOUR_LEVELS, DEFAULT_TILES, DEM_ENCODING, GEBCO_ATTRIBUTION, LAND_ATTRIBUTION, LAND_LAYER,
-  NAME_RANKS, NAMES_ATTRIBUTION, seaSurfaceId, SOURCE_LAYERS,
+  NAME_RANKS, NAMES_ATTRIBUTION, OPEN_WATER, seaSurfaceId, SOURCE_LAYERS,
 } from './basemap.js'
 export type { BasemapOptions, BasemapTiles, BathyPart, Theme } from './basemap.js'
 export {
@@ -39,7 +39,7 @@ export {
   cogSlot, cogUrl, legendFromStac, nodataValue, openCog, overviewHistogram, pickCogAssets, pointValue, WEB_MERCATOR,
 } from './cog.js'
 export type { CogAsset, CogBandLike, CogItemLike, CogSlotOptions, OverviewHistogram, StacNodata } from './cog.js'
-export { decodeH3jTile, encodeH3jTile, H3_FILL, H3_LAYER, H3_SOURCE, h3FillColor, h3Slot, h3TileUrl, parseH3TileUrl } from './h3.js'
+export { absoluteArchiveUrl, decodeH3jTile, encodeH3jTile, H3_FILL, H3_LAYER, H3_SOURCE, h3FillColor, h3Slot, h3TileUrl, parseH3TileUrl } from './h3.js'
 export type { H3Archive, H3SlotOptions } from './h3.js'
 export { cellRing, cellsProvider, h3jAction, h3jSource, pmtilesProvider, TILE_OPTIONS, tileFeatures, tileToGeoJSON, tileToMvt } from './h3Tiles.js'
 export type { TileProvider } from './h3Tiles.js'

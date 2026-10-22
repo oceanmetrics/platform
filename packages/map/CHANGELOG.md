@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.1 (unreleased)
+
+The consumer check (build week 2 step 2a, `spikes/map-consumer`): the six README points run on a Vite page against
+MapLibre 6.13 and CARTO's real styles.
+
+- Fix: `composeStyle`'s land mask repainted the whole ocean over the data on CARTO's current tiles (protomaps schema:
+  water polygons carry `kind`, not `class`); `water-inland` now leaves out `kind` or `class` ocean and sea
+  (`OPEN_WATER`).
+- Fix: a theme flip with `setStyle(style, { diff: true })` dropped the mounted slot. New `carrySlots` and
+  `carryLayers(keep)`, the `transformStyle` that carries the slot's (or any kept) layers and sources into the next style
+  under the layer they sat under.
+- Fix: an h3 archive given by a relative url 404ed in the worker (resolved against the worker script);
+  `h3TileUrl(url, base?)` and `h3Slot` now make it absolute against the page (`absoluteArchiveUrl`).
+- New: `basemapLayerIds(style)`, the layer ids of a composed style: the rule an app's `clear()` keys on (indicators'
+  `base-*` rule matches no CARTO id).
+- README: the setup passes `{ addProtocol, importScriptInWorkers, setWorkerUrl }`, not the `maplibre-gl` namespace
+  (+11.5 kB gzip); boot on `dem: false` (a failing tier stalls `load`); the bundle as a Vite app measures it.
+
 ## 0.2.0 (2026-10-23)
 
 The map stack, build week 2 step 1: the layer slot contract, MapLibre 6 setup, the bathymetric basemap, the ramps and

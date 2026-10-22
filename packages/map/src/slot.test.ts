@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { clearsLayer, formatLayerKey, hitsLayer, isSlotLayer, parseLayerKey, registerSlotKind, slotBeforeId, slotFor } from './slot.js'
+import { carryLayers, carrySlots, clearsLayer, formatLayerKey, hitsLayer, isSlotLayer, parseLayerKey, registerSlotKind, slotBeforeId, slotFor } from './slot.js'
 import type { LayerSlot, LayerSpec } from './slot.js'
+import type { StyleSpecification } from 'maplibre-gl'
 
 describe('the layer key (layer=<kind>:<id>[:<variable>])', () => {
   it('round-trips with and without a variable', () => {
@@ -68,5 +69,45 @@ describe('the slot\'s layer ids', () => {
     expect(hitsLayer('p0:fill')).toBe(true)
     expect(hitsLayer('p2:dots')).toBe(true)
     expect(hitsLayer('base-light')).toBe(false)
+  })
+})
+
+describe('regression: carryLayers keeps the slot across setStyle(..., { diff: true }) (consumer check 2026-10-23)', () => {
+  const style = (fill: string, extra: Record<string, unknown>[] = [], sources: Record<string, unknown> = {}) => ({
+    version: 8,
+    sources: { carto: { type: 'vector', url: 'https://x.test/c.json' }, ...sources },
+    layers: [
+      { id: 'background', type: 'background', paint: { 'background-color': fill } },
+      { id: 'water', type: 'fill', source: 'carto', 'source-layer': 'water' },
+      { id: 'land', type: 'fill', source: 'carto', 'source-layer': 'land' },
+      { id: 'place_city', type: 'symbol', source: 'carto', 'source-layer': 'place' },
+      ...extra,
+    ],
+  }) as unknown as StyleSpecification
+  const slotLayer = { id: 'slot:grid:fill', type: 'fill', source: 'slot:grid' }
+  const slotSource = { 'slot:grid': { type: 'geojson', data: { type: 'FeatureCollection', features: [] } } }
+  const part = [{ id: 'p0:fill', type: 'fill', source: 'p0' }, { id: 'p0:line', type: 'line', source: 'p0' }]
+  // the previous style as getStyle() serializes it: the slot under `land`, the part on top
+  const prev = style('#000', [], { ...slotSource, p0: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } } })
+  prev.layers.splice(2, 0, slotLayer as never)
+  prev.layers.push(...(part as never[]))
+  const ids = (s: StyleSpecification) => s.layers.map((l) => l.id)
+
+  it('puts the slot back under the layer it sat under, with its source, and leaves the rest of the next style alone', () => {
+    const next = style('#fff')
+    const out = carrySlots(prev, next)
+    expect(ids(out)).toEqual(['background', 'water', 'slot:grid:fill', 'land', 'place_city'])
+    expect(Object.keys(out.sources)).toEqual(['carto', 'slot:grid'])
+    expect((out.layers[0] as unknown as { paint: Record<string, string> }).paint['background-color']).toBe('#fff')
+  })
+  it('an app carrying its parts too keys on the basemap ids', () => {
+    const next = style('#fff')
+    const basemap = new Set(ids(next))
+    expect(ids(carryLayers((id) => !basemap.has(id))(prev, next))).toEqual(['background', 'water', 'slot:grid:fill', 'land', 'place_city', 'p0:fill', 'p0:line'])
+  })
+  it('passes the next style through when there is no previous style or nothing to carry', () => {
+    const next = style('#fff')
+    expect(carrySlots(undefined, next)).toBe(next)
+    expect(carrySlots(style('#000'), next)).toBe(next)
   })
 })

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { cellToBoundary, cellToLatLng, getResolution, gridDisk, latLngToCell } from 'h3-js'
 import { geoJSONToTile } from '@maplibre/geojson-vt'
-import { decodeH3jTile, encodeH3jTile, h3FillColor, h3TileUrl, parseH3TileUrl } from './h3.js'
+import { absoluteArchiveUrl, decodeH3jTile, encodeH3jTile, h3FillColor, h3TileUrl, parseH3TileUrl } from './h3.js'
 import { cellRing, cellsProvider, h3jAction, h3jSource, TILE_OPTIONS, tileFeatures, tileToGeoJSON, tileToMvt } from './h3Tiles.js'
 import { lonLatToTile } from './h3Index.js'
 
@@ -107,5 +107,17 @@ describe('tiles and the protocol', () => {
     expect(e.slice(0, 3)).toEqual(['interpolate', ['linear'], ['get', 'v']])
     expect(e.length).toBe(3 + 18)
     expect([e[3], e[4], e[19], e[20]]).toEqual([1.5, '#440154', 46.47, '#fde725'])
+  })
+})
+
+describe('regression: a relative archive url reaches the worker absolute (consumer check 2026-10-23)', () => {
+  it('h3TileUrl resolves it against the page, not the worker script', () => {
+    const t = h3TileUrl('./data/es5.pmtiles', 'http://localhost:5210/app/')
+    expect(t).toBe('h3j://http%3A%2F%2Flocalhost%3A5210%2Fapp%2Fdata%2Fes5.pmtiles/{z}/{x}/{y}')
+    expect(parseH3TileUrl(t.replace('{z}/{x}/{y}', '3/1/2'))).toBe('http://localhost:5210/app/data/es5.pmtiles')
+  })
+  it('an absolute url is kept, and a relative one without a page is left as given', () => {
+    expect(absoluteArchiveUrl('https://x.test/a.pmtiles', 'http://localhost/')).toBe('https://x.test/a.pmtiles')
+    expect(absoluteArchiveUrl('./a.pmtiles', undefined)).toBe('./a.pmtiles')
   })
 })

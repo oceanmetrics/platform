@@ -2,8 +2,10 @@
 // protocol inside MapLibre's worker. the rules, each with a measured failure behind it (atlas docs/spikes/S2.md, obis-hex,
 // platform spike 1):
 //   - named imports only: maplibre-gl 6 has no default export (a default import is a hard Rolldown MISSING_EXPORT).
-//     this module takes the app's `import * as maplibre from 'maplibre-gl'` as an argument, so the package never
-//     imports maplibre-gl at run time (its tests run without it, and the app bundles one copy).
+//     this module takes the three functions it calls from the app (`{ addProtocol, importScriptInWorkers,
+//     setWorkerUrl }`), so the package never imports maplibre-gl at run time (its tests run without it, and the app
+//     bundles one copy). not the `import * as maplibre` namespace: as an argument it keeps every export of maplibre-gl
+//     in the app's bundle (+11.5 kB gzip, consumer check 2026-10-23).
 //   - the worker url comes from Vite's `maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url` (plain `?url` emits a worker
 //     whose shared chunk 404s: rasters paint and vector tiles silently never parse).
 //   - the h3j protocol runs in MapLibre's worker, loaded with `importScriptInWorkers(<absolute url>.mjs)`: MapLibre 6
@@ -19,7 +21,7 @@ export const H3J_SCHEME = 'h3j'
 export const COG_SCHEME = 'cog'
 export const PMTILES_SCHEME = 'pmtiles'
 
-/** the part of maplibre-gl this module calls: pass the app's `import * as maplibre from 'maplibre-gl'` */
+/** the part of maplibre-gl this module calls: pass `{ addProtocol, importScriptInWorkers, setWorkerUrl }` (named imports) */
 export interface MapLibreModule {
   setWorkerUrl(url: string): void
   addProtocol(scheme: string, action: AddProtocolAction): void

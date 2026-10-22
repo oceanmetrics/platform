@@ -4,7 +4,8 @@ The map stack of the Ocean Metrics apps: MapLibre 6 setup, the bathymetric basem
 contract with three providers (a grid slice, a Cloud-Optimized GeoTIFF, H3 hexagons). Apps (indicators, atlas,
 obis-hex, erddap-places) import it and draw their own places on top.
 
-Version 0.2.0 (build week 2, step 1). 0.1.0 was the scaffold published on Day 5.
+Version 0.2.0 (build week 2, step 1). 0.1.0 was the scaffold published on Day 5. 0.2.1 (unreleased) holds the fixes
+of the consumer check (step 2a, `spikes/map-consumer`, `results/checklist.md`).
 
 ## The contract
 
@@ -30,6 +31,13 @@ interface LayerSlot {
 - `slotBeforeId(drawnLayerIds, { under?, fallback? })`: the slot goes under the first vector part's fill
   (`p<i>:fill`, or the app's own `under` rule), else under the first drawn layer, else under `fallback`. Pass
   `seaSurfaceId(style)` as `fallback`, so the data stays under the land mask and the labels.
+- Across a style change: `carrySlots` (or `carryLayers(keep)`) is the `transformStyle` of `setStyle`. MapLibre's diff
+  removes every layer the next style does not name, and `composeStyle` names only the basemap's, so a theme flip without
+  it drops the slot (measured: `slot:grid:fill` before, gone after).
+- What is the basemap's: `basemapLayerIds(style)` of the composed style. An app's `clear()` removes the layers not in it,
+  a click tests those that are neither in it nor `isSlotLayer`. indicators' `clearsLayer` (`!id.startsWith('base-')`)
+  matches none of CARTO's ids and would clear the whole basemap; it stays exported until indicators moves to the rule
+  (`carryLayers((id) => !basemap.has(id))` keeps its parts across the flip as well).
 
 ### Providers
 
@@ -65,6 +73,10 @@ The tiers live at `DEFAULT_TILES`, under `https://storage.oceanmetrics.io/basema
 | land | `osm/land.pmtiles` | the same script: OSM land polygons clipped to the boxes, z0-12 |
 | names | `gebco/names.pmtiles` | not yet: CalCOFI workflows `libs/reference_layers.R` (the IHO-IOC gazetteer, rank 1-3) |
 
+CARTO's styles read the protomaps schema since 2026 (source `protomaps`, `kind` where OpenMapTiles had `class`): the
+mask's `water-inland` leaves out both (`OPEN_WATER`: ocean, sea). The island labels still read OpenMapTiles' `place`
+layer and draw nothing on these tiles (the islands are `earth` polygons of kind `island`); open, see the checklist.
+
 **None of these exists yet (2026-10-23).** The script is written and smoke-tested on a synthetic raster, not run on
 GEBCO: it runs on the mini in build week 2 (2026-11-06 to 11-12), then uploads. Until then an app passes its own
 `tiles` (CalCOFI's California tiers at `storage.googleapis.com/calcofi-db/bathymetry/` work for a California view).
@@ -83,13 +95,17 @@ seascapeR), `colorAt(stops, t)`, `defaultRampFor(variable)`. A grid, a COG and t
 - **The setup, once per page, before the first map:**
 
 ```ts
-import * as maplibre from 'maplibre-gl'                                         // named imports: MapLibre 6 has no default export
+import { addProtocol, importScriptInWorkers, setWorkerUrl } from 'maplibre-gl'  // named imports: MapLibre 6 has no default export
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'     // not plain ?url: its shared chunk 404s
 import h3WorkerUrl from '@oceanmetrics/map/h3-worker?worker&url'
 import { setupMapLibre } from '@oceanmetrics/map'
 
-await setupMapLibre({ maplibre, workerUrl, h3WorkerUrl })   // pmtiles://, cog:// (loaded on first use), h3j in the worker
+// pmtiles://, cog:// (loaded on first use), h3j in the worker
+await setupMapLibre({ maplibre: { addProtocol, importScriptInWorkers, setWorkerUrl }, workerUrl, h3WorkerUrl })
 ```
+
+  Pass the three functions, not `import * as maplibre`: the namespace object as an argument keeps every export of
+  `maplibre-gl` in the bundle (+11.5 kB gzip measured in a Vite 8 app).
 
   and in `vite.config.ts`, worker chunks named `.mjs`, because MapLibre 6's `importScriptInWorkers` `import()`s a
   module only when its url ends in `.mjs` (`setupMapLibre` throws a `WorkerUrlError` otherwise):
@@ -98,7 +114,10 @@ await setupMapLibre({ maplibre, workerUrl, h3WorkerUrl })   // pmtiles://, cog:/
 worker: { format: 'es', rollupOptions: { output: { entryFileNames: 'assets/[name]-[hash].mjs', chunkFileNames: 'assets/[name]-[hash].mjs' } } },
 ```
 
-- **The style.** `composeStyle` on `load`, again on a theme change, with `setStyle(style, { diff: true })`.
+- **The style.** Boot on CARTO's own style (`composeStyle(base, { theme, dem: false })`), then `composeStyle` on `load`
+  and again on a theme change, with `setStyle(style, { diff: true, transformStyle: carrySlots })`. Boot on the
+  composed style only when every tier answers: MapLibre schedules no frame when a source fails, so with the tiers
+  unreachable `load` did not fire until the next repaint in 4 of 4 boots.
 
 The package never imports `maplibre-gl` at run time (only its types), so its tests run without MapLibre and an app
 bundles one copy. `maplibre-gl` (^6.13) and `pmtiles` (^4) are peer dependencies; `h3-js`, `@maplibre/geojson-vt`,
@@ -109,8 +128,10 @@ when it loads; everything else tree-shakes.
 ### What a consumer verifies in step 2 (not covered by these tests)
 
 The rules are tested as pure functions; the MapLibre wiring (`mount`, `unmount`, `setupMapLibre` against the real
-`maplibre-gl`, the worker module in a real worker) is typed against `maplibre-gl` 6 but runs for the first time in an
-app. Check in the indicators Map and the atlas, both themes, 390 px:
+`maplibre-gl`, the worker module in a real worker) is typed against `maplibre-gl` 6. Step 2a ran all six points on a
+Vite page against MapLibre 6.13 and CARTO's real styles, at 1280 and 390 px (`spikes/map-consumer`,
+`results/checklist.md`, 2026-10-23): all pass with 0.2.1's fixes. Check again in the indicators Map and the atlas, both
+themes, 390 px:
 
 1. a vector feature renders after `setupMapLibre` (the worker url is right) and an h3 layer draws from the worker:
    the `h3Worker-<hash>.mjs` request shows, and no `h3j` request on the main thread;
@@ -125,8 +146,13 @@ app. Check in the indicators Map and the atlas, both themes, 390 px:
 
 ## Size
 
+Measured in a Vite 8 app (step 2a, `spikes/map-consumer/results/bundle.json`, minified, gzip -9, `maplibre-gl` and
+`pmtiles` bundled): the base (setup, `composeStyle`, the codec) +5.1 kB over `maplibre-gl` with the pmtiles protocol;
+over that `gridSlot` +3.6 kB, `cogSlot` +3.4 kB (+21.6 kB with `pointValue` and `overviewHistogram`: geotiff's core),
+`h3Slot` +3.4 kB, all three +5.8 kB; the COG protocol 112.6 kB on the first `cog://`; the h3 worker chunk 76.4 kB.
+
 `npm run size` measures the gzipped sum of `dist/**/*.js` (comments included, before an app minifies): 26 014 B on
-2026-10-23, budget 39 000 B (about 1.5×). Every module counts, the h3 worker module and the COG and geotiff code
+2026-10-23 at 0.2.0, 27 203 B with 0.2.1's fixes, budget 39 000 B (about 1.5×). Every module counts, the h3 worker module and the COG and geotiff code
 included.
 
 What an app pays, bundled and minified with its dependencies (rolldown, gzip -9, `maplibre-gl` and `pmtiles`
@@ -149,7 +175,8 @@ changing only the expected layers, the ramp stop counts, squares from a 2×2 lat
 categorical legend, the 3857 guard, a legend from a synthetic STAC asset, a histogram and point values from an
 in-memory GeoTIFF written with geotiff.js, the cog url, the h3 regression tests (tolerance 0 at z1, the unwrap and the
 strip on the 55 crossing cells in `fixtures/h3/crossing55.json`, the lookup missing no cell, the resolution table),
-and an archive read back through `pmtiles`.
+an archive read back through `pmtiles`, and the consumer check's regressions (`water-inland` on protomaps-shaped tiles,
+`carryLayers` across a style change, `basemapLayerIds` as the clear rule, a relative archive url made absolute).
 
 ## Licence
 
