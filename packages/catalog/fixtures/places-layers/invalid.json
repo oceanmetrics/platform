@@ -1,0 +1,5 @@
+{
+  "missing-access.json": "access",
+  "polygon-without-h3.json": "/layers/1/h3",
+  "unknown-key.json": "additional properties"
+}

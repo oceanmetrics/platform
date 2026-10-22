@@ -5,7 +5,7 @@
 export const PACKAGE = { name: '@oceanmetrics/catalog', version: '0.2.0' } as const
 
 /** the profiles this package defines, one `schemas/<name>.schema.json` each. */
-export const PROFILES = ['erddap-grid', 'cog', 'h3', 'atlas-collection', 'atlas-item', 'sdm-dossier', 'om-notebook'] as const
+export const PROFILES = ['erddap-grid', 'cog', 'h3', 'atlas-collection', 'atlas-item', 'sdm-dossier', 'om-notebook', 'places-layers'] as const
 export type Profile = (typeof PROFILES)[number]
 
 type Pair = [number, number]
