@@ -1,0 +1,23 @@
+{
+  "name": "spike-duckdb-h3",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Day 7 spike 4: the DuckDB-WASM H3 community extension against h3-js (load size, parent roll-up time)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "bench": "node run.mjs"
+  },
+  "dependencies": {
+    "@duckdb/duckdb-wasm": "1.32.0",
+    "apache-arrow": "17.0.0",
+    "h3-js": "4.4.0",
+    "hyparquet": "1.31.5",
+    "hyparquet-compressors": "1.1.2"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0",
+    "vite": "8.3.3"
+  }
+}

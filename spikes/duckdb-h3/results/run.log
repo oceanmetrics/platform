@@ -1,0 +1,19 @@
+community true 219.8 ms [{"url":"https://community-extensions.duckdb.org/v1.4.3/wasm_eh/h3.duckdb_extension.wasm","status":200,"bytes":99729,"encoding":"zstd","ms":168.35,"protocol":"h2"}]
+community true 248.6 ms [{"url":"https://community-extensions.duckdb.org/v1.4.3/wasm_eh/h3.duckdb_extension.wasm","status":200,"bytes":99465,"encoding":"zstd","ms":194.57,"protocol":"h2"}]
+community true 250.1 ms [{"url":"https://community-extensions.duckdb.org/v1.4.3/wasm_eh/h3.duckdb_extension.wasm","status":200,"bytes":99727,"encoding":"zstd","ms":211.36,"protocol":"h2"}]
+community true 300.6 ms [{"url":"https://community-extensions.duckdb.org/v1.4.3/wasm_eh/h3.duckdb_extension.wasm","status":200,"bytes":99736,"encoding":"zstd","ms":259.96,"protocol":"h2"}]
+community true 256.2 ms [{"url":"https://community-extensions.duckdb.org/v1.4.3/wasm_eh/h3.duckdb_extension.wasm","status":200,"bytes":99736,"encoding":"zstd","ms":216.47,"protocol":"h2"}]
+custom_repo true 266.5 ms [{"url":"https://community-extensions.duckdb.org/v1.4.3/wasm_eh/h3.duckdb_extension.wasm","status":200,"bytes":99729,"encoding":"zstd","ms":226.31,"protocol":"h2"}]
+url true 230.7 ms [{"url":"https://community-extensions.duckdb.org/v1.4.3/wasm_eh/h3.duckdb_extension.wasm","status":200,"bytes":99726,"encoding":"zstd","ms":191.26,"protocol":"h2"}]
+url true 61.6 ms [{"url":"http://localhost:5181/ext/h3.duckdb_extension.wasm","status":200,"bytes":749295,"ms":22.59,"protocol":"http/1.1"}]
+warm 59.1 [{"url":"https://community-extensions.duckdb.org/v1.4.3/wasm_eh/h3.duckdb_extension.wasm","status":200,"bytes":0,"encoding":"zstd","ms":21.23}]
+res 4: rows 184828 | ext 64.3 | bits 23.3 | h3js(hp) 304.3 | h3js(duck) 268.4 | mixed 476 | verify {"res":4,"ext_rows":184828,"bits_rows":184828,"js_rows":184828,"diff_bits":0,"diff_js":0}
+res 3: rows 37076 | ext 19.5 | bits 9.9 | h3js(hp) 292.4 | h3js(duck) 245.8 | mixed 343.6 | verify {"res":3,"ext_rows":37076,"bits_rows":37076,"js_rows":37076,"diff_bits":0,"diff_js":0}
+res 2: rows 5802 | ext 10.3 | bits 7.1 | h3js(hp) 282.3 | h3js(duck) 251.9 | mixed 310.6 | verify {"res":2,"ext_rows":5802,"bits_rows":5802,"js_rows":5802,"diff_bits":0,"diff_js":0}
+res 1: rows 842 | ext 8.1 | bits 6.3 | h3js(hp) 295.3 | h3js(duck) 239.2 | mixed 302.8 | verify {"res":1,"ext_rows":842,"bits_rows":842,"js_rows":842,"diff_bits":0,"diff_js":0}
+boundary {"duck_wkt":{"cells":10000,"wkt_chars":1595041,"ms":[44.6,40.5,40.4,40.2,40.2],"median_ms":40.4},"h3js":{"cells":10000,"vertices":70065,"ms":[16.6,11,10.3,10.2,10.5],"median_ms":10.5}}
+heap ext {"before_rollups":{"main_js_used":2868896,"main_backing":34203356,"worker_js_used":35869052,"worker_backing_incl_wasm_memory":8364275},"after_rollups":{"main_js_used":3239196,"main_backing":41323567,"worker_js_used":35889016,"worker_backing_incl_wasm_memory":8364275},"duckdb_memory_bytes":29542400}
+heap sql_bits {"before_rollups":{"main_js_used":2706912,"main_backing":34203356,"worker_js_used":35551172,"worker_backing_incl_wasm_memory":6866315},"after_rollups":{"main_js_used":3232640,"main_backing":41323567,"worker_js_used":35597940,"worker_backing_incl_wasm_memory":6866315},"duckdb_memory_bytes":29542400}
+heap h3js_hyparquet {"before_rollups":{"main_js_used":19175596,"main_backing":49771423,"worker_js_used":0,"worker_backing_incl_wasm_memory":0},"after_rollups":{"main_js_used":37796436,"main_backing":49771423,"worker_js_used":0,"worker_backing_incl_wasm_memory":0}}
+heap mixed {"before_rollups":{"main_js_used":2852388,"main_backing":45033340,"worker_js_used":35559852,"worker_backing_incl_wasm_memory":6866315},"after_rollups":{"main_js_used":3641636,"main_backing":52153558,"worker_js_used":35710108,"worker_backing_incl_wasm_memory":6866315},"duckdb_memory_bytes":51615744}
+wrote results/run.json

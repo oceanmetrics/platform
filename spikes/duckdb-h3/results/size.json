@@ -1,0 +1,26 @@
+{
+  "h3-min": {
+    "files": [
+      "h3-min-DkwAYLhZ.js"
+    ],
+    "raw": 180621,
+    "gzip": 54759,
+    "brotli": 45849
+  },
+  "h3-full": {
+    "files": [
+      "h3-full-Bqe_niUH.js"
+    ],
+    "raw": 191952,
+    "gzip": 57407,
+    "brotli": 48164
+  },
+  "h3_extension": {
+    "url": "https://community-extensions.duckdb.org/v1.4.3/wasm_eh/h3.duckdb_extension.wasm",
+    "served_content_encoding_br": "br",
+    "served_content_length_br": 75543,
+    "raw": 748980,
+    "gzip": 127492,
+    "brotli": 75543
+  }
+}
