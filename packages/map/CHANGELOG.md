@@ -29,7 +29,7 @@ three providers.
   `RES_FOR_ZOOM`, `rollUp`; `buildH3jArchive`, the producers' archive writer.
 - Dependencies: `maplibre-gl` ^6.13 and `pmtiles` ^4 as peers; `h3-js`, `@maplibre/geojson-vt`, `@maplibre/vt-pbf`,
   `geotiff`, `@geomatico/maplibre-cog-protocol`.
-- Size budget set from a measurement: 26 024 B gzip, budget 39 000 B.
+- Size budget set from a measurement: 26 014 B gzip, budget 39 000 B.
 
 ## 0.1.0 (2026-10-22)
 

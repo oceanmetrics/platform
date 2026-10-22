@@ -6,7 +6,7 @@ import { gzipSync } from 'node:zlib'
 
 const ROOT = new URL('../packages/', import.meta.url).pathname
 // bytes, gzip. measured on 2026-10-22 (places 11_708, status 7_997), set at about 1.5 times the measurement, rounded up.
-// map: 26_024 on 2026-10-23 (0.2.0: the slots, the setup, the basemap, the ramps and the grid, cog and h3 providers,
+// map: 26_014 on 2026-10-23 (0.2.0: the slots, the setup, the basemap, the ramps and the grid, cog and h3 providers,
 // the h3 worker module and the archive writer all counted), so 39_000; the 5_000 it held was the scaffold's provisional
 // budget. catalog holds only constants and types in the browser (404 B on 2026-10-22, its validator and CLI left out
 // below): its 5_000 budget is provisional and gets set from a measurement once its readers land (build week 1).

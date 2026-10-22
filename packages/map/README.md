@@ -125,7 +125,7 @@ app. Check in the indicators Map and the atlas, both themes, 390 px:
 
 ## Size
 
-`npm run size` measures the gzipped sum of `dist/**/*.js` (comments included, before an app minifies): 26 024 B on
+`npm run size` measures the gzipped sum of `dist/**/*.js` (comments included, before an app minifies): 26 014 B on
 2026-10-23, budget 39 000 B (about 1.5×). Every module counts, the h3 worker module and the COG and geotiff code
 included.
 
