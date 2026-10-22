@@ -1,0 +1,97 @@
+{
+  "type": "Collection",
+  "id": "erddap/calcofi_bottle",
+  "stac_version": "1.1.0",
+  "description": "trimmed from the public calcofi_bottle collection (erddap-places, 2026-10-22), without the latitude and longitude dimensions, to show that a tabledap collection needs none: CalCOFI hydrographic bottle observations (temperature, salinity, oxygen, nutrients and pigments) from 1949 to 2021, served live from the CalCOFI ERDDAP as tabledap. The table is long-format: one row per (sample, measurement_type), with `measurement_type` naming the quantity and `measurement_value` holding it, so a variable here is a value of `measurement_type`, not a column. Referenced in place for computing place statistics in the browser via tabledap.parquetWMeta.",
+  "links": [
+    { "rel": "root", "href": "../../catalog.json", "type": "application/json" },
+    { "rel": "parent", "href": "../../catalog.json", "type": "application/json" },
+    {
+      "rel": "via",
+      "href": "https://erddap.calcofi.io/erddap/info/calcofi_bottle/index.html",
+      "type": "text/html",
+      "title": "CalCOFI Bottle Database - observations"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json",
+    "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json"
+  ],
+  "updated": "2026-09-15T00:00:00Z",
+  "title": "CalCOFI Bottle Database — observations (tabledap)",
+  "extent": {
+    "spatial": { "bbox": [[-164.083, 18.417, -105.967, 51.083]] },
+    "temporal": { "interval": [["1949-02-28T22:42:00Z", "2021-05-13T20:37:17Z"]] }
+  },
+  "license": "other",
+  "providers": [
+    {
+      "name": "California Cooperative Oceanic Fisheries Investigations (CalCOFI)",
+      "roles": ["producer", "licensor"],
+      "url": "https://calcofi.org"
+    },
+    { "name": "Ocean Metrics LLC", "roles": ["processor"], "url": "https://oceanmetrics.io" },
+    { "name": "CalCOFI ERDDAP", "roles": ["host"], "url": "https://erddap.calcofi.io/erddap" }
+  ],
+  "cube:dimensions": {
+    "time": {
+      "type": "temporal",
+      "description": "sample time",
+      "extent": ["1949-02-28T22:42:00Z", "2021-05-13T20:37:17Z"]
+    },
+    "depth": { "type": "spatial", "axis": "z", "description": "Depth below the surface, m", "extent": [0, 5351] }
+  },
+  "cube:variables": {
+    "temperature": {
+      "dimensions": ["time", "depth"],
+      "type": "data",
+      "unit": "degC",
+      "description": "water temperature (measurement_type 'temperature')"
+    },
+    "salinity": {
+      "dimensions": ["time", "depth"],
+      "type": "data",
+      "unit": "PSS-78",
+      "description": "practical salinity, PSS-78 (reported as PSU)"
+    },
+    "chlorophyll_a": {
+      "dimensions": ["time", "depth"],
+      "type": "data",
+      "unit": "ug/L",
+      "description": "chlorophyll a (ug/L = mg m-3)"
+    }
+  },
+  "erddap:base_url": "https://erddap.calcofi.io/erddap",
+  "erddap:dataset_id": "calcofi_bottle",
+  "erddap:protocol": "tabledap",
+  "erddap:version": "2.30",
+  "erddap:cors": true,
+  "erddap:formats": ["parquetWMeta", "parquet", "csvp", "json"],
+  "erddap:lon_range": [-180, 180],
+  "erddap:lat_descending": false,
+  "erddap-places:long_format": { "type_column": "measurement_type", "value_column": "measurement_value" },
+  "assets": {
+    "tabledap": {
+      "href": "https://erddap.calcofi.io/erddap/tabledap/calcofi_bottle.parquetWMeta?longitude%2Clatitude%2Ctime%2Cdepth%2Cmeasurement_type%2Cmeasurement_value&time%3E={t0}&time%3C={t1}&longitude%3E={lon_min}&longitude%3C={lon_max}&latitude%3E={lat_min}&latitude%3C={lat_max}",
+      "type": "application/vnd.apache.parquet",
+      "title": "tabledap query template (percent-encode each constraint separately: %2C between columns, %3E= and %3C= for the bounds)",
+      "roles": ["data", "external"],
+      "table:columns": [
+        { "name": "time", "type": "timestamp", "description": "sample time" },
+        { "name": "depth", "type": "double", "description": "Depth, m" },
+        { "name": "measurement_type", "type": "string", "description": "the quantity this row measures" },
+        {
+          "name": "measurement_value",
+          "type": "double",
+          "description": "the value of measurement_type, in its own units"
+        }
+      ]
+    },
+    "metadata": {
+      "href": "https://erddap.calcofi.io/erddap/info/calcofi_bottle/index.json",
+      "type": "application/json",
+      "title": "ERDDAP dataset metadata (info endpoint)",
+      "roles": ["metadata", "external"]
+    }
+  }
+}

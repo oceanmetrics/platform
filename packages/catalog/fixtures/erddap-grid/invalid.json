@@ -1,0 +1,6 @@
+{
+  "missing_base_url.json": "erddap:base_url",
+  "lon_range_one_element.json": "/erddap:lon_range",
+  "protocol_opendap.json": "/erddap:protocol",
+  "classes_numbers.json": "/cube:variables/CRW_BAA/erddap-places:classes/0"
+}

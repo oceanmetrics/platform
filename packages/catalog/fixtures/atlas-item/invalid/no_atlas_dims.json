@@ -1,0 +1,44 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": ["https://stac-extensions.github.io/raster/v1.1.0/schema.json"],
+  "id": "fish_share",
+  "collection": "aquamaps_eov",
+  "geometry": { "type": "Polygon", "coordinates": [[[-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]]] },
+  "bbox": [-180, -90, 180, 90],
+  "properties": {
+    "datetime": null,
+    "start_datetime": "2019-10-01T00:00:00Z",
+    "end_datetime": "2019-10-31T23:59:59Z",
+    "sdm:env_datetime": "2019-10",
+    "sdm:response_type": "mixed",
+    "sdm:method": "derived_merge",
+    "sdm:source_authority": "OceanMetrics",
+    "sdm:temporal_interval": "static",
+    "atlas:metric": "share",
+    "atlas:value_range": [0, 100],
+    "sdm:value_unit": "score",
+    "sdm:value_range": [0, 100],
+    "title": "trimmed from the atlas aquamaps_eov test fixture (synthetic), 3 of 9 bands"
+  },
+  "assets": {
+    "cog": {
+      "href": "../score_share.tif",
+      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
+      "roles": ["data"],
+      "atlas:bidx": 2,
+      "atlas:rescale": [0, 100],
+      "atlas:colormap": "viridis",
+      "raster:bands": [
+        { "name": "all", "data_type": "uint8", "nodata": 255, "unit": "score" },
+        { "name": "fish", "data_type": "uint8", "nodata": 255, "unit": "score" },
+        { "name": "hardCorals", "data_type": "uint8", "nodata": 255, "unit": "score" }
+      ]
+    }
+  },
+  "links": [
+    { "rel": "collection", "href": "../collection.json" },
+    { "rel": "parent", "href": "../collection.json" },
+    { "rel": "self", "href": "./fish_share.json" }
+  ]
+}

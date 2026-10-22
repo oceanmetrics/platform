@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/atlas-item/v1.0.0/schema.json",
+  "title": "atlas-item: the atlas hooks of a STAC Item",
+  "description": "The atlas: fields a STAC Item carries for the atlas app: which cell of the collection's cube the item is (atlas:dims, required), its observed value range, whether it is empty by construction, and on its assets the draw hints (band, rescale, colormap) and the join keys of a values table. Read by atlas/src/lib/catalog/*.ts; written by the atlas pipeline and workflows/R/eov_share.R. STAC core is out of scope: only type, stac_version, id and the profile's own fields are constrained, and other keys pass through.",
+  "type": "object",
+  "required": ["type", "stac_version", "id", "properties"],
+  "properties": {
+    "type": { "description": "a STAC Item", "const": "Feature" },
+    "stac_version": { "description": "the STAC version, e.g. 1.1.0", "type": "string" },
+    "id": { "description": "the item id", "type": "string", "minLength": 1 },
+    "properties": {
+      "description": "the item properties; atlas:dims is required",
+      "type": "object",
+      "required": ["atlas:dims"],
+      "properties": {
+        "atlas:dims": {
+          "description": "one value per cube dimension: which cell of the collection's cube this item is (e.g. {eov: fish, metric: share})",
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string" }
+        },
+        "atlas:value_range": { "description": "the observed [min, max] of the item's values: the legend and the colour domain", "$ref": "#/$defs/pair" },
+        "atlas:absent": { "description": "true for an item with no data by construction: drawn as an empty slot, never as zero", "type": "boolean" },
+        "atlas:absent_note": { "description": "the text beside the empty slot of an absent item", "type": "string" },
+        "atlas:metric": { "description": "the kind of value (richness, uncertainty ...) where sdm:response_type is mixed", "type": "string", "minLength": 1 }
+      }
+    },
+    "assets": {
+      "description": "the assets, with the atlas draw hints and join keys",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "atlas:bidx": { "description": "the 1-based band of a multi-band COG to draw; absent = band 1", "type": "integer", "minimum": 1 },
+          "atlas:rescale": {
+            "description": "the display range [min, max], or auto (read from the band statistics)",
+            "anyOf": [{ "$ref": "#/$defs/pair" }, { "const": "auto" }]
+          },
+          "atlas:colormap": { "description": "a named colormap (viridis, spectral_r ...); absent = the default ramp", "type": "string", "minLength": 1 },
+          "atlas:value_column": { "description": "the column of a wide values table holding this item's values", "type": "string", "minLength": 1 },
+          "atlas:key_column": { "description": "the join key column of a values table (FID, h3); absent = FID", "type": "string", "minLength": 1 },
+          "atlas:id_field": { "description": "the feature id property of a PMTiles grid; absent = FID", "type": "string", "minLength": 1 },
+          "sdm:h3_resolution": { "description": "the H3 resolution of an H3-keyed asset", "type": "integer", "minimum": 0, "maximum": 15 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "pair": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "items": false
+    }
+  }
+}

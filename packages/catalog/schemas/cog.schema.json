@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/cog/v1.0.0/schema.json",
+  "title": "cog: a STAC Item whose data is a Cloud-Optimized GeoTIFF",
+  "description": "A STAC Item whose data asset is a Cloud-Optimized GeoTIFF that the map reads in the browser (from build week 2). The data asset carries its bands with whole-raster statistics, written at publish, so the legend and the colour domain need no server. Written by the atlas pipeline, workflows/R/eov_share.R and erddap-places Then vs Now; read by the atlas and @oceanmetrics/map. STAC core is out of scope: only type, stac_version, id and the profile's own fields are constrained, and other keys pass through.",
+  "type": "object",
+  "required": ["type", "stac_version", "id", "properties", "assets"],
+  "properties": {
+    "type": { "description": "a STAC Item", "const": "Feature" },
+    "stac_version": { "description": "the STAC version, e.g. 1.1.0", "type": "string" },
+    "id": { "description": "the item id", "type": "string", "minLength": 1 },
+    "properties": {
+      "description": "the item properties; proj:code is required",
+      "type": "object",
+      "required": ["proj:code"],
+      "properties": {
+        "proj:code": {
+          "description": "the CRS of the COG as an EPSG code (projection extension 2.0). Today every COG is EPSG:4326; web-optimised EPSG:3857 copies are a build week 2 decision, so any EPSG code passes.",
+          "type": "string",
+          "pattern": "^EPSG:[0-9]+$"
+        }
+      }
+    },
+    "assets": {
+      "description": "the assets; at least one has roles including data and the COG media type, and that asset lists its bands with statistics",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/asset" },
+      "not": { "type": "object", "additionalProperties": { "not": { "$ref": "#/$defs/isDataCog" } } }
+    }
+  },
+  "$defs": {
+    "pair": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "items": false
+    },
+    "isDataCog": {
+      "description": "an asset with roles including data and type image/tiff; application=geotiff; profile=cloud-optimized",
+      "type": "object",
+      "required": ["type", "roles"],
+      "properties": {
+        "type": {
+          "description": "the COG media type",
+          "type": "string",
+          "pattern": "^image/tiff; ?application=geotiff; ?profile=cloud-optimized$"
+        },
+        "roles": { "description": "includes data", "type": "array", "contains": { "const": "data" } }
+      }
+    },
+    "asset": {
+      "description": "a STAC asset; the atlas draw hints are typed on any asset, the bands on a data COG",
+      "type": "object",
+      "properties": {
+        "atlas:bidx": { "description": "the 1-based band to draw; absent = band 1", "type": "integer", "minimum": 1 },
+        "atlas:rescale": {
+          "description": "the display range [min, max], or auto (read from the band statistics)",
+          "anyOf": [{ "$ref": "#/$defs/pair" }, { "const": "auto" }]
+        },
+        "atlas:colormap": {
+          "description": "a named colormap (viridis, spectral_r ...); absent = the default ramp",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "if": { "$ref": "#/$defs/isDataCog" },
+      "then": {
+        "description": "a data COG lists its bands as bands (STAC 1.1 core, raster 2.0 fields inside) or raster:bands (raster 1.1)",
+        "type": "object",
+        "anyOf": [{ "required": ["bands"] }, { "required": ["raster:bands"] }],
+        "properties": {
+          "bands": { "description": "the bands (STAC 1.1 core)", "$ref": "#/$defs/bands" },
+          "raster:bands": { "description": "the bands (raster extension 1.1)", "$ref": "#/$defs/bands" }
+        }
+      }
+    },
+    "bands": {
+      "description": "one entry per band of the COG, in band order",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/band" }
+    },
+    "band": {
+      "description": "a band: its data type, nodata and whole-raster statistics (written at publish so the legend needs no server). Other band keys (raster:scale, raster:offset ...) pass through.",
+      "type": "object",
+      "required": ["data_type", "nodata", "statistics"],
+      "properties": {
+        "name": { "description": "the band name", "type": "string" },
+        "data_type": {
+          "description": "the pixel data type (raster extension values)",
+          "enum": [
+            "int8",
+            "int16",
+            "int32",
+            "int64",
+            "uint8",
+            "uint16",
+            "uint32",
+            "uint64",
+            "float16",
+            "float32",
+            "float64",
+            "cint16",
+            "cint32",
+            "cfloat32",
+            "cfloat64",
+            "other"
+          ]
+        },
+        "nodata": {
+          "description": "the nodata value: a number, nan, inf or -inf, or null when the band has none",
+          "anyOf": [{ "type": ["number", "null"] }, { "enum": ["nan", "inf", "-inf"] }]
+        },
+        "unit": { "description": "the unit of the values", "type": "string" },
+        "description": { "description": "what the band holds", "type": "string" },
+        "statistics": {
+          "description": "the whole-raster statistics of the band's valid pixels; minimum and maximum are required",
+          "type": "object",
+          "required": ["minimum", "maximum"],
+          "properties": {
+            "minimum": { "description": "the smallest valid value", "type": "number" },
+            "maximum": { "description": "the largest valid value", "type": "number" },
+            "mean": { "description": "the mean of the valid values", "type": "number" },
+            "stddev": { "description": "the standard deviation of the valid values", "type": "number" },
+            "valid_percent": {
+              "description": "the share of valid (not nodata) pixels, 0 to 100",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "histogram": {
+          "description": "the distribution of the valid values: count equal-width buckets from min to max",
+          "type": "object",
+          "required": ["count", "min", "max", "buckets"],
+          "properties": {
+            "count": { "description": "the number of buckets", "type": "integer", "minimum": 1 },
+            "min": { "description": "the lower edge of the first bucket", "type": "number" },
+            "max": { "description": "the upper edge of the last bucket", "type": "number" },
+            "buckets": {
+              "description": "the pixel count per bucket",
+              "type": "array",
+              "items": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

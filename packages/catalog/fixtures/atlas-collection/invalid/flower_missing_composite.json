@@ -1,0 +1,144 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/scientific/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/table/v1.2.0/schema.json",
+    "https://stac-extensions.github.io/version/v1.2.0/schema.json",
+    "https://stac-extensions.github.io/file/v2.1.0/schema.json",
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json"
+  ],
+  "id": "aquamaps_eov",
+  "title": "AquaMaps EOV share",
+  "description": "trimmed from the atlas aquamaps_eov test fixture (synthetic): synthetic fixture of the AquaMaps EOV share product (plan D4): a risk-weighted and an unweighted share score per Essential Ocean Variable, with the equal-weight mean of the EOVs as the composite.",
+  "license": "CC-BY-NC-3.0",
+  "version": "1.0.0",
+  "atlas:note": "Inherited from AquaMaps (CC BY-NC 3.0): the product is non-commercial; the derivation is documented in the notebook.",
+  "sci:citation": "OceanMetrics (2026). AquaMaps EOV share (fixture). Kaschner, K. et al. (2019). AquaMaps: predicted range maps for aquatic species.",
+  "providers": [
+    { "name": "AquaMaps", "roles": ["producer", "licensor"], "url": "https://aquamaps.org" },
+    { "name": "IUCN", "roles": ["licensor"], "url": "https://www.iucnredlist.org" },
+    { "name": "MarineSensitivity", "roles": ["processor"], "url": "https://marinesensitivity.org" },
+    { "name": "OceanMetrics", "roles": ["processor", "host"], "url": "https://oceanmetrics.io" }
+  ],
+  "contacts": [
+    {
+      "name": "Ben Best",
+      "organization": "OceanMetrics",
+      "roles": ["producer", "pointOfContact"],
+      "emails": [{ "value": "ben@oceanmetrics.io" }]
+    }
+  ],
+  "atlas:funders": [],
+  "atlas:status": "prototype",
+  "atlas:source_release": "MarineSensitivity v9",
+  "sdm:response_type": "mixed",
+  "sdm:method": "derived_merge",
+  "sdm:source_authority": "OceanMetrics",
+  "sdm:temporal_interval": "static",
+  "sdm:method_detail": "Share of each species' global suitability clipped to its IUCN range, weighted by extinction-risk category, summed per EOV and scaled to 0-100 by the 99th percentile; the composite is the mean of the reportable EOVs.",
+  "sdm:derived_from": [
+    "msens-v9-am",
+    "msens-v9-rng_iucn",
+    "worms-2026-07-01",
+    "iucn-redlist-2025",
+    "ioos-mldn-eov-taxonomy"
+  ],
+  "sdm:value_unit": "score",
+  "sdm:value_range": [0, 100],
+  "atlas:flower": { "dimension": "eov" },
+  "atlas:cell_species": {
+    "asset": "cell_species",
+    "lookup_asset": "species",
+    "layout": "tiles",
+    "tile_deg": 5,
+    "href_template": "./cell_species/tile={tile}/data_0.parquet",
+    "grid": { "ncol": 7200, "nrow": 3600, "x0": -180, "y0": 90, "res": 0.05 },
+    "key_column": "cell_id",
+    "species_column": "aphia_id",
+    "lookup_key": "aphia_id",
+    "value_column": "suit",
+    "value_unit": "percent",
+    "value_range": [1, 100],
+    "value_label": "Suitability",
+    "group_column": "eov",
+    "group_dimension": "eov",
+    "share": { "total_column": "total_suit_area", "formula": "suit * area_km2(lat) / total_suit_area" },
+    "links": [
+      { "label": "Atlas", "href_template": "?c=aquamaps_native&sp={sp_key}", "same_app": true },
+      { "label": "WoRMS", "column": "worms_url" },
+      { "label": "IUCN", "column": "iucn_url" },
+      { "label": "AquaMaps", "column": "aquamaps_url" }
+    ]
+  },
+  "cube:dimensions": {
+    "x": { "type": "spatial", "axis": "x", "extent": [-180, 180] },
+    "y": { "type": "spatial", "axis": "y", "extent": [-90, 90] },
+    "eov": {
+      "type": "other",
+      "description": "Essential Ocean Variable",
+      "values": ["all", "fish", "hardCorals", "mangroves", "marineMammals", "seabirds", "seagrasses", "seaTurtles"],
+      "atlas:labels": {
+        "all": "All EOVs (mean)",
+        "fish": "Fish",
+        "hardCorals": "Hard corals",
+        "mangroves": "Mangroves",
+        "marineMammals": "Marine mammals",
+        "seabirds": "Seabirds",
+        "seagrasses": "Seagrasses",
+        "seaTurtles": "Sea turtles"
+      }
+    },
+    "metric": {
+      "type": "other",
+      "description": "score metric",
+      "values": ["risk", "share"],
+      "atlas:labels": { "risk": "Risk-weighted share", "share": "Share (unweighted)" }
+    }
+  },
+  "extent": {
+    "spatial": { "bbox": [[-180, -90, 180, 90]] },
+    "temporal": { "interval": [["2019-10-01T00:00:00Z", null]] }
+  },
+  "assets": {
+    "species": {
+      "href": "./species.parquet",
+      "type": "application/vnd.apache.parquet",
+      "title": "Species lookup (eov_taxa + names, keys and links)",
+      "roles": ["metadata"],
+      "table:row_count": 7,
+      "file:size": 4238
+    },
+    "cell_species": {
+      "href": "./cell_species/",
+      "title": "Cell to species table, one Parquet per 5 degree tile",
+      "roles": ["metadata"],
+      "atlas:n_tiles": 1,
+      "table:row_count": 12,
+      "file:size": 2697,
+      "table:columns": [
+        { "name": "cell_id", "type": "int32" },
+        { "name": "aphia_id", "type": "int32" },
+        { "name": "suit", "type": "uint8" }
+      ]
+    },
+    "score_share": {
+      "href": "./score_share.tif",
+      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
+      "title": "Share score, 9 bands",
+      "roles": ["reference"]
+    }
+  },
+  "links": [
+    { "rel": "root", "href": "../catalog.json", "type": "application/json" },
+    { "rel": "parent", "href": "../catalog.json", "type": "application/json" },
+    { "rel": "self", "href": "./collection.json", "type": "application/json" },
+    {
+      "rel": "license",
+      "href": "https://creativecommons.org/licenses/by-nc/3.0/",
+      "type": "text/html",
+      "title": "CC BY-NC 3.0"
+    }
+  ]
+}

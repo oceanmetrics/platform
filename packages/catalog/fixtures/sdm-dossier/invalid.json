@@ -1,0 +1,5 @@
+{
+  "response_type_abundance.json": "/properties/sdm:response_type",
+  "evaluation_no_metrics.json": "/properties/sdm:evaluation/metrics",
+  "response_curve_without_y.json": "/properties/sdm:response_curves/0"
+}

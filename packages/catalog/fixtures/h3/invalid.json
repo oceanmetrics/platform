@@ -1,0 +1,6 @@
+{
+  "resolution_16.json": "/h3:resolutions/1",
+  "template_without_res.json": "/h3:layout/template",
+  "species_table_without_lookup.json": "/h3:species_table",
+  "parent_template_without_parent.json": "/h3:layout/parent_template"
+}

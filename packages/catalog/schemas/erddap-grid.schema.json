@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/erddap-grid/v1.0.0/schema.json",
+  "title": "erddap-grid: a STAC Collection for an ERDDAP dataset",
+  "description": "A STAC Collection describing one ERDDAP dataset (griddap or tabledap) referenced in place: where the server is, what it serves, its datacube axes and variables, and a Parquet query template. Written by erddap-places catalog/build_erddap_collections.ts; read by erddap-places app/src/lib/catalog.ts and the extract engine. STAC core is out of scope (checked elsewhere): only type, stac_version, id and the profile's own fields are constrained, and other keys pass through. The erddap-places: keys keep their published prefix; their rename to erddap: is a build week 1 migration.",
+  "type": "object",
+  "required": [
+    "type", "stac_version", "id", "stac_extensions",
+    "erddap:base_url", "erddap:dataset_id", "erddap:protocol", "erddap:version", "erddap:cors", "erddap:formats",
+    "erddap:lon_range", "erddap:lat_descending", "cube:dimensions", "cube:variables", "assets"
+  ],
+  "properties": {
+    "type": { "description": "a STAC Collection", "const": "Collection" },
+    "stac_version": { "description": "the STAC version, e.g. 1.1.0", "type": "string" },
+    "id": { "description": "the collection id, e.g. erddap/dhw_5km (lowercase)", "type": "string", "minLength": 1 },
+    "stac_extensions": {
+      "description": "the extension schema URLs; must declare the datacube extension 2.2.0",
+      "type": "array",
+      "items": { "type": "string" },
+      "contains": { "const": "https://stac-extensions.github.io/datacube/v2.2.0/schema.json" }
+    },
+    "erddap:base_url": {
+      "description": "the ERDDAP server the app and the engine query, ending in /erddap (no trailing slash)",
+      "type": "string",
+      "format": "uri"
+    },
+    "erddap:upstream_url": {
+      "description": "the ERDDAP server the dataset is re-served from, when base_url is a mirror",
+      "type": "string",
+      "format": "uri"
+    },
+    "erddap:dataset_id": { "description": "the ERDDAP datasetID, in the server's case", "type": "string", "minLength": 1 },
+    "erddap:protocol": { "description": "the ERDDAP service the dataset is read through", "enum": ["griddap", "tabledap"] },
+    "erddap:version": { "description": "the ERDDAP version of base_url, e.g. 2.29", "type": "string", "minLength": 1 },
+    "erddap:cors": { "description": "true when base_url sends CORS headers, so a browser can query it directly", "type": "boolean" },
+    "erddap:formats": {
+      "description": "the file types the server answers for this dataset (parquet, parquetWMeta, csvp, json ...)",
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "erddap:lon_range": {
+      "description": "[min, max] longitude convention of the dataset's axis: [-180, 180] or [0, 360]",
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "items": false
+    },
+    "erddap:lat_descending": {
+      "description": "true when the latitude axis runs north to south, so a griddap constraint is written [(lat_max):1:(lat_min)]",
+      "type": "boolean"
+    },
+    "erddap-places:depth": {
+      "description": "the depth level (m) a griddap dataset with a depth axis is sliced at; the asset template already holds it",
+      "type": "number"
+    },
+    "erddap-places:status": {
+      "description": "pending: described but not served by base_url yet; the app lists it greyed out and nothing is precomputed",
+      "enum": ["pending"]
+    },
+    "erddap-places:long_format": {
+      "description": "a long-format tabledap table: one row per (sample, quantity), so a cube:variables key is a value of type_column, not a column",
+      "type": "object",
+      "required": ["type_column", "value_column"],
+      "additionalProperties": false,
+      "properties": {
+        "type_column": { "description": "the column naming the quantity of a row (e.g. measurement_type)", "type": "string", "minLength": 1 },
+        "value_column": { "description": "the column holding the value of the row (e.g. measurement_value)", "type": "string", "minLength": 1 }
+      }
+    },
+    "cube:dimensions": {
+      "description": "the datacube dimensions: time always, latitude and longitude for griddap, depth when the dataset has one. Other datacube keys of a dimension pass through.",
+      "type": "object",
+      "required": ["time"],
+      "properties": {
+        "time": {
+          "description": "the time axis",
+          "type": "object",
+          "required": ["type", "extent"],
+          "properties": {
+            "type": { "description": "a temporal dimension", "const": "temporal" },
+            "extent": {
+              "description": "[first, last] as ISO 8601 strings; last is null for an open-ended (live) dataset",
+              "type": "array",
+              "prefixItems": [{ "type": "string" }, { "type": ["string", "null"] }],
+              "minItems": 2,
+              "items": false
+            },
+            "step": { "description": "an ISO 8601 duration (P1D, P1M); null or absent for irregular steps", "type": ["string", "null"] }
+          }
+        },
+        "latitude": {
+          "description": "the latitude axis (y)",
+          "type": "object",
+          "required": ["type", "axis", "extent"],
+          "properties": {
+            "type": { "description": "a spatial dimension", "const": "spatial" },
+            "axis": { "description": "latitude is the y axis", "const": "y" },
+            "extent": {
+              "description": "[min, max] in degrees north",
+              "type": "array",
+              "prefixItems": [{ "type": "number" }, { "type": "number" }],
+              "minItems": 2,
+              "items": false
+            },
+            "step": { "description": "the grid spacing in degrees; null or absent for an irregular axis", "type": ["number", "null"] },
+            "reference_system": { "description": "an EPSG code, WKT2 string or PROJJSON object (datacube)", "type": ["integer", "string", "object"] }
+          }
+        },
+        "longitude": {
+          "description": "the longitude axis (x)",
+          "type": "object",
+          "required": ["type", "axis", "extent"],
+          "properties": {
+            "type": { "description": "a spatial dimension", "const": "spatial" },
+            "axis": { "description": "longitude is the x axis", "const": "x" },
+            "extent": {
+              "description": "[min, max] in degrees east",
+              "type": "array",
+              "prefixItems": [{ "type": "number" }, { "type": "number" }],
+              "minItems": 2,
+              "items": false
+            },
+            "step": { "description": "the grid spacing in degrees; null or absent for an irregular axis", "type": ["number", "null"] },
+            "reference_system": { "description": "an EPSG code, WKT2 string or PROJJSON object (datacube)", "type": ["integer", "string", "object"] }
+          }
+        },
+        "depth": {
+          "description": "the depth axis (z), when the dataset has one",
+          "type": "object",
+          "required": ["type", "axis", "extent"],
+          "properties": {
+            "type": { "description": "a spatial dimension", "const": "spatial" },
+            "axis": { "description": "depth is the z axis", "const": "z" },
+            "extent": {
+              "description": "[min, max] depth",
+              "type": "array",
+              "prefixItems": [{ "type": "number" }, { "type": "number" }],
+              "minItems": 2,
+              "items": false
+            },
+            "unit": { "description": "the depth unit, e.g. m", "type": "string" },
+            "step": { "description": "the level spacing; null or absent for irregular levels", "type": ["number", "null"] },
+            "values": { "description": "the depth levels, for an irregular axis", "type": "array", "items": { "type": "number" } }
+          }
+        }
+      }
+    },
+    "cube:variables": {
+      "description": "the variables of the dataset, by name (for a long-format table, by value of long_format.type_column). Other datacube keys of a variable pass through.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["dimensions", "type", "unit"],
+        "properties": {
+          "dimensions": { "description": "the cube:dimensions keys the variable spans, in order", "type": "array", "items": { "type": "string" } },
+          "type": { "description": "data for a measured quantity, auxiliary for a coordinate or flag", "enum": ["data", "auxiliary"] },
+          "unit": { "description": "the unit as the server reports it; null when it has none", "type": ["string", "null"] },
+          "description": { "description": "what the variable is, in a few words", "type": "string" },
+          "erddap-places:categorical": { "description": "true for a class-valued variable (e.g. bleaching alert area): summarised as class shares, never as a mean", "type": "boolean" },
+          "erddap-places:classes": {
+            "description": "the label of each class value of a categorical variable, keyed by the value as a string",
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      }
+    },
+    "assets": {
+      "description": "the assets; at least one has roles including data and type application/vnd.apache.parquet, whose href is the query template ({variable}, {t0}, {t1}, {lat_min} ... placeholders)",
+      "type": "object",
+      "not": {
+        "additionalProperties": {
+          "not": {
+            "type": "object",
+            "required": ["href", "type", "roles"],
+            "properties": {
+              "href": { "description": "the query template (a string; its placeholders are not parsed here)", "type": "string" },
+              "type": { "description": "the Parquet media type", "const": "application/vnd.apache.parquet" },
+              "roles": { "description": "includes data", "type": "array", "contains": { "const": "data" } }
+            }
+          }
+        }
+      }
+    }
+  },
+  "if": {
+    "required": ["erddap:protocol"],
+    "properties": { "erddap:protocol": { "const": "griddap" } }
+  },
+  "then": {
+    "properties": {
+      "cube:dimensions": {
+        "description": "a griddap dataset has latitude and longitude axes",
+        "type": "object",
+        "required": ["latitude", "longitude"]
+      }
+    }
+  }
+}

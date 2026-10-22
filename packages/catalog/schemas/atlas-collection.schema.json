@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/atlas-collection/v1.0.0/schema.json",
+  "title": "atlas-collection: the atlas hooks of a STAC Collection",
+  "description": "The atlas: fields a STAC Collection carries for the atlas app: credits (funders, access, note), the flower plot, the species of a clicked raster cell, a taxa registry with its item template, the pairing of a mean surface with its uncertainty, and value labels on the cube dimensions. Every field is optional; when present it has the shape atlas/src/lib/catalog/*.ts parses. Written by the atlas pipeline and workflows/R/eov_share.R. STAC core is out of scope: only type, stac_version, id and the profile's own fields are constrained, and other keys pass through.",
+  "type": "object",
+  "required": ["type", "stac_version", "id"],
+  "properties": {
+    "type": { "description": "a STAC Collection", "const": "Collection" },
+    "stac_version": { "description": "the STAC version, e.g. 1.1.0", "type": "string" },
+    "id": { "description": "the collection id", "type": "string", "minLength": 1 },
+    "atlas:funders": { "description": "the funders credited (BOEM, MBON ...), until a STAC field exists", "type": "array", "items": { "type": "string" } },
+    "atlas:access": { "description": "restricted: the collection is shown only to signed-in users with access; absent = public", "enum": ["restricted"] },
+    "atlas:note": { "description": "the one sentence the collection wants seen beside its credits (e.g. a licence condition)", "type": "string" },
+    "atlas:flower": {
+      "description": "a flower plot on a raster click: the petals are the sibling items across dimension, the centre the composite value of it",
+      "type": "object",
+      "required": ["dimension", "composite"],
+      "additionalProperties": false,
+      "properties": {
+        "dimension": { "description": "the cube:dimensions key the petals run across (e.g. eov)", "type": "string", "minLength": 1 },
+        "composite": { "description": "the value of dimension that is the centre (e.g. all)", "type": "string", "minLength": 1 }
+      }
+    },
+    "atlas:cell_species": {
+      "description": "the species of a clicked raster cell: a tiled cell -> species Parquet (one file per tile_deg square) and a species lookup asset",
+      "type": "object",
+      "required": ["lookup_asset", "layout", "tile_deg", "href_template", "grid", "key_column", "species_column", "value_column"],
+      "additionalProperties": false,
+      "properties": {
+        "asset": { "description": "the asset key of the tiled table (for its columns and size)", "type": "string", "minLength": 1 },
+        "lookup_asset": { "description": "the asset key of the species lookup Parquet", "type": "string", "minLength": 1 },
+        "layout": { "description": "how the table is split; tiles is the only layout", "const": "tiles" },
+        "tile_deg": { "description": "the side of a tile in degrees (e.g. 5)", "type": "number", "exclusiveMinimum": 0 },
+        "href_template": { "description": "the path of one tile, relative to the collection, with {tile} left in", "type": "string", "pattern": "\\{tile\\}" },
+        "grid": {
+          "description": "the raster grid the cell ids are numbered on: row-major from the top-left, 1-based",
+          "type": "object",
+          "required": ["ncol", "nrow", "x0", "y0", "res"],
+          "additionalProperties": false,
+          "properties": {
+            "ncol": { "description": "the number of columns", "type": "number", "exclusiveMinimum": 0 },
+            "nrow": { "description": "the number of rows", "type": "number", "exclusiveMinimum": 0 },
+            "x0": { "description": "the west edge in degrees", "type": "number" },
+            "y0": { "description": "the north edge in degrees", "type": "number" },
+            "res": { "description": "the cell size in degrees", "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "key_column": { "description": "the tile column holding the cell id", "type": "string", "minLength": 1 },
+        "species_column": { "description": "the tile column holding the species id", "type": "string", "minLength": 1 },
+        "value_column": { "description": "the tile column holding the value (e.g. suitability)", "type": "string", "minLength": 1 },
+        "lookup_key": { "description": "the lookup column joined to species_column; absent = species_column", "type": "string", "minLength": 1 },
+        "value_unit": { "description": "the unit of value_column", "type": "string" },
+        "value_range": { "description": "the [min, max] of value_column; absent = [0, 100]", "$ref": "#/$defs/pair" },
+        "value_label": { "description": "the heading of the value column; absent = Value", "type": "string" },
+        "group_column": { "description": "the lookup column grouping the species (e.g. eov)", "type": "string", "minLength": 1 },
+        "group_dimension": { "description": "the cube:dimensions key group_column is", "type": "string", "minLength": 1 },
+        "share": {
+          "description": "a species' share of its global habitat, when published",
+          "type": "object",
+          "required": ["total_column"],
+          "additionalProperties": false,
+          "properties": {
+            "total_column": { "description": "the lookup column holding a species' total suitable area", "type": "string", "minLength": 1 },
+            "formula": { "description": "the share formula, for the reader", "type": "string" }
+          }
+        },
+        "links": {
+          "description": "the links shown per species",
+          "type": "array",
+          "items": {
+            "description": "a link takes its URL from a lookup column or fills an href_template from the lookup row",
+            "type": "object",
+            "required": ["label"],
+            "additionalProperties": false,
+            "anyOf": [{ "required": ["column"] }, { "required": ["href_template"] }],
+            "properties": {
+              "label": { "description": "the link text", "type": "string", "minLength": 1 },
+              "column": { "description": "the lookup column holding the URL", "type": "string", "minLength": 1 },
+              "href_template": { "description": "a URL with {name} placeholders filled from the lookup row", "type": "string", "minLength": 1 },
+              "same_app": { "description": "true for a URL of the atlas itself, followed in place", "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "atlas:taxa_registry": {
+      "description": "a registry-backed taxon collection: one row per taxon in a Parquet asset, each row made into an Item by atlas:item_template",
+      "type": "object",
+      "required": ["asset"],
+      "additionalProperties": false,
+      "properties": {
+        "asset": { "description": "the asset key of the registry Parquet", "type": "string", "minLength": 1 },
+        "key_column": { "description": "the column keying a taxon; absent = sp_key", "type": "string", "minLength": 1 },
+        "row_count": { "description": "the number of taxa", "type": "integer", "minimum": 0 },
+        "search_columns": { "description": "the columns the search box matches; absent = scientific_name, common_name", "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "group_column": { "description": "the column grouping the taxa (e.g. sp_cat)", "type": "string", "minLength": 1 },
+        "index_asset": { "description": "the asset key of the compact search index JSON, when the registry is large", "type": "string", "minLength": 1 },
+        "legacy_key_column": { "description": "the column holding a taxon's key in the previous release, for old links", "type": "string", "minLength": 1 }
+      }
+    },
+    "atlas:item_template": {
+      "description": "how a registry row becomes an Item: an Item skeleton whose strings carry {column} placeholders (free form)",
+      "type": "object"
+    },
+    "atlas:uncertainty": {
+      "description": "pairs a mean surface with its uncertainty: as sibling items along a cube dimension (e.g. variable: density / cv), or as two bands of the same COG",
+      "type": "object",
+      "required": ["pair", "kind", "mean", "uncertainty"],
+      "additionalProperties": false,
+      "properties": {
+        "pair": { "description": "dimension: the two are sibling items along dimension; band: they are bands of one asset", "enum": ["dimension", "band"] },
+        "dimension": { "description": "the cube:dimensions key the pair runs along (required when pair is dimension)", "type": "string", "minLength": 1 },
+        "kind": { "description": "the uncertainty measure: coefficient of variation, standard error, standard deviation, or a 90 or 95 percent interval width", "enum": ["cv", "se", "sd", "ci90", "ci95"] },
+        "mean": { "description": "the dimension value (pair dimension) or the 1-based band (pair band) of the mean", "type": ["string", "integer"] },
+        "uncertainty": { "description": "the dimension value (pair dimension) or the 1-based band (pair band) of the uncertainty", "type": ["string", "integer"] }
+      },
+      "if": { "type": "object", "required": ["pair"], "properties": { "pair": { "const": "dimension" } } },
+      "then": { "description": "pair dimension names its dimension", "type": "object", "required": ["dimension"] }
+    },
+    "cube:dimensions": {
+      "description": "the datacube dimensions; an atlas selector dimension may carry value labels and the taxon flag. Other datacube keys pass through.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "atlas:labels": { "description": "the human label of each value, keyed by the value", "type": "object", "additionalProperties": { "type": "string" } },
+          "atlas:taxon_dim": { "description": "true for the dimension that picks a taxon", "type": "boolean" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "pair": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "items": false
+    }
+  }
+}

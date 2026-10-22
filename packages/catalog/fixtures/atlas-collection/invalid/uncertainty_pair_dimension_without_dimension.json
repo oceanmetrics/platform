@@ -1,0 +1,30 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "id": "cce_like",
+  "title": "synthetic CCE-like cetacean density models",
+  "description": "synthetic fixture: per species a two-band COG, density and its coefficient of variation; the items run along the variable dimension and atlas:uncertainty pairs them.",
+  "license": "proprietary",
+  "links": [],
+  "atlas:access": "restricted",
+  "atlas:funders": ["BOEM"],
+  "atlas:uncertainty": { "pair": "dimension", "kind": "cv", "mean": "density", "uncertainty": "cv" },
+  "cube:dimensions": {
+    "x": { "type": "spatial", "axis": "x", "extent": [-131, -116.5] },
+    "y": { "type": "spatial", "axis": "y", "extent": [29.5, 49] },
+    "species": {
+      "type": "other",
+      "values": ["137092", "137111"],
+      "atlas:taxon_dim": true,
+      "atlas:labels": {
+        "137092": "Humpback whale (Megaptera novaeangliae)",
+        "137111": "Short-beaked common dolphin (Delphinus delphis)"
+      }
+    },
+    "variable": {
+      "type": "other",
+      "values": ["density", "cv"],
+      "atlas:labels": { "density": "Density (animals per km²)", "cv": "Coefficient of variation" }
+    }
+  }
+}

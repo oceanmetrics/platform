@@ -1,7 +1,7 @@
 {
   "name": "@oceanmetrics/catalog",
-  "version": "0.1.0",
-  "description": "readers for the Ocean Metrics catalogs: STAC layers, the indicators manifest and values, the places index",
+  "version": "0.2.0",
+  "description": "the Ocean Metrics catalogs: STAC layer profiles (JSON Schemas, types, a validator and the om-catalog CLI); the indicators manifest and values and the places index readers follow",
   "license": "MIT",
   "type": "module",
   "private": true,
@@ -11,17 +11,36 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./validate": {
+      "types": "./dist/validate.d.ts",
+      "default": "./dist/validate.js"
+    },
+    "./schemas/*": "./schemas/*"
+  },
+  "bin": {
+    "om-catalog": "./dist/cli.js"
   },
   "files": [
     "dist",
     "src",
-    "README.md"
+    "schemas",
+    "README.md",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --root ../.. packages/catalog"
+  },
+  "dependencies": {
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "typescript": "~5.9.0",
+    "vitest": "^5.0.1"
   }
 }

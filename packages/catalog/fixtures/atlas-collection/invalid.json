@@ -1,0 +1,5 @@
+{
+  "flower_missing_composite.json": "/atlas:flower",
+  "cell_species_template_without_tile.json": "/atlas:cell_species/href_template",
+  "uncertainty_pair_dimension_without_dimension.json": "/atlas:uncertainty"
+}

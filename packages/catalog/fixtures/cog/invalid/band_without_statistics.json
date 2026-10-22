@@ -1,0 +1,53 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "megaptera_novaeangliae_density",
+  "collection": "cce_like",
+  "bbox": [-131, 29.5, -116.5, 49],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[[-131, 29.5], [-116.5, 29.5], [-116.5, 49], [-131, 49], [-131, 29.5]]]
+  },
+  "properties": {
+    "datetime": null,
+    "start_datetime": "1991-07-01T00:00:00Z",
+    "end_datetime": "2018-12-31T23:59:59Z",
+    "title": "synthetic CCE-like two-band density model: band 1 density, band 2 its coefficient of variation",
+    "proj:code": "EPSG:4326",
+    "atlas:dims": { "species": "137092", "variable": "density" }
+  },
+  "assets": {
+    "cog": {
+      "href": "./megaptera_novaeangliae.tif",
+      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
+      "roles": ["data"],
+      "title": "Humpback whale, density (band 1)",
+      "atlas:bidx": 1,
+      "atlas:rescale": [0, 0.0123],
+      "atlas:colormap": "viridis",
+      "raster:bands": [
+        {
+          "name": "density",
+          "description": "density, animals per km2",
+          "data_type": "float32",
+          "nodata": "nan",
+          "unit": "animals/km2",
+          "statistics": { "minimum": 0.0, "maximum": 0.0315, "mean": 0.0021, "stddev": 0.0034, "valid_percent": 61.2 },
+          "histogram": { "count": 4, "min": 0.0, "max": 0.0315, "buckets": [9120, 1310, 220, 41] }
+        },
+        {
+          "name": "cv",
+          "description": "coefficient of variation of density",
+          "data_type": "float32",
+          "nodata": "nan",
+          "unit": "unitless"
+        }
+      ]
+    }
+  },
+  "links": [{ "rel": "collection", "href": "../collection.json" }]
+}

@@ -1,0 +1,32 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": ["https://stac-extensions.github.io/projection/v2.0.0/schema.json"],
+  "id": "aquamaps_like_thunnus_thynnus",
+  "collection": "aquamaps_like",
+  "bbox": [-180, -90, 180, 90],
+  "geometry": { "type": "Polygon", "coordinates": [[[-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]]] },
+  "properties": { "datetime": null, "title": "synthetic AquaMaps-like habitat suitability, STAC 1.1 core bands" },
+  "assets": {
+    "cog": {
+      "href": "./thunnus_thynnus.tif",
+      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
+      "roles": ["data"],
+      "title": "habitat suitability (percent)",
+      "atlas:bidx": 1,
+      "atlas:rescale": [1, 100],
+      "atlas:colormap": "spectral_r",
+      "bands": [
+        {
+          "name": "suitability",
+          "data_type": "uint8",
+          "nodata": 0,
+          "unit": "percent",
+          "statistics": { "minimum": 1, "maximum": 100 }
+        }
+      ]
+    },
+    "thumbnail": { "href": "./thunnus_thynnus.png", "type": "image/png", "roles": ["thumbnail"] }
+  },
+  "links": []
+}

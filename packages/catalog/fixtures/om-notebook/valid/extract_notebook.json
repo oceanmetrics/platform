@@ -1,0 +1,10 @@
+{
+  "target_name": "extract_dhw_sanctuaries",
+  "workflow_type": "extract",
+  "dependency": ["ingest_sanctuaries"],
+  "output": "data/extract_dhw_sanctuaries/manifest.json",
+  "products": [{ "href": "s3://oceanmetrics.io-public/values/dhw_5km/sanctuaries.parquet", "kind": "values" }],
+  "schedule": "0 6 * * 1",
+  "status": "active",
+  "description": "synthetic: weekly degree heating weeks per sanctuary"
+}

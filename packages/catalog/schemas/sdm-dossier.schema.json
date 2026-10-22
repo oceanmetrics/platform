@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/sdm-dossier/v1.0.0/schema.json",
+  "title": "sdm-dossier: the stac-sdm 1.1 fields of a species distribution model product",
+  "description": "The sdm: fields proposed for stac-sdm 1.1 (atlas/pipeline/docs/stac-sdm-proposal.md) on top of the 1.0.0 fields (https://marinesensitivity.github.io/stac-sdm/v1.0.0/schema.json): the richness and uncertainty response types, the taxa and the aggregation of a multi-species product, the model evaluation and the response curves. On an Item (type Feature) the fields are in properties; on a Collection they are at the top level. The 1.0.0 fields are typed loosely, as producers use them today. Written by the atlas pipeline and workflows/R; read by the atlas species dossier. STAC core is out of scope: only type, stac_version, id and the profile's own fields are constrained, and other keys pass through. Reader checks this schema cannot express: sdm:evaluation.roc fpr and tpr have equal length; a response curve's x, y and density have equal length.",
+  "type": "object",
+  "required": ["type", "stac_version", "id"],
+  "properties": {
+    "type": { "description": "a STAC Item (Feature) or Collection", "enum": ["Feature", "Collection"] },
+    "stac_version": { "description": "the STAC version, e.g. 1.1.0", "type": "string" },
+    "id": { "description": "the item or collection id", "type": "string", "minLength": 1 }
+  },
+  "if": { "type": "object", "required": ["type"], "properties": { "type": { "const": "Feature" } } },
+  "then": {
+    "description": "an Item carries the sdm: fields in properties",
+    "type": "object",
+    "required": ["properties"],
+    "properties": { "properties": { "description": "the Item properties, holding the sdm: fields", "$ref": "#/$defs/fields" } }
+  },
+  "else": { "$ref": "#/$defs/fields" },
+  "$defs": {
+    "pair": {
+      "type": "array",
+      "prefixItems": [{ "type": "number" }, { "type": "number" }],
+      "minItems": 2,
+      "items": false
+    },
+    "authorities": {
+      "description": "cross-references to taxonomic authorities by their native identifier",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "worms": { "description": "the WoRMS AphiaID", "type": ["string", "integer"] },
+        "botw": { "description": "the BirdLife (Birds of the World) id", "type": ["string", "integer"] },
+        "itis": { "description": "the ITIS TSN", "type": ["string", "integer"] },
+        "gbif": { "description": "the GBIF taxon key (as in 1.0.0 sdm:taxon)", "type": ["string", "integer"] },
+        "iucn": { "description": "the IUCN Red List taxon id (as in 1.0.0 sdm:taxon)", "type": ["string", "integer"] }
+      }
+    },
+    "numbers": { "type": "array", "items": { "type": "number" } },
+    "fields": {
+      "description": "the sdm: fields; the four 1.0.0 core descriptors are required, sdm:taxon and sdm:taxa exclude each other",
+      "type": "object",
+      "required": ["sdm:response_type", "sdm:method", "sdm:source_authority", "sdm:temporal_interval"],
+      "not": {
+        "description": "sdm:taxon (one taxon) and sdm:taxa (a multi-species product) are mutually exclusive",
+        "type": "object",
+        "required": ["sdm:taxon", "sdm:taxa"]
+      },
+      "properties": {
+        "sdm:response_type": {
+          "description": "what the per-cell value represents: the 1.0.0 values plus richness (number of taxa, or a ratio of it) and uncertainty (the spread of a derived or modelled quantity)",
+          "enum": ["occurrence", "range", "suitability", "probability", "density", "biomass", "mixed", "richness", "uncertainty"]
+        },
+        "sdm:method": { "description": "the modelling approach (open vocabulary: env_envelope, density_surface_model, derived_merge ...)", "type": "string", "minLength": 1 },
+        "sdm:method_detail": { "description": "free-text detail of the algorithm settings or the merge rule", "type": "string" },
+        "sdm:source_authority": { "description": "the originating authority (AquaMaps, NOAA SWFSC, MBON BioTrack ...)", "type": "string", "minLength": 1 },
+        "sdm:temporal_interval": { "description": "the granularity of the prediction interval (static, monthly, seasonal in 1.0.0); a string here", "type": "string", "minLength": 1 },
+        "sdm:predictors": { "description": "the environmental predictors of the model", "type": "array", "items": { "type": "string" } },
+        "sdm:value_unit": { "description": "the unit of the per-cell value (percent, animals/km2, species, unitless ...)", "type": "string" },
+        "sdm:value_range": { "description": "the nominal [min, max] domain of the value", "$ref": "#/$defs/pair" },
+        "sdm:taxon": {
+          "description": "the one taxon a single-species product predicts (1.0.0). group is a string in the atlas pipeline and a boolean in the MST manifest, so both pass; other keys pass through.",
+          "type": "object",
+          "required": ["scientific_name"],
+          "properties": {
+            "scientific_name": { "description": "the scientific name", "type": "string", "minLength": 1 },
+            "common_name": { "description": "the common name", "type": "string" },
+            "authorities": { "description": "the authority ids (worms, botw, itis, gbif, iucn)", "type": "object" },
+            "group": { "description": "the coarse group (fish, bird ...): a string, or a boolean in the MST manifest", "type": ["string", "boolean"] },
+            "redlist_code": { "description": "the IUCN Red List category", "type": "string" }
+          }
+        },
+        "sdm:taxa": {
+          "description": "the taxa contributing to a multi-species product",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["scientific_name"],
+            "additionalProperties": false,
+            "properties": {
+              "scientific_name": { "description": "the scientific name", "type": "string", "minLength": 1 },
+              "authorities": { "description": "the authority ids", "$ref": "#/$defs/authorities" },
+              "common_name": { "description": "the common name", "type": "string" },
+              "group": { "description": "the coarse group (as in sdm:taxon; the proposal's example carries it)", "type": ["string", "boolean"] },
+              "redlist_code": { "description": "the IUCN Red List category", "enum": ["EX", "EW", "CR", "EN", "VU", "NT", "LC", "DD", "NE"] }
+            }
+          }
+        },
+        "sdm:aggregation": {
+          "description": "how a multi-species value was formed",
+          "type": "object",
+          "required": ["method"],
+          "additionalProperties": false,
+          "properties": {
+            "method": { "description": "the aggregation", "enum": ["mean", "sum", "max", "min", "richness", "share", "composite"] },
+            "of": { "description": "what was aggregated (e.g. per-species occupancy probability)", "type": "string" },
+            "n": { "description": "the number of inputs aggregated (e.g. taxa)", "type": "integer", "minimum": 0 }
+          }
+        },
+        "sdm:evaluation": {
+          "description": "how well the model fits: named metrics, the ROC curve and notes",
+          "type": "object",
+          "required": ["metrics"],
+          "additionalProperties": false,
+          "properties": {
+            "metrics": {
+              "description": "the evaluation metrics, at least one",
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["name", "value"],
+                "additionalProperties": false,
+                "properties": {
+                  "name": { "description": "the metric (AUC, TSS, Boyce, deviance ...)", "type": "string", "minLength": 1 },
+                  "value": { "description": "its value", "type": "number" },
+                  "partition": { "description": "the data it was computed on", "enum": ["train", "test", "cv"] }
+                }
+              }
+            },
+            "roc": {
+              "description": "the ROC curve; fpr and tpr have equal length (a reader check)",
+              "type": "object",
+              "required": ["fpr", "tpr"],
+              "additionalProperties": false,
+              "properties": {
+                "fpr": { "description": "false positive rates", "$ref": "#/$defs/numbers" },
+                "tpr": { "description": "true positive rates, one per fpr", "$ref": "#/$defs/numbers" }
+              }
+            },
+            "notes": { "description": "free text on the evaluation", "type": "string" }
+          }
+        },
+        "sdm:response_curves": {
+          "description": "the partial response of the prediction to each predictor; x, y and density have equal length (a reader check)",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["predictor", "x", "y"],
+            "additionalProperties": false,
+            "properties": {
+              "predictor": { "description": "the predictor (a sdm:predictors value)", "type": "string", "minLength": 1 },
+              "unit": { "description": "the unit of x", "type": "string" },
+              "x": { "description": "the predictor values", "$ref": "#/$defs/numbers" },
+              "y": { "description": "the response at each x", "$ref": "#/$defs/numbers" },
+              "density": { "description": "the share of the records (or cells) at each x, for a rug or a shaded band", "$ref": "#/$defs/numbers" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

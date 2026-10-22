@@ -1,0 +1,6 @@
+{
+  "band_without_statistics.json": "/assets/cog/raster:bands/1",
+  "data_type_float99.json": "/assets/cog/bands/0/data_type",
+  "no_proj_code.json": "proj:code",
+  "reference_role_only.json": "/assets"
+}

@@ -1,0 +1,29 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "id": "biotrack_like",
+  "license": "CC-BY-4.0",
+  "links": [],
+  "title": "synthetic BioTrack-like richness and uncertainty",
+  "description": "synthetic fixture: a multi-species product with its taxa and its aggregation at the top level.",
+  "sdm:response_type": "uncertainty",
+  "sdm:method": "derived_merge",
+  "sdm:source_authority": "MBON BioTrack",
+  "sdm:temporal_interval": "seasonal",
+  "sdm:value_unit": "unitless",
+  "sdm:method_detail": "sum of per-species standard deviations of the occupancy probability, scaled 0-1 per ecoregion",
+  "sdm:aggregation": { "method": "sum", "of": "per-species standard deviation of occupancy", "n": 2 },
+  "sdm:taxa": [
+    {
+      "scientific_name": "Alopias vulpinus",
+      "common_name": "Common thresher",
+      "authorities": { "worms": 105836 },
+      "redlist_code": "VU"
+    },
+    {
+      "scientific_name": "Carcharodon carcharias",
+      "authorities": { "worms": "105838", "itis": 159903 },
+      "group": "shark"
+    }
+  ]
+}

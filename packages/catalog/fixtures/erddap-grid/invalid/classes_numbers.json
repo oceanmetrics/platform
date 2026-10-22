@@ -1,0 +1,116 @@
+{
+  "type": "Collection",
+  "id": "erddap/dhw_5km",
+  "stac_version": "1.1.0",
+  "description": "trimmed from the public dhw_5km collection (erddap-places, 2026-10-22): NOAA Coral Reef Watch daily global 5km satellite coral bleaching heat stress monitoring: sea surface temperature (SST), SST anomaly, degree heating weeks (DHW), bleaching alert area (BAA), and hotspot. Served live from PacIOOS ERDDAP; referenced in place for computing place statistics in the browser via griddap.parquet.",
+  "links": [
+    { "rel": "root", "href": "../../catalog.json", "type": "application/json" },
+    { "rel": "parent", "href": "../../catalog.json", "type": "application/json" },
+    {
+      "rel": "via",
+      "href": "https://pae-paha.pacioos.hawaii.edu/erddap/info/dhw_5km/index.html",
+      "type": "text/html",
+      "title": "NOAA Coral Reef Watch — Daily Global 5km SST + DHW"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/datacube/v2.2.0/schema.json",
+    "https://schemas.portolan-sdi.org/portolan/v0.2.0/schema.json"
+  ],
+  "updated": "2026-09-15T00:00:00Z",
+  "title": "NOAA Coral Reef Watch — Daily Global 5km SST + DHW",
+  "extent": {
+    "spatial": { "bbox": [[-180.0, -89.975, 180.0, 89.975]] },
+    "temporal": { "interval": [["1985-04-01T12:00:00Z", null]] }
+  },
+  "license": "CC0-1.0",
+  "providers": [
+    {
+      "name": "NOAA Coral Reef Watch (CRW)",
+      "roles": ["producer", "licensor"],
+      "url": "https://coralreefwatch.noaa.gov"
+    },
+    { "name": "Ocean Metrics LLC", "roles": ["processor"], "url": "https://oceanmetrics.io" },
+    {
+      "name": "PacIOOS (Pacific Islands Ocean Observing System)",
+      "roles": ["host"],
+      "url": "https://www.pacioos.hawaii.edu"
+    }
+  ],
+  "cube:dimensions": {
+    "time": {
+      "type": "temporal",
+      "description": "reference time",
+      "extent": ["1985-04-01T12:00:00Z", null],
+      "step": "P1D"
+    },
+    "latitude": {
+      "type": "spatial",
+      "axis": "y",
+      "description": "Latitude",
+      "extent": [-89.975, 89.975],
+      "step": 0.05,
+      "reference_system": 4326
+    },
+    "longitude": {
+      "type": "spatial",
+      "axis": "x",
+      "description": "Longitude",
+      "extent": [-179.975, 179.975],
+      "step": 0.05,
+      "reference_system": 4326
+    }
+  },
+  "cube:variables": {
+    "CRW_SST": {
+      "dimensions": ["time", "latitude", "longitude"],
+      "type": "data",
+      "unit": "Celsius",
+      "description": "sea surface temperature"
+    },
+    "CRW_DHW": {
+      "dimensions": ["time", "latitude", "longitude"],
+      "type": "data",
+      "unit": "Celsius weeks",
+      "description": "degree heating week"
+    },
+    "CRW_BAA": {
+      "dimensions": ["time", "latitude", "longitude"],
+      "type": "data",
+      "unit": "1",
+      "description": "bleaching alert area (categorical, 0-4)",
+      "erddap-places:categorical": true,
+      "erddap-places:classes": { "0": 0, "1": 1, "2": "Bleaching Warning", "3": "Alert Level 1", "4": "Alert Level 2" }
+    }
+  },
+  "erddap:base_url": "https://pae-paha.pacioos.hawaii.edu/erddap",
+  "erddap:dataset_id": "dhw_5km",
+  "erddap:protocol": "griddap",
+  "erddap:version": "2.29",
+  "erddap:cors": true,
+  "erddap:formats": ["parquet", "csvp", "json"],
+  "erddap:lon_range": [-180, 180],
+  "erddap:lat_descending": true,
+  "assets": {
+    "griddap": {
+      "href": "https://pae-paha.pacioos.hawaii.edu/erddap/griddap/dhw_5km.parquet?{variable}[({t0}):1:({t1})][({lat_max}):1:({lat_min})][({lon_min}):1:({lon_max})]",
+      "type": "application/vnd.apache.parquet",
+      "title": "griddap query template (percent-encode each constraint separately)",
+      "roles": ["data", "external"],
+      "table:columns": [
+        { "name": "time", "type": "timestamp", "description": "reference time" },
+        { "name": "latitude", "type": "double", "description": "Latitude, degrees_north" },
+        { "name": "longitude", "type": "double", "description": "Longitude, degrees_east" },
+        { "name": "CRW_SST", "type": "double", "description": "sea surface temperature, Celsius" },
+        { "name": "CRW_DHW", "type": "double", "description": "degree heating week, Celsius weeks" },
+        { "name": "CRW_BAA", "type": "double", "description": "bleaching alert area, categorical" }
+      ]
+    },
+    "metadata": {
+      "href": "https://pae-paha.pacioos.hawaii.edu/erddap/info/dhw_5km/index.json",
+      "type": "application/json",
+      "title": "ERDDAP dataset metadata (info endpoint)",
+      "roles": ["metadata", "external"]
+    }
+  }
+}

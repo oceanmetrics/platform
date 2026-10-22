@@ -1,0 +1,17 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "id": "sst_mean_h3",
+  "title": "synthetic hex twin of a gridded layer",
+  "description": "synthetic fixture: the H3 resolution 7 twin of a gridded SST layer, one Parquet per EOV, cell id as uint64.",
+  "license": "CC0-1.0",
+  "links": [],
+  "h3:resolutions": [7],
+  "h3:cell_column": "cell_id",
+  "h3:cell_type": "uint64",
+  "h3:layout": { "template": "eov={eov}/data_0.parquet", "keys": ["eov"] },
+  "table:columns": [
+    { "name": "cell_id", "type": "UBIGINT" },
+    { "name": "mean", "type": "DOUBLE", "description": "area-weighted mean" }
+  ]
+}

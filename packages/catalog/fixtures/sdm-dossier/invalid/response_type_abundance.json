@@ -1,0 +1,40 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "id": "shark_summer_richness",
+  "collection": "biotrack_like",
+  "bbox": [-98, 18, -80, 31],
+  "geometry": { "type": "Polygon", "coordinates": [[[-98, 18], [-80, 18], [-80, 31], [-98, 31], [-98, 18]]] },
+  "properties": {
+    "datetime": null,
+    "title": "synthetic BioTrack-like shark richness, summer",
+    "sdm:response_type": "abundance",
+    "sdm:method": "derived_merge",
+    "sdm:source_authority": "MBON BioTrack",
+    "sdm:temporal_interval": "seasonal",
+    "sdm:season": "summer",
+    "sdm:value_unit": "unitless",
+    "sdm:value_range": [0, 1],
+    "sdm:predictors": ["sst", "chl", "depth"],
+    "sdm:aggregation": { "method": "richness", "of": "per-species occupancy probability, ecoregion-weighted", "n": 16 },
+    "sdm:evaluation": {
+      "metrics": [
+        { "name": "AUC", "value": 0.87, "partition": "test" },
+        { "name": "TSS", "value": 0.61, "partition": "cv" }
+      ],
+      "roc": { "fpr": [0, 0.1, 0.3, 1], "tpr": [0, 0.55, 0.85, 1] },
+      "notes": "synthetic values"
+    },
+    "sdm:response_curves": [
+      {
+        "predictor": "sst",
+        "unit": "degC",
+        "x": [20, 24, 28, 32],
+        "y": [0.1, 0.4, 0.8, 0.5],
+        "density": [0.05, 0.3, 0.5, 0.15]
+      }
+    ]
+  },
+  "assets": { "values": { "href": "./values.parquet", "type": "application/vnd.apache.parquet", "roles": ["data"] } },
+  "links": []
+}
