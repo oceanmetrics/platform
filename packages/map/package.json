@@ -31,6 +31,10 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./h3-worker": {
+      "types": "./dist/h3Worker.d.ts",
+      "default": "./dist/h3Worker.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -41,7 +45,10 @@
     "CHANGELOG.md",
     "LICENSE"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/h3Worker.js",
+    "./src/h3Worker.ts"
+  ],
   "engines": {
     "node": ">=20"
   },
