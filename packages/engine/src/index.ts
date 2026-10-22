@@ -1,5 +1,6 @@
-// @oceanmetrics/engine: the browser engine of Ocean Metrics. the mask, the lobes, the ERDDAP requests and the SQL
-// templates shared with the Python engine (om_extract). see the README for what moved from where.
+// @oceanmetrics/engine: the browser engine of Ocean Metrics. the mask, the lobes, the ERDDAP requests, the SQL templates
+// shared with the Python engine (om_extract), DuckDB-WASM as the statistics engine, the chunked live preview and the
+// map's grid slice. see the README for what moved from where.
 export { axisEdges, countVertices, gridMask, pointMask, polygonParts, reduceRing, reduceRings } from './mask.js'
 export type { GeoInput, MaskCell, MaskMethod, MaskOptions, MaskPoint, MaskResult, PointMaskResult } from './mask.js'
 export { polygonCoordinates, wkbToGeoJSON } from './wkb.js'
@@ -28,3 +29,9 @@ export type { ChunkLimits } from './chunks.js'
 export { lit, render, template, templateNames } from './sql.js'
 export type { Param, Params, TemplateName } from './sql.js'
 export { TEMPLATES } from './sqlTemplates.js'
+export { Engine, connectBrowser, toRows } from './engine.js'
+export type { Duck, DuckConnLike, DuckDbLike, EngineEvent, Row } from './engine.js'
+export { isoDay, lobeAxes, lobeMasks, previewWindow, runPreview, sliceSource } from './preview.js'
+export type {
+  LobeAxes, PreviewChunk, PreviewDataset, PreviewOptions, PreviewResult, SliceCell, SliceSource, SliceSourceOptions,
+} from './preview.js'
