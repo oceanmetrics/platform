@@ -30,7 +30,8 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist",
@@ -49,5 +50,24 @@
     "prepack": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --root ../.. packages/map"
+  },
+  "dependencies": {
+    "@geomatico/maplibre-cog-protocol": "^0.10.0",
+    "@maplibre/geojson-vt": "^6.3.0",
+    "@maplibre/vt-pbf": "^4.3.2",
+    "geotiff": "^3.0.5",
+    "h3-js": "^4.4.0"
+  },
+  "peerDependencies": {
+    "maplibre-gl": "^6.13.0",
+    "pmtiles": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^24.13.3",
+    "maplibre-gl": "^6.15.0",
+    "pmtiles": "^4.5.0",
+    "typescript": "~5.9.0",
+    "vitest": "^5.0.1"
   }
 }
