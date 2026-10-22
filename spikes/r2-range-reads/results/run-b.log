@@ -1,0 +1,72 @@
+== 3a pmtiles getHeader + getZxy(2,0,1)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 488.9 ms, 3 req ({"GET 206":3}), 25476 B, all206=true
+  s3 #1: 784.3 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+  worker #2: 309.5 ms, 3 req ({"GET 206":3}), 25480 B, all206=true
+  s3 #2: 700.7 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+  worker #3: 318.3 ms, 3 req ({"GET 206":3}), 25479 B, all206=true
+  s3 #3: 677.2 ms, 3 req ({"GET 206":3}), 26342 B, all206=true
+== 3b maplibre 6 pmtiles:// zoom 3 to idle
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 576.5 ms, 6 req ({"GET 206":6}), 27995 B, all206=true
+  s3 #1: 947.5 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+  worker #2: 1760.1 ms, 6 req ({"GET 206":6}), 29702 B, all206=true
+  s3 #2: 1045.9 ms, 6 req ({"GET 206":6}), 30287 B, all206=true
+  worker #3: 2963.4 ms, 6 req ({"GET 206":6}), 29726 B, all206=true
+  s3 #3: 1094.3 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+== 4a geotiff.js gazetteer Then vs Now FKNMS 2024 (no overviews)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 3854.1 ms, 13 req ({"GET 206":13}), 26250 B, all206=true
+  s3 #1: 2175.6 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #2: 3376.1 ms, 13 req ({"GET 206":13}), 26701 B, all206=true
+  s3 #2: 2185.1 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #3: 1236.2 ms, 13 req ({"GET 206":13}), 26671 B, all206=true
+  s3 #3: 2198.8 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+== 4b geotiff.js atlas aquamaps_eov score_risk (overviews)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (0 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (61 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (121 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (181 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (241 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (301 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (361 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (422 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (482 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (542 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (603 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (663 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (724 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (784 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (844 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (905 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (965 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1026 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1086 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1146 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1206 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1266 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1327 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1388 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1448 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1511 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1571 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1631 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1691 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1751 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1811 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1871 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1931 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (1992 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2052 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2112 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2173 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2233 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2293 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2353 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2413 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2473 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2534 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2594 s)
+  atlas/aquamaps_eov/score_risk.tif: 404, waiting (2654 s)
+  wait: {"ok":false,"status":404,"waited_s":2714}
+done b
