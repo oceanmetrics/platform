@@ -11,7 +11,7 @@ if [[ -n "${1:-}" ]]; then
   otp_args=(--otp "$1")
 fi
 
-for pkg in status places map catalog; do
+for pkg in status places map catalog engine; do
   echo "== publishing @oceanmetrics/${pkg}"
   npm publish -w "packages/${pkg}" --access public ${otp_args[@]+"${otp_args[@]}"}
   echo "== @oceanmetrics/${pkg} is at version: $(npm view "@oceanmetrics/${pkg}" version)"
