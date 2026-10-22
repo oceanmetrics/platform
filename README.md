@@ -9,7 +9,7 @@ rule or a reader is written once.
 | [`@oceanmetrics/places`](packages/places/) | client for the places gazetteer: layers manifest, MapLibre layers from PMTiles, parquet search and lookups, credits | moved in at 0.5.0 from `oceanmetrics/places` `client/` |
 | [`@oceanmetrics/status`](packages/status/) | the status methods (`iea-sd`, `names-pct`, `values`), the period grid, sentences and alt text, the quadrant plot rules | moved in at 0.1.0 from `oceanmetrics/indicators` `src/status/`, with the ecoidx cross-check fixture |
 | [`@oceanmetrics/map`](packages/map/) | the map stack: MapLibre 6, PMTiles, the bathymetric basemap, COG and H3 sources | scaffold only; gains the renderer (grid slice, COG, H3 source) and the basemap in build week 2, 2026-11-06 to 11-12 |
-| [`@oceanmetrics/catalog`](packages/catalog/) | readers for the catalogs: STAC layers, the indicators manifest and values, the places index | scaffold only; gains the STAC profile validators on Day 2 (2026-10-23) and the values and manifest readers in build week 1 (2026-10-30 to 11-05) |
+| [`@oceanmetrics/catalog`](packages/catalog/) | the catalog contracts: the STAC layer profiles (JSON Schemas, types, a validator, the `om-catalog` CLI), then the indicators manifest and values and the places index readers | 0.2.0: the six STAC layer profiles; gains the values and manifest readers in build week 1 (2026-10-30 to 11-05) |
 
 ## Rules
 
@@ -36,7 +36,8 @@ npx vitest run packages/status/src/quad.test.ts   # one file
 
 `npm run size` gzips (level 9) the summed `dist/**/*.js` of each package and compares it with the budget in
 `scripts/size-budget.mjs`. Set on 2026-10-22 at about 1.5 times the measurement: places 18 000 B (measured 11 708),
-status 12 000 B (measured 7 997); map and catalog hold a provisional 5 000 B each until they have code. Raise a budget
+status 12 000 B (measured 7 997); map and catalog hold a provisional 5 000 B each until they have code (catalog
+measured 404 B on 2026-10-22, its Node-only validator and CLI left out: they never reach a browser). Raise a budget
 only with the reason written here.
 
 ## Licence

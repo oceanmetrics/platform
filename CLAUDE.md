@@ -29,7 +29,10 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
   (NA rows count), the SD is the sample SD, a change of exactly 1 SD is not a change.
 - **`places` is the gazetteer client** (moved from `oceanmetrics/places` `client/`); its tests serve `test/fixtures/`
   over a local HTTP server.
-- **`map` and `catalog` are scaffolds** (a `PACKAGE` constant and one test); their READMEs say what fills in and when.
+- **`catalog` holds the STAC layer profiles**: one self-contained JSON Schema per profile in `packages/catalog/schemas/`,
+  read at run time by `@oceanmetrics/catalog/validate` (ajv, Node only, never imported by the index) and by the Python
+  `om_extract.schemas`. Fixtures in `fixtures/<name>/{valid,invalid}/`, the expected errors in `invalid.json`; the test
+  discovers every schema. **`map` is a scaffold** (a `PACKAGE` constant and one test); its README says what fills in.
 - Source imports use `.js` specifiers (`./grid.js`) so the emitted declarations resolve for every consumer.
 
 ## Conventions
