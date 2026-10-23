@@ -22,6 +22,7 @@ scripts/om-publish.sh rewrite --from <host> --to <host> [options] <key.json|pref
 | `--last <glob>` | upload the matching files after all others, in the order given (a file takes the first `--last` it matches) |
 | `--type <ext>=<type>` | the content type of an extension, over the table |
 | `--cache-control <v>`, `--content-encoding <v>` | headers of every file uploaded |
+| `--allow-immutable-rewrite` | go on although an immutable key would be overwritten with different bytes (see "Immutable keys"); prints the URLs to purge |
 | `--size-only` | compare by size (default: rclone `--checksum`, the listing's MD5; aws its size and time) |
 
 Content types by extension: `json` application/json, `geojson` application/geo+json, `parquet`
@@ -31,12 +32,32 @@ application/atom+xml, `xml` application/xml, `md` text/markdown, `csv` text/csv,
 (phase, type) group is staged as a folder of symlinks and uploaded by one `rclone copy --copy-links` and one
 `aws s3 sync`, so both stores get the same files with the same headers.
 
+Exit codes: 0 ok, 1 a tool failed, 2 usage or a missing file, 3 an immutable key would be overwritten with different bytes.
+
 Environment: `OM_STORE`, `OM_S3_BUCKET`, `OM_R2_BUCKET`, `OM_RCLONE` (the wrapper; a missing one stops with its name),
-`OM_AWS`, `OM_CATALOG_CLI` (`packages/catalog/dist/cli.js`), `OM_HISTORY_DATE`. Exit 0 ok, 1 a tool failed, 2 usage.
+`OM_AWS`, `OM_CATALOG_CLI` (`packages/catalog/dist/cli.js`), `OM_HISTORY_DATE`.
 
 **Before the cutover, R2 is still the hourly mirror of S3.** `~/.config/oceanmetrics/r2sync.sh` runs `rclone sync`
 per prefix, which deletes on R2 what S3 lacks: it would delete every `_history/` copy at its next run. Until the mirror
 becomes the nightly `rclone check` (week 6 step 1), it needs `--filter '- _history/**'`, or `--keep-history` waits.
+
+## Immutable keys
+
+The storage Worker keeps some keys in the edge cache for a year (`Cache-Control: public, max-age=31536000,
+immutable`; places `worker/src/paths.ts` `isImmutable(key, store)`): public data files (`.parquet`, `.pmtiles`, `.tif`,
+`.tiff`, `.fgb`) under `obis-h3/v<digits>/**`, content-hash-named files of `marine-atlas/**` (16 to 64 lower-case hex
+characters, optionally `_3857`), and `v<digits>/` folders below an atlas collection or a basemap set; never JSON,
+`gazetteer/`, `indicators/`, `_history/`, the root files or the unlisted bucket. `is_immutable()` in `om-publish.sh`
+is the same rule in shell, tested with the Worker's yes/no tables in `scripts/om-publish.test.ts` (each file names
+the other: change both together).
+
+Before anything is sent, `om-publish.sh` takes the files of the plan whose key is immutable and compares them with the
+store (`rclone check --one-way`, read-only; R2, or S3 with `--only-s3`). A key that exists with **different bytes** stops the run: the keys
+are printed, nothing is sent, the exit code is 3. A dry run reports the same, since the check is read-only. A key that
+is new, or identical, passes. `--allow-immutable-rewrite` lets the run go on and prints the reminder to purge each edge
+copy by URL (`https://storage.oceanmetrics.io/<key>`; the Worker's copy would otherwise serve the old bytes for a year).
+The way out of the refusal is a new key or a new version folder, not the flag. The check hashes the immutable files of
+the plan locally, the same MD5 pass `--checksum` makes anyway.
 
 ## The bucket root
 

@@ -26,6 +26,9 @@
 #   --cache-control <v>  Cache-Control of every file uploaded (e.g. 'no-cache', 'public, max-age=300')
 #   --content-encoding <v>  Content-Encoding of every file (e.g. gzip, for a file the caller gzipped)
 #   --size-only          compare by size only (default: rclone --checksum, the listing's MD5; aws its size and time)
+#   --allow-immutable-rewrite  an immutable key (is_immutable below: the Worker caches it for a year) is never overwritten
+#                        with different bytes: the keys are printed and the run stops, exit 3, a dry run too. with this
+#                        option the run goes on and prints the URLs whose edge copies must be purged
 #
 # rewrite (the cutover's rewrite of published hrefs, @oceanmetrics/catalog/storage rewriteStorageUrls through
 # `om-catalog rewrite-storage`): each target is a key ending in .json or a prefix (every *.json under it, --depth N to
@@ -39,7 +42,7 @@
 # OM_RCLONE (~/.config/oceanmetrics/rclone-r2.sh: rclone with the remotes s3: and r2:), OM_AWS (aws),
 # OM_CATALOG_CLI (packages/catalog/dist/cli.js), OM_HISTORY_DATE (the history folder's date, default today UTC).
 #
-# exit: 0 ok, 1 a tool failed, 2 usage or a missing file.
+# exit: 0 ok, 1 a tool failed, 2 usage or a missing file, 3 an immutable key would be overwritten with different bytes.
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -57,6 +60,35 @@ TAB=$'\t'
 ROOT_KEYS="index.html"
 die() { echo "om-publish: $*" >&2; exit 2; }
 usage() { sed -n '9,11p' "$0" | sed 's/^# \{0,3\}//' >&2; exit 2; }
+
+# ---- immutable keys: the storage Worker keeps them in the edge cache for a year ----
+# MIRROR of isImmutable(key, 'public') in oceanmetrics/places worker/src/paths.ts (same rule, same cases in
+# worker/test/edge.test.ts and scripts/om-publish.test.ts here): change one, change the other in the same breath.
+# a key is immutable when it is a public data file (.parquet .pmtiles .tif .tiff .fgb, case-insensitive) with at least three
+# path segments, no empty segment and no `_history`, and
+#   obis-h3/v<digits>/**                      a release folder
+#   marine-atlas/**/<hash>.tif|tiff|pmtiles   16-64 lower-case hex, optionally `_3857`
+#   atlas/<collection>/**/v<digits>/**  and  basemap/<set>/**/v<digits>/**   a versioned folder below the collection / set
+# never JSON or any other type, gazetteer/, indicators/, _history/, the root files, the unlisted bucket.
+# is_immutable <key> -> status 0 when immutable
+is_immutable() {
+  local key="$1" base mid
+  case "/$key/" in *//*|*/_history/*) return 1 ;; esac
+  case "$key" in */*/*) ;; *) return 1 ;; esac
+  base="${key##*/}"
+  case "$base" in   # the extension, any case, after at least one character
+    ?*.[pP][aA][rR][qQ][uU][eE][tT]|?*.[pP][mM][tT][iI][lL][eE][sS]|?*.[tT][iI][fF]|?*.[tT][iI][fF][fF]|?*.[fF][gG][bB]) ;;
+    *) return 1 ;;
+  esac
+  mid="${key#*/}"
+  case "${key%%/*}" in
+    obis-h3)      [[ "${mid%%/*}" =~ ^v[0-9]+$ ]] ;;
+    marine-atlas) [[ "$base" =~ ^[0-9a-f]{16,64}(_3857)?\.(tif|tiff|pmtiles)$ ]] ;;
+    atlas|basemap) mid="${mid%/*}"; [[ "$mid" == */* ]] && [[ "/${mid#*/}/" =~ /v[0-9]+/ ]] ;;
+    *) return 1 ;;
+  esac
+}
+[ "${OM_PUBLISH_ONLY_FUNCTIONS:-}" = 1 ] && { return 0 2>/dev/null || exit 0; }
 
 # ---- the content types by extension ----
 # one awk pass over the whole list (a subprocess per file made staging 13,000 files a minute; see README, "Staging speed")
@@ -106,6 +138,7 @@ LASTS=()
 CACHE=""
 ENCODING=""
 SIZE_ONLY=0
+ALLOW_IMMUTABLE=0
 FROM=""
 TO=""
 DEPTH=""
@@ -128,6 +161,7 @@ while [ $# -gt 0 ]; do
     --cache-control) [ $# -ge 2 ] || die "--cache-control needs a value"; CACHE="$2"; shift ;;
     --content-encoding) [ $# -ge 2 ] || die "--content-encoding needs a value"; ENCODING="$2"; shift ;;
     --size-only) SIZE_ONLY=1 ;;
+    --allow-immutable-rewrite) ALLOW_IMMUTABLE=1 ;;
     --from) [ $# -ge 2 ] || die "--from needs a host"; FROM="$2"; shift ;;
     --to) [ $# -ge 2 ] || die "--to needs a host"; TO="$2"; shift ;;
     --depth) [ $# -ge 2 ] || die "--depth needs a number"; DEPTH="$2"; shift ;;
@@ -242,6 +276,39 @@ keep_history() {
   "$RCLONE" "${args[@]}"
 }
 
+# guard_immutable <prefix> <list file of "<source>\t<published path>"> <source root>: stop before anything is sent when a
+# key that is_immutable already exists with other bytes (rclone check --one-way: read-only, so a dry run reports it too)
+guard_immutable() {
+  local prefix="$1" list="$2" src="$3" cand="$TMP/imm.list" rel pub k n bad="$TMP/imm.bad" differ="$TMP/imm.differ"
+  while IFS=$'\t' read -r rel pub; do
+    if is_immutable "${prefix:+$prefix/}$pub"; then printf '%s\t%s\n' "$rel" "$pub"; fi
+  done < "$list" > "$cand"
+  [ -s "$cand" ] || return 0
+  [ -x "$RCLONE" ] || [ -n "$(command -v "$RCLONE" 2>/dev/null)" ] || die "the rclone wrapper $RCLONE is missing (OM_RCLONE); it checks the immutable keys"
+  stage "$TMP/imm" "$cand" "$src"
+  local remote="r2:$R2_BUCKET"
+  case " $STORES " in *" r2 "*) ;; *) remote="s3:$S3_BUCKET" ;; esac
+  : > "$differ"
+  # exit 1 means a difference or a missing object: the --differ list is what counts
+  "$RCLONE" check "$TMP/imm" "$remote/$prefix" --one-way --copy-links --differ "$differ" >/dev/null 2>&1 || true
+  while IFS= read -r k; do
+    if [ -n "$k" ] && is_immutable "${prefix:+$prefix/}$k"; then printf '%s\n' "${prefix:+$prefix/}$k"; fi
+  done < "$differ" > "$bad"
+  [ -s "$bad" ] || return 0
+  n="$(grep -c . "$bad")"
+  if [ "$ALLOW_IMMUTABLE" = 1 ]; then
+    echo "om-publish: $n immutable key(s) overwritten with different bytes (--allow-immutable-rewrite):"
+    sed 's/^/    /' "$bad"
+    echo "om-publish: purge the edge copies by URL (Cloudflare cache purge, files):"
+    sed 's|^|    https://storage.oceanmetrics.io/|' "$bad"
+  else
+    echo "om-publish: $n immutable key(s) already exist with different bytes; the storage Worker caches them for a year:" >&2
+    sed 's/^/    /' "$bad" >&2
+    echo "om-publish: nothing was sent. publish new bytes under a new key or version folder, or pass --allow-immutable-rewrite and purge the edge copies by URL" >&2
+    exit 3
+  fi
+}
+
 matches_any() {   # matches_any <path> <glob>...
   local p="$1" g; shift
   for g in "$@"; do
@@ -283,6 +350,8 @@ publish() {
     [ -z "$bad" ] || die "the bucket root takes only the keys: $ROOT_KEYS (not: ${bad% })"
   fi
   echo "om-publish: $total files from $src -> ${prefix:+$prefix}/ on $STORES$( [ "$REALLY" = 1 ] || echo ' (dry run; --really to upload)')"
+
+  guard_immutable "$prefix" "$files" "$root"
 
   # the groups, in upload order: the files not matched by --last, by content type; then each --last glob, by type
   local groups="$TMP/groups" i=0 line rel pub t g

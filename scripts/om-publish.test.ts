@@ -300,7 +300,9 @@ function planTree() {
 const normal = (s: string) => s.replace(/[^\s"]*om-publish-src-[A-Za-z0-9]+/g, '<SRC>').replace(/[^\s"]*om-publish\.[A-Za-z0-9]+/g, '<TMP>').replace(/differ\.\d+/g, 'differ.N')
 const plan = (args: string[], env: Record<string, string> = {}) => {
   const r = run(args, env)
-  return { code: r.code, out: normal(r.out), err: normal(r.err), calls: r.calls.map(c => JSON.parse(normal(JSON.stringify(c)))) }
+  // the immutable-key guard (a read-only `rclone check` into $TMP/imm.*) was added after the golden was recorded: it is not part of the staged plan
+  const calls = r.calls.filter(c => !c.args.some(a => /\/imm\.differ$/.test(a)))
+  return { code: r.code, out: normal(r.out), err: normal(r.err), calls: calls.map(c => JSON.parse(normal(JSON.stringify(c)))) }
 }
 
 describe('om-publish.sh: the staged plan', () => {
@@ -332,5 +334,98 @@ describe('om-publish.sh: the staged plan', () => {
     expect(typeOf(where('score_2.Tiff'))).toBe('image/tiff')
     expect(u.flatMap(c => c.files!)).not.toContain('.DS_Store')
     expect(u.flatMap(c => c.files!)).not.toContain('x/.DS_Store')
+  })
+})
+
+// ---- immutable keys: the storage Worker caches them for a year, so they are never overwritten with other bytes ----
+// is_immutable() in om-publish.sh MIRRORS isImmutable() in oceanmetrics/places worker/src/paths.ts: the two tables
+// below are the Worker's (worker/test/edge.test.ts), keep them in step.
+const IMMUTABLE_YES = [
+  'obis-h3/v20261012/species_flat/res=3/p=81283ffffffffff.parquet',
+  'obis-h3/v20260728/all/res=1/data_0.parquet',
+  'obis-h3/v20261012/files.parquet',
+  'obis-h3/v20261012/taxon/rank=phylum/taxon=Apicomplexa%20incertae%20sedis/res=1/data_0.parquet',
+  'marine-atlas/cog_3857/000108e0a038c385_3857.tif',
+  'marine-atlas/v7/cog_3857/000108e0a038c385_3857.tif',
+  'marine-atlas/cog/global05/000108e0a038c385.tif',
+  'marine-atlas/native/rng_iucn/0007c35e939c220a.pmtiles',
+  'atlas/aquamaps_native/registry/v2/registry.parquet',
+  'basemap/gebco/v20261101/core.pmtiles',
+  'obis-h3/v20261012/A.PARQUET',   // the extension is case-insensitive (the Worker lower-cases it)
+]
+const IMMUTABLE_NO = [
+  'obis-h3/latest.json', 'obis-h3/collection.json', 'obis-h3/v20261012/collection.json', 'obis-h3/v20261012/release.json',
+  'obis-h3/v20261012/items/all.json', 'obis-h3/v20261012/README.md', 'obis-h3/vnext/a.parquet', 'obis-h3/v20261012x/a.parquet',
+  'obis-h3/_history/2026-10-23/v20261012/files.parquet', 'obis-h3/v20261012/_history/files.parquet',
+  'basemap/gebco/core.pmtiles', 'basemap/gebco/far.pmtiles', 'basemap/osm/land.pmtiles',
+  'gazetteer/mpa/places.parquet', 'gazetteer/mpa/places.pmtiles', 'gazetteer/layers.json', 'gazetteer/catalog.json',
+  'gazetteer/index/crosswalk.parquet',
+  'indicators/indicators.json', 'indicators/changes/latest.json', 'indicators/feeds/all.xml', 'indicators/coverage.parquet',
+  'indicators/values/indicator=sst/coll=mpa/data.parquet',
+  'atlas/catalog.json', 'atlas/aquamaps_eov/collection.json', 'atlas/aquamaps_eov/score_risk_3857.tif',
+  'atlas/aquamaps_native/registry.parquet', 'atlas/v2/registry.parquet', 'atlas/aquamaps_native/registry/v2/README.md',
+  'marine-atlas/assets.parquet', 'marine-atlas/tables/cog_3857.parquet', 'marine-atlas/v9/manifest.json',
+  'marine-atlas/v3/cell.tif', 'marine-atlas/latest.txt', 'marine-atlas/versions.json',
+  'marine-atlas/cog_3857/000108E0A038C385_3857.tif', 'marine-atlas/cog_3857/000108e0a038c385_3857.json',
+  'atlas-restricted/coll/v1/data.parquet', 'issues/apps-8/v1/a.parquet', 'index.html', 'nc.parquet', '',
+  'obis-h3/v1//a.parquet', 'obis-h3/v1/a.parquet/', '/obis-h3/v1/a.parquet', 'obis-h3/v1/.parquet',
+]
+
+describe('om-publish.sh: is_immutable() is the Worker\'s isImmutable()', () => {
+  const verdicts = (keys: string[]) => spawnSync('bash', ['-c', `OM_PUBLISH_ONLY_FUNCTIONS=1 source "$0"; while IFS= read -r k; do if is_immutable "$k"; then echo yes; else echo no; fi; done`, SCRIPT],
+    { encoding: 'utf8', input: keys.join('\n') + '\n' }).stdout.trim().split('\n')
+  it('says yes to every immutable key of the Worker\'s table', () => expect(verdicts(IMMUTABLE_YES)).toEqual(IMMUTABLE_YES.map(() => 'yes')))
+  it('says no to every mutable key of the Worker\'s table, and to empty segments and a dot-only name', () => expect(verdicts(IMMUTABLE_NO)).toEqual(IMMUTABLE_NO.map(() => 'no')))
+})
+
+describe('om-publish.sh: an immutable key is not overwritten with different bytes', () => {
+  /** a release folder: an immutable data file, a mutable manifest */
+  function release() {
+    const d = mkdtempSync(join(tmpdir(), 'om-publish-src-'))
+    mkdirSync(join(d, 'species'), { recursive: true })
+    writeFileSync(join(d, 'species/p=1.parquet'), 'PAR1')
+    writeFileSync(join(d, 'files.parquet'), 'PAR1')
+    writeFileSync(join(d, 'release.json'), '{}')
+    return d
+  }
+  const checks = (r: ReturnType<typeof run>) => r.calls.filter(c => c.args[0] === 'check')
+
+  it('stops with exit 3 before any upload, names the keys, and a dry run reports the same', () => {
+    for (const extra of [[], ['--really']]) {
+      const r = run([release(), 'obis-h3/v20261012', ...extra], { OM_FAKE_DIFFER: 'species/p=1.parquet,files.parquet' })
+      expect(r.code).toBe(3)
+      expect(r.err).toContain('2 immutable key(s) already exist with different bytes')
+      expect(r.err).toContain('obis-h3/v20261012/species/p=1.parquet')
+      expect(r.err).toContain('obis-h3/v20261012/files.parquet')
+      expect(r.err).toContain('--allow-immutable-rewrite')
+      expect(uploads(r.calls)).toEqual([])
+      const c = checks(r)[0]
+      expect(c.args).toEqual(expect.arrayContaining(['--one-way', 'r2:oceanmetrics-io-public-enam/obis-h3/v20261012']))
+    }
+  })
+  it('--allow-immutable-rewrite goes on and prints the URLs to purge at the edge', () => {
+    const r = run([release(), 'obis-h3/v20261012', '--really', '--allow-immutable-rewrite'], { OM_FAKE_DIFFER: 'species/p=1.parquet' })
+    expect(r.code).toBe(0)
+    expect(r.out).toContain('purge the edge copies by URL')
+    expect(r.out).toContain('https://storage.oceanmetrics.io/obis-h3/v20261012/species/p=1.parquet')
+    expect(uploads(r.calls).length).toBeGreaterThan(0)
+  })
+  it('a mutable key that differs (release.json) or an identical immutable file does not stop it', () => {
+    expect(run([release(), 'obis-h3/v20261012', '--really'], { OM_FAKE_DIFFER: 'release.json' }).code).toBe(0)
+    const same = run([release(), 'obis-h3/v20261012', '--really'])
+    expect(same.code).toBe(0)
+    expect(checks(same).length).toBeGreaterThan(0)   // it did look
+  })
+  it('a prefix with no immutable key makes no check at all', () => {
+    const r = run([release(), 'gazetteer/mpa'], { OM_FAKE_DIFFER: 'species/p=1.parquet' })
+    expect(r.code).toBe(0)
+    expect(checks(r)).toEqual([])
+  })
+  it('a single file (--as) is judged by its published key; only S3 is checked on S3 alone', () => {
+    const d = release()
+    const r = run([join(d, 'files.parquet'), 'obis-h3/v20261012', '--as', 'x.parquet', '--only-s3'], { OM_FAKE_DIFFER: 'x.parquet' })
+    expect(r.code).toBe(3)
+    expect(r.err).toContain('obis-h3/v20261012/x.parquet')
+    expect(checks(r)[0].args).toContain('s3:oceanmetrics.io-public/obis-h3/v20261012')
   })
 })
