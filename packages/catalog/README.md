@@ -190,9 +190,9 @@ const mine = selectRows(rulesFromParams(new Map([['pi', 'NMS:CINMS']])), rows, {
 - **`diffCoverage(before, after, { seen?, manifest? })`**: one `ChangeRow` per place x indicator (x values collection)
   at the card's row (`pickRow`: the manifest's status grain, else the grain of the row with a status method), in the
   order of `after`, of one kind, in this precedence: `new` (the cell gained its first value), `status` (its status word
-  changed: a word to another, a first word, or a word lost), `period` (its latest period advanced, or its card row moved
-  to another grain). A revised value at the same period, a cell with rows and no value and a cell that lost its rows
-  give no row. The row carries `from_`/`to_status`, `from_`/`to_time`, `value`, `unit` (the manifest's), `seen` (the
+  changed: a word to another, a first word, or a word lost), `period` (its latest period advanced at the same grain).
+  A revised value at the same period, a card row that only moved to another grain (a month row giving way to a year row
+  that gained a value: NMS:PMNM on 2026-10-21), a cell with rows and no value and a cell that lost its rows give no row. The row carries `from_`/`to_status`, `from_`/`to_time`, `value`, `unit` (the manifest's), `seen` (the
   build date) and `sentence`.
 - **`changeSentence(row, manifest?)`**: the one wording for a feed entry, a mail line and the front page, in the card's
   words and with the place: "Iron in Channel Islands National Marine Sanctuary is now below its own record (2025); it was
@@ -211,7 +211,9 @@ const mine = selectRows(rulesFromParams(new Map([['pi', 'NMS:CINMS']])), rows, {
   `changeKey`, `CHANGE_KINDS`.
 - The real pair of 2026-10-23 00:51 -> 01:05 (OBIS `place_exact` for the sanctuaries; 2,664 new coverage rows) gives
   868 `new` cells over the 18 sanctuaries, 0 `status`, 0 `period`; the test holds the public rows of CINMS and FGBNMS
-  (`fixtures/changes-diff/coverage-2026-10-23.json`: 96 `new`).
+  (`fixtures/changes-diff/coverage-2026-10-23.json`: 96 `new`). Over the 16 pairs of published versions (10-20 to 10-23)
+  the backfill finds 16,871 `new` on 10-20 (15,764 of them the first full build), 1 `status` on 10-21 (NMS:PMNM's CRW SST
+  gained its first status, above its own record, when its year row gained a value), 1 `new` on 10-22 and 868 on 10-23.
 
 `/report` (`src/report.ts`), moved from the indicators repo's `src/report/spec.ts` so the Report view, its figure job and
 the alerts Worker read a rule the same way:

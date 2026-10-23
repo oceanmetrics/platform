@@ -75,8 +75,9 @@ function cardRow<R extends DiffRow>(rs: R[] | undefined, ind: Pick<ManifestIndic
 /**
  * the changes from one coverage table to the next: one row per place x indicator (x values collection) whose card row
  * gained its first value (`new`), whose status word changed (`status`: a word to another, a first word, or a word
- * lost) or whose latest period advanced (`period`), in that order of precedence, so a cell gives at most one row. a
- * cell that lost its values gives none. rows in the order of `after`.
+ * lost) or whose latest period advanced at the same grain (`period`), in that order of precedence, so a cell gives at
+ * most one row. a cell that lost its values gives none, and so does a card row that only moved to another grain (a
+ * month row giving way to a year row that gained a value is not a later period). rows in the order of `after`.
  */
 export function diffCoverage(before: DiffRow[], after: DiffRow[], opts: DiffOptions = {}): ChangeRow[] {
   const seen = opts.seen ?? new Date().toISOString().slice(0, 10)
@@ -91,7 +92,7 @@ export function diffCoverage(before: DiffRow[], after: DiffRow[], opts: DiffOpti
     let kind: ChangeKind | null = null
     if (!b) kind = 'new'
     else if ((a.status ?? null) !== (b.status ?? null)) kind = 'status'
-    else if (a.time_grain !== b.time_grain || (a.last_time ?? '') > (b.last_time ?? '')) kind = 'period'
+    else if (a.time_grain === b.time_grain && (a.last_time ?? '') > (b.last_time ?? '')) kind = 'period'
     if (!kind) continue
     const row: Omit<ChangeRow, 'sentence'> = {
       place_id: a.place_id, place_name: a.place_name ?? null, coll: a.coll, place_coll: a.place_coll ?? null, indicator: a.indicator,

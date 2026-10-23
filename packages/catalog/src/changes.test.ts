@@ -68,6 +68,19 @@ describe('diffCoverage', () => {
     const a = [row('NMS:A', 'erddap:sst:mean', 'year', '2024-01-01', 15.3, 'within', 'iea-sd')]
     expect(diffCoverage(b, a, { seen: '2026-10-23' })).toEqual([])
   })
+  it('regression (PMNM, 2026-10-21): a card row that moves from month to year is no period; a first status there is a status', () => {
+    const b = [
+      row('NMS:P', 'erddap:sst:mean', 'year', null, null, null, 'iea-sd'), row('NMS:P', 'erddap:sst:mean', 'month', '2026-09-01', 26.1),
+      row('NMS:P', 'erddap:habitat:share', 'year', null, null), row('NMS:P', 'erddap:habitat:share', 'month', '2026-09-01', 0.4),
+    ]
+    const a = [
+      row('NMS:P', 'erddap:sst:mean', 'year', '2025-01-01', 25.4, 'above', 'iea-sd'), row('NMS:P', 'erddap:sst:mean', 'month', '2026-09-01', 26.1),
+      row('NMS:P', 'erddap:habitat:share', 'year', '2025-01-01', 0.67), row('NMS:P', 'erddap:habitat:share', 'month', '2026-09-01', 0.4),
+    ]
+    const rs = diffCoverage(b, a, { seen: '2026-10-21', manifest: MANIFEST })
+    expect(rs.map((r) => [r.indicator, r.kind, r.from_status, r.to_status])).toEqual([['erddap:sst:mean', 'status', null, 'above']])
+    expect(rs[0].sentence).toBe('ERDDAP:SST:MEAN in NMS:P has its first status: above its own record (2025).')
+  })
   it('a re-run on the published table finds nothing; without a manifest the grain comes from the status method row', () => {
     expect(diffCoverage(AFTER, AFTER, { seen: '2026-10-23' })).toEqual([])
     const r = diffCoverage([], [row('NMS:A', 'x:y', 'month', '2025-12-01', 1), row('NMS:A', 'x:y', 'decade', '2020-01-01', 2, null, 'iea-sd')], { seen: '2026-10-23' })
