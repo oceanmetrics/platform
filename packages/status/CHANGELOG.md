@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2 (2026-10-23)
+
+- The first publish with provenance through GitHub Actions (trusted publishing); no code change.
+
 ## 0.1.1 (unreleased)
 
 - The status words, moved here so the indicators viewer and the places page say them alike: `STATUS_WORDS` (above,

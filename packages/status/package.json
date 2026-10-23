@@ -1,6 +1,6 @@
 {
   "name": "@oceanmetrics/status",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "status methods of Ocean Metrics indicators: iea-sd, names-pct, values; period grid, sentences and alt text; the quadrant plot rules",
   "keywords": [
     "ocean",
