@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.3 (unreleased)
+## 0.2.3 (2026-10-23)
 
 For the indicators Map's compare mode (Then vs Now as two slices of one layer, build week 2 step 4).
 

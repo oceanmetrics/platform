@@ -1,6 +1,6 @@
 {
   "name": "@oceanmetrics/map",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "the map stack of the Ocean Metrics apps: MapLibre 6, PMTiles, the bathymetric basemap, COG and H3 sources",
   "keywords": [
     "ocean",
