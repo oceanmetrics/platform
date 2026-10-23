@@ -1,6 +1,6 @@
 // @oceanmetrics/map: the map stack of the Ocean Metrics apps (README.md). every module is free of side effects and of a
 // run-time maplibre-gl import; the h3 worker module is its own entry (`@oceanmetrics/map/h3-worker`), never imported here.
-export const PACKAGE = { name: '@oceanmetrics/map', version: '0.3.0' } as const
+export const PACKAGE = { name: '@oceanmetrics/map', version: '0.3.1' } as const
 
 // ---- the slot contract ----
 export {
@@ -31,9 +31,9 @@ export type { Ramp, RampFamily, RampKind, Rgb } from './ramps.js'
 
 // ---- the providers ----
 export {
-  axisSpacing, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, GRID_SOURCE, gridFillColor, gridIds, gridLegend, gridOutline, gridSlot, normalizeLon, OUTLINE_BELOW, pickCenter,
+  axisSpacing, cellLocator, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, GRID_SOURCE, gridFillColor, gridIds, gridLegend, gridOutline, gridSlot, normalizeLon, OUTLINE_BELOW, pickCenter, sliceCounts,
 } from './grid.js'
-export type { CellProps, CellSquares, CellSquaresOptions, GridClass, GridSlot, GridSlotOptions, LonCenter, SliceCell, SliceSource } from './grid.js'
+export type { CellProps, CellSquares, CellSquaresOptions, GridClass, GridSlot, GridSlotOptions, LonCenter, SliceCell, SliceCounts, SliceSource } from './grid.js'
 export {
   assertWebMercator, bucketCounts, COG_LAYER, COG_SOURCE, cogBand, cogBands, cogColorFunction, CogProjectionError, cogRange,
   cogHref, cogSlot, cogUrl, legendFromStac, nodataValue, openCog, overviewHistogram, pickCogAssets, pointValue, WEB_MERCATOR,

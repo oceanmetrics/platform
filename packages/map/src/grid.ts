@@ -108,6 +108,57 @@ export function cellSquares(cells: readonly SliceCell[], opts: CellSquaresOption
   }
 }
 
+// ---- the cell under a point, and what a slice holds (0.3.1) ----
+
+/**
+ * the cell of a slice whose square holds a point (a hover or a tap): the squares' own lattice indexed by their steps, so a
+ * lookup reads at most nine cells whatever the slice's size. the point may be in any longitude frame (a world copy, past
+ * 180): it is brought into the squares' frame. a point on the edge of two squares gets the nearer centre; off every square,
+ * null. where two places overlap and a cell is drawn twice, the first drawn answers
+ */
+export function cellLocator(sq: Pick<CellSquares, 'geojson' | 'lonSpacing' | 'latSpacing' | 'center'>): (lng: number, lat: number) => CellProps | null {
+  const { lonSpacing: dx, latSpacing: dy, center } = sq
+  const feats = sq.geojson.features
+  if (!feats.length || !(dx > 0) || !(dy > 0)) return () => null
+  const x0 = feats[0].properties.lon, y0 = feats[0].properties.lat
+  const idx = new Map<string, number>()
+  feats.forEach((f, k) => {
+    const key = `${Math.round((f.properties.lon - x0) / dx)},${Math.round((f.properties.lat - y0) / dy)}`
+    if (!idx.has(key)) idx.set(key, k)
+  })
+  const eps = 1e-9
+  return (lng, lat) => {
+    if (!Number.isFinite(lng) || !Number.isFinite(lat)) return null
+    const base = normalizeLon(lng, center)
+    let best: CellProps | null = null, bd = Infinity
+    for (const x of [base, base - 360, base + 360]) {
+      const i = Math.round((x - x0) / dx), j = Math.round((lat - y0) / dy)
+      for (let di = -1; di <= 1; di++) for (let dj = -1; dj <= 1; dj++) {
+        const k = idx.get(`${i + di},${j + dj}`)
+        if (k === undefined) continue
+        const p = feats[k].properties
+        const ex = Math.abs(x - p.lon) / (dx / 2), ey = Math.abs(lat - p.lat) / (dy / 2)
+        if (ex > 1 + eps || ey > 1 + eps) continue
+        const d = Math.max(ex, ey)
+        if (d < bd) { bd = d; best = p }
+      }
+    }
+    return best ? { ...best } : null
+  }
+}
+
+/** what a slice holds: its cells, those with a value at this step, and those on a place's boundary (area weight below 1) */
+export interface SliceCounts { cells: number; withValue: number; boundary: number }
+
+export function sliceCounts(cells: readonly Pick<SliceCell, 'value' | 'weight'>[]): SliceCounts {
+  let withValue = 0, boundary = 0
+  for (const c of cells) {
+    if (typeof c.value === 'number' && Number.isFinite(c.value)) withValue++
+    if (c.weight < 1) boundary++
+  }
+  return { cells: cells.length, withValue, boundary }
+}
+
 // ---- the colour ----
 
 /** the classes of a categorical grid: the value each class has and its label */
@@ -163,6 +214,16 @@ export interface GridSlot extends LayerSlot {
   cellRange(): [number, number] | null
   /** paint the squares again under the current `domain` without a new slice (the other slot's range moved) */
   repaint(): void
+  /** the cell of the last slice drawn under a point (a hover readout), null off every square or before a slice (0.3.1) */
+  cellAt(lng: number, lat: number): CellProps | null
+  /** the cells of the last slice drawn, with a value, on a boundary; null before one arrives (0.3.1) */
+  counts(): SliceCounts | null
+  /** the ramp the squares and the legend use now: `opts.ramp` until `setRamp` names another (0.3.1) */
+  ramp(): string
+  /** paint with another ramp (a palette choice) without a new slice; null goes back to `opts.ramp` (0.3.1) */
+  setRamp(id: string | null): void
+  /** ask for the slice of the period drawn again (after a failure: the legend's `problem`), the period unchanged (0.3.1) */
+  retry(): void
 }
 
 export const GRID_SOURCE = `${SLOT_PREFIX}grid`
@@ -189,7 +250,8 @@ export function gridOutline(spacing: number, outline?: string | null): string | 
 /** the grid slot: mount adds an empty GeoJSON source and its fill, then each step's rows replace the data */
 export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOptions = {}): GridSlot {
   const title = opts.title ?? spec.variable ?? spec.id
-  const classes = opts.classes ? classLegend(opts.classes, opts.ramp) : null
+  let ramp: string | undefined = opts.ramp
+  let classes = opts.classes ? classLegend(opts.classes, ramp) : null
   const ids = gridIds(opts.instance)
   const domainNow = () => (typeof opts.domain === 'function' ? opts.domain() ?? null : opts.domain ?? null)
   let map: MlMap | null = null
@@ -198,19 +260,26 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
   let own: [number, number] | null = null
   let problem: string | null = null
   let ctl: AbortController | null = null
+  let last: CellSquares | null = null
+  let locate: ((lng: number, lat: number) => CellProps | null) | null = null
+  let counted: SliceCounts | null = null
   const changed = () => opts.onchange?.()
 
   async function load() {
     ctl?.abort()
     const mine = (ctl = new AbortController())
     try {
-      const sq = cellSquares(await source.slice(t, mine.signal))
+      const rows = await source.slice(t, mine.signal)
+      const sq = cellSquares(rows)
       if (mine.signal.aborted || !map) return
+      last = sq
+      locate = null
+      counted = sliceCounts(rows)
       own = sq.geojson.features.some((f) => f.properties.value !== null) ? sq.range : null
       range = domainNow() ?? sq.range
       problem = sq.geojson.features.length ? null : 'no cells in this period'
       ;(map.getSource(ids.source) as GeoJSONSource | undefined)?.setData(sq.geojson)
-      map.setPaintProperty(ids.layer, 'fill-color', gridFillColor({ range, ramp: opts.ramp, classes }))
+      map.setPaintProperty(ids.layer, 'fill-color', gridFillColor({ range, ramp, classes }))
       if (sq.geojson.features.length) {
         const o = gridOutline(Math.min(sq.lonSpacing, sq.latSpacing), opts.outline)
         map.setPaintProperty(ids.layer, 'fill-outline-color', o ?? undefined)
@@ -218,6 +287,9 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
     } catch (err) {
       if (mine.signal.aborted) return
       problem = `no data: ${(err as Error).message}`
+      last = null
+      locate = null
+      counted = null
     }
     changed()
   }
@@ -233,7 +305,7 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
       t = t0
       m.addSource(ids.source, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
       m.addLayer({ id: ids.layer, type: 'fill', source: ids.source,
-        paint: { 'fill-color': gridFillColor({ range: domainNow() ?? [0, 1], ramp: opts.ramp, classes }), 'fill-opacity': opts.opacity ?? 0.8,
+        paint: { 'fill-color': gridFillColor({ range: domainNow() ?? [0, 1], ramp, classes }), 'fill-opacity': opts.opacity ?? 0.8,
           ...(typeof opts.outline === 'string' ? { 'fill-outline-color': opts.outline } : {}) } },
       beforeId ?? undefined)
       void load()
@@ -244,6 +316,9 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
     },
     unmount(m) {
       ctl?.abort()
+      last = null
+      locate = null
+      counted = null
       if (m.getLayer(ids.layer)) m.removeLayer(ids.layer)
       if (m.getSource(ids.source)) m.removeSource(ids.source)
       map = null
@@ -254,11 +329,32 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
       const next = domainNow() ?? own
       if (range && next[0] === range[0] && next[1] === range[1]) return
       range = next
-      map.setPaintProperty(ids.layer, 'fill-color', gridFillColor({ range, ramp: opts.ramp, classes }))
+      map.setPaintProperty(ids.layer, 'fill-color', gridFillColor({ range, ramp, classes }))
       changed()
     },
+    cellAt(lng, lat) {
+      if (!last) return null
+      locate ??= cellLocator(last)
+      return locate(lng, lat)
+    },
+    counts: () => counted,
+    ramp: () => ramp ?? DEFAULT_RAMP,
+    setRamp(id) {
+      const next = id ?? opts.ramp
+      if (next === ramp) return
+      ramp = next
+      if (opts.classes) classes = classLegend(opts.classes, ramp)
+      if (map && map.getLayer(ids.layer)) map.setPaintProperty(ids.layer, 'fill-color', gridFillColor({ range: range ?? domainNow() ?? [0, 1], ramp, classes }))
+      changed()
+    },
+    retry() {
+      if (!map) return
+      problem = null
+      changed()
+      void load()
+    },
     legend() {
-      return gridLegend({ title, t, via: opts.via ?? 'grid slice', problem, units: opts.units ?? null, range, ramp: opts.ramp, classes })
+      return gridLegend({ title, t, via: opts.via ?? 'grid slice', problem, units: opts.units ?? null, range, ramp, classes })
     },
   }
 }

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.1 (2026-10-23)
+
+For the indicators Map's build week 2 gate (the erddap-places parity rows: the cell readout, the counts, a retry, a palette).
+
+- New: `cellLocator(squares)`: the cell of a slice whose square holds a point (`CellProps`, a null value where the step has
+  no data), from the squares' own lattice (at most nine lookups whatever the slice's size), the point brought into the
+  squares' longitude frame (a world copy, a cell drawn at 180.05 in the 0..360 frame). `GridSlot.cellAt(lng, lat)` reads the
+  last slice drawn: a hover or tap readout without `queryRenderedFeatures`, which cannot tell the two halves of a scissor
+  swipe apart and finds nothing in a hidden slot.
+- New: `sliceCounts(cells)` and `GridSlot.counts()`: the cells of the last slice, those with a value, those on a place's
+  boundary (weight below 1), for a legend line.
+- New: `GridSlot.ramp()` and `setRamp(id | null)`: paint the squares (and a categorical grid's classes) and the legend with
+  another ramp, without a new slice; null goes back to `opts.ramp`.
+- New: `GridSlot.retry()`: the slice of the period drawn asked again (after the legend's `problem`), the problem cleared
+  while it loads.
+
 ## 0.3.0 (2026-10-23)
 
 The h3 provider over a release (build week 4, step 4; decisions D4 and D5 of the week 4 plan): the OBIS layer drawn

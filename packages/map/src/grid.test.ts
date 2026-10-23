@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { axisSpacing, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, gridFillColor, gridIds, gridLegend, gridOutline, gridSlot, normalizeLon } from './grid.js'
+import { axisSpacing, cellLocator, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, gridFillColor, gridIds, gridLegend, gridOutline, gridSlot, normalizeLon, sliceCounts } from './grid.js'
 import type { GridSlot, SliceCell, SliceSource } from './grid.js'
 
 // a 2x2 lattice on a 0.25 degree grid, one cell without data on this step
@@ -185,5 +185,93 @@ describe('two slots of one layer (map 0.2.3)', () => {
     await tick()
     expect(a.legend()!.ramp).toMatchObject({ min: 0, max: 100 })
     expect(a.cellRange()).toEqual([10, 12])
+  })
+})
+
+describe('the cell under a point (map 0.3.1)', () => {
+  it('cellLocator: the square that holds the point, its centre, weight and value; null off every square', () => {
+    const at = cellLocator(cellSquares(LATTICE))
+    expect(at(-120.2, 10.2)).toEqual({ lon: -120.125, lat: 10.125, weight: 1, value: 1 })
+    expect(at(-119.76, 10.49)).toEqual({ lon: -119.875, lat: 10.375, weight: 0.25, value: 2 })
+    // a cell without data answers with a null value: the readout says "no data", not nothing
+    expect(at(-120.1, 10.4)).toEqual({ lon: -120.125, lat: 10.375, weight: 1, value: null })
+    expect(at(-120.3, 10.2)).toBeNull()
+    expect(at(-120.2, 10.6)).toBeNull()
+    expect(at(Number.NaN, 10)).toBeNull()
+  })
+  it('cellLocator: a point in a world copy (lng - 360) finds the same cell', () => {
+    expect(cellLocator(cellSquares(LATTICE))(-480.2, 10.2)).toMatchObject({ lon: -120.125, value: 1 })
+  })
+  it('cellLocator: across the antimeridian, a point at -179.97 finds the square drawn at 180.05 in the 0..360 frame', () => {
+    const sq = cellSquares([{ lat: 20, lon: 179.95, value: 1, weight: 1 }, { lat: 20, lon: -179.95, value: 2, weight: 1 }], { latSpacing: 0.1 })
+    const at = cellLocator(sq)
+    expect(at(-179.97, 20.01)).toMatchObject({ value: 2 })
+    expect(at(179.97, 19.99)).toMatchObject({ value: 1 })
+    expect(at(180.03, 20)).toMatchObject({ value: 2 })
+  })
+  it('cellLocator: an empty slice answers null', () => {
+    expect(cellLocator(cellSquares([]))(0, 0)).toBeNull()
+  })
+  it('sliceCounts: the cells, those with a value, those on a boundary (weight below 1)', () => {
+    expect(sliceCounts(LATTICE)).toEqual({ cells: 4, withValue: 3, boundary: 2 })
+    expect(sliceCounts([{ value: Number.NaN, weight: 1 }])).toEqual({ cells: 1, withValue: 0, boundary: 0 })
+  })
+})
+
+describe('the slot\'s cell, counts, ramp and retry (map 0.3.1)', () => {
+  const recordMap = () => {
+    const paint: Record<string, unknown> = {}
+    const m = {
+      addSource() {}, addLayer() {}, getSource: () => ({ setData() {} }), getLayer: () => ({}), removeLayer() {}, removeSource() {},
+      setPaintProperty: (_id: string, k: string, v: unknown) => { paint[k] = v },
+    }
+    return { m, paint }
+  }
+  const tick = () => new Promise((r) => setTimeout(r, 0))
+  const spec = { kind: 'grid' as const, id: 'g', variable: 'sst' }
+  it('cellAt and counts read the last slice drawn; nothing before it', async () => {
+    const { m } = recordMap()
+    const s = gridSlot(spec, { slice: async () => LATTICE })
+    expect(s.cellAt(-120.2, 10.2)).toBeNull()
+    expect(s.counts()).toBeNull()
+    s.mount(m as never, null, '2024-07-01')
+    await tick()
+    expect(s.cellAt(-120.2, 10.2)).toEqual({ lon: -120.125, lat: 10.125, weight: 1, value: 1 })
+    expect(s.counts()).toEqual({ cells: 4, withValue: 3, boundary: 2 })
+    s.unmount(m as never)
+    expect(s.cellAt(-120.2, 10.2)).toBeNull()
+  })
+  it('setRamp paints the squares and the legend with another ramp, without a new slice; null goes back', async () => {
+    const { m, paint } = recordMap()
+    let asked = 0
+    const s = gridSlot(spec, { slice: async () => { asked++; return LATTICE } }, { ramp: 'thermal' })
+    s.mount(m as never, null, null)
+    await tick()
+    expect(s.ramp()).toBe('thermal')
+    s.setRamp('viridis')
+    expect(s.ramp()).toBe('viridis')
+    expect(paint['fill-color']).toEqual(gridFillColor({ range: [1, 3], ramp: 'viridis' }))
+    expect(s.legend()!.ramp!.colors[0]).toBe('#440154')
+    s.setRamp(null)
+    expect(s.ramp()).toBe('thermal')
+    expect(s.legend()!.ramp!.colors[0]).toBe('#042333')
+    expect(asked).toBe(1)
+  })
+  it('retry asks for the same period again after a failure, and the problem clears once it is in', async () => {
+    const { m } = recordMap()
+    const asked: (string | null)[] = []
+    let fail = true
+    const s = gridSlot(spec, { slice: async (t) => { asked.push(t); if (fail) throw new Error('HTTP 404'); return LATTICE } })
+    s.mount(m as never, null, '2024-07-01')
+    await tick()
+    expect(s.legend()!.problem).toBe('no data: HTTP 404')
+    expect(s.counts()).toBeNull()
+    fail = false
+    s.retry()
+    expect(s.legend()!.problem).toBeNull()
+    await tick()
+    expect(asked).toEqual(['2024-07-01', '2024-07-01'])
+    expect(s.legend()!.problem).toBeNull()
+    expect(s.counts()).toEqual({ cells: 4, withValue: 3, boundary: 2 })
   })
 })
