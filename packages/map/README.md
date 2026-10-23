@@ -349,7 +349,7 @@ name ranks) are held to `basemap.ts` by `scripts/basemap.test.ts`.
 KB a tile, with the boxes on the shelf), taking core to about 17-21 GB and about 100 minutes of the same build: a later
 decision. Until then z9 and z10 are core overzoomed outside the sanctuaries.
 
-Open (2026-10-23): `https://storage.oceanmetrics.io/basemap/...` answers 404 until `basemap` joins the `@atlas path_regexp` allow-list
+Since the storage cutover of 2026-10-23 (17:55 PT) `https://storage.oceanmetrics.io/basemap/...` is served by the Worker from R2 (206 by range, CORS); a resolver that still caches the old record of that host (a home router, for a few hours after the switch) sees msens' Caddy and its 404 for `basemap/`: the 404 noted earlier on the mini was that cache, not the host.
 of the storage vhost in `MarineSensitivity/server` `caddy/Caddyfile` (`^/(marine-atlas|gazetteer|...|basemap)(/|$)`), a deploy on msens
 that waits for Ben. The objects are in S3 (range reads answer 206 at `https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/basemap/gebco/far.pmtiles`)
 and mirrored in R2.
