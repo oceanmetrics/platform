@@ -11,6 +11,7 @@ export * from './types.js'
 export { completeGrid, nextPeriod, periodLabel, periodX, spanLabel, grainNoun } from './grid.js'
 export { quantile7 } from './stats.js'
 export { categoricalAlt, categoricalSentence, collapseRuns, fmt, noValues } from './text.js'
+export { METHOD_NOTES, STATUS_NOTE, STATUS_WORDS, statusCaption, TREND_WORDS } from './words.js'
 export { QUADRANT_SHORT, QUADRANT_WORDS, quadAlt, quadPoint, quadrantOf, quadWhy, quadWords } from './quad.js'
 export type { QuadLabelled, QuadPoint, Quadrant } from './quad.js'
 export { ieaSd, namesPct, values }

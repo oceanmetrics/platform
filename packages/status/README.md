@@ -23,6 +23,11 @@ Regenerate the ecoidx fixture (needs R and a checkout of ecoidx; see `fixtures/e
 Rscript fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-iea/ecoidx
 ```
 
+**The words** (0.1.1, `src/words.ts`): `STATUS_WORDS` ("above its own record" ... and `none`: "no status"),
+`TREND_WORDS`, `STATUS_NOTE` (what every status is relative to), `METHOD_NOTES` (one sentence per method) and
+`statusCaption(status, trend)` ("Within its own record · trend flat"). The indicators viewer and the places page say
+them alike through `@oceanmetrics/catalog`'s cards.
+
 `quantile7` (R's `quantile(type = 7)`) is exported for callers that need the same arithmetic as the methods.
 
 Moved from `oceanmetrics/indicators` `src/status/` at commit 8c40f6b on 2026-10-22, with its fixture folder

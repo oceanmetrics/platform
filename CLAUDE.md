@@ -33,7 +33,10 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
 - **`catalog` holds the STAC layer profiles** and the values contract (`values-row`, `values-provenance`): one self-contained JSON Schema per profile in `packages/catalog/schemas/`,
   read at run time by `@oceanmetrics/catalog/validate` (ajv, Node only, never imported by the index) and by the Python
   `om_extract.schemas`. Fixtures in `fixtures/<name>/{valid,invalid}/`, the expected errors in `invalid.json`; the test
-  discovers every schema.
+  discovers every schema. Since 0.3.0 it also holds the **indicator cards**, one implementation for the indicators viewer
+  and the places record page: `@oceanmetrics/catalog/indicators` (the readers of `indicators.json` and `coverage.parquet`,
+  hyparquet, plus every card rule) and `@oceanmetrics/catalog/cards` (the pure rules alone: cards, the three absences, the
+  OBIS fold, Reproduce, rollups). The root index stays types and constants. The status words come from `status`.
 - **`map` is the map stack** (0.2.0): the `LayerSlot` contract (`slot.ts`, moved from indicators), `setupMapLibre`, the
   basemap (`composeStyle`, ported from CalCOFI explore), the ramps, and the `grid`, `cog` and `h3` providers. It never
   imports `maplibre-gl` at run time (the app passes its module to `setupMapLibre`; types only elsewhere), so tests run

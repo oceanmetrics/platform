@@ -1,8 +1,9 @@
 # @oceanmetrics/catalog
 
-The catalog contracts of Ocean Metrics. Today: the **STAC layer profiles**, one JSON Schema per kind of layer, with
-their TypeScript types, a validator and the `om-catalog` command, and the **values contract** (`values-row`,
-`values-provenance`). The values and manifest readers follow in build week 1 (2026-10-30 to 11-05).
+The catalog contracts of Ocean Metrics: the **STAC layer profiles**, one JSON Schema per kind of layer, with their
+TypeScript types, a validator and the `om-catalog` command; the **values contract** (`values-row`,
+`values-provenance`); and the **indicator readers and cards** (0.3.0), the one implementation of a place's indicator
+cards that the indicators viewer and the places record page share.
 
 Each profile constrains only `type`, `stac_version`, `id` and its own fields. STAC core (links, extent, geometry ...) is
 checked elsewhere (rashid), so every other key passes through at the top level and in `properties`; the objects the
@@ -92,6 +93,74 @@ carries `proj:code`, the CCE and EOV share bands carry no `statistics` (the visi
 STAC at publish; the AquaMaps bands already have them), and the CCE writer omits `nodata` when a band has none instead
 of writing null.
 
+## Indicator readers and cards
+
+Two subpaths; the package root stays types and constants (it re-exports the types below, nothing at run time):
+
+- **`@oceanmetrics/catalog/indicators`**: the readers, plus every rule of `/cards`, so an app imports one subpath. It
+  imports `hyparquet`.
+- **`@oceanmetrics/catalog/cards`**: the pure rules alone (no fetch, no parquet), for an app that reads the coverage
+  table its own way.
+
+```ts
+import { cardsFor, loadCoverage, loadManifest, slotFor } from '@oceanmetrics/catalog/indicators'
+
+const base = 'https://storage.oceanmetrics.io/indicators/'
+const [manifest, rows] = await Promise.all([loadManifest(base), loadCoverage(base)])   // or { placeId, columns, fetch }
+const cards = cardsFor(rows, manifest, { placeId: 'NMS:CINMS' })                       // leads first, then by series
+const slot = slotFor(rows, manifest, 'NMS:CINMS', { layerTitle: 'National Marine Sanctuaries', note: '...' })
+```
+
+Readers (`src/indicators.ts`):
+
+- `loadManifest(base?, fetch?)` reads `indicators.json`; `loadCoverage(base?, { columns?, placeId?, fetch? })` reads
+  `coverage.parquet` (one whole-file request, cacheable) and decodes only `columns`, `COVERAGE_COLUMNS` by default (the
+  thirteen the cards and rollups read: the sparkline and the statistics stay undecoded; `ALL_COVERAGE_COLUMNS` lists the
+  26). int64 columns come back as plain numbers. A failed request throws `<file>: HTTP <status> at <base>`.
+
+Rules (`src/cards.ts`), each tested in `src/cards.test.ts` on `fixtures/indicators/` (`indicators.json` and
+`coverage.parquet`, made by `make_coverage.sql`, ported from the places page) and small rows written in the test:
+
+- **The row of a card**: the first grain in the status grain, year, month, decade, day, all that has a value
+  (`pickRow`); an indicator the manifest does not list gets no card. The period by grain: "2025", "2025-07",
+  "the 2020s", "all years" (`periodOf`).
+- **A card** (`cardsFor(rows, manifest, { placeId, leadsOnly?, base?, appUrl? })` -> `IndicatorCard[]`): title,
+  series, unit, value (a categorical one as its largest class and share, "No Stress 82%"), period, status and trend with
+  their glyph classes (`st-above|within|below|none`, `tr-up|flat|down`), the status word and caption (from
+  `@oceanmetrics/status` `STATUS_WORDS`, `statusCaption`), why a rule gave no status, the sentence from coverage, the
+  method label (`methodLabel`) and note (`methodNote`), the citation, the deep link to the indicators app's Place view
+  (`placeViewHref`), and the Reproduce block. Ordered leads first, then by series, then by title. Only `iea-sd` and
+  `names-pct` are status rules; any other method shows its value.
+- **The citation with the place clause** (`placeCitation`, as the viewer's `place.ts`): the manifest's citation with
+  `place <id>` after the indicator id in its "Values:" clause; without a clause one is appended. Without an indicator
+  citation the dataset's is used (`datasetCitation`: its own, else producers; title; DOI).
+- **Reproduce** (`reproduceFor`, as the viewer's `delivery.ts`): the values url (the collection's `path` under the base,
+  null when the manifest lists none), a DuckDB one-liner for the place's rows (`duckdbSnippet`), the canonical config
+  lines (`configLines`: place, indicator, method, grain, recent, min_periods, manifest) and their FNV-1a hash
+  (`configHash`, 12 hex digits, stable, not cryptographic; the test pins two hashes the viewer gives too).
+- **The three absences**, kept distinct: `absenceFor(rows, manifest, placeId)` is `nodata` (the place has coverage rows
+  and no value), `notcomputed` (no rows at all, whatever its collection: the places fix of `c3d923b`) or null;
+  `absenceText(kind, placeId, opts)` gives the words and links of those two and of `nostatus`. A dated sentence ("arrive
+  in build week 3 ...") is the caller's `note`, never a constant here.
+- **The fold** (`foldSeriesWithoutRule(cards, { fold? })`): OBIS series without a status rule fold into one line with
+  their count and how many stay above as lead cards; the rule is a parameter.
+- **The slot** (`slotFor(rows, manifest, placeId, { shownFirst?, layerTitle?, note?, ... })`): the cards, how many show
+  first (the leads, else `shownFirst`, `SHOWN_FIRST` = 6), the fold line, the total and the absence.
+- **Rollups** (`rollups(rows)`, the Matrix summary of build week 3): one cell per place x indicator, counted at its row
+  with a status method and a value, as above, within, below, none (a value, no status) or nodata; per place and per
+  indicator in the order they appear, with the latest period among the cells with a value, and the total.
+
+The words come from `@oceanmetrics/status` (0.1.1: `STATUS_WORDS`, `TREND_WORDS`, `STATUS_NOTE`, `METHOD_NOTES`,
+`statusCaption`); no status is computed here: status, trend and sentence are coverage.parquet's, which the indicators
+coverage builder writes with that package.
+
+**Consumers.** The places record page (`web/src/lib/indicators.ts`) since 0.3.0; the indicators viewer switches after.
+Until 0.3.0 is on npm a consumer links this checkout (`"@oceanmetrics/catalog": "file:../../platform/packages/catalog"`,
+after `npm run build` here). The link resolves the package's own imports (`hyparquet`, `@oceanmetrics/status` 0.1.1) from
+this repo's `node_modules`, so in Vite: allow the checkout in `server.fs.allow`, and do not `resolve.dedupe`
+`@oceanmetrics/status` while the app's own copy is older than 0.1.1 (deduping would hand the package the app's copy,
+which lacks the words). TypeScript follows the link to its real path and needs nothing more.
+
 ## Layout
 
 ```
@@ -101,7 +170,11 @@ fixtures/<name>/valid/*.json        each must pass
 fixtures/<name>/invalid/*.json      each must fail, and breaks exactly one rule of a valid fixture
 fixtures/<name>/invalid.json        invalid file name -> a substring of its error (a JSON pointer or a property name,
                                     so the same file works for ajv and Python's jsonschema)
-src/index.ts                        PROFILES, the field types (types only, safe in a browser)
+src/index.ts                        PROFILES, the field types and the indicators types (types only, safe in a browser)
+src/manifest.ts                     the manifest and coverage types, the column lists, the default urls
+src/indicators.ts                   @oceanmetrics/catalog/indicators: loadManifest, loadCoverage (hyparquet), + cards.ts
+src/cards.ts                        @oceanmetrics/catalog/cards: the card rules, absences, fold, Reproduce, rollups (pure)
+fixtures/indicators/                indicators.json, coverage.parquet (make_coverage.sql): the cards' synthetic fixtures
 src/validate.ts                     listProfiles(), loadSchema(name), validate(name, doc) -> { ok, errors } (Node, ajv)
 src/cli.ts                          the om-catalog bin
 ```
@@ -138,7 +211,8 @@ it reads differently from ajv (ajv runs in strict mode to keep it so).
 
 ## Size budget
 
-5 000 B gzip of `dist/**/*.js`, leaving out `dist/validate*.js` and `dist/cli*.js`: the validator and the CLI are Node
-only (ajv) and never reach a browser, which imports the index (`scripts/size-budget.mjs`, `NODE_ONLY`). Measured
-404 B on 2026-10-22 (the index is constants and types); the budget stays 5 000 B until the values and manifest readers
-land in build week 1.
+10 000 B gzip of `dist/**/*.js`, leaving out `dist/validate*.js` and `dist/cli*.js`: the validator and the CLI are Node
+only (ajv) and never reach a browser (`scripts/size-budget.mjs`, `NODE_ONLY`). Measured 6 726 B on 2026-10-23 at 0.3.0
+(`cards.js` 5 486, `indicators.js` 878, `manifest.js` 527, `index.js` 511, each gzipped alone), so about 1.5 times; it
+was 404 B (the profile constants) under the provisional 5 000 B before the readers and cards landed. `hyparquet` and
+`@oceanmetrics/status` are dependencies and not counted: an app that imports only the root pays 511 B.

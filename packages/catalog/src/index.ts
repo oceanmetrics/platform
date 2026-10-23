@@ -1,8 +1,14 @@
-// @oceanmetrics/catalog: the names of the STAC layer profiles and the TypeScript types of their fields. types only, no
-// runtime weight beyond two constants, so a browser app imports this freely; the validators (ajv) live in the
-// @oceanmetrics/catalog/validate subpath (Node only). the JSON Schemas in schemas/ are the contract, these types mirror them.
+// @oceanmetrics/catalog: the names of the STAC layer profiles and the TypeScript types of their fields, and the types of
+// the indicators catalog (manifest, coverage rows, cards). types only, no runtime weight beyond two constants, so a
+// browser app imports this freely; the validators (ajv) live in the @oceanmetrics/catalog/validate subpath (Node only),
+// the indicators readers (hyparquet) in @oceanmetrics/catalog/indicators and the pure card rules in
+// @oceanmetrics/catalog/cards. the JSON Schemas in schemas/ are the contract, these types mirror them.
 
-export const PACKAGE = { name: '@oceanmetrics/catalog', version: '0.2.0' } as const
+export const PACKAGE = { name: '@oceanmetrics/catalog', version: '0.3.0' } as const
+
+export type * from './manifest.js'
+export type { Absence, AbsenceKind, AbsenceTextOptions, CardsOptions, Fold, FoldOptions, IndicatorCard, Reproduce, Rollup, Rollups, Slot, SlotOptions, StatusCounts, StatusGlyph, TrendGlyph } from './cards.js'
+export type { LoadCoverageOptions } from './indicators.js'
 
 /** the profiles this package defines, one `schemas/<name>.schema.json` each. */
 export const PROFILES = ['erddap-grid', 'cog', 'h3', 'atlas-collection', 'atlas-item', 'sdm-dossier', 'om-notebook', 'places-layers', 'values-row', 'values-provenance'] as const

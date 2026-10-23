@@ -8,11 +8,13 @@ const ROOT = new URL('../packages/', import.meta.url).pathname
 // bytes, gzip. measured on 2026-10-22 (places 11_708, status 7_997), set at about 1.5 times the measurement, rounded up.
 // map: 26_014 on 2026-10-23 (0.2.0: the slots, the setup, the basemap, the ramps and the grid, cog and h3 providers,
 // the h3 worker module and the archive writer all counted), so 39_000; the 5_000 it held was the scaffold's provisional
-// budget. catalog holds only constants and types in the browser (404 B on 2026-10-22, its validator and CLI left out
-// below): its 5_000 budget is provisional and gets set from a measurement once its readers land (build week 1).
+// budget. catalog held only constants and types in the browser until 0.3.0 (404 B on 2026-10-22, its validator and CLI
+// left out below).
+// catalog: 6_726 on 2026-10-23 (0.3.0: the indicators readers and cards land, dist/indicators.js, cards.js and manifest.js
+// counted; hyparquet and @oceanmetrics/status are dependencies and not counted; the root index alone is 511), so 10_000.
 // engine: 26_794 on 2026-10-23 (0.1.0: the mask, the ERDDAP and dataset modules, the engine, the preview and the five
 // SQL templates as strings; DuckDB-WASM and Apache Arrow are peers and not counted), so 40_000.
-const BUDGET = { places: 18_000, status: 12_000, map: 39_000, catalog: 5_000, engine: 40_000 }
+const BUDGET = { places: 18_000, status: 12_000, map: 39_000, catalog: 10_000, engine: 40_000 }
 
 // files a browser never loads, left out of a package's measure: catalog's validator (ajv) and CLI are Node only,
 // reached through the @oceanmetrics/catalog/validate subpath and the om-catalog bin, never from the package index
