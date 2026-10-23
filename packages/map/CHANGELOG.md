@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.1 (unreleased)
+## 0.2.1 (2026-10-23)
 
 The basemap tiers (build week 2 step 2b): the sea floor now serves every app globally.
 
