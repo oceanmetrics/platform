@@ -127,6 +127,14 @@ describe('installGa', () => {
     // each new location is also set on gtag's persistent fields, so gtag.js's own later hits carry it too
     expect(p.calls().filter((c) => c[0] === 'set').length).toBe(3)
   })
+  it('title: a fixed page_title on every hit, whatever the document title says (a report title stays on the page)', () => {
+    const p = page()
+    p.w.document.title = 'My secret report · Ocean Metrics Indicators'
+    installGa('G-TEST000000', { win: p.w, title: 'Ocean Metrics Indicators' })
+    p.w.history!.pushState(null, '', '/places/next')
+    const titles = p.calls().filter((c) => c[0] !== 'js').map((c) => (c.at(-1) as { page_title: string }).page_title)
+    expect(titles).toEqual(['Ocean Metrics Indicators', 'Ocean Metrics Indicators', 'Ocean Metrics Indicators', 'Ocean Metrics Indicators'])
+  })
   it('the wrapped history methods still move the page', () => {
     const p = page()
     installGa('G-TEST000000', { win: p.w })

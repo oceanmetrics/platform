@@ -3,9 +3,9 @@
 ## 0.2.0 (2026-10-23)
 
 - New: analytics, off unless the page passes an id. `<om-nav data-ga="G-…">` loads Google Analytics (GA4) for the page
-  once; `data-ga-keep="view,…"` names the query or hash keys kept in page_location. No id ships in the package or in
+  once; `data-ga-keep="view,…"` names the query or hash keys kept in page_location, `data-ga-title` fixes the page_title. No id ships in the package or in
   any consumer: each reads a build variable (`VITE_GA_ID`, the site's `GA_ID`).
-- New: `installGa(id, { anonymize, pageView, keep, win })` (also `@oceanmetrics/nav/ga`, a page without the bar):
+- New: `installGa(id, { anonymize, pageView, keep, title, win })` (also `@oceanmetrics/nav/ga`, a page without the bar):
   the async gtag.js script, a config with `anonymize_ip: true`, `allow_google_signals: false`,
   `allow_ad_personalization_signals: false` and `send_page_view: false`, its own page_view on load and, with
   `pageView: 'history'` (the default), on each change of the location (pushState, replaceState, popstate, hashchange).
@@ -13,7 +13,7 @@
   Nothing loads for a malformed id, a second call, `window.__om_ga_disabled`, Do Not Track or Global Privacy Control.
   Also `gaLocation`, `gaAllowed`, `GA_ID_RE`, `GA_SRC`.
 - The GA4 stream's enhanced measurement "Page changes based on browser history events" must be off (README "Analytics").
-- 5,777 B gzip bundled and minified (budget 6,000; 0.1.0 was 4,947).
+- 5,793 B gzip bundled and minified (budget 6,000; 0.1.0 was 4,947).
 
 ## 0.1.0 (2026-10-23)
 

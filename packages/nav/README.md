@@ -40,6 +40,7 @@ see Analytics). 5.8 kB gzip bundled and minified (see Size).
 | `collapse-at` | `860` | the bar's width in px below which it collapses to the mark, the app's controls and a menu button (390 px is a phone) |
 | `data-ga` | absent | a GA4 measurement id (`G-…`): the bar loads Google Analytics for the page, once (see Analytics). Absent, empty or malformed: nothing loads |
 | `data-ga-keep` | absent | comma-separated query or hash keys whose plain value is kept in the page_location GA receives (`view`) |
+| `data-ga-title` | absent | a fixed page_title for every hit, for a page whose document title can hold reader text (the indicators report title) |
 
 The default items:
 
@@ -239,7 +240,7 @@ each consumer reads a build variable and sets the attribute only when it is set.
 | consumer | variable (GitHub repository variable) | how it reaches the bar |
 |---|---|---|
 | places `web/` | `VITE_GA_ID` | `import.meta.env.VITE_GA_ID` -> `<om-nav data-ga>` |
-| indicators `viewer/` | `VITE_GA_ID` | `navAttrs()` -> `<om-nav data-ga data-ga-keep="view">` |
+| indicators `viewer/` | `VITE_GA_ID` | `navAttrs()` -> `<om-nav data-ga data-ga-keep="view" data-ga-title>` |
 | atlas, the oceanmetrics instance | `VITE_GA_ID` | `<om-nav data-ga>` (the instance with the bar; an instance without it keeps its own module) |
 | the site (Hugo) | `GA_ID` | `deploy.yml` sets `HUGO_PARAMS_GA_ID`; `header.html` writes `data-ga` from `site.Params.ga_id` |
 | workflows notebooks (Quarto) | `GA_ID` in the render shell | a pre-render script writes the header include with `installGa()` from this package's `ga` subpath |
@@ -250,7 +251,7 @@ each consumer reads a build variable and sets the attribute only when it is set.
 
 ```ts
 import { installGa } from '@oceanmetrics/nav/ga'   // or from '@oceanmetrics/nav'; the bar calls it for data-ga
-installGa(id, { anonymize: true, pageView: 'history', keep: [] })  // the defaults; true when it loaded, else false
+installGa(id, { anonymize: true, pageView: 'history', keep: [], title: '' })  // the defaults; true when it loaded, else false
 ```
 
 What it does, once per page (`window.__om_ga` holds the id; a second bar or call does nothing):
@@ -264,7 +265,8 @@ What it does, once per page (`window.__om_ga` holds the id; a second bar or call
   `page_view` (a task later, after the router's title update). `'load'`: the first page_view only; `false`: none.
 - `page_location` is rebuilt, never the live href: origin + path, plus only the `keep` keys whose value is 1 to 40 of
   `[A-Za-z0-9_.-]`. A query or a fragment (an atlas place polygon `#pl=`, a report title, a place search `?q=`) never
-  reaches Google. `page_title` is the document title.
+  reaches Google. `page_title` is the document title, or `title` (`data-ga-title`) when the page's title can hold reader
+  text: the indicators viewer titles a report with its reader-given title, so it passes a fixed one.
 - nothing loads when `window.__om_ga_disabled` is truthy (set it before the bar loads), when `navigator.doNotTrack`
   (or `window.doNotTrack`) is `"1"`, or when Global Privacy Control is on.
 
@@ -292,10 +294,10 @@ site checkout).
 
 ## Size
 
-`npm run size` has two lines: `nav`, the summed `dist/**/*.js` (9,307 B gzip at 0.2.0 with comments, 7,776 at 0.1.0;
-budget 12,000), and `nav/define`, what a page fetches: `src/define.ts` bundled alone and minified (5,777 B at 0.2.0,
-4,947 at 0.1.0; budget 6,000, the 0.1.0 target; `test/size.test.ts` holds it too). The analytics loader is 830 B of it
-(`src/ga.ts` alone: 1,463 B minified, 876 gzip), small enough to ride in the bar, so `@oceanmetrics/nav/ga` is a
+`npm run size` has two lines: `nav`, the summed `dist/**/*.js` (9,367 B gzip at 0.2.0 with comments, 7,776 at 0.1.0;
+budget 12,000), and `nav/define`, what a page fetches: `src/define.ts` bundled alone and minified (5,793 B at 0.2.0,
+4,947 at 0.1.0; budget 6,000, the 0.1.0 target; `test/size.test.ts` holds it too). The analytics loader is 846 B of it
+(`src/ga.ts` alone: 1,472 B minified, 880 gzip), small enough to ride in the bar, so `@oceanmetrics/nav/ga` is a
 convenience for a page without the bar, not a split. The mark is 1,100 B of it. The week 5 plan's 3 kB holds only without the
 inline mark (an `<img>` of the mark would not take the page's theme), so the budget is the target, 6 kB.
 

@@ -55,6 +55,11 @@ describe('<om-nav data-ga>', () => {
     mount({ 'data-ga': 'G-TEST000000', 'data-ga-keep': 'view' })
     expect((config()?.[2] as { page_location: string }).page_location).toBe(`${location.origin}/indicators/?view=report`)
   })
+  it('data-ga-title fixes the page_title', () => {
+    document.title = 'My secret report'
+    mount({ 'data-ga': 'G-TEST000000', 'data-ga-title': 'Ocean Metrics Indicators' })
+    expect((config()?.[2] as { page_title: string }).page_title).toBe('Ocean Metrics Indicators')
+  })
   it('window.__om_ga_disabled keeps it off', () => {
     vi.stubGlobal('__om_ga_disabled', true)
     mount({ 'data-ga': 'G-TEST000000' })

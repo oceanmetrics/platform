@@ -1,7 +1,7 @@
 // google analytics (GA4) for the Ocean Metrics pages, off unless the page passes a measurement id (no id lives in any
 // repo: each consumer reads it from a build variable and sets <om-nav data-ga>). every hit carries an explicit
 // page_location rebuilt from origin + path (+ the `keep` keys with short plain values), never the live href: a query
-// or fragment can carry a place polygon, a report title or a search. the GA4 stream's enhanced measurement
+// or fragment can carry a place polygon, a report title or a search. page_title is the document title, or `title`. the GA4 stream's enhanced measurement
 // "page changes based on browser history events" must be OFF (README "Analytics"): this module sends those itself.
 
 /** what the helper reads off the page; `globalThis` in a browser, a stub in a test */
@@ -29,6 +29,9 @@ export interface GaOptions {
   pageView?: 'history' | 'load' | false
   /** query or hash keys whose value (1 to 40 of `[A-Za-z0-9_.-]`) is kept in page_location, e.g. `['view']` */
   keep?: readonly string[]
+  /** a fixed page_title for every hit, for a page whose document title can hold reader text (a report title);
+   * default the document title */
+  title?: string
   /** the page; default `globalThis` */
   win?: GaWindow
 }
@@ -66,7 +69,7 @@ export function installGa(id: string, opts: GaOptions = {}): boolean {
   // gtag.js reads `arguments` objects off the dataLayer, not arrays
   const gtag = (w.gtag ??= function () { dl.push(arguments) })
   let at = gaLocation(w.location, keep)
-  const fields = () => ({ page_location: at, page_title: d.title })
+  const fields = () => ({ page_location: at, page_title: opts.title || d.title })
   gtag('js', new Date())
   gtag('config', id, {
     ...(opts.anonymize !== false && { anonymize_ip: true }),

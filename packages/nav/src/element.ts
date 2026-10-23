@@ -105,10 +105,11 @@ export class OmNav extends Base {
     if (this.dispatchEvent(new CustomEvent('om-nav-search', { detail, bubbles: true, composed: true, cancelable: true }))) location.assign(url)
   }
 
-  // `data-ga="G-…"`: google analytics for the page, once (installGa guards); `data-ga-keep="view,…"` keeps those keys
+  // `data-ga="G-…"`: google analytics for the page, once (installGa guards); `data-ga-keep="view,…"` keeps those keys,
+  // `data-ga-title` fixes the page_title
   #ga() {
-    const id = this.isConnected && this.getAttribute('data-ga')
-    if (id) installGa(id, { keep: (this.getAttribute('data-ga-keep') || '').split(',').filter(Boolean) })
+    const id = this.isConnected && this.getAttribute('data-ga'), at = (n: string) => this.getAttribute(`data-ga-${n}`) || ''
+    if (id) installGa(id, { keep: at('keep').split(',').filter(Boolean), title: at('title') })
   }
 
   #scheme() {

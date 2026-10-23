@@ -6,7 +6,7 @@ import { build } from 'rolldown'
 
 // bytes, gzip. 4,947 on 2026-10-23 at 0.1.0 (the mark is 1,100 of it, its numbers rounded to 0.1 by scripts/glyphs.mjs;
 // 1,554 as published). the week 5 plan's 3 kB holds only without the inline mark; the target set for 0.1.0 is under
-// 6 kB, so 6,000 (packages/nav/README.md "Size"). 5,777 at 0.2.0: the analytics loader (src/ga.ts, 830 B) rides in it.
+// 6 kB, so 6,000 (packages/nav/README.md "Size"). 5,793 at 0.2.0: the analytics loader (src/ga.ts, 846 B) rides in it.
 export const NAV_BUNDLE_BUDGET = 6_000
 
 export async function measureNav() {
