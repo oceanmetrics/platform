@@ -242,8 +242,8 @@ each consumer reads a build variable and sets the attribute only when it is set.
 | places `web/` | `VITE_GA_ID` | `import.meta.env.VITE_GA_ID` -> `<om-nav data-ga>` |
 | indicators `viewer/` | `VITE_GA_ID` | `navAttrs()` -> `<om-nav data-ga data-ga-keep="view" data-ga-title>` |
 | atlas, the oceanmetrics instance | `VITE_GA_ID` | `<om-nav data-ga>` (the instance with the bar; an instance without it keeps its own module) |
-| the site (Hugo) | `GA_ID` | `deploy.yml` sets `HUGO_PARAMS_GA_ID`; `header.html` writes `data-ga` from `site.Params.ga_id` |
-| workflows notebooks (Quarto) | `GA_ID` in the render shell | a pre-render script writes the header include with `installGa()` from this package's `ga` subpath |
+| the site (Hugo) | `GA_ID` | `deploy.yml` sets `HUGOxPARAMSxGA_ID` (Hugo's x-delimited form: `HUGO_PARAMS_GA_ID` would set `params.ga.id`); `header.html` writes `data-ga` from `site.Params.ga_id` |
+| workflows notebooks (Quarto) | `GA_ID` in the render shell (CI does not render) | `libs/ga-head.ts` (pre-render) writes the header include: `installGa()` from `https://cdn.jsdelivr.net/npm/@oceanmetrics/nav@0.2.0/dist/ga.js` |
 
 ```html
 <om-nav current="places" data-ga="G-XXXXXXXXXX"></om-nav>
