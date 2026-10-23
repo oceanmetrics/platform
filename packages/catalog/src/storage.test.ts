@@ -3,6 +3,7 @@ import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { run, USAGE } from './cli.js'
+import { DEFAULT_INDICATORS_BASE } from './manifest.js'
 import {
   countStorageUrls, DEFAULT_STORAGE_HOST, parseStorageHost, resolveStorageHost, rewriteStorageUrls, rewriteStorageUrlsCounted,
   S3_PATH_STYLE, S3_VIRTUAL_HOST, STORAGE_ENV, STORAGE_HOST, STORAGE_HOSTS, storageUrl, WORKER_PREVIEW,
@@ -23,8 +24,13 @@ describe('storage: the hosts', () => {
     expect(WORKER_PREVIEW).toBe('https://om-gazetteer.ben-f07.workers.dev')
     expect(Object.keys(STORAGE_HOSTS)).toEqual(['storage', 's3', 's3-virtual', 'preview'])
   })
-  it('defaults to path-style S3 until the cutover flips it', () => {
-    expect(DEFAULT_STORAGE_HOST).toBe(S3_PATH_STYLE)
+  it('defaults to storage.oceanmetrics.io since the cutover of 2026-10-23 (path-style S3 in 0.5.1)', () => {
+    expect(DEFAULT_STORAGE_HOST).toBe(STORAGE_HOST)
+    expect(storageUrl('indicators/indicators.json')).toBe('https://storage.oceanmetrics.io/indicators/indicators.json')
+  })
+  it('the indicators base follows the default host', () => {
+    expect(DEFAULT_INDICATORS_BASE).toBe(storageUrl('indicators/'))
+    expect(DEFAULT_INDICATORS_BASE).toBe('https://storage.oceanmetrics.io/indicators/')
   })
   it('names the override each app reads once', () => {
     expect(STORAGE_ENV).toEqual({ vite: 'VITE_OM_STORAGE', node: 'OM_STORAGE', attribute: 'data-om-storage' })

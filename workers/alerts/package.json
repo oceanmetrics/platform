@@ -14,7 +14,7 @@
     "deploy": "wrangler deploy"
   },
   "dependencies": {
-    "@oceanmetrics/catalog": "^0.5.0",
+    "@oceanmetrics/catalog": "^0.6.0",
     "@oceanmetrics/status": "^0.1.1"
   },
   "devDependencies": {

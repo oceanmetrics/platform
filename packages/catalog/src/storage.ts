@@ -5,9 +5,9 @@
 // dependency; the python twin is om_extract.storage in oceanmetrics/extract, held to the same case table
 // (fixtures/storage/cases.json).
 
-/** the public host: the om-gazetteer Worker over R2 (after the DNS cutover; before it, Caddy 302s to S3) */
+/** the public host: the om-gazetteer Worker over R2 (since the cutover of 2026-10-23; before it, Caddy 302'd to S3) */
 export const STORAGE_HOST = 'https://storage.oceanmetrics.io'
-/** the S3 bucket, path-style: what the apps read today (CORS on every prefix, no redirect) */
+/** the S3 bucket, path-style: what the apps read until the cutover (CORS on every prefix, no redirect); written until the freeze */
 export const S3_PATH_STYLE = 'https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public'
 /** the S3 bucket, virtual-hosted style: a legacy form some older hrefs carry */
 export const S3_VIRTUAL_HOST = 'https://oceanmetrics.io-public.s3.amazonaws.com'
@@ -22,11 +22,11 @@ export type StorageHostName = keyof typeof STORAGE_HOSTS
 const CONSTANT_NAMES: Record<string, string> = { STORAGE_HOST, S3_PATH_STYLE, S3_VIRTUAL_HOST, WORKER_PREVIEW }
 
 /**
- * the host every storage url uses unless a setting overrides it. path-style S3 until the DNS cutover of
- * storage.oceanmetrics.io (week 6 step 2); the cutover flips this one line to STORAGE_HOST and every app, Worker and
- * pipeline follows at its next build.
+ * the host every storage url uses unless a setting overrides it: storage.oceanmetrics.io, the om-gazetteer Worker over
+ * R2, since the cutover of 2026-10-23 (week 6 step 2; path-style S3 before it, catalog 0.5.1). a rollback sets
+ * OM_STORAGE / VITE_OM_STORAGE=s3 per app, or flips this line back in a release.
  */
-export const DEFAULT_STORAGE_HOST: string = S3_PATH_STYLE
+export const DEFAULT_STORAGE_HOST: string = STORAGE_HOST
 
 /** where an app reads its override, once at start: the Vite env (browser builds), the process env (Node, Workers' vars), the page attribute (embeds) */
 export const STORAGE_ENV = { vite: 'VITE_OM_STORAGE', node: 'OM_STORAGE', attribute: 'data-om-storage' } as const

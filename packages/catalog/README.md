@@ -252,11 +252,11 @@ published files with `rewriteStorageUrls()`, so the storage cutover is one setti
 
 | constant | value |
 |---|---|
-| `STORAGE_HOST` | `https://storage.oceanmetrics.io` (the om-gazetteer Worker over R2 after the cutover) |
-| `S3_PATH_STYLE` | `https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public` (what the apps read today) |
+| `STORAGE_HOST` | `https://storage.oceanmetrics.io` (the om-gazetteer Worker over R2; the default since the cutover of 2026-10-23) |
+| `S3_PATH_STYLE` | `https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public` (what the apps read until the cutover; written until the freeze; the rollback) |
 | `S3_VIRTUAL_HOST` | `https://oceanmetrics.io-public.s3.amazonaws.com` (a legacy form) |
 | `WORKER_PREVIEW` | `https://om-gazetteer.ben-f07.workers.dev` (the preview and rehearsal host) |
-| `DEFAULT_STORAGE_HOST` | `S3_PATH_STYLE` until the DNS cutover of `storage.oceanmetrics.io`; the cutover flips this line |
+| `DEFAULT_STORAGE_HOST` | `STORAGE_HOST` since 0.6.0 (the cutover of 2026-10-23; `S3_PATH_STYLE` in 0.5.1). A rollback is `OM_STORAGE` / `VITE_OM_STORAGE` = `s3` per app, or this line flipped back in a release |
 
 **The override**, read once at an app's start and passed to `resolveStorageHost()` in precedence order (a malformed
 value is skipped): the page attribute `data-om-storage` on `<html>` (embeds), the build's `VITE_OM_STORAGE` (browser

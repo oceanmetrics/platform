@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.0 (unreleased)
+
+- **`DEFAULT_STORAGE_HOST` is now `STORAGE_HOST` (`https://storage.oceanmetrics.io`)**, the one-line flip of build week
+  6 step 0. Why: the storage cutover of 2026-10-23 is done: `storage.oceanmetrics.io` is served by the om-gazetteer
+  Worker from R2 (a Custom Domain, no longer Caddy's 302 to S3) and `platform/scripts/storage-check.sh` passes 21 of 21
+  on it (range reads with `Content-Range`, the CORS preflight, content types, keyed and restricted prefixes). Every
+  `storageUrl()` without a host, and every app that passes no `VITE_OM_STORAGE` / `OM_STORAGE` / `data-om-storage`,
+  now reads the bucket from the storage host at its next build. The default changes, so this is a minor bump for a
+  0.x package. Rollback per app: set the override to `s3`; for all: flip the line back in a release.
+- `DEFAULT_INDICATORS_BASE` is `${DEFAULT_STORAGE_HOST}/indicators/` (the same value as before,
+  `https://storage.oceanmetrics.io/indicators/`), so it follows the one setting instead of keeping a host of its own.
+- The case table `fixtures/storage/cases.json`: the two default-host cases expect the storage host (the python twin
+  `om_extract.storage` 0.6.3 flips with it).
+
 ## 0.5.1 (unreleased)
 
 - `@oceanmetrics/catalog/storage` (new, pure, no dependency; build week 6 step 0): the one rule for where the public

@@ -15,10 +15,10 @@
     { "name": "an inherited property name is not a name", "value": "toString", "output": null }
   ],
   "storageUrl": [
-    { "name": "the default host", "key": "indicators/indicators.json", "output": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/indicators/indicators.json" },
+    { "name": "the default host", "key": "indicators/indicators.json", "output": "https://storage.oceanmetrics.io/indicators/indicators.json" },
     { "name": "a prefix keeps its slash", "key": "gazetteer/", "host": "storage", "output": "https://storage.oceanmetrics.io/gazetteer/" },
     { "name": "a leading slash dropped", "key": "/obis-h3/collection.json", "host": "https://storage.oceanmetrics.io/", "output": "https://storage.oceanmetrics.io/obis-h3/collection.json" },
-    { "name": "a malformed host falls back to the default", "key": "atlas/catalog.json", "host": "ftp://x", "output": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/catalog.json" },
+    { "name": "a malformed host falls back to the default", "key": "atlas/catalog.json", "host": "ftp://x", "output": "https://storage.oceanmetrics.io/atlas/catalog.json" },
     { "name": "the reader's key", "key": "atlas-restricted/01ABC/x/collection.json", "host": "preview", "apiKey": "k 1", "output": "https://om-gazetteer.ben-f07.workers.dev/atlas-restricted/01ABC/x/collection.json?key=k%201" },
     { "name": "the reader's key after a query", "key": "marine-atlas/cog/a.tif?b=2", "host": "storage", "apiKey": "abc", "output": "https://storage.oceanmetrics.io/marine-atlas/cog/a.tif?b=2&key=abc" }
   ],

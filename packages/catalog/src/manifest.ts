@@ -2,9 +2,10 @@
 // (coverage.parquet), as oceanmetrics/indicators writes them. types and a few constants only, no runtime dependency;
 // the readers are in indicators.ts, the card rules in cards.ts.
 import type { Grain, Status, Trend } from '@oceanmetrics/status'
+import { DEFAULT_STORAGE_HOST } from './storage.js'
 
-/** the indicators catalog root on storage */
-export const DEFAULT_INDICATORS_BASE = 'https://storage.oceanmetrics.io/indicators/'
+/** the indicators catalog root on storage: `indicators/` on DEFAULT_STORAGE_HOST (storage.oceanmetrics.io since 0.6.0) */
+export const DEFAULT_INDICATORS_BASE = `${DEFAULT_STORAGE_HOST}/indicators/`
 /** the indicators app, whose Place view is the deep view of a place */
 export const INDICATORS_APP = 'https://oceanmetrics.io/indicators/'
 /** erddap-places, where a place nobody computed can be computed */

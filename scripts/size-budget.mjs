@@ -23,6 +23,7 @@ const ROOT = new URL('../packages/', import.meta.url).pathname
 // catalog 0.5.0: 11_610 on 2026-10-23: /changes (diff, sentences, Atom, feed names; 3_753) and /report (the rules moved
 // from indicators; 2_170) land, each loaded only by its own users, so 15_000 (README "Size budget").
 // catalog 0.5.1: 13_896 on 2026-10-23: /storage lands (2_679 alone, mostly comments; under 1 kB minified), budget unchanged.
+// catalog 0.6.0: 13_963 on 2026-10-23: DEFAULT_STORAGE_HOST flipped to the storage host, the indicators base follows it, budget unchanged.
 // nav: 7_776 on 2026-10-23 (0.1.0: the element, its stylesheet, the theme file, the rules, the mark and three glyphs,
 // comments counted), so 12_000; what a page fetches is the bundled line below (4_947, the 6 kB target).
 // nav 0.2.0: 9_367 on 2026-10-23 (the analytics loader ga.js lands; define 5_793), budget unchanged.
