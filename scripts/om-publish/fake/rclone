@@ -29,9 +29,15 @@ if (cmd === 'copy' && remote(src) && !remote(dst) && list) {
   for (const k of rec.list) { fs.mkdirSync(path.dirname(path.join(dst, k)), { recursive: true }); fs.copyFileSync(path.join(remote(src), k), path.join(dst, k)) }
 }
 if (cmd === 'lsjson') {
-  const root = remote(pos[1])
-  console.log(JSON.stringify(rec.list.map(k => {
+  // like rclone: without -R a --files-from list is listed one level deep (a nested key comes back as its top folder,
+  // IsDir true); --files-only drops the folders
+  const root = remote(pos[1]), deep = args.includes('-R') || args.includes('--recursive'), filesOnly = args.includes('--files-only')
+  const rows = new Map()
+  for (const k of rec.list) {
+    const top = k.split('/')[0]
+    if (!deep && top !== k) { rows.set(top, { Path: top, IsDir: true }); continue }
     const m = path.join(root, k + '.meta.json')
-    return { Path: k, Metadata: fs.existsSync(m) ? JSON.parse(fs.readFileSync(m, 'utf8')) : {} }
-  })))
+    rows.set(k, { Path: k, IsDir: false, Metadata: fs.existsSync(m) ? JSON.parse(fs.readFileSync(m, 'utf8')) : {} })
+  }
+  console.log(JSON.stringify([...rows.values()].filter(r => !(filesOnly && r.IsDir))))
 }

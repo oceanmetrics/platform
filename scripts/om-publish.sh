@@ -316,7 +316,8 @@ rewrite() {
   # ---- --really: upload each changed file with its own headers, history kept on R2 ----
   printf '%s\n' "$out" | awk -F'\t' 'NF == 2 && $1 > 0 { print $2 }' | sed "s|^$TMP/src/||" > "$TMP/changed"
   [ -s "$TMP/changed" ] || { echo "nothing to rewrite"; return 0; }
-  "$RCLONE" lsjson -M --files-from-raw "$TMP/changed" --no-traverse "$read_remote" > "$TMP/meta.json"
+  # -R --files-only: without -R rclone lists a --files-from list one level deep (a nested key comes back as its folder)
+  "$RCLONE" lsjson -M -R --files-only --files-from-raw "$TMP/changed" --no-traverse "$read_remote" > "$TMP/meta.json"
   node -e '
     const meta = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))
     const gz = new Set(require("fs").readFileSync(process.argv[2], "utf8").split("\n").filter(Boolean))
@@ -325,6 +326,8 @@ rewrite() {
       const enc = m["content-encoding"] ?? (gz.has(o.Path) ? "gzip" : "")
       console.log([o.Path, m["content-type"] ?? o.MimeType ?? "application/json", m["cache-control"] ?? "", enc].join("\x1f"))
     }' "$TMP/meta.json" "$gz" > "$TMP/headers"
+  [ "$(wc -l < "$TMP/headers" | tr -d ' ')" = "$(wc -l < "$TMP/changed" | tr -d ' ')" ] \
+    || die "the stores' metadata lists $(wc -l < "$TMP/headers" | tr -d ' ') of $(wc -l < "$TMP/changed" | tr -d ' ') changed files; nothing uploaded"
   HISTORY=1
   local key ctype cache enc top n=0
   while IFS=$'\x1f' read -r key ctype cache enc; do

@@ -215,6 +215,14 @@ describe('om-publish.sh rewrite', () => {
     expect(bytes(coll).toString()).toBe('{"links":[{"href":"https://storage.oceanmetrics.io/obis-h3/latest.json"},{"href":"https://storage.oceanmetrics.io/obis-h3/v20261012/"}]}\n')
     expect(r.calls.filter(c => c.args[0] === 'check').length).toBe(2)
   })
+  it('regression 2026-10-23: the headers are read recursively, files only (a nested key is not listed as its folder)', () => {
+    // the first live --really read `lsjson -M --files-from-raw` without -R: rclone answered with the top folders
+    // (`atlas`, `indicators`, IsDir true) and the upload stopped at `cp .../src/atlas` (nothing uploaded)
+    const r = run(['rewrite', '--from', 's3', '--to', 'storage', '--really', 'obis-h3', 'atlas/aquamaps_native/registry_index.json'], { OM_FAKE_REMOTE: bucket(), OM_FAKE_DIFFER: 'x' })
+    expect(r.code).toBe(0)
+    const ls = r.calls.find(c => c.args[0] === 'lsjson')!
+    expect(ls.args).toEqual(expect.arrayContaining(['-M', '-R', '--files-only']))
+  })
   it('needs --from, --to and a target', () => {
     expect(run(['rewrite', '--to', 'storage', 'obis-h3']).code).toBe(2)
     expect(run(['rewrite', '--from', 's3', '--to', 'storage']).code).toBe(2)
