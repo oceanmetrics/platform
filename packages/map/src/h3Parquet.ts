@@ -2,8 +2,9 @@
 // week 4 plan: no prebuilt archives; the release already is a pyramid by resolution and parent, and its metrics do not
 // roll up). for a tile at zoom z (h3ReleaseLayer.ts releaseFile):
 //   1. the resolution and its file: the pin or the ladder's resolution for z;
-//   2. the cells under the tile: tileParents at a resolution two coarser (the bbox grown by its margins, the strip
-//      across ±180), each parent turned into the cell_id range of its children by bit arithmetic (h3Bits.ts);
+//   2. the cells under the tile: tileParents at a resolution two coarser (the parents of the cells that touch the tile
+//      and its buffer, the strip across ±180; 0.3.2), each parent turned into the cell_id range of its children by bit
+//      arithmetic (h3Bits.ts);
 //   3. the row groups whose cell_id statistics meet a range, and only those, read with hyparquet (column projection:
 //      the id and the indicator columns; the h3 string column is not read, the id gives it), each row group cached in
 //      the worker (LRU by decoded bytes), so the next tile in the same group, and an indicator switch, fetch nothing;

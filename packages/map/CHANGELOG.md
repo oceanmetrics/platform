@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.3.2 (2026-10-23)
+
+The two reads the atlas's OBIS layer measured over their bars (atlas `docs/obis-layer.md`).
+
+- Fixed: `tileParents` returns only the parents whose cells can touch the tile. When the tile holds at most
+  `EXACT_CELLS` (20,000) cells of `res` (every tile of the auto rule) it lists them with h3-js, keeps those
+  `cellTouchesTile` keeps, and returns their parents; past that (a pinned fine resolution at a low zoom) the parents
+  whose hexagon meets the tile's box grown by how far their descendants reach past it (`OVERHANG`, 0.25 of the parent's
+  edge, measured at most 0.203) plus one edge of `res`. 0.3.1 took every parent overlapping the box grown by two cells
+  of `res`: at Monterey z9 (res 7) the view's nine tiles asked 9 res-3 parent files, now 8 (161,302 B to 154,706 B over
+  the live release); the MVT of every tile measured is unchanged. Regression tests named for the miss.
+- Fixed: at a pinned resolution three or more levels finer than the parents (`res` 6 under res-2 parents at z5),
+  0.3.1's two-cell margin fell short of how far a parent's descendants reach (46 km at res 2 against 7 km): 2 parents
+  were missed at Fiji, so cells of theirs near the tile's edge could be left out.
+- New: `speciesForCell(href, cell, { res, columns?, reader?, fetch?, tail? })`: the rows of one hexagon from a species
+  table sorted by `cell_id` (the release's `species_flat/res=3.parquet`), reading only the row groups whose `cell_id`
+  statistics meet the cell (its own id, its children's contiguous range for a coarser cell, its parent's id for a finer
+  one: `scope`), with the requests and bytes of the call; `cellRange(cell, fileRes)` and `rowCell(row)`. A reader passed
+  in keeps each file's footer. Over the live file a page's first res-3 cell reads 329 kB (the 245 kB footer) and a res-1
+  cell 830 kB; with the footer kept, 67 kB and 568 kB: the README says what the release must change.
+- Fixtures: `fixtures/h3release/species_flat/res=3.parquet` (synthetic, `build.mjs species_flat`), `measure.mjs` the
+  Monterey view case and a live `collection.json` source, `measure_species.mjs`.
+
 ## 0.3.1 (2026-10-23)
 
 For the indicators Map's build week 2 gate (the erddap-places parity rows: the cell readout, the counts, a retry, a palette).

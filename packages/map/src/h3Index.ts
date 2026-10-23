@@ -1,14 +1,15 @@
 // the tile lookup over a table of h3 cells, and the resolution each tile zoom draws. ported from platform spike 1
 // (`spikes/h3j-source/src/cellIndex.ts`, 2026-10-22), generalised from res 5 to any resolution:
 //   - the cells are grouped by a coarser parent (three levels up: res 5 by res 2, the shape of obis-hex's parent
-//     partitions); a tile asks h3-js for the parents overlapping its bbox, grown by two cells of the table's resolution
-//     (a child can poke out of its parent by part of a cell) and geojson-vt's tile buffer, then takes their children.
-//     the bbox edges are densified every 2° (h3's edges are great circles, a bbox's are parallels).
+//     partitions); a tile asks h3-js for the parents of the cells that touch it and geojson-vt's tile buffer (or, when
+//     the tile holds too many cells to list, the parents whose hexagon meets the bbox grown by how far a parent's
+//     descendants reach past it: tileParents), then takes their children. the bbox edges are densified every 2° (h3's
+//     edges are great circles, a bbox's are parallels).
 //   - a tile near ±180 also takes the strip on the other side of the seam, so the wrapped copies (h3.ts cellRing)
 //     reach tile x = 0 and x = 2^z - 1 (spike 1 condition 4).
 //   - the resolution steps with zoom (spike 1 condition 3): at res 5 a z1 tile held 25,000 to 50,000 cells and took 40
 //     to 85 ms. RES_FOR_ZOOM is obis-hex's zoom_to_res (MarineSensitivity h3-db app.R) at each tile zoom.
-import { cellToBoundary, cellToParent, getHexagonEdgeLengthAvg, getResolution, polygonToCellsExperimental, POLYGON_TO_CELLS_FLAGS, UNITS } from 'h3-js'
+import { cellToBoundary, cellToParent, getHexagonAreaAvg, getHexagonEdgeLengthAvg, getResolution, polygonToCellsExperimental, POLYGON_TO_CELLS_FLAGS, UNITS } from 'h3-js'
 import { zoomToRes } from './h3Zoom.js'
 
 /** one table of cells, columnar: h3 ids and one value per id (the shape of an h3j tile and of obis-hex's partitions) */
@@ -107,29 +108,67 @@ export function seamSpans(w: number, e: number): [number, number][] {
   return spans
 }
 
-/** two cells of `res`, in degrees of latitude: how far a cell can poke out of its parent */
+/** two cells of `res`, in degrees of latitude (CellIndex.marginDeg; tileParents no longer grows its box by it) */
 export const marginDegFor = (res: number): number => (2 * getHexagonEdgeLengthAvg(res, UNITS.km)) / KM_PER_DEG
 
-/**
- * the cells of `parentRes` whose children at `res` may touch tile z/x/y: the tile's bbox grown by geojson-vt's buffer
- * and two cells of `res`, its edges densified every 2°, split at ±180 so the strip on the other side of the seam comes
- * too (spike 1 condition 4). the lookup CellIndex keys its groups by, and the release provider turns into cell_id ranges
- */
-export function tileParents(z: number, x: number, y: number, res: number, parentRes: number): Set<string> {
-  const margin = marginDegFor(res)
-  const [w0, s0, e0, n0] = tileBounds(z, x, y)
-  const pad = ((e0 - w0) * BUFFER) / EXTENT
-  const latPad = margin + ((n0 - s0) * BUFFER) / EXTENT
+/** how far the descendants of a cell of `parentRes` reach past its own hexagon, as a share of its edge length (its
+ * radius): measured with h3-js over cells at res 0 to 5 and their children one to four levels down, at most 0.203
+ * (res 0), 0.165 at res 1 to 5. rounded up to a quarter, so the bound stays under one parent radius */
+export const OVERHANG = 0.25
+
+/** the most cells of `res` a tile's lookup lists one by one (tileParents' exact path); a pinned fine resolution at a
+ * low zoom has more and takes the parents' own hexagons instead */
+export const EXACT_CELLS = 20_000
+
+const EARTH_KM2 = 4 * Math.PI * 6371.0088 ** 2
+
+/** a rough count of the cells of `res` in a box (its spherical area over the mean cell area) */
+function boxCells(w: number, s: number, e: number, n: number, res: number): number {
+  const rad = Math.PI / 180
+  const frac = ((Math.min(360, e - w) * rad) * Math.abs(Math.sin(n * rad) - Math.sin(s * rad))) / (4 * Math.PI)
+  return (frac * EARTH_KM2) / getHexagonAreaAvg(res, UNITS.km2)
+}
+
+/** the cells of `res` whose hexagon meets the box [w, s, e, n] grown by `km` (split at ±180, densified), in degrees */
+function cellsNear(w0: number, s0: number, e0: number, n0: number, km: number, res: number): Set<string> {
+  const latPad = km / KM_PER_DEG
   const s = Math.max(-MAX_LAT, s0 - latPad)
   const n = Math.min(MAX_LAT, n0 + latPad)
   const cos = Math.cos((Math.max(Math.abs(s), Math.abs(n)) * Math.PI) / 180)
-  const lonPad = pad + margin / Math.max(cos, 0.01)
+  const lonPad = latPad / Math.max(cos, 0.01)
   const out = new Set<string>()
   for (const [a, b] of seamSpans(w0 - lonPad, e0 + lonPad))
     for (const poly of bboxPolygons(a, s, b, n))
-      for (const c of polygonToCellsExperimental(poly, parentRes, POLYGON_TO_CELLS_FLAGS.containmentOverlapping, true))
+      for (const c of polygonToCellsExperimental(poly, res, POLYGON_TO_CELLS_FLAGS.containmentOverlapping, true))
         out.add(c)
   return out
+}
+
+/**
+ * the cells of `parentRes` whose children at `res` can touch tile z/x/y (the tile and geojson-vt's buffer, as
+ * cellTouchesTile says), split at ±180 so the strip on the other side of the seam comes too (spike 1 condition 4).
+ * the lookup CellIndex keys its groups by, and the release provider turns into cell_id ranges and parent files.
+ *   - exact, when the box holds at most EXACT_CELLS cells of `res` (every tile of the auto rule, where the resolution
+ *     steps with zoom): the cells of `res` whose hexagon meets the box grown by one of their own edges (a hexagon's
+ *     bbox reaches past it by less), kept by cellTouchesTile, and their parents. so a parent comes only when one of
+ *     its cells reaches the tile (map 0.3.2: at Monterey z9, res 7, the view's nine tiles read 8 res-3 parent files,
+ *     not 9).
+ *   - else the parents whose own hexagon meets the box grown by how far their descendants reach past it (OVERHANG of
+ *     the parent's edge, under one parent radius) and one edge of `res`. 0.3.1 grew the box by two cells of `res` at
+ *     every resolution, short of the overhang when `res` is three or more levels finer than `parentRes`.
+ */
+export function tileParents(z: number, x: number, y: number, res: number, parentRes: number): Set<string> {
+  const [w, s, e, n] = tileBounds(z, x, y)
+  const pad = ((e - w) * BUFFER) / EXTENT, latPad = ((n - s) * BUFFER) / EXTENT
+  const box: [number, number, number, number] = [w - pad, Math.max(-MAX_LAT, s - latPad), e + pad, Math.min(MAX_LAT, n + latPad)]
+  const edge = getHexagonEdgeLengthAvg(res, UNITS.km)
+  const out = new Set<string>()
+  if (parentRes >= res || boxCells(...box, res) <= EXACT_CELLS) {
+    for (const c of cellsNear(...box, edge, res))
+      if (cellTouchesTile(c, z, x, y)) out.add(parentRes >= res ? c : cellToParent(c, parentRes))
+    return out
+  }
+  return cellsNear(...box, OVERHANG * getHexagonEdgeLengthAvg(parentRes, UNITS.km) + edge, parentRes)
 }
 
 export class CellIndex {

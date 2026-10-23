@@ -1,6 +1,6 @@
 // @oceanmetrics/map: the map stack of the Ocean Metrics apps (README.md). every module is free of side effects and of a
 // run-time maplibre-gl import; the h3 worker module is its own entry (`@oceanmetrics/map/h3-worker`), never imported here.
-export const PACKAGE = { name: '@oceanmetrics/map', version: '0.3.1' } as const
+export const PACKAGE = { name: '@oceanmetrics/map', version: '0.3.2' } as const
 
 // ---- the slot contract ----
 export {
@@ -44,7 +44,7 @@ export type { H3Archive, H3SlotOptions } from './h3.js'
 export { cellRing, cellsProvider, h3jAction, h3jSource, pmtilesProvider, TILE_OPTIONS, tileFeatures, tileToGeoJSON, tileToMvt } from './h3Tiles.js'
 export type { TileProvider } from './h3Tiles.js'
 export {
-  BUFFER, CellIndex, cellTouchesTile, EXTENT, lonLatToTile, marginDegFor, NON_ADDITIVE, RES_FOR_ZOOM, resForZoom, rollUp, seamSpans, tileBounds,
+  BUFFER, CellIndex, cellTouchesTile, EXACT_CELLS, EXTENT, lonLatToTile, marginDegFor, NON_ADDITIVE, OVERHANG, RES_FOR_ZOOM, resForZoom, rollUp, seamSpans, tileBounds,
   tileParents, ZOOM_BREAKS, zoomToRes,
 } from './h3Index.js'
 export type { Aggregate, H3jTile, H3Rows, H3TileData } from './h3Index.js'
@@ -64,6 +64,8 @@ export type { H3ReleaseItem, H3ReleaseSlot, H3ReleaseSlotOptions, H3ReleaseView 
 export { ReleaseReader, releaseProvider, tileRanges } from './h3Parquet.js'
 export type { ReleaseReaderOptions } from './h3Parquet.js'
 export { readReleaseStats, statsMatch } from './h3Stats.js'
+export { cellRange, rowCell, speciesForCell } from './h3Species.js'
+export type { CellSpecies, SpeciesForCellOptions, SpeciesValue } from './h3Species.js'
 export type { StatsMatch, StatsRow } from './h3Stats.js'
 export { COMPRESSORS, DEFAULT_TAIL, newReadStats, openRangeFile } from './parquetFile.js'
 export type { RangeFile, RangeFileOptions, ReadStats } from './parquetFile.js'

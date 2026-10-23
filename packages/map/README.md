@@ -103,8 +103,11 @@ What happens, and where:
 - **Worker** (`h3Parquet.ts`, in `@oceanmetrics/map/h3-worker`). For a tile at zoom z: the resolution is the pin, or
   the finest of the ladder at or under `RES_FOR_ZOOM[z]`, else the ladder's coarsest. Never a roll-up: each resolution
   is its own file, and `rollUp` now refuses `sp`, `es`, `shannon`, `simpson` (`NON_ADDITIVE`) with any aggregate. The
-  cells under the tile are `tileParents` (the bbox grown by geojson-vt's buffer and two cells, densified, split at ±180)
-  at a resolution two coarser, each parent turned into the cell_id range of its children by bit arithmetic
+  cells under the tile are `tileParents` at a resolution two coarser (0.3.2: the parents of the cells of `res` that
+  touch the tile and geojson-vt's buffer, as `cellTouchesTile` says, listed with h3-js when the box holds at most
+  `EXACT_CELLS` = 20,000 of them; past that, a pinned fine resolution at a low zoom, the parents whose own hexagon meets
+  the box grown by how far a parent's descendants reach past it, `OVERHANG` = 0.25 of its edge, under one parent radius,
+  plus one edge of `res`; split at ±180, densified), each parent turned into the cell_id range of its children by bit arithmetic
   (`h3Bits.ts`, spike 4's verdict, tested against h3-js on 100 random cells at res 1 to 7). The reader opens a file
   with one suffix range request (`bytes=-65536`: the length from Content-Range, which the bucket's CORS exposes, and
   the footer in one round trip, no HEAD), keeps the row groups whose `cell_id` statistics meet a range and reads only
@@ -138,6 +141,24 @@ files through a Range-honouring fetch unless said; read = fetch and decode, buil
 | v20261012 `all/res=5` as published | z9 California at res 5, cold | 3 | 2,174,529 | 2 / 4 | 195 | 110.1 + 0.5 |
 | the same, sorted | z9 California at res 5, cold | 2 | 226,780 | 1 / 66 | 195 | 10.9 + 0.6 |
 | v20261012 over HTTP from S3 us-east-1, res 7 split by res-3 parent | z9 California, cold | 4 | 53,970 | 4 / 0 | 662 | 405 + 1.6 |
+| the same, 0.3.2 (`tileParents` exact) | z9 California, cold | 3 | 43,823 | 3 / 0 | 493 | 548 + 7.5 |
+| obis-h3 v20261012 over HTTP (the live `obis-h3/collection.json`, layer `all`), 0.3.1 | **the Monterey Bay view at z9** (res 7: the nine 512 px tiles of a 1280 × 800 map at -122.1, 36.75) | 9 (9 parent files) | **161,302** | 9 / 0 | 8,337 | 481 for the nine |
+| the same, 0.3.2 | the same view | 8 (8 parent files) | **154,706** | 8 / 0 | 7,369 | 469 for the nine |
+
+**Monterey z9 (0.3.2).** The atlas measured this view at 169,560 B in 11 res-3 parent files against obis-hex's 118 KB in
+7 (its `docs/obis-layer.md`; its view's exact centre is not written, the 49 centres of a 0.7° × 0.6° grid over the bay
+ask 7 to 12 files at 0.3.1, mean 9.5). 0.3.1's `tileParents` took every parent at res 5 whose hexagon met the tile's
+box grown by two res-7 cells, so some tiles asked a res-3 file none of whose cells reaches them (832918fffffffff for
+tile 9/81/200); 0.3.2 asks only the parents of cells that touch the tile: 8 files at -122.1, 36.75 (9 before), mean 8.8
+over the 49 centres (min 7, max 12), and the MVT of every tile measured is byte for byte the same (California z4 39,971 B,
+z9 25,685 B, Fiji z6 35,525 B, live; the fixture's too): the cells no longer read were never drawn. **Still over 118 KB**,
+for two reasons outside `tileParents`: (1) MapLibre asks the 512 px tiles that meet the view, nine tiles of 1536 ×
+1536 px for 1280 × 800, and their cells reach one res-3 parent past obis-hex's cover of the view (8329adfffffffff, from
+tile 9/83/200); obis-hex planned from the view's own bounds (the res-3 centres in view and their ring 1: 7 here, all
+among the 8); (2) the 118 KB was obis-hex's own files: **the same 7 partitions of today's release are 135,373 B**
+(832834 38,953; 832830 27,823; 832835 27,174; 83291a 18,622; 83291b 8,674; 832836 7,997; 8329a9 6,130), so no tile
+plan reads this view under 118 KB. The test is `h3Index.test.ts` "the Monterey Bay view at z9"; the regressions are
+named for the miss.
 
 So on today's unsorted release the provider is correct but reads whole groups of 122,880 rows; the sorted layout of
 obisindicators 0.11 cuts a cold z6 tile from 2.5 MB to 0.37 MB and a z9 res-5 tile from 2.2 MB to 0.23 MB, for 2.9%
@@ -169,6 +190,55 @@ either way. Tile building stays under 10 ms; a cold tile's time is the fetch.
    base), and the heads are ordinary taxon layers under `taxon/rank=<rank>/taxon=<name>/` (`h3:heads.layer: taxon`).
 
 The h3j PMTiles form (`h3Slot` with `{ url }`) stays for single-value archives.
+
+### The species of a cell (`speciesForCell`, 0.3.2)
+
+```ts
+import { ReleaseReader, speciesForCell } from '@oceanmetrics/map'
+
+const reader = new ReleaseReader({ tail: 262_144 })   // one per page: each file's footer is read once
+const got = await speciesForCell(`${base}species_flat/res=3.parquet`, '81197ffffffffff', { res: 3, reader })
+// { cell, cellRes: 1, fileRes: 3, scope: 'children', range, rows: [{ cell_id, name_key, aphiaid, n, year_min, year_max }, ...],
+//   groupsRead, groupsSkipped, requests, bytes }   or null when the file is not there
+```
+
+The Cell pane's read of a species table sorted by `cell_id` (the release's `species_flat/res=3.parquet`): the row
+groups whose `cell_id` statistics meet the cell's range, and only those. A cell at the file's resolution is its own id;
+a coarser cell is the ids of its children at the file's resolution, which are **one contiguous range**: a parent's
+children share its base cell and digits and run the finer digits 0 to 6 (`childRange`), and over all 41,162 res-3 cells
+the range of a parent holds its children and nothing else (`h3Species.test.ts`, for res-0, res-1 and res-2 parents,
+pentagons among them), so in a file sorted by `cell_id` they are one run of rows. A finer cell returns its parent's rows
+(`scope: 'parent'`). The rows are the file's (a coarser cell's are one per child and species: summing them is the
+caller's). `columns` limits the read; the id comes back as a bigint, the INT64 columns as numbers.
+
+**Measured** (2026-10-23, Node 26 on the Mac mini, `node packages/map/fixtures/h3release/measure_species.mjs
+<href>`, the live `v20261012/species_flat/res=3.parquet` on S3 us-east-1: 23.9 MB, 3,788,665 rows in 370 row groups of
+about 10,240, **a 245,010 B footer**; columns `aphiaid, n, name_key, year_min, year_max`; a warm HTTPS connection, the
+first request of a cold one adds about 0.5 s):
+
+| cell | tail | footer | requests | bytes | row groups read / skipped | rows (species) | ms |
+|---|--:|---|--:|--:|--:|--:|--:|
+| `8329a9fffffffff` (res 3, Monterey) | 64 KiB | read | 3 | 311,769 | 1 / 369 | 196 (196) | 476 to 482 |
+| the same | 256 KiB | read | 2 | 328,895 | 1 / 369 | 196 | 313 to 319 |
+| the same | either | kept (a second cell of the page) | 1 | 66,751 | 1 / 369 | 196 | 143 to 171 |
+| `81197ffffffffff` (res 1, 49 res-3 children) | 64 KiB | read | 11 | 813,075 | 9 / 361 | 76,751 (9,123 AphiaIDs) | 710 to 1,369 |
+| the same | 256 KiB | read | 10 | 830,201 | 9 / 361 | 76,751 | 353 to 386 |
+| the same | either | kept | 9 | 568,057 | 9 / 361 | 76,751 | 200 to 289 |
+
+**The bar (0.6 MB, 0.3 s) is met only once the footer is kept**: a page's first cell pays the 245 kB footer (79% of a
+res-3 read), and a res-1 cell reads 9 row groups of 10,240 rows (568 kB) for its 77,000 child rows. The atlas passes a
+256 KiB tail (one request for the footer, not two) and keeps one reader per page. What the release must change
+(obisindicators, `species_flat`), in order of effect:
+
+1. **A `species_flat` per resolution** (`res=1.parquet`, `res=2.parquet` beside `res=3`, one row per cell and species:
+   `n` summed, `year_min` the least, `year_max` the greatest, as the atlas's `sumBySpecies` does): a res-1 cell then
+   reads its own 9,123 rows (about one 10,240-row group, ~60 kB) instead of its children's 76,751 (568 kB).
+2. **A footer under the 64 KiB tail**, so the first read is one request: split each file by a coarse parent as the
+   layer files are (`species_flat/res=3/p=<res-1 parent>.parquet`: 23.9 MB over the res-1 parents with records, so
+   most files come whole in the tail and a dense one has a footer of a few groups), and drop the `h3` column (the
+   `cell_id` gives it; it is one of the seven columns every row group's metadata repeats, with string statistics).
+3. Smaller row groups are not the fix on their own: 370 groups already make the footer; halving the rows doubles it.
+
 
 ### The basemap
 
@@ -316,6 +386,8 @@ over that `gridSlot` +3.6 kB, `cogSlot` +3.4 kB (+21.6 kB with `pointValue` and 
 2026-10-23 at 0.2.0, 27 203 B with 0.2.1's fixes, 28 589 B at 0.2.3, budget 39 000 B (about 1.5×). Every module counts,
 the h3 worker module and the COG and geotiff code included.
 
+0.3.2: 45 109 B (42 836 B at 0.3.1): `h3Species.ts` and the new `tileParents`; the worker chunk 100 672 B (+457 B).
+
 **0.3.0 raises the package budget to 48 000 B**: 41 877 B measured, +13.3 kB for the seven modules of the release
 provider (`h3Bits`, `h3Zoom`, `h3ReleaseLayer`, `h3Release`, `h3Parquet`, `h3Stats`, `parquetFile`), comment-heavy as
 the rest. What an app pays eagerly for `h3ReleaseSlot` is +5.2 kB minified over the base (h3Slot: +3.0 kB): the zoom
@@ -340,7 +412,7 @@ external, 2026-10-23):
 | + `cogSlot`, `legendFromStac`, `pointValue`, `overviewHistogram` | 22.2 kB (geotiff's core) | the protocol; geotiff's decoders (LERC, ZSTD, deflate ...) only for files that use them |
 | + `h3Slot` | 3.9 kB | the tile builder (h3-js, geojson-vt, vt-pbf) only for an in-memory table |
 | + `h3ReleaseSlot` | 9.0 kB (base + 5.2) | the legend reader (hyparquet, fzstd) 20.9 kB on the first legend |
-| `@oceanmetrics/map/h3-worker` (in MapLibre's worker) | 100.2 kB (0.3.0, with the release reader; 76.4 kB at 0.2.x) | spike 1 measured 68.7 kB for the h3j code |
+| `@oceanmetrics/map/h3-worker` (in MapLibre's worker) | 100.2 kB (0.3.0, with the release reader; 76.4 kB at 0.2.x; 100.7 kB at 0.3.2) | spike 1 measured 68.7 kB for the h3j code |
 | `buildH3jArchive` (producers) | 65.2 kB | |
 
 ## Tests
@@ -357,7 +429,10 @@ a res-6 split by res-2 parent, a whole taxon file, the 55 crossing cells, `stats
 as S3 does): file resolution per period set, the zoom to res to path table, row-group pruning (a tile under one of three
 groups reads one), the cache (a second tile fetches nothing), the parent split and the whole-file fallback, the
 multi-indicator MVT round trip, the crossing-55 seam, the legend's quantiles against the file, the slot's update rules on
-a stand-in map, the bit-arithmetic parents against h3-js, and the worker chunk's size, and the consumer check's regressions (`water-inland` on protomaps-shaped tiles,
+a stand-in map, the bit-arithmetic parents against h3-js, `tileParents` against an h3-js derivation (the parents of
+the cells that touch the tile, the Monterey Bay view at z9 and the two 0.3.1 regressions), `speciesForCell` over
+`fixtures/h3release/species_flat/res=3.parquet` (a res-3 cell across two row groups, a res-1 cell's 49 children as one
+run of the file, a res-5 cell's parent, the footer once per reader), and the worker chunk's size, and the consumer check's regressions (`water-inland` on protomaps-shaped tiles,
 `carryLayers` across a style change, `basemapLayerIds` as the clear rule, a relative archive url made absolute).
 
 ## Licence

@@ -1,7 +1,9 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { cellToLatLng, cellToParent, gridDisk, latLngToCell } from 'h3-js'
-import { CellIndex, cellTouchesTile, lonLatToTile, RES_FOR_ZOOM, resForZoom, rollUp, seamSpans, tileBounds } from './h3Index.js'
+import { cellToChildren, cellToLatLng, cellToParent, gridDisk, latLngToCell, polygonToCells } from 'h3-js'
+import { cellIdOf, h3OfCellId, parentId } from './h3Bits.js'
+import { CellIndex, cellTouchesTile, lonLatToTile, RES_FOR_ZOOM, resForZoom, rollUp, seamSpans, tileBounds, tileParents } from './h3Index.js'
+import { tileRanges } from './h3Parquet.js'
 
 const CROSSING = JSON.parse(readFileSync(new URL('../fixtures/h3/crossing55.json', import.meta.url), 'utf8')) as { h3: string[]; v: number[] }
 
@@ -74,6 +76,89 @@ describe('CellIndex', () => {
         expect(hs.filter((h) => !east.has(h)), `z${z} x${n - 1} y${y}`).toEqual([])
       }
     }
+  })
+})
+
+// ---- tileParents (map 0.3.2) ----
+
+/** the parents tileParents must return, derived with h3-js alone: the cells of `parentRes` whose centre is in the
+ * tile's bbox (polygonToCells; the cell under the centre when none is) and their neighbours, kept when one of their
+ * children at `res` touches the tile (cellTouchesTile: the tile and geojson-vt's buffer). two rings, not one: at
+ * Monterey 9/82/200 a res-5 parent two rings out has one res-7 child in the tile's buffer */
+function parentsTouching(z: number, x: number, y: number, res: number, parentRes: number): Set<string> {
+  const [w, s, e, n] = tileBounds(z, x, y)
+  const core = polygonToCells([[s, w], [n, w], [n, e], [s, e]], parentRes)
+  const seed = core.length ? core : [latLngToCell((s + n) / 2, (w + e) / 2, parentRes)]
+  const near = new Set(seed.flatMap((c) => gridDisk(c, 2)))
+  return new Set([...near].filter((p) => cellToChildren(p, res).some((c) => cellTouchesTile(c, z, x, y))))
+}
+const sorted = (s: Set<string>) => [...s].sort()
+
+/** the 512 px tiles of a W x H map centred on lon, lat at zoom z (what MapLibre asks for a vector source) */
+function viewTiles(lon: number, lat: number, z: number, W = 1280, H = 800): { tiles: [number, number][]; bbox: [number, number, number, number] } {
+  const size = 512 * 2 ** z, r = (lat * Math.PI) / 180
+  const px = ((lon + 180) / 360) * size, py = ((1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2) * size
+  const tiles: [number, number][] = []
+  for (let x = Math.floor((px - W / 2) / 512); x <= Math.floor((px + W / 2 - 1) / 512); x++)
+    for (let y = Math.floor((py - H / 2) / 512); y <= Math.floor((py + H / 2 - 1) / 512); y++) tiles.push([x, y])
+  const toLon = (p: number) => (p / size) * 360 - 180, toLat = (q: number) => (Math.atan(Math.sinh(Math.PI * (1 - (2 * q) / size))) * 180) / Math.PI
+  return { tiles, bbox: [toLon(px - W / 2), toLat(py + H / 2), toLon(px + W / 2), toLat(py - H / 2)] }
+}
+
+/** the res-3 parent files (all/res=7/p=<res-3>) the release provider reads for a z9 tile at res 7 (h3Parquet.ts) */
+const filesOf = (z: number, x: number, y: number) =>
+  new Set([...tileRanges(z, x, y, 7, 5).parents].map((p) => h3OfCellId(parentId(cellIdOf(p), 3))))
+
+// the atlas measured the Monterey Bay view at z9 (docs/obis-layer.md); the codec's case is this centre
+const MONTEREY: [number, number] = [-122.1, 36.75]
+
+describe('tileParents: only the parents whose cells can touch the tile', () => {
+  it('a z9 tile over Monterey Bay at res 7: its res-3 and res-5 parents are the h3-js derivation, exactly', () => {
+    const [x, y] = lonLatToTile(...MONTEREY, 9)
+    expect([x, y]).toEqual([82, 199])
+    const p3 = tileParents(9, x, y, 7, 3)
+    expect(sorted(p3)).toEqual(sorted(parentsTouching(9, x, y, 7, 3)))
+    expect(sorted(p3)).toEqual(['832834fffffffff', '83291afffffffff', '8329a9fffffffff'])
+    expect(sorted(tileParents(9, x, y, 7, 5))).toEqual(sorted(parentsTouching(9, x, y, 7, 5)))
+  })
+  it('the Monterey Bay view at z9 (1280 x 800, nine tiles) reads 8 res-3 parent files: obis-hex\'s 7, and one its tiles reach past the view', () => {
+    const { tiles, bbox: [w, s, e, n] } = viewTiles(...MONTEREY, 9)
+    expect(tiles).toHaveLength(9)
+    const files = new Set(tiles.flatMap(([x, y]) => [...filesOf(9, x, y)]))
+    // obis-hex's cover of the view (viewport.ts coverCells): the res-3 centres in the view and their ring 1
+    const core = polygonToCells([[s, w], [n, w], [n, e], [s, e]], 3)
+    const obisHex = new Set((core.length ? core : [latLngToCell(MONTEREY[1], MONTEREY[0], 3)]).flatMap((c) => gridDisk(c, 1)))
+    expect(obisHex.size).toBe(7)
+    expect(files.size).toBe(8)
+    expect([...obisHex].filter((c) => !files.has(c))).toEqual([])
+    // the eighth: tile 83/200 (south-east, past the view's corner) holds cells of it
+    expect([...files].filter((c) => !obisHex.has(c))).toEqual(['8329adfffffffff'])
+    expect(filesOf(9, 83, 200).has('8329adfffffffff')).toBe(true)
+  })
+  it('regression (map 0.3.1, Monterey z9 over its budget: 11 parent files in the atlas against obis-hex\'s 7): no tile of the view asks a parent none of whose cells reaches it', () => {
+    // 0.3.1 grew each tile's bbox by two res-7 cells and took every res-5 parent overlapping it: 9 files here, among
+    // them 832918fffffffff for tile 81/200, whose res-7 cells all stop short of the tile
+    const { tiles } = viewTiles(...MONTEREY, 9)
+    for (const [x, y] of tiles) {
+      const got = tileParents(9, x, y, 7, 5)
+      expect(sorted(got), `9/${x}/${y}`).toEqual(sorted(parentsTouching(9, x, y, 7, 5)))
+    }
+    expect(filesOf(9, 81, 200).has('832918fffffffff')).toBe(false)
+  })
+  it('regression (map 0.3.1 dropped parents at a pinned fine resolution): at z5, res 6 under res-2 parents, no parent with a cell in the tile is missed', () => {
+    // a z5 tile holds more res-6 cells than EXACT_CELLS, so the parents' own hexagons are tested, grown by how far
+    // their descendants reach (OVERHANG of a res-2 edge, 46 km): 0.3.1's two res-6 cells (7 km) missed 2 at Fiji
+    for (const [lon, lat] of [[178, -17.5], [-121, 34], [3, 0]] as [number, number][]) {
+      const [x, y] = lonLatToTile(lon, lat, 5)
+      const want = parentsTouching(5, x, y, 6, 2), got = tileParents(5, x, y, 6, 2)
+      expect([...want].filter((p) => !got.has(p)), `5/${x}/${y}`).toEqual([])
+      // and not many more: the bound is under one parent radius
+      expect(got.size, `5/${x}/${y}`).toBeLessThanOrEqual(want.size + 6)
+    }
+  })
+  it('a pinned resolution two zooms finer still takes the exact path (z7, res 7 under res 3: 12,800 cells listed)', () => {
+    const [x, y] = lonLatToTile(-121, 34, 7)
+    expect(sorted(tileParents(7, x, y, 7, 3))).toEqual(sorted(parentsTouching(7, x, y, 7, 3)))
   })
 })
 

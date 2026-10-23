@@ -12,6 +12,10 @@
 //   taxon/rank=class/taxon=Aves/res=5,6/   a whole file at res 6 (no parent split: the fallback)
 //   decade/all/decade=1990s|2000s/res=1..3/, year/all/year=2015/res=1..3/   the period sets (res 1 the globe, 2 and 3
 //                                 the regions), values shifted per period
+//   species_flat/res=3.parquet    the species of each res-3 cell (the release's columns: h3, cell_id, name_key,
+//                                 aphiaid, n, year_min, year_max), sorted by cell_id then aphiaid in row groups of 2,048:
+//                                 the 49 res-3 children of the res-1 cell over California and the regions' res-3 cells
+//                                 (speciesForCell, h3Species.test.ts). `node .../build.mjs species_flat` writes it alone
 import { execFileSync } from 'node:child_process'
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -79,6 +83,40 @@ const regions4 = [...new Set(regions5.map((h) => cellToParent(h, 4)))]
 const regions3 = [...new Set(regions5.map((h) => cellToParent(h, 3)))]
 const regions2 = [...new Set(regions5.map((h) => cellToParent(h, 2)))]
 
+// ---- species_flat/res=3.parquet: 1 to 100 species per cell, synthetic AphiaIDs, a name_key shared by some ----
+function speciesFlat() {
+  const cal1 = latLngToCell(...REGIONS.cal, 1)
+  const cells = [...new Set([...cellToChildren(cal1, 3), ...regions3])]
+  const rows = []
+  for (const h3 of cells) {
+    const k = hash(h3)
+    const ids = new Set()
+    for (let j = 0, m = 1 + (k % 100); j < m; j++) ids.add(100000 + ((k >>> 4) + j * 7919) % 5000)
+    for (const aphiaid of ids) {
+      const q = hash(`${h3}:${aphiaid}`)
+      const y0 = q % 13 === 0 ? null : 1950 + (q % 70)
+      rows.push({ h3, cell_id: BigInt('0x' + h3).toString(), name_key: aphiaid % 3000, aphiaid, n: 1 + (q >>> 3) % 500,
+        year_min: y0, year_max: y0 == null ? null : y0 + ((q >>> 9) % 6) })
+    }
+  }
+  mkdirSync(TMP, { recursive: true })
+  const nd = join(TMP, 'species_flat.ndjson')
+  writeFileSync(nd, rows.map((r) => JSON.stringify(r)).join('\n') + '\n')
+  const out = join(HERE, 'species_flat/res=3.parquet')
+  mkdirSync(dirname(out), { recursive: true })
+  rmSync(out, { force: true })
+  execFileSync('duckdb', ['-c', `SET threads = 1; SET preserve_insertion_order = true;
+    COPY (SELECT h3, cell_id::BIGINT AS cell_id, name_key::INTEGER AS name_key, aphiaid::BIGINT AS aphiaid, n::BIGINT AS n,
+      year_min::INTEGER AS year_min, year_max::INTEGER AS year_max
+      FROM read_json('${nd}', columns = {h3: 'VARCHAR', cell_id: 'VARCHAR', name_key: 'INTEGER', aphiaid: 'BIGINT', n: 'BIGINT', year_min: 'INTEGER', year_max: 'INTEGER'})
+      ORDER BY cell_id::BIGINT, aphiaid)
+    TO '${out}' (FORMAT parquet, COMPRESSION zstd, ROW_GROUP_SIZE 2048);`])
+  const g = groups('species_flat/res=3.parquet')
+  console.log(`species_flat/res=3: ${cells.length} cells, ${rows.length} rows, ${g.length} row groups`)
+  rmSync(TMP, { recursive: true, force: true })
+}
+if (process.argv[2] === 'species_flat') { speciesFlat(); process.exit(0) }
+
 rmSync(join(HERE, 'all'), { recursive: true, force: true })
 for (const d of ['seam', 'taxon', 'decade', 'year']) rmSync(join(HERE, d), { recursive: true, force: true })
 
@@ -144,3 +182,4 @@ console.log(`stats.parquet: ${gs.length} row groups (${gs.map((g) => `${g.stats_
 
 rmSync(TMP, { recursive: true, force: true })
 console.log(`${files} layer files written`)
+speciesFlat()
