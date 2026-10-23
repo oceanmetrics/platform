@@ -4,14 +4,16 @@
 // the indicators readers (hyparquet) in @oceanmetrics/catalog/indicators and the pure card rules in
 // @oceanmetrics/catalog/cards. the JSON Schemas in schemas/ are the contract, these types mirror them.
 
-export const PACKAGE = { name: '@oceanmetrics/catalog', version: '0.4.0' } as const
+export const PACKAGE = { name: '@oceanmetrics/catalog', version: '0.5.0' } as const
 
 export type * from './manifest.js'
 export type { Absence, AbsenceKind, AbsenceTextOptions, CardsOptions, Fold, FoldOptions, IndicatorCard, Reproduce, Rollup, Rollups, Slot, SlotOptions, StatusCounts, StatusGlyph, TrendGlyph } from './cards.js'
 export type { LoadCoverageOptions } from './indicators.js'
+export type { AtomOptions, ChangeKind, ChangeRow, DiffOptions, DiffRow, FeedKind, FeedSpec, FeedsOptions, FeedsPlaces } from './changes.js'
+export type { IndicatorLike, PlaceLike, PlaceSetLike, RuleContext, RuleRow, Rules, RuleSet } from './report.js'
 
 /** the profiles this package defines, one `schemas/<name>.schema.json` each. */
-export const PROFILES = ['erddap-grid', 'cog', 'h3', 'atlas-collection', 'atlas-item', 'sdm-dossier', 'om-notebook', 'places-layers', 'values-row', 'values-provenance'] as const
+export const PROFILES = ['erddap-grid', 'cog', 'h3', 'atlas-collection', 'atlas-item', 'sdm-dossier', 'om-notebook', 'places-layers', 'values-row', 'values-provenance', 'changes-row', 'changes-latest', 'feeds-index', 'alerts-subscription'] as const
 export type Profile = (typeof PROFILES)[number]
 
 type Pair = [number, number]

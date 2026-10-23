@@ -1,0 +1,17 @@
+{
+  "place_id": "NMS:CINMS",
+  "place_name": "Channel Islands National Marine Sanctuary",
+  "coll": "places",
+  "place_coll": "places",
+  "indicator": "cmems:cmems_mod_glo_bgc_my_0.25deg_P1M-m:fe:mean",
+  "kind": "status",
+  "time_grain": "year",
+  "from_status": "within",
+  "to_status": "below",
+  "from_time": "2024-01-01",
+  "to_time": "2025-01-01",
+  "value": 0.0012,
+  "unit": "mmol m-3",
+  "sentence": "Iron in Channel Islands National Marine Sanctuary is now below its own record (2025); it was within its own record.",
+  "seen": "2026-01-15"
+}

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/changes-latest/v1.0.0/schema.json",
+  "title": "Ocean Metrics indicators changes: the latest pointer",
+  "description": "indicators/changes/latest.json, written by every catalog build (even a quiet one: `checked_at` moves): the date of the last non-empty change file, its counts per kind and hrefs, and the recent change files, so a reader (the front page, the alerts Worker) reads one small file before any change file. Hrefs are relative to the indicators catalog root.",
+  "type": "object",
+  "required": [
+    "date",
+    "checked_at",
+    "counts",
+    "hrefs",
+    "recent"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "The date of the last non-empty change file; null before the first change."
+    },
+    "checked_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$",
+      "description": "When the last build compared the catalog, UTC."
+    },
+    "manifest_version": {
+      "type": "string",
+      "description": "The manifest version of the last build."
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "status",
+        "new",
+        "period"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "description": "Rows of kind `status`.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "new": {
+          "description": "Rows of kind `new`.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "period": {
+          "description": "Rows of kind `period`.",
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "description": "The rows of the last non-empty change file, per kind."
+    },
+    "hrefs": {
+      "type": "object",
+      "required": [
+        "json",
+        "parquet",
+        "feeds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "json": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The last change file as JSON (changes/<date>.json); null before the first change."
+        },
+        "parquet": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The same rows as Parquet (changes/<date>.parquet)."
+        },
+        "feeds": {
+          "type": "string",
+          "description": "The feeds' index (feeds/index.json)."
+        }
+      },
+      "description": "Where the last change file and the feeds are."
+    },
+    "recent": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "required": [
+          "date",
+          "href",
+          "counts"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "date": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "The change file's date."
+          },
+          "href": {
+            "type": "string",
+            "description": "The change file as JSON."
+          },
+          "counts": {
+            "type": "object",
+            "required": [
+              "status",
+              "new",
+              "period"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "status": {
+                "description": "Rows of kind `status`.",
+                "type": "integer",
+                "minimum": 0
+              },
+              "new": {
+                "description": "Rows of kind `new`.",
+                "type": "integer",
+                "minimum": 0
+              },
+              "period": {
+                "description": "Rows of kind `period`.",
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "description": "Its rows per kind."
+          }
+        }
+      },
+      "description": "The last 30 non-empty change files, newest first."
+    }
+  }
+}

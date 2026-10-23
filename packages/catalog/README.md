@@ -100,6 +100,8 @@ Today's producers were checked against the profiles on 2026-10-22: the 18 live e
 carries `proj:code`, the CCE and EOV share bands carry no `statistics` (the vision doc: statistics are written into
 STAC at publish; the AquaMaps bands already have them), and the CCE writer omits `nodata` when a band has none instead
 of writing null.
+- **`changes-row`**, **`changes-latest`**, **`feeds-index`** and **`alerts-subscription`** (0.5.0, the change feed and the
+  alerts of build week 5): see "Changes, feeds and report rules" below.
 
 ## Indicator readers and cards
 
@@ -169,6 +171,77 @@ this repo's `node_modules`, so in Vite: allow the checkout in `server.fs.allow`,
 `@oceanmetrics/status` while the app's own copy is older than 0.1.1 (deduping would hand the package the app's copy,
 which lacks the words). TypeScript follows the link to its real path and needs nothing more.
 
+## Changes, feeds and report rules
+
+Two more pure subpaths (0.5.0), for the indicators catalog build, the alerts Worker and the front page:
+
+```ts
+import { atomFeed, diffCoverage, feedsFor, feedsIndex } from '@oceanmetrics/catalog/changes'
+import { rulesFromParams, selectRows } from '@oceanmetrics/catalog/report'
+
+const rows = diffCoverage(published, built, { seen: '2026-10-23', manifest })  // ChangeRow[]: one per place x indicator
+const feeds = feedsFor(rows, { places, sets: manifest.place_sets })             // all, coll=, set=, place= (file, href, rows)
+const xml = atomFeed(feeds[0].rows, { title: feeds[0].title, id: feeds[0].feedId, updated, link: feeds[0].link, self: feeds[0].href })
+const mine = selectRows(rulesFromParams(new Map([['pi', 'NMS:CINMS']])), rows, { indicators: manifest.indicators })
+```
+
+`/changes` (`src/changes.ts`):
+
+- **`diffCoverage(before, after, { seen?, manifest? })`**: one `ChangeRow` per place x indicator (x values collection)
+  at the card's row (`pickRow`: the manifest's status grain, else the grain of the row with a status method), in the
+  order of `after`, of one kind, in this precedence: `new` (the cell gained its first value), `status` (its status word
+  changed: a word to another, a first word, or a word lost), `period` (its latest period advanced, or its card row moved
+  to another grain). A revised value at the same period, a cell with rows and no value and a cell that lost its rows
+  give no row. The row carries `from_`/`to_status`, `from_`/`to_time`, `value`, `unit` (the manifest's), `seen` (the
+  build date) and `sentence`.
+- **`changeSentence(row, manifest?)`**: the one wording for a feed entry, a mail line and the front page, in the card's
+  words and with the place: "Iron in Channel Islands National Marine Sanctuary is now below its own record (2025); it was
+  within its own record.", "... has its first status: above its own record (2025).", "... has its first value: 412
+  records for 2024.", "... has a value for 2025: 16.1 °C; the last was for 2024." Never better or worse (a schema rule
+  and a regression test).
+- **`atomFeed(rows, { title, id, updated, link, self?, subtitle?, max? })`**: RFC 4287 as a string (no DOM): the feed's
+  id, title, updated, author and self link; one entry per change, newest first, at most `max` (100), each with a stable
+  id (`entryId`: `tag:oceanmetrics.io,2026:changes/<seen>/<place>/<coll>/<indicator>/<kind>`, the same in every feed),
+  the sentence as title, `updated` at the build date and a link to the indicators app's Place view of the indicator.
+- **`feedsFor(rows, { places, sets?, colls? }, { base?, appUrl? })`**: the feeds and the rows each holds: `all.xml`,
+  `coll=<slug>.xml` per collection, `set=<id>.xml` per place set, `place=<id>.xml` per place (an empty feed for a place
+  with no change yet, so a link never 404s; `feedFile` maps an id's other characters to `_`). `feedsIndex(feeds,
+  updated)` is the `feeds-index` document.
+- `countKinds`, `mergeChanges` (a same-day re-run adds only what is new: deduplicated by date, cell and kind),
+  `changeKey`, `CHANGE_KINDS`.
+- The real pair of 2026-10-23 00:51 -> 01:05 (OBIS `place_exact` for the sanctuaries; 2,664 new coverage rows) gives
+  868 `new` cells over the 18 sanctuaries, 0 `status`, 0 `period`; the test holds the public rows of CINMS and FGBNMS
+  (`fixtures/changes-diff/coverage-2026-10-23.json`: 96 `new`).
+
+`/report` (`src/report.ts`), moved from the indicators repo's `src/report/spec.ts` so the Report view, its figure job and
+the alerts Worker read a rule the same way:
+
+- places `*`, `coll:<slug>` (the place's group, else a values collection that holds it), `set:<id>` or a place id;
+  indicators `*` (each series' lead), `all`, `cat:<term>`, `series:<id>[:*]` or an id; include, then exclude.
+  `matchPlaces`, `expandPlaces`, `matchIndicators`, `expandIndicators`, `seriesLeads`.
+- `rulesFromParams(kv)` / `rulesParams(rules)`: the URL keys `pi px ii ix`, defaults (`DEFAULT_RULES`: `coll:places`,
+  `*`) left out.
+- `selectRows(rules, rows, { indicators, sets? })` and `matchesRules(rules, row, ctx)`: the change (or coverage) rows a
+  watch selects, the places grouped by `place_coll ?? coll` as the Report view groups them.
+
+Schemas:
+
+- **`changes-row` 1.0**: one change row (above); every field present, nullable where it may be empty; `kind` `status`,
+  `new` or `period`; a `status` row has a status on at least one side, a `new` row no earlier period or status, a
+  `period` row both periods; `seen` a date; no "better", "worse", "improv..." or "deteriorat..." in `sentence`.
+- **`changes-latest` 1.0**: `indicators/changes/latest.json`, written every build: `date` of the last non-empty change
+  file (null before the first), `checked_at`, `manifest_version`, `counts` per kind, `hrefs` (`json`, `parquet`,
+  `feeds`) and `recent` (the last 30 files with their counts).
+- **`feeds-index` 1.0**: `indicators/feeds/index.json`: `updated` and every feed's `kind`, `id`, `href` (an `.xml`
+  url), `title`, `updated` (its newest entry, null when empty) and `entries`.
+- **`alerts-subscription` 1.0**: the alerts Worker's record and nothing more (`additionalProperties` false, so a plain
+  `email` key fails): `id`, `hmac` (HMAC-SHA256 hex of the address, kept apart and encrypted), `kinds` (default
+  `status`, `new`), `cadence` (`daily` | `weekly`), `rules` (the report rules; no `@` in a rule), `title`, `source`
+  (`place` | `report` | `alerts`), `confirmed_at` (null while pending), `created_at`, `last_sent`.
+
+Fixtures use RFC 2606 addresses only; a test fails on any address in `fixtures/` outside example.org, example.com and
+the publisher's own oceanmetrics.io contact.
+
 ## Layout
 
 ```
@@ -183,6 +256,9 @@ src/index.ts                        PROFILES, the field types and the indicators
 src/manifest.ts                     the manifest and coverage types, the column lists, the default urls
 src/indicators.ts                   @oceanmetrics/catalog/indicators: loadManifest, loadCoverage (hyparquet), + cards.ts
 src/cards.ts                        @oceanmetrics/catalog/cards: the card rules, absences, fold, Reproduce, rollups (pure)
+src/changes.ts                      @oceanmetrics/catalog/changes: diffCoverage, changeSentence, atomFeed, feedsFor (pure)
+src/report.ts                       @oceanmetrics/catalog/report: the selection rules and the pi px ii ix keys (pure)
+fixtures/changes-diff/              the real 10-23 coverage pair, rows of two sanctuaries (public)
 fixtures/indicators/                indicators.json, coverage.parquet (make_coverage.sql): the cards' synthetic fixtures
 src/validate.ts                     listProfiles(), loadSchema(name), validate(name, doc) -> { ok, errors } (Node, ajv)
 src/cli.ts                          the om-catalog bin
@@ -220,8 +296,10 @@ it reads differently from ajv (ajv runs in strict mode to keep it so).
 
 ## Size budget
 
-10 000 B gzip of `dist/**/*.js`, leaving out `dist/validate*.js` and `dist/cli*.js`: the validator and the CLI are Node
-only (ajv) and never reach a browser (`scripts/size-budget.mjs`, `NODE_ONLY`). Measured 6 726 B on 2026-10-23 at 0.3.0
-(`cards.js` 5 486, `indicators.js` 878, `manifest.js` 527, `index.js` 511, each gzipped alone), so about 1.5 times; it
-was 404 B (the profile constants) under the provisional 5 000 B before the readers and cards landed. `hyparquet` and
-`@oceanmetrics/status` are dependencies and not counted: an app that imports only the root pays 511 B.
+15 000 B gzip of `dist/**/*.js`, leaving out `dist/validate*.js` and `dist/cli*.js`: the validator and the CLI are Node
+only (ajv) and never reach a browser (`scripts/size-budget.mjs`, `NODE_ONLY`). Measured 11 560 B on 2026-10-23 at 0.5.0
+(`cards.js` 5 486, `changes.js` 3 696, `report.js` 2 170, `indicators.js` 878, `index.js` 543, `manifest.js` 527, each
+gzipped alone). Raised from 10 000 B (6 726 B at 0.3.0) when `/changes` and `/report` landed: the budget sums every
+file, while an app loads only its subpaths (the places page on `/cards` pays nothing for `/changes`; the viewer's rules
+cost what its own copy did). `hyparquet` and `@oceanmetrics/status` are dependencies and not counted: an app that
+imports only the root pays 543 B.

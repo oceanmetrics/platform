@@ -1,0 +1,29 @@
+{
+  "id": "Vb30jFJZa2gJ5vDA",
+  "hmac": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "kinds": [
+    "status"
+  ],
+  "cadence": "weekly",
+  "rules": {
+    "places": {
+      "include": [
+        "coll:mr_eez"
+      ],
+      "exclude": [
+        "MRGID:8456"
+      ]
+    },
+    "indicators": {
+      "include": [
+        "series:obis-all:*"
+      ],
+      "exclude": [
+        "obis:simpson"
+      ]
+    }
+  },
+  "source": "report",
+  "confirmed_at": null,
+  "created_at": "2026-12-01T09:00:00Z"
+}

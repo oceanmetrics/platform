@@ -1,7 +1,7 @@
 {
   "name": "@oceanmetrics/catalog",
-  "version": "0.4.0",
-  "description": "the Ocean Metrics catalogs: STAC layer profiles (JSON Schemas, types, a validator and the om-catalog CLI), the values contract, and the indicators readers and cards",
+  "version": "0.5.0",
+  "description": "the Ocean Metrics catalogs: STAC layer profiles (JSON Schemas, types, a validator and the om-catalog CLI), the values contract, the indicators readers and cards, the change feed and the report rules",
   "keywords": [
     "ocean",
     "stac",
@@ -38,6 +38,14 @@
     "./cards": {
       "types": "./dist/cards.d.ts",
       "default": "./dist/cards.js"
+    },
+    "./changes": {
+      "types": "./dist/changes.d.ts",
+      "default": "./dist/changes.js"
+    },
+    "./report": {
+      "types": "./dist/report.d.ts",
+      "default": "./dist/report.js"
     },
     "./validate": {
       "types": "./dist/validate.d.ts",

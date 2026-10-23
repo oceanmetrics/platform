@@ -543,3 +543,17 @@ describe('om-catalog', () => {
     expect(run(['validate', 'nope', 'x.json'], l.o, l.e)).toBe(2)
   })
 })
+
+// the publisher's own contact (a STAC provider's, oceanmetrics.io) is public; any other address is a subscriber's or a person's
+describe('fixtures hold no address (RFC 2606 domains and the publisher\'s own only)', () => {
+  const files = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap(e =>
+    e.isDirectory() ? files(join(dir, e.name)) : e.name.endsWith('.json') ? [join(dir, e.name)] : [])
+  const ADDRESS = /[A-Za-z0-9._%+-]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,}/g
+  const outside = (text: string) => [...text.matchAll(ADDRESS)].map(m => m[0]).filter(a => !/@(example\.(org|com)|oceanmetrics\.io)$/.test(a))
+  it('every address in a fixture is at example.org, example.com or oceanmetrics.io', () => {
+    for (const f of files(FIXTURES)) expect([f, outside(readFileSync(f, 'utf8'))]).toEqual([f, []])
+  })
+  it('seeded fault: an address elsewhere is caught', () => {
+    expect(outside('{"email": "someone@example.org", "x": "a.person@noaa.gov"}')).toEqual(['a.person@noaa.gov'])
+  })
+})

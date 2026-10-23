@@ -1,0 +1,8 @@
+{
+  "status-without-to-status.json": "must have required property 'to_status'",
+  "kind-gone.json": "/kind: must be equal to one of the allowed values",
+  "worse-in-sentence.json": "/sentence: must NOT be valid (a status is never better or worse)",
+  "status-without-a-status.json": "a status row has a status before or after",
+  "new-with-earlier-period.json": "/from_time: must be null",
+  "seen-not-a-date.json": "/seen: must match pattern"
+}

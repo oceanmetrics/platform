@@ -19,7 +19,9 @@ const ROOT = new URL('../packages/', import.meta.url).pathname
 // line below; the legend reader is a lazy 20.9 kB chunk with hyparquet and fzstd). the reason is in the map README "Size".
 // engine: 26_794 on 2026-10-23 (0.1.0: the mask, the ERDDAP and dataset modules, the engine, the preview and the five
 // SQL templates as strings; DuckDB-WASM and Apache Arrow are peers and not counted), so 40_000.
-const BUDGET = { places: 18_000, status: 12_000, map: 48_000, catalog: 10_000, engine: 40_000 }
+// catalog 0.5.0: 11_560 on 2026-10-23: /changes (diff, sentences, Atom, feed names; 3_696) and /report (the rules moved
+// from indicators; 2_170) land, each loaded only by its own users, so 15_000 (README "Size budget").
+const BUDGET = { places: 18_000, status: 12_000, map: 48_000, catalog: 15_000, engine: 40_000 }
 
 // files a browser never loads, left out of a package's measure: catalog's validator (ajv) and CLI are Node only,
 // reached through the @oceanmetrics/catalog/validate subpath and the om-catalog bin, never from the package index

@@ -1,6 +1,23 @@
 # Changelog
 
-## 0.4.0 (unreleased)
+## 0.5.0 (unreleased)
+
+- `@oceanmetrics/catalog/changes` (new, pure): `diffCoverage(before, after, { seen?, manifest? })` -> `ChangeRow[]`, one
+  row per place x indicator at the card's row, of kind `new` (a first value), `status` (the status word changed) or
+  `period` (a later period); `changeSentence(row, manifest?)`, the one wording for feeds, mails and the front page;
+  `atomFeed(rows, { title, id, updated, link, self?, subtitle?, max? })` (RFC 4287, stable entry ids `entryId`);
+  `feedsFor(rows, { places, sets?, colls? }, { base?, appUrl? })` (all, `coll=`, `set=`, `place=` feeds) and
+  `feedsIndex`; `countKinds`, `mergeChanges`, `changeKey`, `feedFile`, `CHANGE_KINDS`.
+- `@oceanmetrics/catalog/report` (new, pure): the selection rules moved from oceanmetrics/indicators `src/report/spec.ts`
+  (`matchPlaces`, `expandPlaces`, `matchIndicators`, `expandIndicators`, `seriesLeads` and their types), plus
+  `rulesFromParams`/`rulesParams` (the `pi px ii ix` keys, `DEFAULT_RULES`), `selectRows` and `matchesRules` (the rows a
+  watch selects). `IndicatorLike.category` is optional.
+- Four schemas join `PROFILES`, each with valid and invalid fixtures: `changes-row`, `changes-latest`, `feeds-index`,
+  `alerts-subscription` (no address: a plain `email` key fails).
+- A test fails on any address in `fixtures/` outside example.org, example.com and oceanmetrics.io.
+- Size budget 15 000 B (was 10 000; measured 11 560), the reason in the README.
+
+## 0.4.0
 
 - The `h3` profile 1.1 (`$id` `https://oceanmetrics.io/schemas/h3/v1.1.0/schema.json`), for the obis-h3 release as one
   STAC collection with decades and years (build week 4, step 1). Every new field is optional, so the v20261012 shape

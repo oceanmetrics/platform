@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/feeds-index/v1.0.0/schema.json",
+  "title": "Ocean Metrics indicators feeds: the index",
+  "description": "indicators/feeds/index.json: every Atom feed of the change rows, one for all, one per collection, one per place set and one per place (@oceanmetrics/catalog/changes feedsFor). The alerts page and the Place page read it to name and link the feeds.",
+  "type": "object",
+  "required": [
+    "updated",
+    "feeds"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "updated": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$",
+      "description": "When the feeds were written, UTC."
+    },
+    "feeds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "id",
+          "href",
+          "title",
+          "updated"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "all",
+              "coll",
+              "set",
+              "place"
+            ],
+            "description": "Which feed: every change, a collection's, a place set's or a place's."
+          },
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The place id, collection slug or set id; `all` for all."
+          },
+          "href": {
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https?://.+\\.xml$",
+            "description": "The Atom feed's url."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The feed's title."
+          },
+          "updated": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$",
+            "description": "The time of its newest entry; null for a feed with no entry yet."
+          },
+          "entries": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "How many entries it holds."
+          }
+        }
+      },
+      "description": "The feeds: all first, then collections, sets and places."
+    }
+  }
+}

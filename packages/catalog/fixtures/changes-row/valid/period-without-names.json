@@ -1,0 +1,15 @@
+{
+  "place_id": "MRGID:8371",
+  "coll": "mr_eez",
+  "indicator": "sdg:ER_MRN_MPA",
+  "kind": "period",
+  "time_grain": "year",
+  "from_status": null,
+  "to_status": null,
+  "from_time": "2023-01-01",
+  "to_time": "2024-01-01",
+  "value": 12.5,
+  "unit": null,
+  "sentence": "sdg:ER_MRN_MPA in MRGID:8371 has a value for 2024: 12.50; the last was for 2023.",
+  "seen": "2026-10-20"
+}

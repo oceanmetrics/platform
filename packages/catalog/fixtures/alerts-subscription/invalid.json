@@ -1,0 +1,8 @@
+{
+  "plain-email.json": "must NOT have additional properties: \"email\"",
+  "unknown-kind.json": "/kinds/1: must be equal to one of the allowed values",
+  "hourly.json": "/cadence: must be equal to one of the allowed values",
+  "bad-hmac.json": "/hmac: must match pattern",
+  "address-in-a-rule.json": "/rules/places/include/0: must match pattern",
+  "no-kinds.json": "/kinds: must NOT have fewer than 1 items"
+}

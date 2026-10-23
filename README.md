@@ -10,7 +10,7 @@ rule or a reader is written once.
 | [`@oceanmetrics/status`](packages/status/) | the status methods (`iea-sd`, `names-pct`, `values`), the period grid, sentences and alt text, the quadrant plot rules | moved in at 0.1.0 from `oceanmetrics/indicators` `src/status/`, with the ecoidx cross-check fixture |
 | [`@oceanmetrics/map`](packages/map/) | the map stack: MapLibre 6 setup, the bathymetric basemap, the ramps, the layer slot contract and its providers (grid slice, COG, H3) | 0.2.0 (2026-10-23, build week 2 step 1; 0.1.0 was the scaffold); the basemap tiers are built by `scripts/basemap/build_gebco.sh`, not uploaded yet |
 | [`@oceanmetrics/engine`](packages/engine/) | the browser engine: the place mask, the lobes, ERDDAP requests, the SQL templates shared with `om_extract`, DuckDB-WASM statistics, the chunked live preview and the map's grid slice | 0.1.0 (2026-10-23, build week 2 step 2b): moved from erddap-places (the frozen original); `indicators` is its first consumer (step 2c); not in the Day 5 publish |
-| [`@oceanmetrics/catalog`](packages/catalog/) | the catalog contracts: the STAC layer profiles (JSON Schemas, types, a validator, the `om-catalog` CLI), the values contract, and the indicators readers and cards (`/indicators`, `/cards`) | 0.4.0 (2026-10-23, build week 4 step 1, unreleased): the `h3` profile 1.1 (period sets for decades and years, the species table's first and last year, `h3:heads`, `row_group_rows`); 0.3.0: the indicator cards shared by the indicators viewer and the places record page |
+| [`@oceanmetrics/catalog`](packages/catalog/) | the catalog contracts: the STAC layer profiles (JSON Schemas, types, a validator, the `om-catalog` CLI), the values contract, and the indicators readers and cards (`/indicators`, `/cards`), the change feed (`/changes`) and the report rules (`/report`) | 0.5.0 (2026-10-23, build week 5 step 0, unreleased): `/changes` (`diffCoverage`, `changeSentence`, `atomFeed`, `feedsFor`), `/report` (the selection rules moved from indicators) and the `changes-row`, `changes-latest`, `feeds-index` and `alerts-subscription` schemas; 0.4.0: the `h3` profile 1.1 (period sets for decades and years, the species table's first and last year, `h3:heads`, `row_group_rows`); 0.3.0: the indicator cards shared by the indicators viewer and the places record page |
 
 ## Rules
 
@@ -82,7 +82,11 @@ what an app pays per provider); catalog 10 000 B (measured 6 726 on 2026-10-23 a
 cards landed; 404 B before, the profile constants alone; its Node-only validator and CLI left out: they never reach a
 browser; hyparquet and `@oceanmetrics/status` are dependencies and not counted); engine 40 000 B (measured 26 794 on 2026-10-23
 at 0.1.0, the five SQL templates included; DuckDB-WASM and Apache Arrow are peers and not counted; packages/engine/README.md
-has what an app pays per entry). Raise a budget only with the reason written here.
+has what an app pays per entry). Catalog raised to 15 000 B on 2026-10-23 at 0.5.0 (measured 11 560): two subpaths
+landed, `/changes` (3 696 B: the diff, the sentences, the Atom builder and the feed names) and `/report` (2 170 B: the
+selection rules moved from the indicators repo), and the budget sums every file while no app loads them all (an app on
+`/cards` pays nothing for `/changes`; the viewer's rules cost what its own copy did). Raise a budget only with the reason
+written here.
 
 ## Licence
 

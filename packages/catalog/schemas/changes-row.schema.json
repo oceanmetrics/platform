@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/changes-row/v1.0.0/schema.json",
+  "title": "Ocean Metrics indicators change: one row of a change file",
+  "description": "One change at a place x indicator between two builds of the indicators catalog, read at the card's row (the status grain first, as @oceanmetrics/catalog pickRow), written by @oceanmetrics/catalog/changes diffCoverage to indicators/changes/<YYYY-MM-DD>.json and .parquet. `new`: the cell gained its first value; `status`: its status word changed (a word to another, a first word, or a word lost); `period`: its latest period advanced. A cell gives at most one row a day, in that order of precedence. Statuses are relative to the place's own record: no sentence says better or worse.",
+  "type": "object",
+  "required": [
+    "place_id",
+    "coll",
+    "indicator",
+    "kind",
+    "time_grain",
+    "from_status",
+    "to_status",
+    "from_time",
+    "to_time",
+    "value",
+    "unit",
+    "sentence",
+    "seen"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "place_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*:\\S+$",
+      "description": "Gazetteer place id, `<authority>:<source_id>` (e.g. NMS:CINMS, MRGID:8371)."
+    },
+    "place_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The place's name, from the coverage row."
+    },
+    "coll": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "The values collection the row was read from (which values file holds it)."
+    },
+    "place_coll": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "The place's home gazetteer collection, its group; readers use `place_coll ?? coll`."
+    },
+    "indicator": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*:[A-Za-z0-9_.\\-]+(:[A-Za-z0-9_.\\-]+)*$",
+      "description": "Indicator id, as indicators.json lists it."
+    },
+    "kind": {
+      "enum": [
+        "status",
+        "new",
+        "period"
+      ],
+      "description": "What changed: `status` (the status word), `new` (the first value), `period` (a later period)."
+    },
+    "time_grain": {
+      "enum": [
+        "all",
+        "decade",
+        "year",
+        "month",
+        "day"
+      ],
+      "description": "The grain of the card's row."
+    },
+    "from_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "above",
+        "within",
+        "below",
+        null
+      ],
+      "description": "The status before; null when there was none."
+    },
+    "to_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "above",
+        "within",
+        "below",
+        null
+      ],
+      "description": "The status after; null when there is none."
+    },
+    "from_time": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "The last period before (its first day); null for a `new` row."
+    },
+    "to_time": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "The last period after (its first day); null at the `all` grain."
+    },
+    "value": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "The last value after the change."
+    },
+    "unit": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The value's unit, from the manifest; null when unknown."
+    },
+    "sentence": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "description": "a status is never better or worse",
+        "pattern": "([Bb]etter|[Ww]orse|[Ii]mprov|[Dd]eteriorat)"
+      },
+      "description": "The change in words (changeSentence): the one wording for a feed entry, a mail line and the front page."
+    },
+    "seen": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "The build date the change was seen, YYYY-MM-DD."
+    }
+  },
+  "allOf": [
+    {
+      "description": "a status row has a status on at least one side, and the two differ (a reader check: the schema states the first half)",
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "status"
+          }
+        }
+      },
+      "then": {
+        "anyOf": [
+          {
+            "properties": {
+              "from_status": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "properties": {
+              "to_status": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "description": "a status row has a status before or after"
+      }
+    },
+    {
+      "description": "a new row has no earlier period and no earlier status",
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "new"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "from_time": {
+            "type": "null"
+          },
+          "from_status": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "description": "a period row has both periods",
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "period"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "from_time": {
+            "type": "string"
+          },
+          "to_time": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ]
+}

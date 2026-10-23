@@ -1,0 +1,17 @@
+{
+  "place_id": "NMS:FGBNMS",
+  "place_name": "Flower Garden Banks National Marine Sanctuary",
+  "coll": "places",
+  "place_coll": "places",
+  "indicator": "obis:records",
+  "kind": "new",
+  "time_grain": "year",
+  "from_status": null,
+  "to_status": null,
+  "from_time": null,
+  "to_time": "2024-01-01",
+  "value": 412,
+  "unit": "records",
+  "sentence": "OBIS records in Flower Garden Banks National Marine Sanctuary has its first value: 412.00 records for 2024.",
+  "seen": "2026-10-23"
+}

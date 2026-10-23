@@ -1,0 +1,15 @@
+{
+  "date": null,
+  "checked_at": "2026-10-23T08:21:40Z",
+  "counts": {
+    "status": 0,
+    "new": 0,
+    "period": 0
+  },
+  "hrefs": {
+    "json": null,
+    "parquet": null,
+    "feeds": "feeds/index.json"
+  },
+  "recent": []
+}

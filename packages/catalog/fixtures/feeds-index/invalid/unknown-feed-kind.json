@@ -1,0 +1,37 @@
+{
+  "updated": "2026-10-23T08:21:40Z",
+  "feeds": [
+    {
+      "kind": "all",
+      "id": "all",
+      "href": "https://storage.oceanmetrics.io/indicators/feeds/all.xml",
+      "title": "Ocean Metrics indicators: all changes",
+      "updated": "2026-10-23T00:00:00Z",
+      "entries": 100
+    },
+    {
+      "kind": "coll",
+      "id": "places",
+      "href": "https://storage.oceanmetrics.io/indicators/feeds/coll=places.xml",
+      "title": "Ocean Metrics indicators: places",
+      "updated": "2026-10-23T00:00:00Z",
+      "entries": 100
+    },
+    {
+      "kind": "set",
+      "id": "political",
+      "href": "https://storage.oceanmetrics.io/indicators/feeds/set=political.xml",
+      "title": "Ocean Metrics indicators: Political boundaries",
+      "updated": null,
+      "entries": 0
+    },
+    {
+      "kind": "region",
+      "id": "NMS:CINMS",
+      "href": "https://storage.oceanmetrics.io/indicators/feeds/place=NMS:CINMS.xml",
+      "title": "Ocean Metrics indicators: Channel Islands National Marine Sanctuary",
+      "updated": "2026-10-23T00:00:00Z",
+      "entries": 56
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "counts-without-period.json": "/counts: must have required property 'period'",
+  "unknown-kind-count.json": "must NOT have additional properties: \"gone\"",
+  "no-checked-at.json": "must have required property 'checked_at'",
+  "more-than-30-recent.json": "/recent: must NOT have more than 30 items"
+}

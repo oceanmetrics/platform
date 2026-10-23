@@ -1,0 +1,5 @@
+{
+  "unknown-feed-kind.json": "/feeds/3/kind: must be equal to one of the allowed values",
+  "not-an-atom-file.json": "/feeds/0/href: must match pattern",
+  "feed-without-title.json": "/feeds/1: must have required property 'title'"
+}

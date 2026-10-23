@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://oceanmetrics.io/schemas/alerts-subscription/v1.0.0/schema.json",
+  "title": "Ocean Metrics alerts: one subscription record",
+  "description": "The record the alerts Worker keeps per subscription (KV `sub:<id>`), and nothing more: no address, name, organization or IP. The address is kept apart, encrypted, and found by its HMAC. What is watched is the report spec's own selection rules (@oceanmetrics/catalog/report): places `*`, `coll:<slug>`, `set:<id>` or a place id; indicators `*`, `all`, `cat:<term>`, `series:<id>[:*]` or an id; so a subscription picks up what is published later.",
+  "type": "object",
+  "required": [
+    "id",
+    "hmac",
+    "kinds",
+    "cadence",
+    "rules",
+    "confirmed_at",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,64}$",
+      "description": "The subscription id: random, url-safe."
+    },
+    "hmac": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "HMAC-SHA256 of the normalised address, hex: finds the record from an address without storing it."
+    },
+    "kinds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "status",
+          "new",
+          "period"
+        ]
+      },
+      "default": [
+        "status",
+        "new"
+      ],
+      "description": "The change kinds mailed (default status and new)."
+    },
+    "cadence": {
+      "enum": [
+        "daily",
+        "weekly"
+      ],
+      "description": "At most one mail a day, or one a week (Mondays)."
+    },
+    "rules": {
+      "type": "object",
+      "required": [
+        "places",
+        "indicators"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "places": {
+          "type": "object",
+          "required": [
+            "include",
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[^@,\\s]+$"
+              },
+              "description": "Include rules, as the report spec's (`pi`, `ii`)."
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[^@,\\s]+$"
+              },
+              "description": "Exclude rules (`px`, `ix`)."
+            }
+          },
+          "description": "The places rules."
+        },
+        "indicators": {
+          "type": "object",
+          "required": [
+            "include",
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[^@,\\s]+$"
+              },
+              "description": "Include rules, as the report spec's (`pi`, `ii`)."
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[^@,\\s]+$"
+              },
+              "description": "Exclude rules (`px`, `ix`)."
+            }
+          },
+          "description": "The indicators rules."
+        }
+      },
+      "description": "What is watched: the report spec's places and indicators rules."
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200,
+      "pattern": "^[^@]*$",
+      "description": "The watch in words, from the report or the place page (no address)."
+    },
+    "source": {
+      "enum": [
+        "place",
+        "report",
+        "alerts"
+      ],
+      "description": "Where the subscription was made: a Place page, a report, the alerts page."
+    },
+    "confirmed_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$",
+      "description": "When the address was confirmed (double opt-in); null while pending."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z$",
+      "description": "When the subscription was asked for, UTC."
+    },
+    "last_sent": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "The change date of the last mail sent."
+    }
+  }
+}
