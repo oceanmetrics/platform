@@ -30,6 +30,7 @@ From `oceanmetrics/erddap-places` on 2026-10-23 (app 0.3.12, commit 3b1868a):
 | `src/erddap.ts` | `app/src/lib/erddap.ts` | `.js` import specifiers only |
 | `src/extent.ts` | `app/src/lib/extent.ts` | `.js` import specifiers only |
 | `src/fetchRetry.ts` | `app/src/lib/fetchRetry.ts` | `.js` import specifiers only |
+| `src/patient.ts` | new (0.1.2): the retry the places page and the indicators viewer each wrote | `patientFetch(url, init?, { tries = 6, delayMs, onRetry?, retryOn? })`: asks each request again on a network error, a 404 "Currently unknown datasetID", a 429 or a 5xx; abortable through `init.signal`; throws a `PatientFetchError` (an `ErddapUnreachable` with the last `status`) after `tries` |
 | `src/cells.ts` | `app/src/lib/cells.ts` | nothing (`@oceanmetrics/map` `grid.ts` has its own port of `cellSquares`; `cellPoints` and `placeMapBounds` live here) |
 | `src/dataset.ts` | `app/src/lib/catalog.ts` | the pure functions word for word (`toDataset`, `valueExpr`, `statsTemplate`, `lobeLonSpan`, `resolveDataset` ...); `loadDatasets` (reads the gazetteer's catalog.json) and `linkMismatch` (the app's wording) stay in the app |
 | `src/chunks.ts` | `precompute/src/stats.ts` `window`, `chunks`, `chunkDaysFor`; `precompute/src/targets.ts` `MAX_CHUNK_DAYS`, `MAX_REQUEST_VALUES` | `chunks()` word for word; `chunkDaysFor()` takes the two limits as options (defaulting to 90 and 100,000); `window()` defaults to `'all'` (the precompute's `DAYS`) |

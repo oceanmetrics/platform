@@ -18,6 +18,8 @@ export {
 export type { ClampResult, InfoTable, TimeExtent, Window, WindowOpts } from './extent.js'
 export { ErddapUnreachable, fetchRetry, hostOf, mapFailMessage } from './fetchRetry.js'
 export type { RetryOpts } from './fetchRetry.js'
+export { PatientFetchError, UNKNOWN_DATASET, isRetryable, patientFetch } from './patient.js'
+export type { PatientOpts, PatientRetry } from './patient.js'
 export { axisSpacing, cellPoints, cellSquares, indexBounds, normalizeLon, pickCenter, placeMapBounds } from './cells.js'
 export type { CellPoints, CellProps, CellSquares, CellSquaresOptions, LonCenter, ValueCell } from './cells.js'
 export {

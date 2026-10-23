@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.2 (2026-10-23)
+
+- New: `patientFetch(url, init?, { tries = 6, delayMs = 300, maxDelayMs = 4000, onRetry?, retryOn? })`, the one rule for
+  asking an ERDDAP request again when the server drops it (the places page and the indicators viewer each carried a copy).
+  Retried: a network error, a 404 whose body says "Currently unknown datasetID" (the mirror answers the same url 404 and
+  200 by turns), a 429 and a 5xx, after a pause of `delayMs` x the try, capped at `maxDelayMs`. Any other answer, a 4xx
+  included, is returned at once. `init.signal` aborts it at once, between tries too; `onRetry` reports each retry (try,
+  pause, reason, status). After `tries` failed tries it throws a `PatientFetchError` (an `ErddapUnreachable`, so the message
+  names the host and the last status: "erddap.oceanmetrics.io did not answer (HTTP 503 Service Unavailable, 6 tries)"),
+  with `status` and `cause`. Also exported: `isRetryable` (the default rule, for a `retryOn` that adds to it), `UNKNOWN_DATASET`.
+  `fetchRetry` is unchanged. To get a `typeof fetch` for `lobeAxes`, `fetchTimeExtent` and `sliceSource`:
+  `(u, init) => patientFetch(u as string, init)`.
+- Differs from the two app copies on purpose: they returned the last response after the last try; this throws, and only a
+  404 that names the unknown dataset is retried (they retried every 404).
+
 ## 0.1.1 (2026-10-23)
 
 - Fix: `sliceSource().slice()` read the lobes' slabs without the `SELECT DISTINCT` that `runPreview` applies, so where two
