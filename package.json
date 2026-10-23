@@ -8,7 +8,7 @@
   "workspaces": ["packages/*", "workers/*"],
   "engines": { "node": ">=22" },
   "scripts": {
-    "test": "vitest run && npm test -w workers/alerts",
+    "test": "vitest run && npm test -w workers/alerts && npm test -w workers/usage",
     "typecheck": "npm run typecheck --workspaces",
     "build": "npm run build --workspaces",
     "size": "node scripts/size-budget.mjs"

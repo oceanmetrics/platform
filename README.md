@@ -16,6 +16,8 @@ rule or a reader is written once.
 One Worker lives here too, beside the packages it imports (decision D6 of the week 5 plan): **[`workers/alerts/`](workers/alerts/)**,
 `om-alerts`, the email alerts of the indicators (confirmed opt-in, hourly digests of the change files). It is an npm
 workspace but not a package (`private`, never published); its README has the routes, the KV layout and the runbook.
+Beside it, **[`workers/usage/`](workers/usage/)** is not a Worker but a Node script: the weekly usage numbers per catalog from the
+Workers' Analytics Engine datasets (`--dry-run` prints the SQL; needs a read token only to run for real).
 
 ## Rules
 

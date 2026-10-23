@@ -65,6 +65,10 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
   runs after the packages' vitest. No address in any file but `alerts@mail.oceanmetrics.io` and RFC 2606 examples
   (`scripts/no-addresses.mjs`); the KV `ALERTS` holds the list, addresses AES-GCM encrypted; secrets only via
   `wrangler secret put`. Its README has the routes and the runbook.
+- **`workers/usage/` is the weekly usage script** (a workspace, not a Worker): `usage.mjs` posts the Analytics Engine SQL
+  (`om_gazetteer` per prefix, `om_alerts` routes and digests) for 7 and 30 days, prints a Markdown table and writes
+  `<out>/usage/<date>.json` outside the repo. The token `CF_AE_TOKEN` comes from the environment or `~/.config/oceanmetrics/cf-ae.env`,
+  never the repo. Plain Node, no dependency; its README has the token scope and the launchd plist.
 - Source imports use `.js` specifiers (`./grid.js`) so the emitted declarations and `dist/*.js` resolve for every consumer
   and for plain Node ESM (places 0.5.1 shipped without them); `scripts/esm-load.test.ts` builds and loads each `dist/index.js` in Node.
 

@@ -1,0 +1,15 @@
+{
+  "name": "@oceanmetrics/usage",
+  "version": "0.1.0",
+  "private": true,
+  "description": "weekly usage numbers per catalog from the Workers' Analytics Engine datasets (a Node script, not a Worker)",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "om-usage": "usage.mjs" },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "build": "node --check usage.mjs && node --check lib.mjs",
+    "usage": "node usage.mjs"
+  }
+}
