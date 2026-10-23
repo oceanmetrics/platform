@@ -7,9 +7,9 @@
 // the sea floor and the data, so the coast is CARTO's own at every zoom.
 //
 // Left out of the port: explore's boundary registry (composeBoundaries; the places package draws boundaries) and the
-// `import.meta.env` urls (the tiers are a `BasemapTiles` config here). The tiers at the default urls are built in build
-// week 2 by `scripts/basemap/build_gebco.sh` (a global far tier z0-5, regional core tiers z0-8 over the 18 sanctuaries,
-// the contours); until they are uploaded the default urls 404 and an app passes its own `tiles`.
+// `import.meta.env` urls (the tiers are a `BasemapTiles` config here). The tiers at the default urls are built by
+// `scripts/basemap/build_gebco.sh` on the Mac mini: far (the globe, z0-5), core (the globe, z0-8), a regional tier
+// over the 18 sanctuaries (z9-10), the contours, the OSM land mask and the undersea names, all global.
 import type { LayerSpecification, StyleSpecification } from 'maplibre-gl'
 
 export type Theme = 'dark' | 'light'
@@ -20,8 +20,11 @@ export const BATHY_PARTS: readonly BathyPart[] = ['relief', 'depth', 'contours']
 
 /** where the archives live; each is a PMTiles url, null leaves that part out */
 export interface BasemapTiles {
-  /** terrain-RGB, z0-8 over the regional boxes (custom 1 m encoding) */
+  /** terrain-RGB, z0-8 over the globe (custom 1 m encoding) */
   core: string
+  /** deeper terrain-RGB tiers drawn over core from z9 (`REGIONAL_MINZOOM`), each its own archive of the same encoding:
+   * the default is the 18 sanctuaries' boxes at z9-10. Absent or empty: core is overzoomed past z8 */
+  regional?: readonly string[]
   /** terrain-RGB, z0-5 over the globe */
   far: string
   /** isobath lines (`ele`, `level`), source layer `contours` */
@@ -35,6 +38,7 @@ export const BASEMAP_URL = 'https://storage.oceanmetrics.io/basemap/'
 export const DEFAULT_TILES: Readonly<BasemapTiles> = {
   core: `${BASEMAP_URL}gebco/core.pmtiles`,
   far: `${BASEMAP_URL}gebco/far.pmtiles`,
+  regional: [`${BASEMAP_URL}gebco/core-sanctuaries.pmtiles`],
   contours: `${BASEMAP_URL}gebco/contours.pmtiles`,
   names: `${BASEMAP_URL}gebco/names.pmtiles`,
   land: `${BASEMAP_URL}osm/land.pmtiles`,
@@ -42,6 +46,8 @@ export const DEFAULT_TILES: Readonly<BasemapTiles> = {
 export const SOURCE_LAYERS = { contours: 'contours', names: 'names', land: 'land' } as const
 /** the custom 1 m terrain-RGB encoding of the tiers: elevation = R·65536 + G·256 + B − 10000 (explore D21) */
 export const DEM_ENCODING = { encoding: 'custom', redFactor: 65536, greenFactor: 256, blueFactor: 1, baseShift: 10000, tileSize: 512 } as const
+/** the zoom the regional tiers start at (the build's REGIONAL_ZMIN) */
+export const REGIONAL_MINZOOM = 9
 export const GEBCO_ATTRIBUTION = 'GEBCO Compilation Group (2025) GEBCO 2025 Grid'
 export const NAMES_ATTRIBUTION = 'IHO-IOC GEBCO Gazetteer of Undersea Feature Names'
 export const LAND_ATTRIBUTION = '© OpenStreetMap contributors'
@@ -170,17 +176,28 @@ export function composeStyle(base: StyleSpecification, opts: BasemapOptions): St
   return style as unknown as StyleSpecification
 }
 
+/** the source id of the i-th regional tier: `gebco-regional`, `gebco-regional-2`, ... (its layers add `-relief`, `-shade`) */
+export const regionalSourceId = (i: number): string => (i === 0 ? 'gebco-regional' : `gebco-regional-${i + 1}`)
+
 function seaFloorLayers(style: Style, theme: Theme, tiles: BasemapTiles, parts: readonly BathyPart[], opacity: number | null): Layer[] {
   const o = opacity ?? bathyDefaultOpacity(theme)
   const k = Math.min(1.4, o / bathyDefaultOpacity(theme))
   const dem = (url: string) => ({ type: 'raster-dem', url: `pmtiles://${url}`, ...DEM_ENCODING, attribution: GEBCO_ATTRIBUTION })
   style.sources['gebco-far'] = dem(tiles.far)
   style.sources['gebco'] = dem(tiles.core)
+  // far under core under the regional tiers, each tier its own source and its own relief and shade layers
+  const tiers: { src: string; minzoom?: number }[] = [{ src: 'gebco-far' }, { src: 'gebco' }]
+  ;(tiles.regional ?? []).forEach((url, i) => {
+    const src = regionalSourceId(i)
+    style.sources[src] = dem(url)
+    tiers.push({ src, minzoom: REGIONAL_MINZOOM })
+  })
   const out: Layer[] = []
-  for (const src of ['gebco-far', 'gebco']) {
-    if (parts.includes('depth')) out.push({ id: `${src}-relief`, type: 'color-relief', source: src,
+  for (const { src, minzoom } of tiers) {
+    const gate = minzoom === undefined ? {} : { minzoom }
+    if (parts.includes('depth')) out.push({ id: `${src}-relief`, type: 'color-relief', source: src, ...gate,
       paint: { 'color-relief-opacity': o, 'color-relief-color': ['interpolate', ['linear'], ['elevation'], ...BATHY_RAMP[theme]] } })
-    if (parts.includes('relief')) out.push({ id: `${src}-shade`, type: 'hillshade', source: src,
+    if (parts.includes('relief')) out.push({ id: `${src}-shade`, type: 'hillshade', source: src, ...gate,
       paint: { 'hillshade-method': 'igor', 'hillshade-exaggeration': Math.min(1, 0.5 * k), ...SHADE[theme] } })
   }
   if (parts.includes('contours') && tiles.contours) {
@@ -286,7 +303,7 @@ export const basemapLayerIds = (style: Pick<StyleSpecification, 'layers'>): Set<
 
 // ---- where the data goes ----
 
-const SEA_FLOOR = /^gebco(-far)?-(relief|shade)$|^gebco-contour/
+const SEA_FLOOR = /^gebco(-far|-regional(-\d+)?)?-(relief|shade)$|^gebco-contour/
 
 /** the id the data layers go under (the sea surface): the land mask when it is on, else the first layer above the sea
  * floor (or above CARTO's water); null when the style has neither */

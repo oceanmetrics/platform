@@ -57,29 +57,69 @@ the cells whose hexagon reaches it. In Node pass `gzip: (b) => zlib.gzipSync(b, 
 
 `composeStyle(cartoStyle, { theme, tiles?, parts?, opacity?, land?, names?, baseLabels? })` (`basemap.ts`, a port of
 CalCOFI explore's `composeStyle`) returns one style for `map.setStyle(style, { diff: true })`: CARTO's style with the
-ocean moved to the bottom, the GEBCO sea floor as colour relief and igor hillshade from two terrain-RGB tiers
-(`gebco-far` under `gebco`), isobaths gated by level and zoom (`CONTOUR_LEVELS`: 1000 m multiples from z0, 500 from
+ocean moved to the bottom, the GEBCO sea floor as colour relief and igor hillshade from terrain-RGB tiers (`gebco-far`
+under `gebco` under the `regional` tiers from z9), isobaths gated by level and zoom (`CONTOUR_LEVELS`: 1000 m multiples from z0, 500 from
 z5, 100-750 from z7, 50 from z9), the OSM land mask, the GEBCO undersea names, and CARTO's own text toned down, in both
 themes. `dem: false` gives the boot style (first paint does not wait for terrain). `baseStyle(theme)` fetches CARTO's
 style once.
 
-The tiers live at `DEFAULT_TILES`, under `https://storage.oceanmetrics.io/basemap/`:
+The tiers live at `DEFAULT_TILES`, under `https://storage.oceanmetrics.io/basemap/`. All are global except the regional
+tier, built from GEBCO 2025 (`GEBCO_2025` grid, 15 arc-second, ice-surface version, downloaded 2026-10-23 from
+`dap.ceda.ac.uk/bodc/gebco/global/gebco_2025/`, 4.2 GB zip of eight GeoTIFFs) on the Mac mini by
+`scripts/basemap/build_gebco.sh` (about 1 h 20 min end to end with 10 parallel blocks):
 
-| part | url | built by |
-|---|---|---|
-| far | `gebco/far.pmtiles` | `scripts/basemap/build_gebco.sh`: the globe, z0-5 |
-| core | `gebco/core.pmtiles` | the same script: the 18 sanctuaries' boxes (padded 1°), z0-8 |
-| contours | `gebco/contours.pmtiles` | the same script: 500/1000 m globally, every level in the boxes, z0-10 |
-| land | `osm/land.pmtiles` | the same script: OSM land polygons clipped to the boxes, z0-12 |
-| names | `gebco/names.pmtiles` | not yet: CalCOFI workflows `libs/reference_layers.R` (the IHO-IOC gazetteer, rank 1-3) |
+| part | url | zooms | tiles | bytes | what |
+|---|---|---|---|---|---|
+| far | `gebco/far.pmtiles` | 0-5 | 1,365 | 205,342,212 (196 MB) | terrain-RGB, the globe; a small tier for first paint |
+| core | `gebco/core.pmtiles` | 0-8 | 87,381 | 5,690,322,235 (5.3 GiB) | terrain-RGB, the globe (z0-5 are far's tiles; z6 449.6 MB, z7 1.30 GB, z8 3.78 GB of PNG) |
+| regional | `gebco/core-sanctuaries.pmtiles` | 9-10 | 6,742 | 457,140,143 (436 MiB) | terrain-RGB, the 18 sanctuaries' boxes padded 1° (PMNM in two), z9 1,430 tiles, z10 5,312 |
+| contours | `gebco/contours.pmtiles` | 0-10 | 582,050 | 640,315,888 (611 MiB) | isobaths, source layer `contours` (`ele`, `level`): z0-6 the 500/1000 m lines of a ~4.6 km grid, z7-10 every level at the full 15" resolution, gated by zoom as `CONTOUR_LEVELS` |
+| land | `osm/land.pmtiles` | 0-10 | 610,484 | 161,505,661 (154 MiB) | OpenStreetMap land polygons (osmdata.openstreetmap.de, 2026-08-31 extract), source layer `land` |
+| names | `gebco/names.pmtiles` | 0-10 | 56,614 | 11,075,106 (10.6 MiB) | IHO-IOC GEBCO gazetteer, 5,412 records (2,632 points, 1,128 lines, 1,652 polygons as inside points), source layer `names` (`label`, `rank` 1-3) |
+
+Total 7,165,701,245 bytes (6.7 GiB) in `s3://oceanmetrics.io-public/basemap/` (mirrored to R2 by the hourly
+`io.oceanmetrics.r2sync`, `basemap` is in its prefix list). The terrain tiers are PNG, 512 px, the custom 1 m encoding
+(`DEM_ENCODING`: elevation = R·65536 + G·256 + B − 10000), land clamped to 0 m, each zoom warped to its exact tile grid
+before encoding. The encoding saturates at −10,000 m: the Challenger Deep floor (−10,580 m at 142.19 E, 11.35 N)
+decodes as −10,000 m; the depth ramp ends at −6,500 m, so nothing shows. Attribution is in each archive's metadata
+(`GEBCO Compilation Group (2025) GEBCO 2025 Grid (doi:10.5285/37c52e96-24ea-67ce-e063-7086abc05f29)`, the gazetteer's
+and OpenStreetMap's).
+
+Rebuild and publish (the Mac mini, `/Volumes/msens_big/_big/oceanmetrics/basemap/`; downloads in `raw/`, work in
+`build/`, archives in `out/`):
+
+```sh
+cd /Volumes/msens_big/_big/oceanmetrics/basemap
+curl -L -o raw/gebco_2025_geotiff.zip 'https://dap.ceda.ac.uk/bodc/gebco/global/gebco_2025/ice_surface_elevation/geotiff/gebco_2025_geotiff.zip?download=1'
+unzip -q raw/gebco_2025_geotiff.zip -d raw/gebco        # land: raw/land-polygons-split-4326.zip (osmdata.openstreetmap.de)
+JOBS=10 WORK=$PWD/build RAW=$PWD/raw ~/Github/oceanmetrics/platform/scripts/basemap/build_gebco.sh raw/gebco out \
+  prep,far,core,regional,contours,land,names,verify         # tmux om:basemap, log basemap.log, marker basemap.done
+for f in gebco/far gebco/core gebco/core-sanctuaries gebco/contours gebco/names osm/land; do
+  aws s3 cp out/$f.pmtiles s3://oceanmetrics.io-public/basemap/$f.pmtiles --content-type application/vnd.pmtiles; done
+~/.config/oceanmetrics/rclone-r2.sh sync s3:oceanmetrics.io-public/basemap r2:oceanmetrics-io-public/basemap
+```
+
+Check a terrain tile against the source with `python3 -I scripts/basemap/check_tile.py <archive> <z> <lon> <lat> <gebco.tif>`
+(from z8 a pixel is the bilinear source value rounded to 1 m: Monterey Bay z8 −461 m against −461.3 m; Stellwagen Bank
+−87 m against −87.3 m; Maui z9 −1,325 m against −1,325.3 m). The scripts' rules (isobath levels and the zoom gate,
+name ranks) are held to `basemap.ts` by `scripts/basemap.test.ts`.
+
+**A global z9 would cost about 11-15 GB** (3-4 times z8's 3.78 GB: 262,144 tiles at 40-56 KB; the sanctuaries' z9 is 92
+KB a tile, with the boxes on the shelf), taking core to about 17-21 GB and about 100 minutes of the same build: a later
+decision. Until then z9 and z10 are core overzoomed outside the sanctuaries.
+
+Open (2026-10-23): `https://storage.oceanmetrics.io/basemap/...` answers 404 until `basemap` joins the `@atlas path_regexp` allow-list
+of the storage vhost in `MarineSensitivity/server` `caddy/Caddyfile` (`^/(marine-atlas|gazetteer|...|basemap)(/|$)`), a deploy on msens
+that waits for Ben. The objects are in S3 (range reads answer 206 at `https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/basemap/gebco/far.pmtiles`)
+and mirrored in R2.
+
+Known: the sea floor is drawn by two or three translucent layers where tiers overlap (far under core at z0-5, regional
+over core inside the sanctuaries from z9), so the relief is slightly denser there than outside; far duplicates core's
+z0-5 tiles and could be dropped (or core's layers gated from z6) once the look is checked.
 
 CARTO's styles read the protomaps schema since 2026 (source `protomaps`, `kind` where OpenMapTiles had `class`): the
 mask's `water-inland` leaves out both (`OPEN_WATER`: ocean, sea). The island labels still read OpenMapTiles' `place`
 layer and draw nothing on these tiles (the islands are `earth` polygons of kind `island`); open, see the checklist.
-
-**None of these exists yet (2026-10-23).** The script is written and smoke-tested on a synthetic raster, not run on
-GEBCO: it runs on the mini in build week 2 (2026-11-06 to 11-12), then uploads. Until then an app passes its own
-`tiles` (CalCOFI's California tiers at `storage.googleapis.com/calcofi-db/bathymetry/` work for a California view).
 
 ### Ramps
 

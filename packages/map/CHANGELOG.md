@@ -2,6 +2,15 @@
 
 ## 0.2.1 (unreleased)
 
+The basemap tiers (build week 2 step 2b): the sea floor now serves every app globally.
+
+- New: `BasemapTiles.regional`, a list of deeper terrain-RGB archives drawn over core from z9 (`REGIONAL_MINZOOM`), each
+  its own `raster-dem` source (`gebco-regional`, `gebco-regional-2`, ..., `regionalSourceId(i)`) with relief and shade
+  layers; `DEFAULT_TILES.regional` is `gebco/core-sanctuaries.pmtiles` (the 18 sanctuaries, padded 1 degree, z9-10).
+  Pass `tiles: { regional: [] }` to leave core overzoomed past z8. `seaSurfaceId` and `basemapLayerIds` know the new ids.
+- Changed: `core` is the globe at z0-8 (it was the regional boxes), and the contours and the land mask are global; see
+  the README's Basemap section for the archives, sizes and the build.
+
 The consumer check (build week 2 step 2a, `spikes/map-consumer`): the six README points run on a Vite page against
 MapLibre 6.13 and CARTO's real styles.
 

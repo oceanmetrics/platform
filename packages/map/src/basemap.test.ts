@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { StyleSpecification } from 'maplibre-gl'
-import { basemapLayerIds, composeStyle, CONTOUR_LEVELS, DEFAULT_TILES, OPEN_WATER, seaSurfaceId } from './basemap.js'
+import { basemapLayerIds, composeStyle, CONTOUR_LEVELS, DEFAULT_TILES, OPEN_WATER, REGIONAL_MINZOOM, regionalSourceId, seaSurfaceId } from './basemap.js'
 import { clearsLayer, isSlotLayer } from './slot.js'
 
 // a CARTO-shaped base (the layer ids and kinds composeStyle keys on), no network
@@ -29,7 +29,7 @@ describe('composeStyle', () => {
   it('stacks the ocean at the bottom, the sea floor, the mask, the names, then CARTO\'s land layers and labels', () => {
     expect(ids(composeStyle(BASE, { theme: 'dark' }))).toEqual([
       'background', 'park_national_park', 'water',
-      'gebco-far-relief', 'gebco-far-shade', 'gebco-relief', 'gebco-shade',
+      'gebco-far-relief', 'gebco-far-shade', 'gebco-relief', 'gebco-shade', 'gebco-regional-relief', 'gebco-regional-shade',
       'gebco-contour-3', 'gebco-contour-2', 'gebco-contour-1', 'gebco-contour-0', 'gebco-contour-label',
       'land', 'water-inland',
       'landcover',
@@ -39,7 +39,7 @@ describe('composeStyle', () => {
   })
   it('without the mask the ocean stays where CARTO put it and the sea floor sits right after water', () => {
     const s = composeStyle(BASE, { theme: 'light', land: false, names: false, parts: ['depth'] })
-    expect(ids(s)).toEqual(['background', 'landcover', 'park_national_park', 'water', 'gebco-far-relief', 'gebco-relief',
+    expect(ids(s)).toEqual(['background', 'landcover', 'park_national_park', 'water', 'gebco-far-relief', 'gebco-relief', 'gebco-regional-relief',
       'water_shadow', 'road', 'boundary_country', 'place_city', 'place_island', 'place_island_minor', 'place_town', 'watername'])
   })
   it('dem: false returns the base untouched (the boot style)', () => {
@@ -58,6 +58,32 @@ describe('composeStyle', () => {
     expect((s.sources['gebco-far'] as { url: string }).url).toBe(`pmtiles://${DEFAULT_TILES.far}`)
     expect((s.sources['osm-land'] as { url: string }).url).toBe(`pmtiles://${DEFAULT_TILES.land}`)
   })
+  it('each regional tier is a pmtiles raster-dem source of its own with relief and shade layers from z9, over core', () => {
+    const s = composeStyle(BASE, { theme: 'dark', tiles: { regional: ['https://x.test/a.pmtiles', 'https://x.test/b.pmtiles'] } })
+    expect(regionalSourceId(0)).toBe('gebco-regional')
+    expect(regionalSourceId(1)).toBe('gebco-regional-2')
+    expect(s.sources['gebco-regional']).toMatchObject({ type: 'raster-dem', url: 'pmtiles://https://x.test/a.pmtiles', encoding: 'custom', baseShift: 10000, tileSize: 512 })
+    expect(s.sources['gebco-regional-2']).toMatchObject({ type: 'raster-dem', url: 'pmtiles://https://x.test/b.pmtiles', encoding: 'custom' })
+    const sea = ids(s).filter((id) => id.startsWith('gebco-') && /-(relief|shade)$/.test(id))
+    expect(sea).toEqual(['gebco-far-relief', 'gebco-far-shade', 'gebco-relief', 'gebco-shade',
+      'gebco-regional-relief', 'gebco-regional-shade', 'gebco-regional-2-relief', 'gebco-regional-2-shade'])
+    expect(REGIONAL_MINZOOM).toBe(9)
+    for (const id of sea.filter((i) => i.includes('regional'))) expect(layer(s, id).minzoom).toBe(9)
+    for (const id of ['gebco-far-relief', 'gebco-relief', 'gebco-shade']) expect(layer(s, id).minzoom).toBeUndefined()
+    expect(layer(s, 'gebco-regional-relief').source).toBe('gebco-regional')
+    expect(layer(s, 'gebco-regional-2-shade').source).toBe('gebco-regional-2')
+  })
+  it('the default regional tier is the sanctuaries at z9-10, and an empty list leaves core overzoomed', () => {
+    expect(DEFAULT_TILES.regional).toEqual(['https://storage.oceanmetrics.io/basemap/gebco/core-sanctuaries.pmtiles'])
+    const none = composeStyle(BASE, { theme: 'dark', tiles: { regional: [] } })
+    expect(Object.keys(none.sources).filter((k) => k.startsWith('gebco-regional'))).toEqual([])
+    expect(ids(none).filter((id) => id.includes('regional'))).toEqual([])
+    expect(Object.keys(composeStyle(BASE, { theme: 'dark' }).sources).filter((k) => k.startsWith('gebco-regional'))).toEqual(['gebco-regional'])
+  })
+  it('seaSurfaceId puts the data above the regional layers too', () => {
+    const s = composeStyle(BASE, { theme: 'dark', land: false, names: false, parts: ['depth', 'relief'] })
+    expect(seaSurfaceId(s)).toBe('water_shadow') // the first layer after gebco-regional-shade
+  })
   it('the depth ramp is transparent at exactly 0 m in both themes', () => {
     for (const theme of ['dark', 'light'] as const) {
       const e = layer(composeStyle(BASE, { theme }), 'gebco-relief').paint['color-relief-color']
@@ -69,7 +95,7 @@ describe('composeStyle', () => {
     expect(ids(light)).toEqual(ids(dark))
     const changed = ids(dark).filter((id) => JSON.stringify(layer(dark, id)) !== JSON.stringify(layer(light, id)))
     expect(changed).toEqual([
-      'gebco-far-relief', 'gebco-far-shade', 'gebco-relief', 'gebco-shade',
+      'gebco-far-relief', 'gebco-far-shade', 'gebco-relief', 'gebco-shade', 'gebco-regional-relief', 'gebco-regional-shade',
       'gebco-contour-3', 'gebco-contour-2', 'gebco-contour-1', 'gebco-contour-0', 'gebco-contour-label',
       'gebco-names-1', 'gebco-names-2', 'gebco-names-3', 'gebco-names-line',
       'place_city', 'place_island', 'place_island_minor', 'place_town', 'watername',
