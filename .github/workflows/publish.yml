@@ -1,0 +1,146 @@
+# publish @oceanmetrics/* to npm with trusted publishing (OIDC, no token) and provenance. docs/publishing.md is the runbook.
+# dispatch only: Actions -> publish -> Run workflow, from main. dry-run (default true) stops after the gates and
+# `npm publish --dry-run`; unticked, the publish job waits in the `npm` environment for its required reviewer (Ben).
+name: publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'package to publish, or changed (every package whose package.json version is not on npm yet)'
+        type: choice
+        required: true
+        default: changed
+        options: [changed, status, places, map, catalog, engine, nav]
+      dry-run:
+        description: 'dry run: gates and npm publish --dry-run only, nothing is published'
+        type: boolean
+        default: true
+
+# no token anywhere: the publish job gets id-token: write for the OIDC exchange with npm, and nothing else is written
+permissions:
+  contents: read
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '22'
+  # trusted publishing needs npm >= 11.5.1; Node 22 ships npm 10. 11, not 12: npm 12 skips dependency install scripts
+  # (workerd, esbuild) unless allow-listed in package.json, which this repo has not done
+  NPM_VERSION: '11'
+
+jobs:
+  # no environment here, so a dry run never waits for a reviewer
+  check:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    outputs:
+      packages: ${{ steps.plan.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm install -g "npm@${NPM_VERSION}"
+      - run: npm ci
+      # build first: catalog's tests and typecheck import @oceanmetrics/status from its dist
+      - run: npm run build
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run size
+      # refuses a package whose version is already on npm (or older than npm's); lists what would publish
+      - id: plan
+        env:
+          PACKAGE: ${{ inputs.package }}
+        run: |
+          set -euo pipefail
+          packages=$(node scripts/publish-check.mjs "$PACKAGE" --names | paste -sd " " -)
+          if [[ -z "$packages" ]]; then
+            echo "nothing to publish: every package.json version is already on npm" | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+          {
+            echo "### would publish"
+            for p in $packages; do echo "- \`@oceanmetrics/$p\` $(node -p "require('./packages/$p/package.json').version")"; done
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: npm publish --dry-run
+        env:
+          PACKAGES: ${{ steps.plan.outputs.packages }}
+        run: |
+          set -euo pipefail
+          for p in $PACKAGES; do
+            npm publish --dry-run -w "packages/$p" --access public
+          done
+
+  publish:
+    needs: check
+    if: ${{ !inputs.dry-run && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    # the human step: the environment's required reviewer approves before this job starts. npm's trusted publisher
+    # entry names this environment, so a publish from anywhere else is refused by npm.
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      # no registry-url and no NODE_AUTH_TOKEN: npm falls back to the OIDC token
+      - run: npm install -g "npm@${NPM_VERSION}"
+      - run: npm ci
+      - run: npm run build
+      # the registry may have moved since the check job (a second run, a token publish): look again
+      - id: plan
+        env:
+          PACKAGE: ${{ inputs.package }}
+        run: |
+          set -euo pipefail
+          packages=$(node scripts/publish-check.mjs "$PACKAGE" --names | paste -sd " " -)
+          [[ -n "$packages" ]] || { echo "nothing left to publish"; exit 1; }
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+      - name: npm publish --provenance
+        env:
+          PACKAGES: ${{ steps.plan.outputs.packages }}
+        run: |
+          set -euo pipefail
+          {
+            echo "### published with provenance"
+            echo "commit \`${GITHUB_SHA::7}\`, run $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+          for p in $PACKAGES; do
+            name="@oceanmetrics/$p"
+            version=$(node -p "require('./packages/$p/package.json').version")
+            echo "== publishing $name@$version"
+            npm publish -w "packages/$p" --provenance --access public 2>&1 | tee "publish-$p.log"
+            # the transparency-log entry npm prints, and the package page that shows "Built and signed on GitHub Actions"
+            log=$(grep -o 'https://search.sigstore.dev/[^ ]*' "publish-$p.log" | head -1 || true)
+            echo "- [$name@$version](https://www.npmjs.com/package/$name/v/$version)${log:+, [provenance statement]($log)}" >> "$GITHUB_STEP_SUMMARY"
+          done
+      - name: provenance on the registry
+        env:
+          PACKAGES: ${{ steps.plan.outputs.packages }}
+        run: |
+          # the attestation URL appears a few seconds after the publish; a miss is reported, not fatal
+          for p in $PACKAGES; do
+            name="@oceanmetrics/$p"
+            version=$(node -p "require('./packages/$p/package.json').version")
+            url=""
+            for _ in 1 2 3 4 5 6; do
+              url=$(npm view "$name@$version" dist.attestations.url 2>/dev/null || true)
+              [[ -n "$url" ]] && break
+              sleep 10
+            done
+            if [[ -n "$url" ]]; then
+              echo "- $name@$version attestations: $url" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "- $name@$version: no attestation on the registry yet, check npm view $name@$version dist.attestations" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done

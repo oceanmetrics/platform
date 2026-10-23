@@ -53,6 +53,10 @@ also `schemas/`, never `fixtures/`), and runs `npm run build` on `prepack`, so a
 carries a fresh `dist/`. The npm account has 2FA on writes, so there is no root `publish` script that fires all four
 at once; `scripts/publish.sh` does it one package at a time.
 
+The route that replaces the token is `.github/workflows/publish.yml` (npm trusted publishing with provenance, a reviewer on the
+`npm` environment): the setup and the first test publish are in [docs/publishing.md](docs/publishing.md). Until that is
+set up, `scripts/publish.sh` below is the way; it calls `scripts/publish-check.mjs` and skips what is already on npm.
+
 Day 5 steps (2026-10-26), from a clean `main`:
 
 1. `npm ci && npm test && npm run typecheck && npm run build && npm run size` (all green).
