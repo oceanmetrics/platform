@@ -60,13 +60,13 @@ async function duckQuery(url: string) {
 }
 
 // 3. pmtiles ----
-async function pmtilesRaw(url: string) {
+async function pmtilesRaw(url: string, z = 2, x = 0, y = 1) {
   const t0 = now();
   const p = new PMTiles(new FetchSource(url));
   const h = await p.getHeader();
   const t_header = now() - t0;
   const t1 = now();
-  const tile = await p.getZxy(2, 0, 1);
+  const tile = await p.getZxy(z, x, y);
   const t_tile = now() - t1;
   return {
     ms: r2(now() - t0), ms_header: r2(t_header), ms_tile: r2(t_tile),

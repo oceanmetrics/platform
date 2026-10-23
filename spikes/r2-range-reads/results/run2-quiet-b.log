@@ -1,0 +1,40 @@
+== 3a pmtiles getHeader + getZxy(2,0,1)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 346.2 ms, 3 req ({"GET 206":3}), 25948 B, all206=true
+  s3 #1: 754.1 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+  worker #2: 306.8 ms, 3 req ({"GET 206":3}), 25939 B, all206=true
+  s3 #2: 663.5 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+  worker #3: 293.5 ms, 3 req ({"GET 206":3}), 25932 B, all206=true
+  s3 #3: 704.5 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+== 3b maplibre 6 pmtiles:// zoom 3 to idle
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 355.4 ms, 6 req ({"GET 206":6}), 29702 B, all206=true
+  s3 #1: 957 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+  worker #2: 480.8 ms, 6 req ({"GET 206":6}), 29708 B, all206=true
+  s3 #2: 957.6 ms, 6 req ({"GET 206":6}), 30287 B, all206=true
+  worker #3: 322.4 ms, 6 req ({"GET 206":6}), 29703 B, all206=true
+  s3 #3: 1003.8 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+== 4a geotiff.js gazetteer Then vs Now FKNMS 2024 (no overviews)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 924.4 ms, 13 req ({"GET 206":13}), 26683 B, all206=true
+  s3 #1: 2112.8 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #2: 1054 ms, 13 req ({"GET 206":13}), 26688 B, all206=true
+  s3 #2: 2177.2 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #3: 1036.6 ms, 13 req ({"GET 206":13}), 26686 B, all206=true
+  s3 #3: 2087.5 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+== 4b geotiff.js atlas aquamaps_eov score_risk (overviews)
+  probe: {"path":"atlas/aquamaps_eov/score_risk.tif","status":404}
+  s3 #1: 2871.9 ms, 19 req ({"GET 206":19}), 111935 B, all206=true
+  s3 #2: 2845.2 ms, 19 req ({"GET 206":19}), 111555 B, all206=true
+  s3 #3: 2935.7 ms, 19 req ({"GET 206":19}), 111935 B, all206=true
+== 4c geotiff.js atlas aquamaps_eov score_risk_3857 (overviews)
+  probe: {"path":"atlas/aquamaps_eov/score_risk_3857.tif","status":404}
+  s3 #1: 2819.7 ms, 24 req ({"GET 206":24}), 111783 B, all206=true
+  s3 #2: 2818 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+  s3 #3: 2702.7 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+== 3c pmtiles getHeader + getZxy(2,1,1) basemap/gebco/far
+  probe: {"path":"basemap/gebco/far.pmtiles","status":404}
+  s3 #1: 903 ms, 2 req ({"GET 206":2}), 323584 B, all206=true
+  s3 #2: 891.7 ms, 2 req ({"GET 206":2}), 323584 B, all206=true
+  s3 #3: 826.6 ms, 2 req ({"GET 206":2}), 323584 B, all206=true
+done b

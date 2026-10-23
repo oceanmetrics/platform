@@ -16,7 +16,7 @@ const ORIGIN = `http://localhost:${PORT}`;
 const PHASE = process.argv[2] ?? "a";
 const SKIP = (process.env.SKIP ?? "").split(",").filter(Boolean); // e.g. SKIP=4b to skip the atlas COG
 const WAIT_MS = 45 * 60e3, POLL_MS = 60e3;
-const OUT = new URL("./results/results.json", import.meta.url).pathname;
+const OUT = new URL(`./results/${process.env.OUT_NAME ?? "results.json"}`, import.meta.url).pathname;
 mkdirSync(new URL("./results/", import.meta.url).pathname, { recursive: true });
 
 const redact = (s) => (KEY ? String(s).replaceAll(KEY, "<preview-key>") : String(s));
@@ -148,7 +148,7 @@ function summarize(runs) {
   };
 }
 
-async function check(id, title, spec, { wait = null, targetsOnly = null } = {}) {
+async function check(id, title, spec, { wait = null, probe = null } = {}) {
   console.log(`== ${id} ${title}`);
   const out = { title, files: {}, wait: null };
   if (wait) {
@@ -156,9 +156,17 @@ async function check(id, title, spec, { wait = null, targetsOnly = null } = {}) 
     console.log("  wait:", JSON.stringify(out.wait));
     if (!out.wait.ok) { out.skipped = `still ${out.wait.status} on the worker after ${out.wait.waited_s} s`; return out; }
   }
-  const runsBy = Object.fromEntries(targets.map((t) => [t.name, []]));
+  // probe: one HEAD on the worker; when it is not 200 the check runs against S3 only and records why
+  let tgts = targets;
+  if (probe) {
+    const s = await head(`${WORKER}${probe}${KEY ? `?key=${KEY}` : ""}`);
+    out.worker_probe = { path: probe, status: s };
+    console.log("  probe:", JSON.stringify(out.worker_probe));
+    if (s !== 200) tgts = targets.filter((t) => t.name !== "worker");
+  }
+  const runsBy = Object.fromEntries(tgts.map((t) => [t.name, []]));
   for (let i = 0; i < RUNS; i++) {
-    for (const t of targets) {
+    for (const t of tgts) {
       const u = urlOf(t, spec.path);
       const s = spec.extra ? spec.extra(t) : [];
       const rec = await run({ fn: spec.fn, args: [u, ...s], dataPath: spec.path, duck: spec.duck, boot: spec.boot });
@@ -166,7 +174,7 @@ async function check(id, title, spec, { wait = null, targetsOnly = null } = {}) 
       console.log(`  ${t.name} #${i + 1}: ${rec.error ?? `${rec.wall_ms} ms, ${rec.n_requests} req (${JSON.stringify(rec.statuses)}), ${rec.bytes_wire} B, all206=${rec.all_206}`}`);
     }
   }
-  for (const t of targets) out.files[t.name] = { url: redact(urlOf(t, spec.path)), ...summarize(runsBy[t.name]) };
+  for (const t of tgts) out.files[t.name] = { url: redact(urlOf(t, spec.path)), ...summarize(runsBy[t.name]) };
   return out;
 }
 
@@ -214,8 +222,11 @@ if (PHASE === "b") {
   results.c3b_pmtiles_draw = await check("3b", "maplibre 6 pmtiles:// zoom 3 to idle", { fn: "pmtilesDraw", path: PMT, extra: () => [lay.source_layer] }, { wait: PMT }); save();
   const FK = "gazetteer/rasters/dhw_5km/CRW_SST/NMS:FKNMS/2024.tif";
   results.c4a_cog_gazetteer = await check("4a", "geotiff.js gazetteer Then vs Now FKNMS 2024 (no overviews)", { fn: "cog", path: FK }, { wait: FK }); save();
-  const AT = "atlas/aquamaps_eov/score_risk.tif";
-  if (!SKIP.includes("4b")) results.c4b_cog_atlas = await check("4b", "geotiff.js atlas aquamaps_eov score_risk (overviews)", { fn: "cog", path: AT }, { wait: AT }); save();
+  // run 2 (quiet network): no waiting; the worker is probed once and a 404 leaves the check S3-only
+  const AT = "atlas/aquamaps_eov/score_risk.tif", AT3 = "atlas/aquamaps_eov/score_risk_3857.tif", FAR = "basemap/gebco/far.pmtiles";
+  if (!SKIP.includes("4b")) { results.c4b_cog_atlas = await check("4b", "geotiff.js atlas aquamaps_eov score_risk (overviews)", { fn: "cog", path: AT }, { probe: AT }); save(); }
+  if (!SKIP.includes("4c")) { results.c4c_cog_atlas_3857 = await check("4c", "geotiff.js atlas aquamaps_eov score_risk_3857 (overviews)", { fn: "cog", path: AT3 }, { probe: AT3 }); save(); }
+  if (!SKIP.includes("3c")) { results.c3c_pmtiles_basemap = await check("3c", "pmtiles getHeader + getZxy(2,1,1) basemap/gebco/far", { fn: "pmtilesRaw", path: FAR, extra: () => [2, 1, 1] }, { probe: FAR }); save(); }
 }
 
 save();
