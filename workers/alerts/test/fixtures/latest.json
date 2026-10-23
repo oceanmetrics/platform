@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-23",
+  "checked_at": "2026-10-23T07:15:49Z",
+  "manifest_version": "2026.10.23",
+  "counts": { "status": 1, "new": 1, "period": 1 },
+  "hrefs": { "json": "changes/2026-10-23.json", "parquet": "changes/2026-10-23.parquet", "feeds": "feeds/index.json" },
+  "recent": [
+    { "date": "2026-10-23", "href": "changes/2026-10-23.json", "counts": { "status": 1, "new": 1, "period": 1 } },
+    { "date": "2026-10-22", "href": "changes/2026-10-22.json", "counts": { "status": 0, "new": 1, "period": 0 } },
+    { "date": "2026-10-21", "href": "changes/2026-10-21.json", "counts": { "status": 1, "new": 0, "period": 0 } }
+  ]
+}

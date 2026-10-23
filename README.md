@@ -13,6 +13,10 @@ rule or a reader is written once.
 | [`@oceanmetrics/catalog`](packages/catalog/) | the catalog contracts: the STAC layer profiles (JSON Schemas, types, a validator, the `om-catalog` CLI), the values contract, and the indicators readers and cards (`/indicators`, `/cards`), the change feed (`/changes`) and the report rules (`/report`) | 0.5.0 (2026-10-23, build week 5 step 0, unreleased): `/changes` (`diffCoverage`, `changeSentence`, `atomFeed`, `feedsFor`), `/report` (the selection rules moved from indicators) and the `changes-row`, `changes-latest`, `feeds-index` and `alerts-subscription` schemas; 0.4.0: the `h3` profile 1.1 (period sets for decades and years, the species table's first and last year, `h3:heads`, `row_group_rows`); 0.3.0: the indicator cards shared by the indicators viewer and the places record page |
 | [`@oceanmetrics/nav`](packages/nav/) | the one navigation bar of the apps and the site: `<om-nav>`, a framework-free custom element (the mark, the three doors, the place search, What changed, Docs, a slot for the app's own controls), styled by the brand tokens of the host | 0.1.0 (2026-10-23, build week 5 step 3, decision D7, unreleased): new |
 
+One Worker lives here too, beside the packages it imports (decision D6 of the week 5 plan): **[`workers/alerts/`](workers/alerts/)**,
+`om-alerts`, the email alerts of the indicators (confirmed opt-in, hourly digests of the change files). It is an npm
+workspace but not a package (`private`, never published); its README has the routes, the KV layout and the runbook.
+
 ## Rules
 
 - **Apps import these packages and never each other.** Shared code goes here; an app that needs something from another
@@ -28,10 +32,10 @@ rule or a reader is written once.
 
 ```sh
 npm install              # once; links the workspaces
-npm test                 # vitest, every package (must be green to commit)
-npm run typecheck        # tsc --noEmit in each package
-npm run build            # tsc to packages/*/dist (types and JS)
-npm run size             # gzip budget per package, after build
+npm test                 # vitest, every package, then the alerts Worker's own npm test (must be green to commit)
+npm run typecheck        # tsc --noEmit in each package and the Worker
+npm run build            # tsc to packages/*/dist (types and JS); the Worker's bundle (wrangler dry-run) to workers/alerts/dist
+npm run size             # gzip budget per package and the Worker bundle, after build
 npx vitest run packages/status/src/quad.test.ts   # one file
 ```
 
@@ -91,6 +95,9 @@ written here. Nav 12 000 B (measured 7 776 on 2026-10-23 at 0.1.0, every dist fi
 fetches for the bar is its own line, `nav/define` (`scripts/nav-size.mjs`: `src/define.ts` bundled alone and minified,
 4 947 B, budget 6 000 B, the 0.1.0 target; the reason it is not the week 5 plan's 3 kB is the inline mark, 1 100 B of
 it: packages/nav/README.md "Size").
+
+The alerts Worker is not a package: its line is the deployed bundle (`wrangler deploy --dry-run --minify`, one file),
+budget 30 000 B from the week 5 plan, measured 12 330 B at 0.1.0 on 2026-10-23.
 
 ## Licence
 

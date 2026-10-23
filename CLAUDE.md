@@ -59,6 +59,12 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
   and glyphs are generated into `src/glyphs.ts` by `packages/nav/scripts/glyphs.mjs` from the site checkout's brand kit
   (a test fails when stale). The element tests run in happy-dom (`// @vitest-environment happy-dom`); `dist/index.js`
   loads in plain Node (the class extends an empty base without a DOM).
+- **`workers/alerts/` is the `om-alerts` Worker** (a workspace, not a package: private, never published): the email
+  alerts over the indicators change files, filtered by `@oceanmetrics/catalog/report` (the rules the Report view
+  expands). Its tests run in workerd (`@cloudflare/vitest-plugin`) from its own `npm test`, which the root `npm test`
+  runs after the packages' vitest. No address in any file but `alerts@mail.oceanmetrics.io` and RFC 2606 examples
+  (`scripts/no-addresses.mjs`); the KV `ALERTS` holds the list, addresses AES-GCM encrypted; secrets only via
+  `wrangler secret put`. Its README has the routes and the runbook.
 - Source imports use `.js` specifiers (`./grid.js`) so the emitted declarations and `dist/*.js` resolve for every consumer
   and for plain Node ESM (places 0.5.1 shipped without them); `scripts/esm-load.test.ts` builds and loads each `dist/index.js` in Node.
 

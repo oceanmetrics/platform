@@ -5,10 +5,10 @@
   "description": "Shared TypeScript packages of the Ocean Metrics platform: places, status, map, catalog, engine, nav",
   "license": "MIT",
   "type": "module",
-  "workspaces": ["packages/*"],
+  "workspaces": ["packages/*", "workers/*"],
   "engines": { "node": ">=22" },
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run && npm test -w workers/alerts",
     "typecheck": "npm run typecheck --workspaces",
     "build": "npm run build --workspaces",
     "size": "node scripts/size-budget.mjs"

@@ -1,0 +1,10 @@
+{
+  "version": "2026.10.23",
+  "indicators": [
+    { "id": "erddap:dhw_5km:CRW_SST:mean", "title": "Sea surface temperature (CRW, 5 km)", "series": "sst", "lead": true, "category": { "onms": "water-quality", "names": "physical-chemical", "eov": "sea-surface-temperature" } },
+    { "id": "erddap:IMERG_monthly_global_precip:precipitation:mean", "title": "Precipitation (NASA IMERG)", "series": "precipitation", "lead": true, "category": { "onms": "drivers-pressures", "names": "physical-chemical", "eov": "physics" } },
+    { "id": "obis:n", "title": "OBIS records, all taxa", "series": "obis-all", "lead": true, "category": { "onms": "living-resources", "names": "biological", "eov": "bioeco" } },
+    { "id": "obis:bp", "title": "OBIS Berger-Parker dominance, all taxa", "series": "obis-all", "lead": false, "category": { "onms": "living-resources", "names": "biological", "eov": "bioeco" } }
+  ],
+  "place_sets": [{ "id": "political", "title": "Ocean by jurisdiction", "groups": ["mr_eez", "fao_high_seas"] }]
+}

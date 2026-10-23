@@ -1,0 +1,30 @@
+{
+  "name": "@oceanmetrics/alerts-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "om-alerts: the Cloudflare Worker behind the Ocean Metrics email alerts (confirmed opt-in, hourly digests of the indicators change files)",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "deps": "npm run build -w @oceanmetrics/status -w @oceanmetrics/catalog --silent",
+    "test": "npm run deps && node scripts/no-addresses.mjs && node scripts/schema-validator.mjs && vitest run",
+    "typecheck": "npm run deps && node scripts/schema-validator.mjs && tsc --noEmit",
+    "build": "wrangler deploy --dry-run --outdir dist --minify",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@oceanmetrics/catalog": "^0.5.0",
+    "@oceanmetrics/status": "^0.1.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.4.7",
+    "@cloudflare/workers-types": "^5.20261008.1",
+    "ajv": "^8.17.0",
+    "ajv-formats": "^3.0.1",
+    "esbuild": "^0.28.2",
+    "typescript": "~5.9.0",
+    "vitest": "^5.0.1",
+    "wrangler": "^4.152.0"
+  }
+}

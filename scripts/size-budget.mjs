@@ -56,4 +56,14 @@ const n = await measureNav()
 const nok = n.gzip <= NAV_BUNDLE_BUDGET
 over ||= !nok
 console.log(`${nok ? 'ok  ' : 'OVER'} ${'nav/define'.padEnd(8)} ${String(n.gzip).padStart(6)} B gzip (budget ${NAV_BUNDLE_BUDGET} B, one chunk bundled and minified)`)
+
+// the alerts Worker (workers/alerts, not a package): its deployed bundle (wrangler's dry-run, minified), budget 30 kB gzip
+// from the week 5 plan (12_330 on 2026-10-23, 0.1.0)
+const ALERTS_BUDGET = 30_000
+const alerts = new URL('../workers/alerts/dist/index.js', import.meta.url).pathname
+if (!existsSync(alerts)) throw new Error(`size budget: ${alerts} not found; run npm run build first`)
+const a = gzipSync(readFileSync(alerts), { level: 9 }).length
+const aok = a <= ALERTS_BUDGET
+over ||= !aok
+console.log(`${aok ? 'ok  ' : 'OVER'} ${'om-alerts'.padEnd(8)} ${String(a).padStart(6)} B gzip (budget ${ALERTS_BUDGET} B, the Worker bundle, minified)`)
 process.exit(over ? 1 : 0)

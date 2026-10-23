@@ -1,0 +1,28 @@
+# om-alerts: the email alerts of the Ocean Metrics indicators (confirmed opt-in, hourly digests of the change files).
+# the runbook, the routes and the KV layout are in README.md. no address and no key is ever in this file: the secrets
+# (ALERTS_KEY, RESEND_KEY, TURNSTILE_SECRET, RESEND_WEBHOOK_SECRET) are set with `wrangler secret put` on the mini.
+name = "om-alerts"
+main = "src/index.ts"
+compatibility_date = "2026-10-01"
+
+# alerts.oceanmetrics.io once the zone is active in Cloudflare (decision D9); workers.dev until then
+# routes = [{ pattern = "alerts.oceanmetrics.io", custom_domain = true }]
+
+[triggers]
+crons = ["0 * * * *"]   # hourly: read changes/latest.json, mail the subscribers whose digest is due
+
+[vars]
+PROVIDER     = "log"                                                         # log | resend (resend needs the RESEND_KEY secret)
+SITE         = "https://oceanmetrics.io"                                     # the static pages: /alerts/, /alerts/confirm/, /alerts/manage/, /alerts/unsubscribe/
+API_BASE     = "https://om-alerts.ben-f07.workers.dev"                       # this Worker's public url (the List-Unsubscribe target)
+CHANGES_BASE = "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/indicators/"   # changes/latest.json, changes/<date>.json, indicators.json
+FROM         = "Ocean Metrics alerts <alerts@mail.oceanmetrics.io>"
+# REPLY_TO   = ""        # optional; set it as a var on the mini, never committed
+
+[[kv_namespaces]]
+binding = "ALERTS"
+id      = "480d45d67202420c9fe94d071dbe904f"
+
+[[analytics_engine_datasets]]
+binding = "EVENTS"
+dataset = "om_alerts"

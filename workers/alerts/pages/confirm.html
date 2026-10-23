@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+  /alerts/confirm/ on oceanmetrics.io: the page the confirmation mail links to (`/alerts/confirm/#t=<token>`).
+  for the website: port into the Hugo layout (layouts/alerts/confirm.html or a content page with this body), keep the
+  script as is. the token rides in the fragment, so it never reaches a server log; opening the page confirms nothing:
+  only the button POSTs (a mail link scanner opens links, it does not press buttons). the API base is the meta tag.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <meta name="om-alerts-api" content="https://om-alerts.ben-f07.workers.dev">
+  <title>Confirm your alert · Ocean Metrics</title>
+  <style>
+    .om-alerts { max-width: 36rem; margin: 3rem auto; padding: 0 16px; font: 1rem/1.5 var(--font-sans, system-ui, sans-serif); }
+    .om-alerts button { font: inherit; padding: .6rem 1.2rem; border-radius: 6px; border: 0; cursor: pointer;
+      background: var(--color-accent, #0b5c8a); color: var(--color-on-accent, #fff); }
+    .om-alerts button[disabled] { opacity: .6; cursor: progress; }
+    .om-alerts [hidden] { display: none; }
+    .om-alerts .note { opacity: .8; font-size: .9rem; }
+  </style>
+</head>
+<body>
+<main class="om-alerts">
+  <h1>Confirm your alert</h1>
+  <section id="ask">
+    <p>Press the button to confirm that this address may receive Ocean Metrics alerts. Nothing is sent until you do.</p>
+    <p><button id="go" type="button">Confirm my alert</button></p>
+    <p class="note">If you did not ask for alerts, close this page: the request is deleted in 48 hours.</p>
+  </section>
+  <section id="done" hidden>
+    <p><strong>Confirmed.</strong> You will get at most one mail a day (or a week, as you chose) when something changes in what you watch.</p>
+    <p><a id="manage" href="/alerts/manage/">Manage your alerts</a></p>
+  </section>
+  <p id="msg" role="status" aria-live="polite"></p>
+</main>
+<script>
+(() => {
+  const api = document.querySelector('meta[name="om-alerts-api"]').content
+  const t = new URLSearchParams(location.hash.slice(1)).get('t')
+  const $ = (id) => document.getElementById(id)
+  const say = (s) => { $('msg').textContent = s }
+  if (!t) { $('ask').hidden = true; say('This link has no token. Open the link from the confirmation mail again.'); return }
+  $('go').addEventListener('click', async () => {
+    $('go').disabled = true
+    say('Confirming…')
+    try {
+      const res = await fetch(`${api}/v1/confirm`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ token: t }) })
+      const out = await res.json().catch(() => ({}))
+      if (res.ok) {
+        $('ask').hidden = true
+        $('done').hidden = false
+        $('manage').href = `/alerts/manage/#t=${out.manage}`
+        say(out.already ? 'This alert was already confirmed.' : '')
+      } else if (res.status === 404) {
+        say('This link is unknown or older than 48 hours. Subscribe again from the alerts page.')
+      } else if (res.status === 429) {
+        say('Too many tries. Wait a few minutes and press the button again.')
+        $('go').disabled = false
+      } else {
+        say(out.message || 'Something went wrong. Try again later.')
+        $('go').disabled = false
+      }
+    } catch {
+      say('The alerts service could not be reached. Try again later.')
+      $('go').disabled = false
+    }
+  })
+})()
+</script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<!--
+  /alerts/manage/ on oceanmetrics.io: the page the welcome mail and every digest link to (`/alerts/manage/#t=<manage token>`,
+  and `&u=all` from the Unsubscribe link). for the website: port into the Hugo layout, keep the script as is. the token
+  rides in the fragment; every change is a button that POSTs (a link scanner changes nothing; the list, read on load, changes nothing). lists the address's
+  alerts, changes the kinds and the cadence of each, deletes one, or unsubscribes from all. the API base is the meta tag.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="referrer" content="no-referrer">
+  <meta name="om-alerts-api" content="https://om-alerts.ben-f07.workers.dev">
+  <title>Manage your alerts · Ocean Metrics</title>
+  <style>
+    .om-alerts { max-width: 40rem; margin: 3rem auto; padding: 0 16px; font: 1rem/1.5 var(--font-sans, system-ui, sans-serif); }
+    .om-alerts button { font: inherit; padding: .5rem 1rem; border-radius: 6px; cursor: pointer; border: 1px solid currentColor;
+      background: transparent; color: inherit; }
+    .om-alerts button.primary { border: 0; background: var(--color-accent, #0b5c8a); color: var(--color-on-accent, #fff); }
+    .om-alerts button[disabled] { opacity: .6; cursor: progress; }
+    .om-alerts [hidden] { display: none; }
+    .om-alerts .sub { border: 1px solid var(--color-border, #8884); border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+    .om-alerts .sub h2 { font-size: 1.05rem; margin: 0 0 .25rem; }
+    .om-alerts .rules { font-size: .9rem; opacity: .8; overflow-wrap: anywhere; }
+    .om-alerts fieldset { border: 0; padding: 0; margin: .5rem 0; display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
+    .om-alerts .row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .5rem; }
+    .om-alerts .note { opacity: .8; font-size: .9rem; }
+  </style>
+</head>
+<body>
+<main class="om-alerts">
+  <h1>Your Ocean Metrics alerts</h1>
+  <section id="unsub" hidden>
+    <p>Stop every Ocean Metrics alert to this address?</p>
+    <p><button id="all" class="primary" type="button">Unsubscribe from all alerts</button></p>
+  </section>
+  <section id="list" hidden>
+    <div id="subs"></div>
+    <p id="end" hidden><button id="all2" type="button">Unsubscribe from all alerts</button></p>
+  </section>
+  <section id="gone" hidden>
+    <p><strong>Unsubscribed.</strong> No more alerts will be sent to this address. Only a one-way fingerprint of it is
+      kept, so it is never mailed again unless you subscribe anew. <a href="/alerts/">Subscribe again</a></p>
+  </section>
+  <p id="msg" role="status" aria-live="polite"></p>
+  <p class="note">Statuses are relative to each place’s own record, not better or worse. <a href="/alerts/privacy/">What is kept, and for how long</a></p>
+</main>
+<script>
+(() => {
+  const api = document.querySelector('meta[name="om-alerts-api"]').content
+  const q = new URLSearchParams(location.hash.slice(1))
+  const t = q.get('t')
+  const $ = (id) => document.getElementById(id)
+  const say = (s) => { $('msg').textContent = s }
+  const KINDS = { status: 'status changes', new: 'first values', period: 'new periods' }
+  if (!t) { say('This link has no token. Open the Manage link from one of the alert mails.'); return }
+
+  async function post(path, body) {
+    const res = await fetch(`${api}${path}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ token: t, ...body }) })
+    const out = await res.json().catch(() => ({}))
+    if (res.status === 404) throw new Error('No alert for this link: it may have been unsubscribed already.')
+    if (res.status === 429) throw new Error('Too many tries. Wait a few minutes and try again.')
+    if (!res.ok) throw new Error(out.message || 'Something went wrong. Try again later.')
+    return out
+  }
+  const busy = async (btn, fn) => {
+    btn.disabled = true
+    say('')
+    try { await fn() } catch (e) { say(e.message === 'Failed to fetch' ? 'The alerts service could not be reached.' : e.message) }
+    btn.disabled = false
+  }
+  const words = (r) => `places: ${r.places.include.join(', ')}${r.places.exclude.length ? ` except ${r.places.exclude.join(', ')}` : ''}; ` +
+    `indicators: ${r.indicators.include.join(', ')}${r.indicators.exclude.length ? ` except ${r.indicators.exclude.join(', ')}` : ''}`
+
+  function render(subs) {
+    const box = $('subs')
+    box.textContent = ''
+    if (!subs.length) { gone(); return }
+    for (const s of subs) {
+      const el = document.createElement('div')
+      el.className = 'sub'
+      const h = document.createElement('h2')
+      h.textContent = s.title || 'Alert'
+      const rules = document.createElement('p')
+      rules.className = 'rules'
+      rules.textContent = words(s.rules) + (s.status === 'pending' ? ' (not confirmed yet)' : '')
+      const kinds = document.createElement('fieldset')
+      kinds.innerHTML = '<legend class="note">Mail me about</legend>'
+      for (const [k, label] of Object.entries(KINDS)) {
+        const l = document.createElement('label')
+        const c = Object.assign(document.createElement('input'), { type: 'checkbox', value: k, checked: s.kinds.includes(k) })
+        l.append(c, ' ', label)
+        kinds.append(l)
+      }
+      const cad = document.createElement('select')
+      for (const v of ['daily', 'weekly']) cad.append(new Option(v === 'daily' ? 'at most daily' : 'weekly, Mondays', v, false, s.cadence === v))
+      const save = Object.assign(document.createElement('button'), { type: 'button', textContent: 'Save' })
+      const del = Object.assign(document.createElement('button'), { type: 'button', textContent: 'Delete this alert' })
+      save.onclick = () => busy(save, async () => {
+        const ks = [...kinds.querySelectorAll('input:checked')].map((c) => c.value)
+        if (!ks.length) throw new Error('Choose at least one kind of change, or delete the alert.')
+        render((await post('/v1/manage', { action: 'update', id: s.id, kinds: ks, cadence: cad.value })).subscriptions)
+        say('Saved.')
+      })
+      del.onclick = () => busy(del, async () => render((await post('/v1/manage', { action: 'delete', id: s.id })).subscriptions))
+      const row = document.createElement('div')
+      row.className = 'row'
+      row.append(cad, save, del)
+      el.append(h, rules, kinds, row)
+      box.append(el)
+    }
+    $('end').hidden = false
+  }
+  function gone() {
+    $('unsub').hidden = true
+    $('list').hidden = true
+    $('gone').hidden = false
+  }
+  const all = (btn) => busy(btn, async () => {
+    const res = await fetch(`${api}/v1/unsubscribe`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ token: t }) })
+    if (!res.ok) throw new Error('The unsubscribe did not go through. Try again later.')
+    gone()
+  })
+  $('all').onclick = () => all($('all'))
+  $('all2').onclick = () => all($('all2'))
+  if (q.get('u') === 'all') $('unsub').hidden = false
+  $('list').hidden = false
+  // listing changes nothing, so it runs on load; every change is a button
+  say('Loading…')
+  post('/v1/manage', { action: 'list' }).then((out) => { say(''); render(out.subscriptions) }, (e) => say(e.message))
+})()
+</script>
+</body>
+</html>
