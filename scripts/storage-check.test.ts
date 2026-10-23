@@ -208,17 +208,22 @@ describe('storage-check.sh: 12, the keyed tier', () => {
     expect(r.code).toBe(0)
     expect(r.calls.some(c => c.url.includes('key='))).toBe(false)
   })
-  it('with --key it sends ?key= on the ranged read, wants 206 and x-om-usage, and never prints the id', () => {
+  it('with --key it sends ?key= on the ranged read, wants 206 and Content-Range, prints the usage header as information, and never prints the id', () => {
     const r = run([H, '--key', 'SECRETID123'])
     const keyed = r.calls.filter(c => c.url.includes('?key=SECRETID123'))
     expect(keyed.length).toBe(1)
     expect(keyed[0].sent.range).toBe('bytes=0-16383')
-    expect(row(r.out, '12')).toMatch(/PASS/)
+    expect(row(r.out, '12')).toMatch(/PASS usage header: present/)
     expect(r.out + r.err).not.toContain('SECRETID123')
   })
-  it('FAIL without x-om-usage, and on a 403 for the key', () => {
+  it('x-om-usage absent (the Worker sends it only near the cap) is still a PASS, shown as absent', () => {
+    const r = run([H, '--key', 'k'], broken({ match: '\\?key=k$', status: 206, headers: RANGE }))
+    expect(row(r.out, '12')).toMatch(/PASS usage header: absent/)
+    expect(r.code).toBe(0)
+  })
+  it('FAIL on a keyed read without Content-Range, and on a 403 for the key', () => {
     const keyed = (extra: Partial<Rule>) => run([H, '--key', 'k'], broken({ match: '\\?key=k$', status: 206, headers: RANGE, ...extra }))
-    expect(row(keyed({}).out, '12')).toMatch(/FAIL no x-om-usage/)
+    expect(row(keyed({ headers: CORS }).out, '12')).toMatch(/FAIL no content-range/)
     expect(row(keyed({ status: 403 }).out, '12')).toMatch(/FAIL status 403 \(want 206\)/)
   })
 })

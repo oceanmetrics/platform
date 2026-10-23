@@ -7,7 +7,8 @@
 #   storage-check.sh <host> [--key <id>] [--compare <host2>] [--max-ms <n>]
 #
 #   <host>            https://storage.oceanmetrics.io or the preview https://om-gazetteer.ben-f07.workers.dev
-#   --key <id>        also check the keyed tier (row 12): a ranged read with ?key=<id>, 206 and x-om-usage; the id is
+#   --key <id>        also check the keyed tier (row 12): a ranged read with ?key=<id>, 206 and Content-Range; the
+#                     x-om-usage header is printed as information only (the Worker sends it near the cap); the id is
 #                     sent to the host but never printed
 #   --compare <host2> run the same checks against a second host and print both columns (preview against live)
 #   --max-ms <n>      the response-time limit of row 11, the median of 5 ranged GETs (default 1500)
@@ -96,7 +97,7 @@ ROWS='1|layers.json, keyless|gazetteer/index/layers.json||200|application/json|a
 run_host() {
   IDX=$1; local host=$2
   : > "$TMP/res.$IDX"; : > "$TMP/st.$IDX"
-  local id label path range want ctype need org url fails h c i ms bad med total n3 codes
+  local usage id label path range want ctype need org url fails h c i ms bad med total n3 codes
 
   # (1)-(8): single requests
   while IFS='|' read -r id label path range want ctype need org; do
@@ -155,9 +156,9 @@ ROWS_END
     if [ "$P_CODE" != 206 ]; then fails="status $P_CODE (want 206)"
     else
       has_hdr content-range || fails="no content-range"
-      has_hdr x-om-usage    || fails="${fails:+$fails; }no x-om-usage"
     fi
-    if [ -z "$fails" ]; then record 12 "keyed range read" PASS "x-om-usage present"
+    if has_hdr x-om-usage; then usage=present; else usage=absent; fi
+    if [ -z "$fails" ]; then record 12 "keyed range read" PASS "usage header: $usage"
     else record 12 "keyed range read" FAIL "$fails"; fi
   fi
 

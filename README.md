@@ -114,15 +114,15 @@ scripts/storage-check.sh https://om-gazetteer.ben-f07.workers.dev --compare http
 | 9 | `OPTIONS` of the row 2 url with `Origin: https://oceanmetrics.io`, `Access-Control-Request-Headers: range` | 204 or 200, `Access-Control-Allow-Origin` (`*` or the origin), allow-headers include `range` |
 | 10 | every request above | none is a 3xx (the cell says how many were, of how many) |
 | 11 | median of 5 ranged GETs of row 2 | all 206, median at most 1,500 ms (`--max-ms`) |
-| 12 | `--key <id>`: row 2 again with `?key=<id>` | 206, `Content-Range`, `x-om-usage` present; SKIP without `--key`; the id is never printed |
+| 12 | `--key <id>`: row 2 again with `?key=<id>` | 206, `Content-Range`; the cell adds `usage header: present/absent` as information; SKIP without `--key`; the id is never printed |
 
 A cell is `PASS`, `PASS <detail>` or `FAIL <what differed>` (a wrong status is reported alone: `status 302 (want 206)`).
 `--compare` runs the same rows against a second host and prints both columns; the exit code is 1 if either has a FAIL.
 Each run is about 24 requests, under the Worker's anonymous limit of 120 a minute per IP, so run it once, not in a loop.
 `scripts/storage-check.test.ts` runs it against a fake `curl` (`scripts/storage-check/fake/curl`): a scenario of rules,
 one test per row and rule, the Caddy's all-302 case, the timing median and limit, `--key`, `--compare` and the usage errors.
-Row 12 asks for `x-om-usage`, which the Worker sets only on a key at or over its soft threshold (80 % of the cap), so a
-fresh key shows FAIL `no x-om-usage` until the Worker sends the header on every keyed response.
+Row 12 does not require `x-om-usage`: the Worker sends it only on a key at or over its soft threshold (80 % of the cap),
+so `usage header: absent` is normal for a fresh key.
 
 ## Size budget
 
