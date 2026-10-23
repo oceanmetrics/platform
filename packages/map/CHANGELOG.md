@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.3.4 (2026-10-23)
+
+The basemap's relief tiers no longer overlap: a first view at z2 fetched both `far` and `core` for the same pixels.
+
+- Fixed: `composeStyle` gates the sea-floor layers so one tier draws one zoom. The `gebco-far` layers get `maxzoom: 6`
+  (they draw z0-5 alone), the `gebco` (core) layers `minzoom: 6` and, while a regional tier is configured, `maxzoom: 9`,
+  the regional layers keep `minzoom: 9`. With `tiles.regional: []` the core layers have no `maxzoom` and core is overzoomed
+  past z8, as before. The relief and hillshade layers of a tier share its range. The isobaths, the land mask and the
+  undersea names are unchanged, and the composed style has the same layer ids in the same order and the same sources
+  (only the far and core layers gained `minzoom` or `maxzoom`).
+- Saving, measured on a real MapLibre 6.13 in headless Chrome over the live archives (`spikes/map-consumer`,
+  `scripts/tiers.mjs`, Monterey Bay, relief = far + core + regional): the first view at z2 went from 5,197,251 B to
+  2,623,604 B of relief (2,573,647 B, 49.5%, at 1280 px; 1,778,868 B at 390 px) and from 8,375,779 B to 5,802,141 B for
+  everything the first view fetches; at z8 the far tier's z5 tile is no longer fetched under core (404,644 B at 1280 px).
+  The idle tier costs one 16,384 B header read. Table in the README ("Known" note).
+- New (export): `CORE_MINZOOM` (6), beside `REGIONAL_MINZOOM` (9).
+- Tests: the zoom range of each tier from the composed style, exactly one tier at every quarter zoom from 0 to 10 (also
+  with two regional tiers, and with none), and a snapshot of the layer ids and their order.
+- Size: package 47 403 B (47 148 B at 0.3.3; budget 48 000 B), the worker chunk unchanged.
+
 ## 0.3.3 (2026-10-23)
 
 What the tiles cost, for the atlas OBIS layer's footer (obis-hex parity row 80): the release reader keeps request and

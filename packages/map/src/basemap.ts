@@ -1,8 +1,9 @@
 // the bathymetric basemap: a typed port of CalCOFI explore `src/basemap.ts` `composeStyle()` (plan 2026-08-31 D21, D22,
 // D26, D27; reference layers 2026-09-09 D47 to D54). CARTO's style plus the GEBCO sea floor as ONE style object, applied
 // with `setStyle(style, { diff: true })`, so a theme flip is a paint diff and no layer is dropped the way addLayer-after-
-// load ones are. The sea floor is two terrain-RGB tiers (`gebco-far` under `gebco`: MapLibre never fetches a parent tile
-// as a fallback, so one sparse archive leaves the far field blank), drawn as colour relief and igor hillshade, with
+// load ones are. The sea floor is terrain-RGB tiers (`gebco-far` z0-5, `gebco` z6-8, the regional tiers from z9; each
+// layer is gated so one zoom draws one tier, and MapLibre never fetches a parent tile as a fallback, so one sparse
+// archive would leave the far field blank), drawn as colour relief and igor hillshade, with
 // isobaths gated by level and zoom, the GEBCO gazetteer's undersea feature names, and the OpenStreetMap land mask over
 // the sea floor and the data, so the coast is CARTO's own at every zoom.
 //
@@ -48,6 +49,10 @@ export const SOURCE_LAYERS = { contours: 'contours', names: 'names', land: 'land
 export const DEM_ENCODING = { encoding: 'custom', redFactor: 65536, greenFactor: 256, blueFactor: 1, baseShift: 10000, tileSize: 512 } as const
 /** the zoom the regional tiers start at (the build's REGIONAL_ZMIN) */
 export const REGIONAL_MINZOOM = 9
+/** the zoom core's layers start at: far draws z0-5 alone (its layers' `maxzoom` is this), so no two relief tiers draw
+ * one zoom. A layer's `minzoom` is inclusive, its `maxzoom` exclusive: far shows below 6, core from 6 up to 9 where a
+ * regional tier takes over (core alone, overzoomed, when there is none) */
+export const CORE_MINZOOM = 6
 export const GEBCO_ATTRIBUTION = 'GEBCO Compilation Group (2025) GEBCO 2025 Grid'
 export const NAMES_ATTRIBUTION = 'IHO-IOC GEBCO Gazetteer of Undersea Feature Names'
 export const LAND_ATTRIBUTION = '© OpenStreetMap contributors'
@@ -185,16 +190,21 @@ function seaFloorLayers(style: Style, theme: Theme, tiles: BasemapTiles, parts: 
   const dem = (url: string) => ({ type: 'raster-dem', url: `pmtiles://${url}`, ...DEM_ENCODING, attribution: GEBCO_ATTRIBUTION })
   style.sources['gebco-far'] = dem(tiles.far)
   style.sources['gebco'] = dem(tiles.core)
-  // far under core under the regional tiers, each tier its own source and its own relief and shade layers
-  const tiers: { src: string; minzoom?: number }[] = [{ src: 'gebco-far' }, { src: 'gebco' }]
-  ;(tiles.regional ?? []).forEach((url, i) => {
+  // far, core, then the regional tiers, each its own source and its own relief and shade layers; the zoom ranges do not
+  // overlap (far z0-5, core z6-8 or z6 and up without a regional tier, regional from z9), so a first view fetches one tier
+  const regional = tiles.regional ?? []
+  const tiers: { src: string; minzoom?: number; maxzoom?: number }[] = [
+    { src: 'gebco-far', maxzoom: CORE_MINZOOM },
+    { src: 'gebco', minzoom: CORE_MINZOOM, ...(regional.length ? { maxzoom: REGIONAL_MINZOOM } : {}) },
+  ]
+  regional.forEach((url, i) => {
     const src = regionalSourceId(i)
     style.sources[src] = dem(url)
     tiers.push({ src, minzoom: REGIONAL_MINZOOM })
   })
   const out: Layer[] = []
-  for (const { src, minzoom } of tiers) {
-    const gate = minzoom === undefined ? {} : { minzoom }
+  for (const { src, minzoom, maxzoom } of tiers) {
+    const gate = { ...(minzoom === undefined ? {} : { minzoom }), ...(maxzoom === undefined ? {} : { maxzoom }) }
     if (parts.includes('depth')) out.push({ id: `${src}-relief`, type: 'color-relief', source: src, ...gate,
       paint: { 'color-relief-opacity': o, 'color-relief-color': ['interpolate', ['linear'], ['elevation'], ...BATHY_RAMP[theme]] } })
     if (parts.includes('relief')) out.push({ id: `${src}-shade`, type: 'hillshade', source: src, ...gate,

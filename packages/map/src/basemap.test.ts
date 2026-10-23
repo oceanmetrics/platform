@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { StyleSpecification } from 'maplibre-gl'
-import { basemapLayerIds, composeStyle, CONTOUR_LEVELS, DEFAULT_TILES, OPEN_WATER, REGIONAL_MINZOOM, regionalSourceId, seaSurfaceId } from './basemap.js'
+import { basemapLayerIds, composeStyle, CONTOUR_LEVELS, CORE_MINZOOM, DEFAULT_TILES, OPEN_WATER, REGIONAL_MINZOOM, regionalSourceId, seaSurfaceId } from './basemap.js'
 import { clearsLayer, isSlotLayer } from './slot.js'
 
 // a CARTO-shaped base (the layer ids and kinds composeStyle keys on), no network
@@ -69,7 +69,7 @@ describe('composeStyle', () => {
       'gebco-regional-relief', 'gebco-regional-shade', 'gebco-regional-2-relief', 'gebco-regional-2-shade'])
     expect(REGIONAL_MINZOOM).toBe(9)
     for (const id of sea.filter((i) => i.includes('regional'))) expect(layer(s, id).minzoom).toBe(9)
-    for (const id of ['gebco-far-relief', 'gebco-relief', 'gebco-shade']) expect(layer(s, id).minzoom).toBeUndefined()
+    expect(layer(s, 'gebco-far-relief').minzoom).toBeUndefined()
     expect(layer(s, 'gebco-regional-relief').source).toBe('gebco-regional')
     expect(layer(s, 'gebco-regional-2-shade').source).toBe('gebco-regional-2')
   })
@@ -110,6 +110,98 @@ describe('composeStyle', () => {
     expect(layer(s, 'place_town').layout['text-size']).toEqual({ stops: [[6, 9], [10, 11]] })
     const hidden = composeStyle(BASE, { theme: 'dark', baseLabels: false })
     expect(layer(hidden, 'place_city').layout.visibility).toBe('none')
+  })
+})
+
+// the relief tiers by zoom, from the composed style: a layer draws at zoom z when minzoom <= z < maxzoom (MapLibre: minzoom
+// inclusive, maxzoom exclusive), so the tier of a source is the set of zooms any of its relief or shade layers draws at
+describe('the relief tiers do not overlap (0.3.4)', () => {
+  const SEA = /^gebco(-far|-regional(-\d+)?)?-(relief|shade)$/
+  const draws = (l: Record<string, any>, z: number) => (l.minzoom ?? 0) <= z && z < (l.maxzoom ?? 24)
+  const ZOOMS = Array.from({ length: 41 }, (_, i) => i / 4) // 0 to 10 in quarter steps, so the seams at 6 and 9 are hit exactly and from both sides
+  const tiersAt = (s: StyleSpecification, z: number) => [...new Set(s.layers.filter((l) => SEA.test(l.id) && draws(l, z)).map((l) => (l as Record<string, any>).source as string))]
+  const range = (s: StyleSpecification, src: string) => {
+    const ls = s.layers.filter((l) => (l as Record<string, any>).source === src && SEA.test(l.id)) as Record<string, any>[]
+    expect(new Set(ls.map((l) => `${l.minzoom}-${l.maxzoom}`)).size).toBe(1) // relief and shade of a tier share one range
+    return [ls[0].minzoom ?? 0, ls[0].maxzoom ?? null]
+  }
+  it('with the default regional tier: far z0-5, core z6-8, the regional tier from z9', () => {
+    const s = composeStyle(BASE, { theme: 'dark' })
+    expect(CORE_MINZOOM).toBe(6)
+    expect(range(s, 'gebco-far')).toEqual([0, 6])
+    expect(range(s, 'gebco')).toEqual([6, 9])
+    expect(range(s, 'gebco-regional')).toEqual([9, null])
+  })
+  it('every zoom 0 to 10 is drawn by exactly one relief tier, seams included', () => {
+    const s = composeStyle(BASE, { theme: 'dark', tiles: { regional: ['https://x.test/a.pmtiles', 'https://x.test/b.pmtiles'] } })
+    const at = ZOOMS.map((z) => tiersAt(s, z))
+    // two regional tiers share z9+ (they cover different boxes): exactly one *kind* of tier below z9, the regionals alone from 9
+    for (const [i, z] of ZOOMS.entries()) {
+      if (z < 6) expect(at[i], `z${z}`).toEqual(['gebco-far'])
+      else if (z < 9) expect(at[i], `z${z}`).toEqual(['gebco'])
+      else expect(at[i], `z${z}`).toEqual(['gebco-regional', 'gebco-regional-2'])
+    }
+  })
+  it('exactly one tier at every zoom 0 to 10 with one regional tier', () => {
+    const s = composeStyle(BASE, { theme: 'light' })
+    for (const z of ZOOMS) expect(tiersAt(s, z), `z${z}`).toHaveLength(1)
+    expect(ZOOMS.map((z) => tiersAt(s, z)[0])).toEqual(ZOOMS.map((z) => z < 6 ? 'gebco-far' : z < 9 ? 'gebco' : 'gebco-regional'))
+  })
+  it('without a regional tier core is the last tier, overzoomed past z8 (no maxzoom), and still no overlap', () => {
+    const s = composeStyle(BASE, { theme: 'dark', tiles: { regional: [] } })
+    expect(range(s, 'gebco')).toEqual([6, null])
+    for (const z of [...ZOOMS, 12, 16, 22]) expect(tiersAt(s, z), `z${z}`).toEqual([z < 6 ? 'gebco-far' : 'gebco'])
+  })
+  it('a part that is switched off drops its layers and keeps the ranges of the others', () => {
+    for (const parts of [['depth'], ['relief']] as const) {
+      const s = composeStyle(BASE, { theme: 'dark', parts })
+      for (const z of ZOOMS) expect(tiersAt(s, z), `${parts} z${z}`).toHaveLength(1)
+    }
+  })
+  it('the land mask, the isobaths and the names keep their own zoom gates', () => {
+    const s = composeStyle(BASE, { theme: 'dark' })
+    for (const id of ['land', 'water-inland', 'gebco-contour-3', 'gebco-contour-2', 'gebco-contour-1', 'gebco-contour-0', 'gebco-contour-label', 'gebco-names-line'])
+      expect(layer(s, id).maxzoom, id).toBeUndefined()
+    expect(['land', 'water-inland', 'gebco-names-1', 'gebco-names-line'].map((id) => layer(s, id).minzoom)).toEqual([undefined, undefined, 4, 4])
+  })
+  it('the composed style is otherwise unchanged: the layer ids and their order (snapshot of 0.3.3)', () => {
+    const dark = composeStyle(BASE, { theme: 'dark' })
+    expect(ids(dark)).toMatchInlineSnapshot(`
+      [
+        "background",
+        "park_national_park",
+        "water",
+        "gebco-far-relief",
+        "gebco-far-shade",
+        "gebco-relief",
+        "gebco-shade",
+        "gebco-regional-relief",
+        "gebco-regional-shade",
+        "gebco-contour-3",
+        "gebco-contour-2",
+        "gebco-contour-1",
+        "gebco-contour-0",
+        "gebco-contour-label",
+        "land",
+        "water-inland",
+        "landcover",
+        "gebco-names-1",
+        "gebco-names-2",
+        "gebco-names-3",
+        "gebco-names-line",
+        "water_shadow",
+        "road",
+        "boundary_country",
+        "place_city",
+        "place_island",
+        "place_island_minor",
+        "place_town",
+        "watername",
+      ]
+    `)
+    // the sources are the same, and only the far and core layers carry a maxzoom
+    expect(Object.keys(dark.sources)).toEqual(['carto', 'gebco-far', 'gebco', 'gebco-regional', 'gebco-contours', 'osm-land', 'gebco-names'])
+    expect(ids(dark).filter((id) => layer(dark, id).maxzoom !== undefined)).toEqual(['gebco-far-relief', 'gebco-far-shade', 'gebco-relief', 'gebco-shade'])
   })
 })
 

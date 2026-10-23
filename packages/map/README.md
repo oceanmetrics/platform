@@ -299,7 +299,7 @@ res-3 read), and a res-1 cell reads 9 row groups of 10,240 rows (568 kB) for its
 `composeStyle(cartoStyle, { theme, tiles?, parts?, opacity?, land?, names?, baseLabels? })` (`basemap.ts`, a port of
 CalCOFI explore's `composeStyle`) returns one style for `map.setStyle(style, { diff: true })`: CARTO's style with the
 ocean moved to the bottom, the GEBCO sea floor as colour relief and igor hillshade from terrain-RGB tiers (`gebco-far`
-under `gebco` under the `regional` tiers from z9), isobaths gated by level and zoom (`CONTOUR_LEVELS`: 1000 m multiples from z0, 500 from
+at z0-5, `gebco` at z6-8, the `regional` tiers from z9; one tier draws a zoom, 0.3.4), isobaths gated by level and zoom (`CONTOUR_LEVELS`: 1000 m multiples from z0, 500 from
 z5, 100-750 from z7, 50 from z9), the OSM land mask, the GEBCO undersea names, and CARTO's own text toned down, in both
 themes. `dem: false` gives the boot style (first paint does not wait for terrain). `baseStyle(theme)` fetches CARTO's
 style once.
@@ -354,9 +354,31 @@ of the storage vhost in `MarineSensitivity/server` `caddy/Caddyfile` (`^/(marine
 that waits for Ben. The objects are in S3 (range reads answer 206 at `https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/basemap/gebco/far.pmtiles`)
 and mirrored in R2.
 
-Known: the sea floor is drawn by two or three translucent layers where tiers overlap (far under core at z0-5, regional
-over core inside the sanctuaries from z9), so the relief is slightly denser there than outside; far duplicates core's
-z0-5 tiles and could be dropped (or core's layers gated from z6) once the look is checked.
+One tier draws one zoom (0.3.4; before it, far drew under core at z0-5 and far, core and the regional tier overlapped from
+z6, so the relief was a little denser there and the first view fetched two archives for the same pixels). A layer's
+`minzoom` is inclusive and its `maxzoom` exclusive: the far layers have `maxzoom: 6` (`CORE_MINZOOM`), the core layers
+`minzoom: 6` and, while a regional tier is configured, `maxzoom: 9` (`REGIONAL_MINZOOM`), the regional layers `minzoom: 9`.
+With `regional: []` core has no `maxzoom` and is overzoomed past z8. MapLibre fetches no tiles for a source whose layers
+are all out of range, so the gate is also the saving; the isobaths (one archive, gated by level), the land mask and the
+names are as before. `src/basemap.test.ts` asserts the ranges from the composed style at every quarter zoom from 0 to 10.
+
+First view, bytes on the wire per tier, live archives, headless Chrome 156 on a real MapLibre 6.13 (`spikes/map-consumer`,
+`node scripts/tiers.mjs before|after` after `npm run build` in both; it boots the README flow centred on Monterey Bay,
+waits for idle and counts every response by archive, CARTO's style and tiles apart; results in `results/tiers-before.json`
+and `tiers-after.json`). "Before" is 0.3.3 and "after" 0.3.4; each line is far / core (bytes, requests), the regional tier
+costs one 16,384 B header read in both, and the idle tier of 0.3.4 costs one 16,384 B header read too.
+
+| view | far before | far after | core before | core after | relief before | relief after | saved |
+|---|---|---|---|---|---|---|---|
+| 1280 px, z2 | 2,590,836 (10) | 2,590,836 (10) | 2,590,031 (11) | 16,384 (1) | 5,197,251 | 2,623,604 | 2,573,647 (49.5%) |
+| 1280 px, z8 | 421,028 (3) | 16,384 (1) | 779,228 (10) | 779,228 (10) | 1,216,640 | 811,996 | 404,644 (33.3%) |
+| 390 px, z2 | 1,796,037 (7) | 1,796,037 (7) | 1,795,252 (8) | 16,384 (1) | 3,607,673 | 1,828,805 | 1,778,868 (49.3%) |
+| 390 px, z8 | 103,733 (2) | 16,384 (1) | 632,241 (8) | 632,241 (8) | 752,358 | 665,009 | 87,349 (11.6%) |
+
+(relief = far + core + regional, the regional 16,384 B included.) With CARTO's style and tiles, the land mask and the
+names the whole first view at z2 on a desktop screen went from 8,375,779 B to 5,802,141 B (390 px: 5,925,087 B to
+4,146,197 B); at z8 from 1,776,036 B to 1,371,383 B (390 px: 1,345,824 B to 1,258,480 B). The tiers are read from the S3
+host (`TIERS_BASE`), the same objects the storage host serves once `basemap` is allowed (the Open note above).
 
 CARTO's styles read the protomaps schema since 2026 (source `protomaps`, `kind` where OpenMapTiles had `class`): the
 mask's `water-inland` leaves out both (`OPEN_WATER`: ocean, sea). The island labels still read OpenMapTiles' `place`
@@ -443,6 +465,8 @@ the h3 worker module and the COG and geotiff code included.
 0.3.2: 45 109 B (42 836 B at 0.3.1): `h3Species.ts` and the new `tileParents`; the worker chunk 100 672 B (+457 B).
 
 0.3.3: 47 148 B (+2 039 B: `h3Tap.ts`, the per-tile tally in the reader and `stats()` on the slot); the worker chunk 101 057 B (+385 B).
+
+0.3.4: 47 403 B (+255 B: the tier ranges in `seaFloorLayers`); the worker chunk is unchanged (101 057 B).
 
 **0.3.0 raises the package budget to 48 000 B**: 41 877 B measured, +13.3 kB for the seven modules of the release
 provider (`h3Bits`, `h3Zoom`, `h3ReleaseLayer`, `h3Release`, `h3Parquet`, `h3Stats`, `parquetFile`), comment-heavy as

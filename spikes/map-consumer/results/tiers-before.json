@@ -1,0 +1,243 @@
+{
+  "when": "2026-10-23T15:22:08.990Z",
+  "chrome": "156.0.8078.47",
+  "label": "before",
+  "center": [
+    -122.5,
+    36.8
+  ],
+  "tiles": {
+    "core": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/basemap/gebco/core.pmtiles",
+    "far": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/basemap/gebco/far.pmtiles",
+    "regional": [
+      "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/basemap/gebco/core-sanctuaries.pmtiles"
+    ],
+    "contours": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/basemap/gebco/contours.pmtiles",
+    "names": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/basemap/gebco/names.pmtiles",
+    "land": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/basemap/osm/land.pmtiles"
+  },
+  "views": [
+    {
+      "width": 1280,
+      "zoom": 2,
+      "tiers": {
+        "carto": {
+          "requests": 16,
+          "bytes": 523401
+        },
+        "core-sanctuaries": {
+          "requests": 1,
+          "bytes": 16384
+        },
+        "far": {
+          "requests": 10,
+          "bytes": 2590836
+        },
+        "core": {
+          "requests": 11,
+          "bytes": 2590031
+        },
+        "contours": {
+          "requests": 11,
+          "bytes": 1746880
+        },
+        "land": {
+          "requests": 11,
+          "bytes": 891863
+        },
+        "names": {
+          "requests": 1,
+          "bytes": 16384
+        }
+      },
+      "relief": 5197251,
+      "total": 8375779,
+      "errors": 0
+    },
+    {
+      "width": 1280,
+      "zoom": 6,
+      "tiers": {
+        "carto": {
+          "requests": 14,
+          "bytes": 299870
+        },
+        "far": {
+          "requests": 3,
+          "bytes": 421028
+        },
+        "land": {
+          "requests": 7,
+          "bytes": 25652
+        },
+        "core": {
+          "requests": 10,
+          "bytes": 1394452
+        },
+        "contours": {
+          "requests": 9,
+          "bytes": 55422
+        },
+        "names": {
+          "requests": 9,
+          "bytes": 18508
+        },
+        "core-sanctuaries": {
+          "requests": 1,
+          "bytes": 16384
+        }
+      },
+      "relief": 1831864,
+      "total": 2231316,
+      "errors": 0
+    },
+    {
+      "width": 1280,
+      "zoom": 8,
+      "tiers": {
+        "carto": {
+          "requests": 15,
+          "bytes": 464570
+        },
+        "contours": {
+          "requests": 8,
+          "bytes": 49393
+        },
+        "names": {
+          "requests": 6,
+          "bytes": 17132
+        },
+        "land": {
+          "requests": 7,
+          "bytes": 28301
+        },
+        "core": {
+          "requests": 10,
+          "bytes": 779228
+        },
+        "far": {
+          "requests": 3,
+          "bytes": 421028
+        },
+        "core-sanctuaries": {
+          "requests": 1,
+          "bytes": 16384
+        }
+      },
+      "relief": 1216640,
+      "total": 1776036,
+      "errors": 0
+    },
+    {
+      "width": 390,
+      "zoom": 2,
+      "tiers": {
+        "carto": {
+          "requests": 13,
+          "bytes": 405381
+        },
+        "names": {
+          "requests": 1,
+          "bytes": 16384
+        },
+        "land": {
+          "requests": 8,
+          "bytes": 647044
+        },
+        "core-sanctuaries": {
+          "requests": 1,
+          "bytes": 16384
+        },
+        "core": {
+          "requests": 8,
+          "bytes": 1795252
+        },
+        "far": {
+          "requests": 7,
+          "bytes": 1796037
+        },
+        "contours": {
+          "requests": 8,
+          "bytes": 1248605
+        }
+      },
+      "relief": 3607673,
+      "total": 5925087,
+      "errors": 0
+    },
+    {
+      "width": 390,
+      "zoom": 6,
+      "tiers": {
+        "carto": {
+          "requests": 10,
+          "bytes": 196925
+        },
+        "names": {
+          "requests": 6,
+          "bytes": 17557
+        },
+        "contours": {
+          "requests": 6,
+          "bytes": 36535
+        },
+        "far": {
+          "requests": 3,
+          "bytes": 421028
+        },
+        "core-sanctuaries": {
+          "requests": 1,
+          "bytes": 16384
+        },
+        "core": {
+          "requests": 6,
+          "bytes": 793297
+        },
+        "land": {
+          "requests": 5,
+          "bytes": 23961
+        }
+      },
+      "relief": 1230709,
+      "total": 1505687,
+      "errors": 0
+    },
+    {
+      "width": 390,
+      "zoom": 8,
+      "tiers": {
+        "carto": {
+          "requests": 13,
+          "bytes": 494202
+        },
+        "core": {
+          "requests": 8,
+          "bytes": 632241
+        },
+        "contours": {
+          "requests": 7,
+          "bytes": 49348
+        },
+        "land": {
+          "requests": 7,
+          "bytes": 32641
+        },
+        "core-sanctuaries": {
+          "requests": 1,
+          "bytes": 16384
+        },
+        "far": {
+          "requests": 2,
+          "bytes": 103733
+        },
+        "names": {
+          "requests": 7,
+          "bytes": 17275
+        }
+      },
+      "relief": 752358,
+      "total": 1345824,
+      "errors": 0
+    }
+  ]
+}
