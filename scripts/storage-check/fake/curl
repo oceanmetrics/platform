@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# a fake curl for scripts/storage-check.test.ts. $OM_FAKE_SCENARIO holds one rule per line, fields separated by the unit
+# separator (\037): method, url regex (ERE), range (any|yes|no), status, times (space separated seconds, used in turn),
+# fail (0|1: exit 7 with no output, like a refused connection), then one "name: value" per response header.
+# the first rule that matches answers, anything else is a 404. each call is a line of $OM_FAKE_LOG: method, url, then
+# every argument, fields separated by \037. it understands only what storage-check.sh sends: -sS, -o, --max-time,
+# -D <file>, -w <format>, -X, -H, and the url last.
+dump=""; fmt=""; method=GET; url=""; ranged=no; US=$'\037'; all=""
+for a in "$@"; do all="$all$US$a"; done
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -D) dump=$2; shift 2 ;;
+    -w) fmt=$2; shift 2 ;;
+    -X) method=$2; shift 2 ;;
+    -H) case "$2" in [Rr]ange:*) ranged=yes ;; esac; shift 2 ;;
+    -o|--max-time) shift 2 ;;
+    -*) shift ;;
+    *) url=$1; shift ;;
+  esac
+done
+printf '%s\t%s\t%s\n' "$method" "$url" "${all#"$US"}" >> "$OM_FAKE_LOG"
+n=0; st=404; times="0.010000"; fail=0; headers=()
+while IFS="$US" read -r -a f; do
+  n=$((n + 1))
+  [ "${f[0]}" = "$method" ] || continue
+  [[ $url =~ ${f[1]} ]] || continue
+  case "${f[2]}" in yes) [ "$ranged" = yes ] || continue ;; no) [ "$ranged" = no ] || continue ;; esac
+  st=${f[3]}; times=${f[4]}; fail=${f[5]}; headers=("${f[@]:6}")
+  break
+done < "$OM_FAKE_SCENARIO"
+[ "$fail" = 0 ] || exit 7
+# the nth call of a rule takes the nth time, round robin
+c=0; [ -f "$OM_FAKE_LOG.n$n" ] && c=$(cat "$OM_FAKE_LOG.n$n")
+echo $((c + 1)) > "$OM_FAKE_LOG.n$n"
+set -- $times
+shift $((c % $#)); t=$1
+if [ -n "$dump" ]; then
+  { printf 'HTTP/2 %s\r\n' "$st"; for h in ${headers[@]+"${headers[@]}"}; do printf '%s\r\n' "$h"; done; printf '\r\n'; } > "$dump"
+fi
+printf '%s' "$fmt" | sed -e "s/%{http_code}/$st/" -e "s/%{time_total}/$t/"

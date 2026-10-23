@@ -88,6 +88,42 @@ Edit each repo in its own change; nothing here edits them.
   (`node_modules/@oceanmetrics/catalog/schemas`).
 - [ ] Update the `CLAUDE.md` of this repo and of each consumer: the `file:` link text becomes "from npm".
 
+## Cutover check
+
+`scripts/storage-check.sh <host>` is the verification of the storage host on cutover day: the `om-gazetteer` Worker
+(`oceanmetrics/places` `worker/`) answers for every published prefix the way the apps need, and the old Caddy's
+redirect to path-style S3 is gone. It is read-only (GET and OPTIONS, redirects never followed), needs only bash 3.2 and
+curl, prints a PASS/FAIL table and exits 1 on any FAIL (2 on a usage error).
+
+```sh
+scripts/storage-check.sh https://om-gazetteer.ben-f07.workers.dev                       # the preview
+scripts/storage-check.sh https://storage.oceanmetrics.io --key <id>                     # live, with the keyed tier
+scripts/storage-check.sh https://om-gazetteer.ben-f07.workers.dev --compare https://storage.oceanmetrics.io   # both columns
+```
+
+| row | what is asked | pass when |
+|---|---|---|
+| 1 | `gazetteer/index/layers.json`, keyless | 200, `application/json`, `Access-Control-Allow-Origin` |
+| 2 | `gazetteer/index/places_index.parquet`, `Range: bytes=0-16383` | 206, `Content-Range`, `Accept-Ranges` |
+| 3 | `basemap/gebco/far.pmtiles`, Range | 206, `application/vnd.pmtiles` |
+| 4a-c | `indicators/indicators.json`; `indicators/coverage.parquet` (Range); `indicators/feeds/place=NMS:CINMS.xml` | 200; 206; 200 `application/atom+xml` |
+| 5a-b | `atlas/catalog.json`; `atlas/aquamaps_eov/score_risk_3857.tif` (Range) | 200; 206 |
+| 6a-b | `obis-h3/collection.json`; `obis-h3/latest.json` | 200; 200 |
+| 7a-c | `marine-atlas/` (html); `marine-atlas/stac/catalog.json`; `marine-atlas/tables/cog_3857.parquet` (Range) | 200 html; 200; 206 |
+| 8a-d | `backups/`; `backups/msens_20260623.sql.gz`; `atlas-restricted/x` and `unlisted/gazetteer/mr_eez/places.parquet`, no key | 404; 404; 403; 403 |
+| 9 | `OPTIONS` of the row 2 url with `Origin: https://oceanmetrics.io`, `Access-Control-Request-Headers: range` | 204 or 200, `Access-Control-Allow-Origin` (`*` or the origin), allow-headers include `range` |
+| 10 | every request above | none is a 3xx (the cell says how many were, of how many) |
+| 11 | median of 5 ranged GETs of row 2 | all 206, median at most 1,500 ms (`--max-ms`) |
+| 12 | `--key <id>`: row 2 again with `?key=<id>` | 206, `Content-Range`, `x-om-usage` present; SKIP without `--key`; the id is never printed |
+
+A cell is `PASS`, `PASS <detail>` or `FAIL <what differed>` (a wrong status is reported alone: `status 302 (want 206)`).
+`--compare` runs the same rows against a second host and prints both columns; the exit code is 1 if either has a FAIL.
+Each run is about 24 requests, under the Worker's anonymous limit of 120 a minute per IP, so run it once, not in a loop.
+`scripts/storage-check.test.ts` runs it against a fake `curl` (`scripts/storage-check/fake/curl`): a scenario of rules,
+one test per row and rule, the Caddy's all-302 case, the timing median and limit, `--key`, `--compare` and the usage errors.
+Row 12 asks for `x-om-usage`, which the Worker sets only on a key at or over its soft threshold (80 % of the cap), so a
+fresh key shows FAIL `no x-om-usage` until the Worker sends the header on every keyed response.
+
 ## Size budget
 
 `npm run size` gzips (level 9) the summed `dist/**/*.js` of each package and compares it with the budget in
