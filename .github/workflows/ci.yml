@@ -19,7 +19,8 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci
+      # build first: catalog's tests import @oceanmetrics/status from its dist/ (red on main since 10-23 otherwise)
+      - run: npm run build
       - run: npm test
       - run: npm run typecheck
-      - run: npm run build
       - run: npm run size
