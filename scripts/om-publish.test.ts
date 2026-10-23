@@ -154,12 +154,53 @@ describe('om-publish.sh: upload', () => {
     expect(r.err).toContain('/nonexistent/rclone-r2.sh is missing')
     expect(r.calls).toEqual([])
   })
-  it('refuses the bucket root, .. and _history/ as a prefix', () => {
-    for (const p of ['/', 'indicators/../backups', 'indicators/_history/x']) {
+  it('refuses an empty prefix, .. and _history/ as a prefix', () => {
+    for (const p of ['', 'indicators/../backups', 'indicators/_history/x']) {
       const r = run([catalog(), p])
       expect(r.code).toBe(2)
       expect(r.calls).toEqual([])
     }
+  })
+  it('the bucket root: refused for any folder or key but the exact key index.html (the browse page of places)', () => {
+    const d = catalog()
+    for (const args of [[d, '/'], [join(d, 'README.md'), '/'], [join(d, 'indicators.json'), '/', '--as', 'indicators.json'],
+      [join(d, 'README.md'), '/', '--as', 'gazetteer/index.html'], [join(d, 'README.md'), '/', '--as', 'index.html.bak'], [join(d, 'README.md'), '/', '--as', 'xindex.html']]) {
+      const r = run(args)
+      expect(r.code, args.join(' ')).toBe(2)
+      expect(r.err).toContain('the bucket root takes only the keys: index.html')
+      expect(r.calls).toEqual([])
+    }
+    // a folder holding index.html and anything else is refused too, even with --include of a wider glob
+    writeFileSync(join(d, 'index.html'), '<html/>')
+    expect(run([d, '/', '--include', '*index.html']).code).toBe(0)   // matches index.html only: the other files have other names
+    expect(run([d, '/', '--include', '*.html', '--include', 'README.md']).code).toBe(2)
+    expect(run([d, '/']).code).toBe(2)
+    // no history folder at the root, and a prefix that merely looks like it is still a prefix
+    const h = run([join(d, 'index.html'), '/', '--keep-history'])
+    expect(h.code).toBe(2)
+    expect(h.err).toContain('the bucket root has no history folder')
+  })
+  it('the bucket root takes index.html on both stores, in the bucket and not in a folder of it', () => {
+    const d = catalog()
+    writeFileSync(join(d, 'index.html'), '<html>root</html>')
+    const r = run([join(d, 'index.html'), '/', '--cache-control', 'no-cache'])
+    expect(r.code).toBe(0)
+    const u = uploads(r.calls)
+    expect(u.map(store)).toEqual(['r2', 's3'])
+    expect(u.map(c => c.files)).toEqual([['index.html'], ['index.html']])
+    expect(u.map(typeOf)).toEqual(['text/html; charset=utf-8', 'text/html; charset=utf-8'])
+    expect(u[0].args[1]).toMatch(/\/g\d+$/)
+    expect(u[0].args[2]).toBe('r2:oceanmetrics-io-public-enam')
+    expect(u[1].args[3]).toBe('s3://oceanmetrics.io-public')
+    expect(r.out).toContain('r2:oceanmetrics-io-public-enam/')
+    expect(r.out).not.toContain('//  ')
+    for (const c of u) expect(c.args.some(a => a.startsWith('--delete'))).toBe(false)
+    // and a folder of pages: the include picks the root page alone
+    mkdirSync(join(d, 'gazetteer'), { recursive: true })
+    writeFileSync(join(d, 'gazetteer/index.html'), '<html>g</html>')
+    const f = run([d, '/', '--include', 'index.html', '--cache-control', 'no-cache'])
+    expect(f.code).toBe(0)
+    expect(uploads(f.calls).flatMap(c => c.files)).toEqual(['index.html', 'index.html'])
   })
 })
 

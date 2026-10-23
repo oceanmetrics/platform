@@ -33,15 +33,15 @@
 # simplification only at low zooms): GDAL's MVT writer neither simplifies nor limits a tile's size.
 #
 # Run on the mini on 2026-10-23 (build week 2), then the outputs go to https://storage.oceanmetrics.io/basemap/ (step
-# `upload`).
+# `upload`, through scripts/om-publish.sh).
 #
 # usage:
 #   scripts/basemap/build_gebco.sh <gebco_dir> <out_dir> [steps]
 #     gebco_dir  the GEBCO 2025 global grid as GeoTIFF tiles (gebco_2025_geotiff.zip, unzipped; any *.tif)
 #     out_dir    the archives under <out_dir>/gebco and <out_dir>/osm; work files under <out_dir>/work, or $WORK
-#     steps      comma-separated, default prep,far,core,regional,contours,land,names,verify; `upload` needs S3_DEST (and
-#                S3_ENDPOINT for R2), e.g. S3_DEST=s3://oceanmetrics.io-public/basemap
-#   environment: WORK (work dir), RAW (downloads: land-polygons-split-4326.zip, gazetteer/), PYTHON (default python3),
+#     steps      comma-separated, default prep,far,core,regional,contours,land,names,verify; `upload` sends the archives
+#                to basemap/ through om-publish.sh (both stores; UPLOAD_MODE=--dry-run only lists)
+#   environment: OM_PUBLISH (the publisher; default scripts/om-publish.sh), UPLOAD_MODE, WORK (work dir), RAW (downloads: land-polygons-split-4326.zip, gazetteer/), PYTHON (default python3),
 #                JOBS (parallel blocks, default 8), LAND_ZMAX (default 10)
 set -euo pipefail
 
@@ -339,12 +339,14 @@ verify() {
   log "verify: far $want_far tiles, core $want_core tiles; every archive verifies"
 }
 
+# upload: gebco/*.pmtiles and osm/*.pmtiles (not the work files under $OUT/work) to basemap/ on both stores through
+# om-publish.sh (R2 then S3; never deletes; checksum-compared, so an unchanged archive is not sent again). It uploads
+# for real, as the step always did; UPLOAD_MODE=--dry-run lists what it would send and writes nothing.
+# S3_DEST and S3_ENDPOINT are no longer read: the prefix is basemap/ and the stores are om-publish's (OM_STORE).
 upload() {
-  : "${S3_DEST:?upload needs S3_DEST, e.g. s3://oceanmetrics-storage/basemap}"
-  local ep=(); [[ -n "${S3_ENDPOINT:-}" ]] && ep=(--endpoint-url "$S3_ENDPOINT")
-  for f in "$OUT"/gebco/*.pmtiles "$OUT"/osm/*.pmtiles; do
-    aws s3 cp "${ep[@]+"${ep[@]}"}" "$f" "$S3_DEST/${f#"$OUT"/}" --content-type application/vnd.pmtiles
-  done
+  local publisher="${OM_PUBLISH:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/om-publish.sh}"
+  [[ -x "$publisher" ]] || { log "upload: $publisher not found (set OM_PUBLISH)"; exit 1; }
+  "$publisher" "${UPLOAD_MODE:---really}" --include 'gebco/*.pmtiles' --include 'osm/*.pmtiles' "$OUT" basemap
 }
 
 # the block and chunk workers run under xargs -P, in their own bash

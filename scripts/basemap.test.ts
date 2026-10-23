@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { execFileSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { execFileSync, spawnSync } from 'node:child_process'
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { CONTOUR_LEVELS, NAME_RANKS } from '../packages/map/src/basemap.js'
 
 // the tile build (scripts/basemap/build_gebco.sh) and the style (packages/map/src/basemap.ts) each hold the isobath
@@ -59,5 +61,47 @@ describe('build_gebco.sh: undersea names', () => {
 
   it('the style reads ranks 1, 2 and 3', () => {
     expect(NAME_RANKS.map((r) => r.rank)).toEqual([1, 2, 3])
+  })
+})
+
+describe('build_gebco.sh: the upload step goes through om-publish.sh', () => {
+  // the real om-publish.sh against the fake aws and rclone of om-publish.test.ts: what each call would send is recorded
+  const FAKE = new URL('./om-publish/fake', import.meta.url).pathname
+  const upload = (env: Record<string, string> = {}) => {
+    const out = mkdtempSync(join(tmpdir(), 'gebco-out-'))
+    for (const f of ['gebco/far.pmtiles', 'gebco/core.pmtiles', 'osm/land.pmtiles', 'work/contours_low.pmtiles', 'work/far.mbtiles', 'raw/land.zip']) {
+      mkdirSync(join(out, f, '..'), { recursive: true })
+      writeFileSync(join(out, f), f)
+    }
+    const log = join(out, 'calls.log')
+    writeFileSync(log, '')
+    const r = spawnSync('bash', [new URL('./basemap/build_gebco.sh', import.meta.url).pathname, join(out, 'src'), out, 'upload'], {
+      encoding: 'utf8', env: { ...process.env, PATH: `${FAKE}:${process.env.PATH}`, OM_RCLONE: join(FAKE, 'rclone-r2.sh'), OM_FAKE_LOG: log, OM_STORE: '', ...env },
+    })
+    const calls = readFileSync(log, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l) as { tool: string; args: string[]; files?: string[] })
+    return { ...r, calls, uploads: calls.filter((c) => c.files) }
+  }
+
+  it('sends the archives of gebco/ and osm/ to basemap/ on R2 then S3, as application/vnd.pmtiles, and nothing of work/ or raw/', () => {
+    const r = upload()
+    expect(r.status).toBe(0)
+    expect(r.uploads.map((c) => c.tool)).toEqual(['rclone', 'aws'])
+    for (const c of r.uploads) expect(c.files).toEqual(['gebco/core.pmtiles', 'gebco/far.pmtiles', 'osm/land.pmtiles'])
+    expect(r.uploads[0].args).toContain('Content-Type: application/vnd.pmtiles')
+    expect(r.uploads[0].args).toContain('r2:oceanmetrics-io-public-enam/basemap')
+    expect(r.uploads[1].args).toContain('s3://oceanmetrics.io-public/basemap')
+    for (const c of r.uploads) expect(c.args.some((a) => a.startsWith('--delete') || a === '--dry-run' || a === '--dryrun')).toBe(false)
+  })
+  it('UPLOAD_MODE=--dry-run lists in the tools\' dry-run modes; OM_STORE=r2 leaves S3 alone', () => {
+    const d = upload({ UPLOAD_MODE: '--dry-run', OM_STORE: 'r2' })
+    expect(d.status).toBe(0)
+    expect(d.uploads.map((c) => c.tool)).toEqual(['rclone'])
+    expect(d.uploads[0].args).toContain('--dry-run')
+    expect(d.stdout).toContain('(dry run)')
+  })
+  it('a missing publisher stops with its path', () => {
+    const r = upload({ OM_PUBLISH: '/nonexistent/om-publish.sh' })
+    expect(r.status).toBe(1)
+    expect(r.stderr).toContain('/nonexistent/om-publish.sh not found')
   })
 })

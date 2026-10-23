@@ -7,7 +7,7 @@
 # (~/.config/oceanmetrics/rclone-r2.sh sources r2.env), the AWS keys from the host's profile.
 #
 # usage:
-#   om-publish.sh [options] <local dir|file> <prefix>
+#   om-publish.sh [options] <local dir|file> <prefix>      (<prefix> `/` is the bucket root: only the key index.html)
 #   om-publish.sh rewrite --from <host> --to <host> [options] <key.json|prefix>...
 #
 # upload options:
@@ -52,6 +52,9 @@ CLI="${OM_CATALOG_CLI:-$ROOT/packages/catalog/dist/cli.js}"
 HDATE="${OM_HISTORY_DATE:-$(date -u +%F)}"
 
 TAB=$'\t'
+# the bucket root is not a prefix: it is refused, except for these exact keys (the browse page the generator in
+# oceanmetrics/places writes at the root), and only as the prefix `/`. the rule is not widened by a pattern.
+ROOT_KEYS="index.html"
 die() { echo "om-publish: $*" >&2; exit 2; }
 usage() { sed -n '9,11p' "$0" | sed 's/^# \{0,3\}//' >&2; exit 2; }
 
@@ -160,27 +163,28 @@ history_base() {
 # ---- one group of files (a staged folder of symlinks) to one store ----
 # upload_group <store> <stage dir> <prefix> <content type> <cache control> <content encoding>
 upload_group() {
-  local store="$1" stage="$2" prefix="$3" ctype="$4" cache="$5" enc="$6" n
+  local store="$1" stage="$2" prefix="$3" ctype="$4" cache="$5" enc="$6" n sub=""
+  [ -z "$prefix" ] || sub="/$prefix"   # empty: the bucket root (ROOT_KEYS only)
   n="$(find -L "$stage" -type f | wc -l | tr -d ' ')"
   [ "$n" -gt 0 ] || return 0
   local dry=""; [ "$REALLY" = 1 ] || dry=1
   if [ "$store" = r2 ]; then
-    local args=(copy "$stage" "r2:$R2_BUCKET/$prefix" --copy-links --stats-one-line --stats 0)
+    local args=(copy "$stage" "r2:$R2_BUCKET$sub" --copy-links --stats-one-line --stats 0)
     if [ "$SIZE_ONLY" = 1 ]; then args+=(--size-only); else args+=(--checksum); fi
     [ -n "$ctype" ] && args+=(--header-upload "Content-Type: $ctype")
     [ -n "$cache" ] && args+=(--header-upload "Cache-Control: $cache")
     [ -n "$enc" ] && args+=(--header-upload "Content-Encoding: $enc")
     [ -n "$dry" ] && args+=(--dry-run)
-    echo "r2  ${ctype:-(guessed)}  $n files -> r2:$R2_BUCKET/$prefix/${dry:+  (dry run)}"
+    echo "r2  ${ctype:-(guessed)}  $n files -> r2:$R2_BUCKET$sub/${dry:+  (dry run)}"
     "$RCLONE" "${args[@]}"
   else
-    local args=(s3 sync "$stage" "s3://$S3_BUCKET/$prefix" --no-progress)
+    local args=(s3 sync "$stage" "s3://$S3_BUCKET$sub" --no-progress)
     [ "$SIZE_ONLY" = 1 ] && args+=(--size-only)
     [ -n "$ctype" ] && args+=(--content-type "$ctype")
     [ -n "$cache" ] && args+=(--cache-control "$cache")
     [ -n "$enc" ] && args+=(--content-encoding "$enc")
     [ -n "$dry" ] && args+=(--dryrun)
-    echo "s3  ${ctype:-(guessed)}  $n files -> s3://$S3_BUCKET/$prefix/${dry:+  (dry run)}"
+    echo "s3  ${ctype:-(guessed)}  $n files -> s3://$S3_BUCKET$sub/${dry:+  (dry run)}"
     "$AWS" "${args[@]}"
   fi
 }
@@ -237,7 +241,12 @@ matches_any() {   # matches_any <path> <glob>...
 # ---- publish <local> <prefix> ----
 publish() {
   local src="$1" prefix files="$TMP/files"
-  prefix="$(clean_prefix "$2")"
+  if [ "$2" = "/" ]; then   # the bucket root: only the exact keys of ROOT_KEYS, and no history folder
+    prefix=""
+    [ "$HISTORY" = 0 ] || die "--keep-history: the bucket root has no history folder"
+  else
+    prefix="$(clean_prefix "$2")"
+  fi
   [ -e "$src" ] || die "$src does not exist"
   # the list: "<source path relative to root><TAB><published path>"
   local root
@@ -256,7 +265,11 @@ publish() {
   fi
   local total; total="$(grep -c . "$files" || true)"
   [ "$total" -gt 0 ] || die "no file to publish in $src"
-  echo "om-publish: $total files from $src -> $prefix/ on $STORES$( [ "$REALLY" = 1 ] || echo ' (dry run; --really to upload)')"
+  if [ -z "$prefix" ]; then
+    local bad; bad="$(awk -F'\t' -v ok=" $ROOT_KEYS " 'index(ok, " " $2 " ") == 0 { printf "%s ", $2 }' "$files")"
+    [ -z "$bad" ] || die "the bucket root takes only the keys: $ROOT_KEYS (not: ${bad% })"
+  fi
+  echo "om-publish: $total files from $src -> ${prefix:+$prefix}/ on $STORES$( [ "$REALLY" = 1 ] || echo ' (dry run; --really to upload)')"
 
   # the groups, in upload order: the files not matched by --last, by content type; then each --last glob, by type
   local groups="$TMP/groups" i=0 line rel pub t g
