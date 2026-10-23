@@ -5,8 +5,9 @@ when the indicators catalog's change files hold something the address watches. W
 behind a one-function adapter, D2 a KV namespace of its own with the addresses encrypted, D6 here in platform, D8 kinds
 `status` and `new` and cadence daily, D9 workers.dev until the zone is active).
 
-**Status (2026-10-23): built and tested; not deployed with its secrets.** The KV namespace `ALERTS`
-(`480d45d67202420c9fe94d071dbe904f`) exists on the Ocean Metrics Cloudflare account. Until `ALERTS_KEY` is set every
+**Status (2026-10-23): built, tested, and deployed in log mode with no secret** to
+`https://om-alerts.ben-f07.workers.dev` (version `6c0beb4e`; `/v1/health` answers `provider: log, keyed: false`). The KV
+namespace `ALERTS` (`480d45d67202420c9fe94d071dbe904f`) exists on the Ocean Metrics Cloudflare account. Until `ALERTS_KEY` is set every
 POST route answers 503 `not_configured` and the cron waits (metric `cron/not_configured`). With `PROVIDER=log` no mail
 leaves the Worker: the mails go to the console (addresses redacted) and Analytics Engine. Steps that need the account,
 the provider or DNS are marked **BEN-DOES**.
@@ -118,8 +119,9 @@ RFC 2606 examples, with a seeded fault. Locally: put a throwaway `ALERTS_KEY="$(
 
 1. **Done 2026-10-23**: `npx wrangler kv namespace create ALERTS` → `480d45d67202420c9fe94d071dbe904f` (in `wrangler.toml`).
    Analytics Engine is on for the account (`om_gazetteer`); `om_alerts` is created on first write.
-2. Deploy in log mode (no secret): `npx wrangler deploy` from `workers/alerts/` on the mini. `curl <base>/v1/health`
-   says `provider: log, keyed: false`; the POST routes answer 503 until step 3.
+2. **Done 2026-10-23**: deployed in log mode (no secret), `npx wrangler deploy` from `workers/alerts/` on the mini.
+   `curl <base>/v1/health` says `provider: log, keyed: false`; the POST routes answer 503 until step 3. (A first
+   request right after a deploy may get Cloudflare's error 1042 for a few seconds while workers.dev catches up.)
 3. **BEN-DOES** the secrets, from `~/.config/oceanmetrics/alerts.env` on the mini (mode 600, never in a repo or chat,
    the `r2.env` pattern), each with `wrangler secret put <NAME>` reading stdin, e.g.
    `set -a; . ~/.config/oceanmetrics/alerts.env; set +a; printf %s "$ALERTS_KEY" | npx wrangler secret put ALERTS_KEY`:
