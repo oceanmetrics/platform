@@ -1,0 +1,85 @@
+# D4 pre-check (week 6): the R2 bucket is in EEUR; time the storage Worker against S3 from a US GitHub-hosted runner.
+# One-off, manual. The harness is spikes/r2-range-reads (its own deps, outside the root workspaces).
+name: r2-range-reads
+
+on:
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: 'harness phase: a (hyparquet, DuckDB-WASM, CORS), b (PMTiles, MapLibre, COGs) or ab'
+        type: choice
+        options: [ab, a, b]
+        default: ab
+      runs:
+        description: 'runs per check and origin'
+        type: string
+        default: '3'
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        working-directory: spikes/r2-range-reads
+    env:
+      OM_KEY: ${{ secrets.OM_KEY }}
+      OUT_NAME: us-${{ github.run_id }}.json
+      RUNS: ${{ inputs.runs }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: spikes/r2-range-reads/package-lock.json
+      - name: Where this runner is (public IP metadata only)
+        run: |
+          curl -s https://ipinfo.io/json | tee runner-ip.json
+          echo
+          {
+            echo '### Runner'
+            echo
+            echo '```json'
+            curl -s https://ipinfo.io/json | grep -E '"(city|region|country|org|timezone)"'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - run: npm ci
+      - run: npm run build
+      # the harness drives the system Chrome (playwright channel "chrome"); ubuntu-latest ships it
+      - name: Chrome
+        run: google-chrome --version || npx playwright install --with-deps chrome
+      - name: Range reads, Worker vs S3
+        run: |
+          set -o pipefail
+          mkdir -p results
+          phases="${{ inputs.phase }}"
+          [ "$phases" = "ab" ] && phases="a b"
+          for p in $phases; do
+            node run.mjs "$p" 2>&1 | tee "results/$OUT_NAME.$p.log"
+          done
+      - name: Summary table
+        if: always()
+        run: |
+          if [ -f "results/$OUT_NAME" ]; then
+            {
+              echo '### Worker vs S3 (ms; cold / median / p95 over the runs)'
+              echo
+              node summary.mjs "results/$OUT_NAME"
+            } | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            echo 'no results file' | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Check the key is not in the results
+        if: always()
+        run: '! grep -rF "$OM_KEY" results runner-ip.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r2-range-reads-us-${{ github.run_id }}
+          path: |
+            spikes/r2-range-reads/results/us-${{ github.run_id }}*
+            spikes/r2-range-reads/runner-ip.json

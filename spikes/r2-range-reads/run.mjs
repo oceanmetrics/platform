@@ -1,5 +1,5 @@
 // drives the bench page in the system chrome (playwright, channel chrome) and writes results/results.json.
-// usage: OM_KEY=<preview key> node run.mjs [a|b]   a = checks 1, 2, 5 (files already on the worker); b = checks 3, 4 (wait for the mirror)
+// usage: OM_KEY=<preview key> [OUT_NAME=x.json RUNS=3 SKIP=4b,4c] node run.mjs [a|b]   a = checks 1, 2, 5 (files already on the worker); b = checks 3, 4 (wait for the mirror)
 // network log: cdp Network on the page target and, for requests made inside the duckdb worker, cdp Network on the worker
 // target over --remote-debugging-port. every check runs RUNS times against the worker and S3, interleaved, in a fresh
 // browser context with the http cache disabled (so every run is cold for chrome; the cloudflare edge may still be warm).
@@ -8,7 +8,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { serve } from "./serve.mjs";
 
-const PORT = 5190, DBG = 9334, RUNS = 3;
+const PORT = 5190, DBG = 9334, RUNS = Math.max(1, Number(process.env.RUNS ?? 3) || 3); // RUNS env: runs per check and origin
 const KEY = process.env.OM_KEY ?? "";
 const WORKER = "https://om-gazetteer.ben-f07.workers.dev/";
 const S3 = "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/";
