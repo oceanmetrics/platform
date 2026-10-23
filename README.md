@@ -11,6 +11,7 @@ rule or a reader is written once.
 | [`@oceanmetrics/map`](packages/map/) | the map stack: MapLibre 6 setup, the bathymetric basemap, the ramps, the layer slot contract and its providers (grid slice, COG, H3) | 0.2.0 (2026-10-23, build week 2 step 1; 0.1.0 was the scaffold); the basemap tiers are built by `scripts/basemap/build_gebco.sh`, not uploaded yet |
 | [`@oceanmetrics/engine`](packages/engine/) | the browser engine: the place mask, the lobes, ERDDAP requests, the SQL templates shared with `om_extract`, DuckDB-WASM statistics, the chunked live preview and the map's grid slice | 0.1.0 (2026-10-23, build week 2 step 2b): moved from erddap-places (the frozen original); `indicators` is its first consumer (step 2c); not in the Day 5 publish |
 | [`@oceanmetrics/catalog`](packages/catalog/) | the catalog contracts: the STAC layer profiles (JSON Schemas, types, a validator, the `om-catalog` CLI), the values contract, and the indicators readers and cards (`/indicators`, `/cards`), the change feed (`/changes`) and the report rules (`/report`) | 0.5.0 (2026-10-23, build week 5 step 0, unreleased): `/changes` (`diffCoverage`, `changeSentence`, `atomFeed`, `feedsFor`), `/report` (the selection rules moved from indicators) and the `changes-row`, `changes-latest`, `feeds-index` and `alerts-subscription` schemas; 0.4.0: the `h3` profile 1.1 (period sets for decades and years, the species table's first and last year, `h3:heads`, `row_group_rows`); 0.3.0: the indicator cards shared by the indicators viewer and the places record page |
+| [`@oceanmetrics/nav`](packages/nav/) | the one navigation bar of the apps and the site: `<om-nav>`, a framework-free custom element (the mark, the three doors, the place search, What changed, Docs, a slot for the app's own controls), styled by the brand tokens of the host | 0.1.0 (2026-10-23, build week 5 step 3, decision D7, unreleased): new |
 
 ## Rules
 
@@ -86,7 +87,10 @@ has what an app pays per entry). Catalog raised to 15 000 B on 2026-10-23 at 0.5
 landed, `/changes` (3 753 B: the diff, the sentences, the Atom builder and the feed names) and `/report` (2 170 B: the
 selection rules moved from the indicators repo), and the budget sums every file while no app loads them all (an app on
 `/cards` pays nothing for `/changes`; the viewer's rules cost what its own copy did). Raise a budget only with the reason
-written here.
+written here. Nav 12 000 B (measured 7 776 on 2026-10-23 at 0.1.0, every dist file with its comments); what a page
+fetches for the bar is its own line, `nav/define` (`scripts/nav-size.mjs`: `src/define.ts` bundled alone and minified,
+4 947 B, budget 6 000 B, the 0.1.0 target; the reason it is not the week 5 plan's 3 kB is the inline mark, 1 100 B of
+it: packages/nav/README.md "Size").
 
 ## Licence
 

@@ -2,7 +2,7 @@
   "name": "oceanmetrics-platform",
   "version": "0.0.0",
   "private": true,
-  "description": "Shared TypeScript packages of the Ocean Metrics platform: places, status, map, catalog, engine",
+  "description": "Shared TypeScript packages of the Ocean Metrics platform: places, status, map, catalog, engine, nav",
   "license": "MIT",
   "type": "module",
   "workspaces": ["packages/*"],

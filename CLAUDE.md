@@ -53,6 +53,12 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
   over DuckDB-WASM (a peer; the app passes its module to `connectBrowser`), `runPreview` (the chunked live preview: 90 days
   or 100,000 values a request, `onChunk` in time order, abortable) and `sliceSource` for `@oceanmetrics/map`'s `gridSlot`.
   The SQL strings are generated into `src/sqlTemplates.ts` by `scripts/sql-templates.mjs` at build; a test fails when stale.
+- **`nav` is the one bar of the apps and the site** (0.1.0, decision D7): `<om-nav>`, a framework-free custom element
+  in Shadow DOM. The rules are pure in `items.ts` (items, search url, collapse, scheme); colour values live only in
+  `tokens.ts` (each role: `--om-nav-<role>`, then the host's semantic token, then the brand light-dark() pair); the mark
+  and glyphs are generated into `src/glyphs.ts` by `packages/nav/scripts/glyphs.mjs` from the site checkout's brand kit
+  (a test fails when stale). The element tests run in happy-dom (`// @vitest-environment happy-dom`); `dist/index.js`
+  loads in plain Node (the class extends an empty base without a DOM).
 - Source imports use `.js` specifiers (`./grid.js`) so the emitted declarations and `dist/*.js` resolve for every consumer
   and for plain Node ESM (places 0.5.1 shipped without them); `scripts/esm-load.test.ts` builds and loads each `dist/index.js` in Node.
 

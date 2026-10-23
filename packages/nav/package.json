@@ -1,0 +1,63 @@
+{
+  "name": "@oceanmetrics/nav",
+  "version": "0.1.0",
+  "description": "the one navigation bar of the Ocean Metrics apps and site: a framework-free <om-nav> custom element (mark, the three doors, place search, what changed, docs, the app's own controls)",
+  "keywords": [
+    "ocean",
+    "navigation",
+    "custom-element",
+    "web-component"
+  ],
+  "homepage": "https://github.com/oceanmetrics/platform/tree/main/packages/nav#readme",
+  "bugs": {
+    "url": "https://github.com/oceanmetrics/platform/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oceanmetrics/platform.git",
+    "directory": "packages/nav"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./define": {
+      "types": "./dist/define.d.ts",
+      "default": "./dist/define.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/**/*.test.ts",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "./dist/define.js",
+    "./src/define.ts"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepack": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --root ../.. packages/nav",
+    "glyphs": "node scripts/glyphs.mjs"
+  },
+  "devDependencies": {
+    "happy-dom": "20.14.6"
+  }
+}

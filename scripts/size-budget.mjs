@@ -4,6 +4,7 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { gzipSync } from 'node:zlib'
 import { H3_WORKER_BUDGET, measureH3Worker } from './h3-worker-size.mjs'
+import { NAV_BUNDLE_BUDGET, measureNav } from './nav-size.mjs'
 
 const ROOT = new URL('../packages/', import.meta.url).pathname
 // bytes, gzip. measured on 2026-10-22 (places 11_708, status 7_997), set at about 1.5 times the measurement, rounded up.
@@ -21,7 +22,9 @@ const ROOT = new URL('../packages/', import.meta.url).pathname
 // SQL templates as strings; DuckDB-WASM and Apache Arrow are peers and not counted), so 40_000.
 // catalog 0.5.0: 11_610 on 2026-10-23: /changes (diff, sentences, Atom, feed names; 3_753) and /report (the rules moved
 // from indicators; 2_170) land, each loaded only by its own users, so 15_000 (README "Size budget").
-const BUDGET = { places: 18_000, status: 12_000, map: 48_000, catalog: 15_000, engine: 40_000 }
+// nav: 7_776 on 2026-10-23 (0.1.0: the element, its stylesheet, the theme file, the rules, the mark and three glyphs,
+// comments counted), so 12_000; what a page fetches is the bundled line below (4_947, the 6 kB target).
+const BUDGET = { places: 18_000, status: 12_000, map: 48_000, catalog: 15_000, engine: 40_000, nav: 12_000 }
 
 // files a browser never loads, left out of a package's measure: catalog's validator (ajv) and CLI are Node only,
 // reached through the @oceanmetrics/catalog/validate subpath and the om-catalog bin, never from the package index
@@ -47,4 +50,10 @@ const w = await measureH3Worker()
 const wok = w.gzip <= H3_WORKER_BUDGET
 over ||= !wok
 console.log(`${wok ? 'ok  ' : 'OVER'} ${'map/h3-worker'.padEnd(8)} ${String(w.gzip).padStart(6)} B gzip (budget ${H3_WORKER_BUDGET} B, one chunk bundled and minified)`)
+
+// the bar, bundled (define.ts alone, minified): what a page fetches for <om-nav>
+const n = await measureNav()
+const nok = n.gzip <= NAV_BUNDLE_BUDGET
+over ||= !nok
+console.log(`${nok ? 'ok  ' : 'OVER'} ${'nav/define'.padEnd(8)} ${String(n.gzip).padStart(6)} B gzip (budget ${NAV_BUNDLE_BUDGET} B, one chunk bundled and minified)`)
 process.exit(over ? 1 : 0)
