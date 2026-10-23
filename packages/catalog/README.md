@@ -36,11 +36,19 @@ profiles define themselves (`atlas:flower`, `h3:layout`, `sdm:evaluation` ...) a
   the hex twins, BioTrack. Rules: type Collection; `h3:resolutions` (unique, each 0 to 15, at least one),
   `h3:cell_column`, `h3:cell_type` (string or uint64), `h3:layout` and `table:columns` (each with `name` and `type`)
   are required; `h3:layout.template` contains `{res}`, `parent_template` contains `{res}` and `{parent}`, `parent_res`
-  maps a resolution to its parent's (coarser, a reader check), `keys` names the other placeholders; `h3:periods` has
-  `grain` (decade, year, month, all), `values` and `placeholder`. The species x hex x count table `h3:species_table`
-  needs `href_template` (with `{res}`), `resolutions`, `partition_by`, `columns` (`cell`, `species`, `count`, maybe
-  `year`) and `lookup` (`href`, `key`, `lineage_column`, maybe `rank_columns` and `name_column`); `sorted_by` defaults
-  to `["h3"]`.
+  maps a resolution to its parent's (coarser, a reader check), `keys` names the other placeholders, and
+  `row_group_rows` (an integer >= 1, optional) is the most rows a row group of a cell-sorted layer file holds, so a
+  reader knows a range read of the groups under a tile's parents pays. `h3:periods` is one period set (`grain` decade,
+  year, month or all, `values`, `placeholder`, maybe `resolutions`), the 1.0 shape the v20261012 release has, or a list
+  of sets (1.1: decades and years in one collection, one period strip), each with its own `placeholder` and its
+  `resolutions` (required in a list), and maybe a `template` (with `{res}`) when its path differs from
+  `h3:layout.template`. The species x hex x count table `h3:species_table` needs `href_template` (with `{res}`),
+  `resolutions`, `partition_by`, `columns` (`cell`, `species`, `count`, maybe `year`, `name_key`, `year_min` and
+  `year_max` (together: the Cell pane's first and last year), and `period` (the decade variant's column)) and `lookup`
+  (`href`, `key`, `lineage_column`, maybe `rank_columns` and `name_column`); `sorted_by` defaults to `["h3"]`.
+  `h3:heads` (1.1) is `{layer, href?}`: the layer key the pre-aggregated heads (Animalia and every taxon spanning
+  several classes) are published under as ordinary layers, e.g. `taxon`, and the JSON listing them. Profile 1.1 only
+  adds optional fields, so a 1.0 document stays valid; its `$id` is `.../h3/v1.1.0/schema.json`.
 - **`atlas-collection`**: the atlas hooks of a Collection, all optional, each in the shape `atlas/src/lib/catalog/*.ts`
   parses. Written by the atlas pipeline and `workflows/R/eov_share.R`. Rules: `atlas:funders` strings,
   `atlas:access` `restricted` only, `atlas:note` a string; `atlas:flower` is exactly `{dimension, composite}`;
@@ -165,7 +173,8 @@ which lacks the words). TypeScript follows the link to its real path and needs n
 
 ```
 schemas/<name>.schema.json          draft 2020-12, self-contained (no cross-file $ref), $id
-                                    https://oceanmetrics.io/schemas/<name>/v1.0.0/schema.json
+                                    https://oceanmetrics.io/schemas/<name>/v<version>/schema.json (1.0.0;
+                                    h3 1.1.0 since catalog 0.4.0)
 fixtures/<name>/valid/*.json        each must pass
 fixtures/<name>/invalid/*.json      each must fail, and breaks exactly one rule of a valid fixture
 fixtures/<name>/invalid.json        invalid file name -> a substring of its error (a JSON pointer or a property name,

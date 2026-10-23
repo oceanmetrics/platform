@@ -25,6 +25,9 @@ const fails = (profile: string, doc: unknown, sub: string) => {
   expect(errors.join('\n')).toContain(sub)
 }
 
+// the profile versions past 1.0.0 (a minor version only adds optional fields, so a 1.0 document stays valid)
+const PROFILE_VERSION: Record<string, string> = { h3: '1.1.0' }
+
 // ---- every schema, every fixture (a profile added on another branch is covered once merged) ----
 
 describe.each(listProfiles())('profile %s', name => {
@@ -33,9 +36,9 @@ describe.each(listProfiles())('profile %s', name => {
   const invalid = jsonFiles(join(dir, 'invalid'))
   const expected: Record<string, string> = existsSync(join(dir, 'invalid.json')) ? read(join(dir, 'invalid.json')) : {}
 
-  it('has its $id at oceanmetrics.io/schemas/<name>/v1.0.0, draft 2020-12, and no cross-file $ref', () => {
+  it('has its $id at oceanmetrics.io/schemas/<name>/v<profile version>, draft 2020-12, and no cross-file $ref', () => {
     const schema = loadSchema(name)
-    expect(schema.$id).toBe(`https://oceanmetrics.io/schemas/${name}/v1.0.0/schema.json`)
+    expect(schema.$id).toBe(`https://oceanmetrics.io/schemas/${name}/v${PROFILE_VERSION[name] ?? '1.0.0'}/schema.json`)
     expect(schema.$schema).toBe('https://json-schema.org/draft/2020-12/schema')
     const refs = [...JSON.stringify(schema).matchAll(/"\$ref":"([^"]*)"/g)].map(m => m[1])
     expect(refs.filter(r => !r.startsWith('#'))).toEqual([])
@@ -228,6 +231,7 @@ describe('cog rules', () => {
 describe('h3 rules', () => {
   const obis = fixture('h3', 'obis_h3_species_table')
   const twin = fixture('h3', 'hex_twin_res7')
+  const two = fixture('h3', 'obis_h3_decades_and_years')
   const P = 'h3'
 
   it('is a Collection', () => fails(P, edit(twin, d => { d.type = 'Feature' }), '/type'))
@@ -254,6 +258,39 @@ describe('h3 rules', () => {
   it('gives periods a grain, values and a placeholder', () => {
     fails(P, edit(obis, d => { d['h3:periods'].grain = 'century' }), '/h3:periods/grain')
     fails(P, edit(obis, d => delete d['h3:periods'].placeholder), "/h3:periods: must have required property 'placeholder'")
+  })
+  it('keeps the single-set periods of profile 1.0 (the v20261012 shape) valid, resolutions optional there', () => {
+    passes(P, obis)
+    passes(P, edit(obis, d => { d['h3:periods'].resolutions = [1, 2, 3, 4, 5] }))
+    fails(P, edit(obis, d => { d['h3:periods'].res = [1] }), 'must NOT have additional properties: "res"')
+  })
+  it('takes a list of period sets (1.1), each with a grain, values, a placeholder and resolutions', () => {
+    passes(P, two)
+    expect(two['h3:periods'].map((s: any) => s.grain)).toEqual(['decade', 'year'])
+    fails(P, edit(two, d => { d['h3:periods'] = [] }), '/h3:periods: must NOT have fewer than 1 items')
+    fails(P, edit(two, d => delete d['h3:periods'][1].placeholder), "/h3:periods/1: must have required property 'placeholder'")
+    fails(P, edit(two, d => delete d['h3:periods'][0].resolutions), "/h3:periods/0: must have required property 'resolutions'")
+    fails(P, edit(two, d => { d['h3:periods'][1].resolutions = [16] }), '/h3:periods/1/resolutions/0')
+    fails(P, edit(two, d => { d['h3:periods'][0].grain = 'century' }), '/h3:periods/0/grain')
+    fails(P, edit(two, d => { d['h3:periods'][1].template = 'year/all/year={year}/data_0.parquet' }), '/h3:periods/1/template: must match pattern')
+    fails(P, edit(two, d => { d['h3:periods'] = 'decade' }), '/h3:periods')
+  })
+  it('records how many rows a row group holds, an integer >= 1', () => {
+    passes(P, edit(twin, d => { d['h3:layout'].row_group_rows = 1 }))
+    fails(P, edit(two, d => { d['h3:layout'].row_group_rows = 0 }), '/h3:layout/row_group_rows: must be >= 1')
+    fails(P, edit(two, d => { d['h3:layout'].row_group_rows = 1.5 }), '/h3:layout/row_group_rows: must be integer')
+  })
+  it('names the layer key the heads are published under', () => {
+    passes(P, edit(two, d => { d['h3:heads'] = { layer: 'taxon' } }))
+    fails(P, edit(two, d => { d['h3:heads'] = { href: 'species/heads.json' } }), "/h3:heads: must have required property 'layer'")
+    fails(P, edit(two, d => { d['h3:heads'] = 'taxon' }), '/h3:heads: must be object')
+    fails(P, edit(two, d => { d['h3:heads'].built = false }), 'must NOT have additional properties: "built"')
+  })
+  it('gives the species table first and last year together, and a period column for the decade variant', () => {
+    passes(P, edit(two, d => { delete d['h3:species_table'].columns.year_min; delete d['h3:species_table'].columns.year_max }))
+    fails(P, edit(two, d => delete d['h3:species_table'].columns.year_max), '/h3:species_table/columns: must have property year_max when property year_min is present')
+    fails(P, edit(two, d => delete d['h3:species_table'].columns.year_min), '/h3:species_table/columns: must have property year_min when property year_max is present')
+    fails(P, edit(two, d => { d['h3:species_table'].columns.period = '' }), '/h3:species_table/columns/period')
   })
   it('requires table:columns with a name and a type each', () => {
     fails(P, edit(twin, d => delete d['table:columns']), "'table:columns'")
@@ -483,6 +520,16 @@ describe('om-catalog', () => {
     const l = lines()
     expect(run(['validate', 'h3', f('h3', 'valid', 'hex_twin_res7.json'), f('h3', 'valid', 'obis_h3_species_table.json')], l.o, l.e)).toBe(0)
     expect(l.out.at(-1)).toBe('2 of 2 valid against h3')
+  })
+  it('validates both h3 period shapes, one grain (v20261012) and two (1.1)', () => {
+    const l = lines()
+    expect(run(['validate', 'h3', f('h3', 'valid', 'obis_h3_species_table.json'), f('h3', 'valid', 'obis_h3_decades_and_years.json')], l.o, l.e)).toBe(0)
+    expect(l.out.at(-1)).toBe('2 of 2 valid against h3')
+  })
+  it('names the period set that lacks its placeholder', () => {
+    const l = lines()
+    expect(run(['validate', 'h3', f('h3', 'invalid', 'period_set_without_placeholder.json')], l.o, l.e)).toBe(1)
+    expect(l.err.join('\n')).toContain("/h3:periods/1: must have required property 'placeholder'")
   })
   it('exits 1 and prints the errors when a file fails', () => {
     const l = lines()

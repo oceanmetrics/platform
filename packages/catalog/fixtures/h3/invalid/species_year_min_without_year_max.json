@@ -1,0 +1,179 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "id": "obis_h3",
+  "title": "OBIS biodiversity indicators on H3 with decades and years (synthetic, obis-h3 0.11-like)",
+  "description": "synthetic fixture modelled on the obis-h3 0.11 release: decade and year layers as two period sets (res 1 to 5 each), the heads published as taxon layers, cell-sorted files with small row groups, and the species table with first and last year and a decade column.",
+  "license": "CC-BY-4.0",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          -180,
+          -90,
+          180,
+          90
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          null,
+          null
+        ]
+      ]
+    }
+  },
+  "links": [],
+  "h3:resolutions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "h3:cell_column": "h3",
+  "h3:cell_type": "string",
+  "h3:layout": {
+    "template": "{layer}/res={res}/data_0.parquet",
+    "parent_template": "{layer}/res={res}/p={parent}/data_0.parquet",
+    "parent_res": {
+      "6": 2,
+      "7": 3
+    },
+    "keys": [
+      "layer",
+      "eov",
+      "rank",
+      "taxon"
+    ],
+    "row_group_rows": 10000
+  },
+  "h3:periods": [
+    {
+      "grain": "decade",
+      "values": [
+        "1990s",
+        "2000s",
+        "2010s",
+        "2020s"
+      ],
+      "placeholder": "decade",
+      "resolutions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "template": "decade/{layer}/decade={decade}/res={res}/data_0.parquet"
+    },
+    {
+      "grain": "year",
+      "values": [
+        "2013",
+        "2014",
+        "2015"
+      ],
+      "placeholder": "year",
+      "resolutions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "template": "year/{layer}/year={year}/res={res}/data_0.parquet"
+    }
+  ],
+  "table:columns": [
+    {
+      "name": "h3",
+      "type": "VARCHAR",
+      "description": "H3 cell id, hex string"
+    },
+    {
+      "name": "cell_id",
+      "type": "BIGINT",
+      "description": "H3 cell id, 64-bit integer"
+    },
+    {
+      "name": "n",
+      "type": "BIGINT",
+      "description": "number of occurrence records"
+    },
+    {
+      "name": "sp",
+      "type": "BIGINT",
+      "description": "number of species"
+    },
+    {
+      "name": "shannon",
+      "type": "DOUBLE",
+      "description": "Shannon diversity index"
+    },
+    {
+      "name": "simpson",
+      "type": "DOUBLE",
+      "description": "Simpson diversity index"
+    },
+    {
+      "name": "es",
+      "type": "DOUBLE",
+      "description": "expected number of species in a random sample of 50 records (Hurlbert ES50)"
+    }
+  ],
+  "h3:species_table": {
+    "href_template": "species/res={res}/class={class}/data_0.parquet",
+    "resolutions": [
+      3,
+      4,
+      5
+    ],
+    "partition_by": [
+      "class"
+    ],
+    "sorted_by": [
+      "cell_id"
+    ],
+    "columns": {
+      "cell": "cell_id",
+      "species": "aphiaid",
+      "count": "n",
+      "name_key": "name_key",
+      "year_min": "year_min",
+      "period": "decade"
+    },
+    "lookup": {
+      "href": "species/species.parquet",
+      "key": "aphiaid",
+      "lineage_column": "lineage",
+      "rank_columns": {
+        "phylum": "phylum",
+        "class": "class",
+        "order": "order",
+        "family": "family",
+        "genus": "genus",
+        "species": "species"
+      },
+      "name_column": "scientificname"
+    },
+    "heads": "species/heads.json"
+  },
+  "assets": {
+    "all": {
+      "href": "./all/",
+      "title": "hive folders, one per resolution",
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "h3:heads": {
+    "layer": "taxon",
+    "href": "species/heads.json"
+  }
+}

@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://oceanmetrics.io/schemas/h3/v1.0.0/schema.json",
+  "$id": "https://oceanmetrics.io/schemas/h3/v1.1.0/schema.json",
   "title": "h3: a STAC Collection for a layer on the H3 grid",
-  "description": "A STAC Collection for a layer whose native grid is H3: the obis-h3 release as an atlas collection (build week 4), the hex twins of gridded layers, BioTrack. It says which resolutions exist, how a file path is built from a resolution (and a parent cell, a period or other keys), which columns hold the cell id and the metrics, and optionally where the species x hex x count table is (the answer to the h3t service). STAC core is out of scope: only type, stac_version, id and the profile's own fields are constrained, and other keys pass through.",
+  "description": "A STAC Collection for a layer whose native grid is H3: the obis-h3 release as an atlas collection (build week 4), the hex twins of gridded layers, BioTrack. It says which resolutions exist, how a file path is built from a resolution (and a parent cell, a period or other keys), which columns hold the cell id and the metrics, and optionally where the species x hex x count table is (the answer to the h3t service) and under which layer key the pre-aggregated heads are published. Profile 1.1 (catalog 0.4.0): h3:periods may be a list of period sets (decade and year) each with its own placeholder and resolutions, the species table may carry year_min, year_max and period, h3:heads, and h3:layout.row_group_rows. STAC core is out of scope: only type, stac_version, id and the profile's own fields are constrained, and other keys pass through.",
   "type": "object",
   "required": [
     "type",
@@ -93,41 +93,32 @@
             "type": "string",
             "minLength": 1
           }
+        },
+        "row_group_rows": {
+          "description": "the most rows a Parquet row group of a layer file holds (the files are sorted by cell), so a reader knows a range read of the groups under a tile's parents pays; absent when the row groups are large or unsorted",
+          "type": "integer",
+          "minimum": 1
         }
       }
     },
     "h3:periods": {
-      "description": "the time periods published, when the layer has more than one",
-      "type": "object",
-      "required": [
-        "grain",
-        "values",
-        "placeholder"
-      ],
-      "additionalProperties": false,
-      "properties": {
-        "grain": {
-          "description": "the length of a period",
-          "enum": [
-            "decade",
-            "year",
-            "month",
-            "all"
+      "description": "the time periods published, when the layer has more than one: one set of a single grain (profile 1.0), or a list of sets (1.1, e.g. decades and years), each with its own placeholder and resolutions",
+      "if": {
+        "type": "array"
+      },
+      "then": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "$ref": "#/$defs/period_set",
+          "type": "object",
+          "required": [
+            "resolutions"
           ]
-        },
-        "values": {
-          "description": "the periods, as they appear in a path (e.g. 1990s, 2000s)",
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "string"
-          }
-        },
-        "placeholder": {
-          "description": "the template placeholder a period fills, e.g. period",
-          "type": "string",
-          "minLength": 1
         }
+      },
+      "else": {
+        "$ref": "#/$defs/period_set"
       }
     },
     "table:columns": {
@@ -237,7 +228,30 @@
               "description": "an integer key per distinct species name, so richness counts names as h3t does (several aphiaids may share a name)",
               "type": "string",
               "minLength": 1
+            },
+            "year_min": {
+              "description": "the first year a species was recorded in the cell (the Cell pane's first year); comes with year_max",
+              "type": "string",
+              "minLength": 1
+            },
+            "year_max": {
+              "description": "the last year a species was recorded in the cell (the Cell pane's last year); comes with year_min",
+              "type": "string",
+              "minLength": 1
+            },
+            "period": {
+              "description": "the period column of the decade variant (e.g. decade), whose values are those of an h3:periods set",
+              "type": "string",
+              "minLength": 1
             }
+          },
+          "dependentRequired": {
+            "year_min": [
+              "year_max"
+            ],
+            "year_max": [
+              "year_min"
+            ]
           }
         },
         "lookup": {
@@ -286,6 +300,26 @@
           "minLength": 1
         }
       }
+    },
+    "h3:heads": {
+      "description": "the pre-aggregated heads (Animalia and every taxon spanning several classes): the layer key they are published under as ordinary layers (e.g. taxon, whose template has rank and taxon keys), so a reader draws a head as any taxon layer and never reads the class files",
+      "type": "object",
+      "required": [
+        "layer"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "layer": {
+          "description": "the layer key the heads are published under, e.g. taxon",
+          "type": "string",
+          "minLength": 1
+        },
+        "href": {
+          "description": "a JSON listing the heads (rank, name, aphiaid), relative to the collection, e.g. species/heads.json",
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   },
   "$defs": {
@@ -294,6 +328,54 @@
       "type": "integer",
       "minimum": 0,
       "maximum": 15
+    },
+    "period_set": {
+      "description": "one set of periods of a single grain",
+      "type": "object",
+      "required": [
+        "grain",
+        "values",
+        "placeholder"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "grain": {
+          "description": "the length of a period",
+          "enum": [
+            "decade",
+            "year",
+            "month",
+            "all"
+          ]
+        },
+        "values": {
+          "description": "the periods, as they appear in a path (e.g. 1990s, 2000s)",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "placeholder": {
+          "description": "the template placeholder a period fills, e.g. period",
+          "type": "string",
+          "minLength": 1
+        },
+        "resolutions": {
+          "description": "the resolutions this set is published at, a subset of h3:resolutions (a reader check); required in a list of sets",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/res"
+          }
+        },
+        "template": {
+          "description": "the path of one period at one resolution, when it differs from h3:layout.template, e.g. year/all/year={year}/res={res}/data_0.parquet",
+          "type": "string",
+          "pattern": "\\{res\\}"
+        }
+      }
     }
   }
 }

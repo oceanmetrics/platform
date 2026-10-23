@@ -2,5 +2,10 @@
   "resolution_16.json": "/h3:resolutions/1",
   "template_without_res.json": "/h3:layout/template",
   "species_table_without_lookup.json": "/h3:species_table",
-  "parent_template_without_parent.json": "/h3:layout/parent_template"
+  "parent_template_without_parent.json": "/h3:layout/parent_template",
+  "period_set_without_placeholder.json": "/h3:periods/1: must have required property 'placeholder'",
+  "period_set_without_resolutions.json": "/h3:periods/0: must have required property 'resolutions'",
+  "species_year_min_without_year_max.json": "/h3:species_table/columns",
+  "heads_without_layer.json": "/h3:heads: must have required property 'layer'",
+  "row_group_rows_zero.json": "/h3:layout/row_group_rows"
 }

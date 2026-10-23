@@ -4,7 +4,7 @@
 // the indicators readers (hyparquet) in @oceanmetrics/catalog/indicators and the pure card rules in
 // @oceanmetrics/catalog/cards. the JSON Schemas in schemas/ are the contract, these types mirror them.
 
-export const PACKAGE = { name: '@oceanmetrics/catalog', version: '0.3.0' } as const
+export const PACKAGE = { name: '@oceanmetrics/catalog', version: '0.4.0' } as const
 
 export type * from './manifest.js'
 export type { Absence, AbsenceKind, AbsenceTextOptions, CardsOptions, Fold, FoldOptions, IndicatorCard, Reproduce, Rollup, Rollups, Slot, SlotOptions, StatusCounts, StatusGlyph, TrendGlyph } from './cards.js'
@@ -92,16 +92,22 @@ export interface CogDataAsset extends AtlasDrawHints {
 
 // ---- h3 ----
 
-export interface H3Layout { template: string; parent_template?: string; parent_res?: Record<string, number>; keys?: string[] }
-export interface H3Periods { grain: 'decade' | 'year' | 'month' | 'all'; values: string[]; placeholder: string }
+export interface H3Layout { template: string; parent_template?: string; parent_res?: Record<string, number>; keys?: string[]; row_group_rows?: number }
+/** one set of periods of a single grain; `resolutions` is required in a list of sets (profile 1.1). */
+export interface H3Periods { grain: 'decade' | 'year' | 'month' | 'all'; values: string[]; placeholder: string; resolutions?: number[]; template?: string }
+/** a period set in a list of sets (profile 1.1): its own placeholder and resolutions. */
+export interface H3PeriodSet extends H3Periods { resolutions: number[] }
+/** the layer key the pre-aggregated heads are published under (profile 1.1). */
+export interface H3Heads { layer: string; href?: string }
 export interface TableColumn { name: string; type: string; description?: string; [key: string]: unknown }
 export interface H3SpeciesTable {
   href_template: string
   resolutions: number[]
   partition_by: string[]
   sorted_by?: string[]
-  columns: { cell: string; species: string; count: string; year?: string }
+  columns: { cell: string; species: string; count: string; year?: string; name_key?: string; year_min?: string; year_max?: string; period?: string }
   lookup: { href: string; key: string; lineage_column: string; rank_columns?: Record<string, string>; name_column?: string }
+  heads?: string
 }
 /** the profile fields of an h3 Collection. */
 export interface H3Fields {
@@ -109,9 +115,10 @@ export interface H3Fields {
   'h3:cell_column': string
   'h3:cell_type': 'string' | 'uint64'
   'h3:layout': H3Layout
-  'h3:periods'?: H3Periods
+  'h3:periods'?: H3Periods | H3PeriodSet[]
   'table:columns': TableColumn[]
   'h3:species_table'?: H3SpeciesTable
+  'h3:heads'?: H3Heads
 }
 
 // ---- atlas-collection ----
