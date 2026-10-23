@@ -12,7 +12,7 @@ compatibility_date = "2026-10-01"
 crons = ["0 * * * *"]   # hourly: read changes/latest.json, mail the subscribers whose digest is due
 
 [vars]
-PROVIDER     = "log"                                                         # log | resend (resend needs the RESEND_KEY secret)
+PROVIDER     = "resend"                                                         # log | resend (resend needs the RESEND_KEY secret)
 SITE         = "https://oceanmetrics.io"                                     # the static pages: /alerts/, /alerts/confirm/, /alerts/manage/, /alerts/unsubscribe/
 API_BASE     = "https://om-alerts.ben-f07.workers.dev"                       # this Worker's public url (the List-Unsubscribe target)
 CHANGES_BASE = "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/indicators/"   # changes/latest.json, changes/<date>.json, indicators.json
