@@ -36,11 +36,14 @@ describe.skipIf(!fs.existsSync(ERDDAP_PLACES))(`byte-identical to erddap-places'
   for (const n of NAMES) it(n, () => expect(bytes(SQL, n).equals(bytes(ERDDAP_PLACES, n))).toBe(true))
 })
 
-// om_extract carries the three grid templates (the tabledap two have no Python reader yet)
+// om_extract carries the three grid templates (the tabledap two have no Python reader yet) and may carry more of its
+// own (stats_h3 since 0.6.0, for readers the browser engine does not have): the shared three stay byte-identical,
+// the rest are not compared
+const GRID = ['last_step', 'stats_categorical', 'stats_daily']
 const extractNames = fs.existsSync(EXTRACT) ? fs.readdirSync(EXTRACT).filter((f) => f.endsWith('.sql')).map((f) => f.slice(0, -4)).sort() : []
 describe.skipIf(!extractNames.length)(`byte-identical to om_extract's sql/ (${EXTRACT})`, () => {
-  it('om_extract has the three grid templates', () => expect(extractNames).toEqual(['last_step', 'stats_categorical', 'stats_daily']))
-  for (const n of extractNames) it(n, () => expect(bytes(SQL, n).equals(bytes(EXTRACT, n))).toBe(true))
+  it('om_extract has the three grid templates', () => expect(GRID.every((n) => extractNames.includes(n))).toBe(true))
+  for (const n of GRID) it(n, () => expect(bytes(SQL, n).equals(bytes(EXTRACT, n))).toBe(true))
 })
 
 /** two dates x four cells: classes 1,2,1,3 with weights 1, .5, 1, .25 (a quarter-covered cell). */
