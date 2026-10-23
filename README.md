@@ -54,8 +54,9 @@ carries a fresh `dist/`. The npm account has 2FA on writes, so there is no root 
 at once; `scripts/publish.sh` does it one package at a time.
 
 The route that replaces the token is `.github/workflows/publish.yml` (npm trusted publishing with provenance, a reviewer on the
-`npm` environment): the setup and the first test publish are in [docs/publishing.md](docs/publishing.md). Until that is
-set up, `scripts/publish.sh` below is the way; it calls `scripts/publish-check.mjs` and skips what is already on npm.
+`npm` environment): the setup and the first provenance publish (`status` 0.1.2, 2026-10-23) are in
+[docs/publishing.md](docs/publishing.md). The token route, `scripts/publish.sh` below, is retired once Ben revokes the npm
+token; until then it is a fallback that calls `scripts/publish-check.mjs` and skips what is already on npm.
 
 Day 5 steps (2026-10-26), from a clean `main`:
 

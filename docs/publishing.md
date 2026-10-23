@@ -1,8 +1,9 @@
 # Publishing `@oceanmetrics/*` to npm
 
 Publishing is `.github/workflows/publish.yml`: npm **trusted publishing** (OIDC, no token) with provenance, and a GitHub
-environment reviewer as the human step (decision D11). `scripts/publish.sh` with a token is the fallback until the
-steps below are done. Why now: npm ends direct publishing with 2FA-bypass tokens around January 2027
+environment reviewer as the human step (decision D11). The first provenance publish, `@oceanmetrics/status` 0.1.2, ran
+on 2026-10-23 (run 39964112396, approved by Ben). `scripts/publish.sh` with a token is the old route: it is **retired once
+Ben revokes the token** (section 4), and until then it is only a fallback. Why now: npm ends direct publishing with 2FA-bypass tokens around January 2027
 ([GitHub changelog, 2026-07-08](https://github.blog/changelog/2026-07-08-npm-install-time-security-and-gat-bypass2fa-deprecation/));
 the granular token in use expires 2027-01-20.
 
@@ -87,11 +88,12 @@ After step 3 works for `status` and the other five have their entries:
 1. npmjs.com -> Access Tokens: **revoke** the granular token (it expires 2027-01-20 anyway).
 2. On the mini: delete the `_authToken` line from `~/.npmrc`, and delete `~/.config/oceanmetrics/npm.env`.
 3. Per package, set "Require two-factor authentication and disallow tokens" (Settings -> Publishing access).
-4. Tell the next session so `CLAUDE.md` and the README stop naming the token route, and `scripts/publish.sh` goes or
-   becomes a pointer to this page.
+4. `CLAUDE.md`, the README and the `scripts/publish.sh` header say the token path is retired once the token is revoked;
+   after the revocation, delete `scripts/publish.sh` or reduce it to a pointer to this page.
 
-## The fallback until then
+## The fallback (retired once Ben revokes the token)
 
+The token path stops working, and is retired, when Ben revokes the granular token (section 4). Until then,
 `scripts/publish.sh` with the token (`~/.npmrc` on the mini) or with a one-time password:
 
 ```sh
@@ -104,5 +106,6 @@ scripts/publish.sh [otp]                # only the packages whose version is not
 
 D11 chose `npm publish --provenance` with the environment reviewer as the approval. If npm later requires staged
 publishing (`npm stage publish`, approved by a human with `npm stage approve <id>`), only the `npm publish` line of the
-`publish` job changes; the environment, the check and the OIDC permissions stay. This workflow was written without a
-live run: the first test publish in step 3 is also its first execution.
+`publish` job changes; the environment, the check and the OIDC permissions stay. The first live run was the
+`status` 0.1.2 publish of 2026-10-23: `npm view @oceanmetrics/status@0.1.2 dist.attestations` shows a
+`https://slsa.dev/provenance/v1` attestation.

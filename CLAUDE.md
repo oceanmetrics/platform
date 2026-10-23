@@ -4,8 +4,8 @@ Guidance for Claude Code in `oceanmetrics/platform`: the shared TypeScript packa
 (`@oceanmetrics/places`, `status`, `map`, `catalog`) as npm workspaces under `packages/`. Apps import these packages
 and never each other. Until the first publish on Day 5 (2026-10-26) the apps link to this checkout as
 `file:../platform/packages/<name>`; the packages export from `dist/`, so run `npm run build` before an app uses them.
-Publishing is the `publish` workflow (npm trusted publishing, `docs/publishing.md`) or, until that is set up on npm,
-`scripts/publish.sh <otp>` (see the README, "Publishing"); `scripts/publish-check.mjs` lists what would publish.
+Publishing is the `publish` workflow (npm trusted publishing, `docs/publishing.md`); the token route,
+`scripts/publish.sh <otp>` (README, "Publishing"), is retired once Ben revokes the token; `scripts/publish-check.mjs` lists what would publish.
 
 **This repo is public from its first commit.** Never commit secrets, private emails or internal data: nothing from
 `~/data/oceanmetrics/places-internal`, no Marine Regions copies, no PPOW geometry, in code or fixtures. Fixtures are
