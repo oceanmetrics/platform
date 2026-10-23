@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest'
 import { execFileSync, spawnSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { gunzipSync, gzipSync } from 'node:zlib'
@@ -226,5 +226,65 @@ describe('om-publish.sh rewrite', () => {
   it('needs --from, --to and a target', () => {
     expect(run(['rewrite', '--to', 'storage', 'obis-h3']).code).toBe(2)
     expect(run(['rewrite', '--from', 's3', '--to', 'storage']).code).toBe(2)
+  })
+})
+
+// ---- the staged plan: what is staged, in which groups and order, with which headers, is pinned byte for byte ----
+// scripts/om-publish/staging-plan.golden.json was recorded from the per-file implementation (one subprocess per file,
+// 13,000 files a minute) before staging became one pass (awk for the types, perl for the symlinks). A change to the plan
+// is a change to what reaches the bucket: regenerate it only on purpose (UPDATE_GOLDEN=1 npx vitest run scripts/om-publish.test.ts)
+const GOLDEN = join(ROOT, 'scripts/om-publish/staging-plan.golden.json')
+
+/** a deterministic tree with the awkward names: upper-case and missing extensions, a dotted folder, spaces, .DS_Store */
+function planTree() {
+  const d = mkdtempSync(join(tmpdir(), 'om-publish-src-'))
+  const names = [
+    'collection.json', 'index.html', 'LICENSE', 'README.MD', '.hidden', '.DS_Store', 'x/.DS_Store', 'v1.2/data', 'v1.2/data.JSON',
+    'a b/c d.json', 'a b/e.PARQUET', 'items/a.json', 'items/b.json', 'score_1.tif', 'score_1_3857.tif', 'score_2.Tiff', 'feeds/index.json',
+    'feeds/a.xml', 'feeds/b.atom', 'changes/latest.json', 'changes/20260101.json', 'changes/20260102.parquet', 'g/h/i/j/k.geojson',
+    'm.nc', 'n.gz', 'o.zip', 'p.svg', 'q.jpg', 'r.jpeg', 's.png', 't.pmtiles', 'u.csv', 'v.txt', 'w.md', 'x.unknownext', 'noext/y', 'dir.with.dots/z.json',
+  ]
+  for (let i = 0; i < 150; i++) names.push(`bulk/b${i % 7}/f${String(i).padStart(3, '0')}.${['json', 'parquet', 'html', 'xml', 'png', 'tif', 'csv', 'bin'][i % 8]}`)
+  for (const n of names) {
+    mkdirSync(join(d, n, '..'), { recursive: true })
+    writeFileSync(join(d, n), n)
+  }
+  return d
+}
+const normal = (s: string) => s.replace(/[^\s"]*om-publish-src-[A-Za-z0-9]+/g, '<SRC>').replace(/[^\s"]*om-publish\.[A-Za-z0-9]+/g, '<TMP>').replace(/differ\.\d+/g, 'differ.N')
+const plan = (args: string[], env: Record<string, string> = {}) => {
+  const r = run(args, env)
+  return { code: r.code, out: normal(r.out), err: normal(r.err), calls: r.calls.map(c => JSON.parse(normal(JSON.stringify(c)))) }
+}
+
+describe('om-publish.sh: the staged plan', () => {
+  const scenarios: [string, (d: string) => [string[], Record<string, string>?]][] = [
+    ['dry run, both stores', d => [[d, 'obis-h3/v1']]],
+    ['really, history, two files differ', d => [[d, 'indicators', '--really', '--keep-history'], { OM_FAKE_DIFFER: 'collection.json,items/a.json' }]],
+    ['the indicators chain: --last, --type, --cache-control', d => [[d, 'indicators', '--really', '--cache-control', 'public, max-age=300', '--type', 'xml=application/atom+xml; charset=utf-8', '--type', 'BIN=application/x-bin',
+      '--last', 'changes/*.parquet', '--last', 'changes/[0-9]*.json', '--last', 'feeds/*.xml', '--last', 'feeds/index.json', '--last', 'changes/latest.json', '--last', 'collection.json']]],
+    ['include and exclude', d => [[d, 'gazetteer/x', '--include', '*.json', '--include', '*.png', '--exclude', 'bulk/*', '--exclude', 'a b/*']]],
+    ['one file with --as', d => [[join(d, 'collection.json'), 'atlas', '--as', 'catalog.json', '--cache-control', 'no-cache']]],
+    ['r2 only, size-only, gzip', d => [[d, 'atlas/aquamaps_native', '--only-r2', '--size-only', '--content-encoding', 'gzip', '--exclude', 'bulk/*']]],
+    ['s3 only, the pmtiles and the dotted folder', d => [[d, 'basemap', '--only-s3', '--include', '*.pmtiles', '--include', 'dir.with.dots/*', '--include', 'v1.2/*']]],
+  ]
+  it('is identical to the recorded plan for the fixture tree, scenario by scenario', () => {
+    const got = scenarios.map(([name, f]) => { const d = planTree(); const [args, env] = f(d); return { name, ...plan(args, env) } })
+    if (process.env.UPDATE_GOLDEN === '1' || !existsSync(GOLDEN)) writeFileSync(GOLDEN, JSON.stringify(got, null, 1) + '\n')
+    const want = JSON.parse(readFileSync(GOLDEN, 'utf8'))
+    expect(got.map(g => g.name)).toEqual(want.map((w: { name: string }) => w.name))
+    for (let i = 0; i < got.length; i++) expect(got[i], got[i].name).toEqual(want[i])
+    expect(got.every(g => g.code === 0)).toBe(true)
+  }, 60000)
+  it('regression: a folder, a name with spaces and a dotted folder reach the stage with their own content types', () => {
+    const d = planTree()
+    const u = uploads(run([d, 'p', '--only-r2']).calls)
+    const where = (f: string) => u.find(c => c.files?.includes(f))!
+    expect(typeOf(where('a b/c d.json'))).toBe('application/json')
+    expect(typeOf(where('v1.2/data'))).toBeUndefined()
+    expect(typeOf(where('v1.2/data.JSON'))).toBe('application/json')
+    expect(typeOf(where('score_2.Tiff'))).toBe('image/tiff')
+    expect(u.flatMap(c => c.files!)).not.toContain('.DS_Store')
+    expect(u.flatMap(c => c.files!)).not.toContain('x/.DS_Store')
   })
 })

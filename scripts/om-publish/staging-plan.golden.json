@@ -1,0 +1,5201 @@
+[
+ {
+  "name": "dry run, both stores",
+  "code": 0,
+  "out": "om-publish: 185 files from <SRC> -> obis-h3/v1/ on r2 s3 (dry run; --really to upload)\nr2  (guessed)  23 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  application/atom+xml; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  application/geo+json  1 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  application/gzip  1 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  application/json  28 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  application/vnd.apache.parquet  21 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  application/vnd.pmtiles  1 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  application/x-netcdf  1 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  application/xml  20 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  application/zip  1 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  image/jpeg  2 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  image/png  20 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  image/svg+xml  1 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  image/tiff  22 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  text/csv; charset=utf-8  19 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  text/html; charset=utf-8  20 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  text/markdown; charset=utf-8  2 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\nr2  text/plain; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/obis-h3/v1/  (dry run)\ns3  (guessed)  23 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  application/atom+xml; charset=utf-8  1 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  application/geo+json  1 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  application/gzip  1 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  application/json  28 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  application/vnd.apache.parquet  21 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  application/vnd.pmtiles  1 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  application/x-netcdf  1 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  application/xml  20 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  application/zip  1 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  image/jpeg  2 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  image/png  20 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  image/svg+xml  1 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  image/tiff  22 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  text/csv; charset=utf-8  19 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  text/html; charset=utf-8  20 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  text/markdown; charset=utf-8  2 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\ns3  text/plain; charset=utf-8  1 files -> s3://oceanmetrics.io-public/obis-h3/v1/  (dry run)\n",
+  "err": "",
+  "calls": [
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g1",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--dry-run"
+    ],
+    "files": [
+     ".hidden",
+     "LICENSE",
+     "bulk/b0/f007.bin",
+     "bulk/b0/f063.bin",
+     "bulk/b0/f119.bin",
+     "bulk/b1/f015.bin",
+     "bulk/b1/f071.bin",
+     "bulk/b1/f127.bin",
+     "bulk/b2/f023.bin",
+     "bulk/b2/f079.bin",
+     "bulk/b2/f135.bin",
+     "bulk/b3/f031.bin",
+     "bulk/b3/f087.bin",
+     "bulk/b3/f143.bin",
+     "bulk/b4/f039.bin",
+     "bulk/b4/f095.bin",
+     "bulk/b5/f047.bin",
+     "bulk/b5/f103.bin",
+     "bulk/b6/f055.bin",
+     "bulk/b6/f111.bin",
+     "noext/y",
+     "v1.2/data",
+     "x.unknownext"
+    ],
+    "text": [
+     "LmhpZGRlbg==",
+     "TElDRU5TRQ==",
+     "YnVsay9iMC9mMDA3LmJpbg==",
+     "YnVsay9iMC9mMDYzLmJpbg==",
+     "YnVsay9iMC9mMTE5LmJpbg==",
+     "YnVsay9iMS9mMDE1LmJpbg==",
+     "YnVsay9iMS9mMDcxLmJpbg==",
+     "YnVsay9iMS9mMTI3LmJpbg==",
+     "YnVsay9iMi9mMDIzLmJpbg==",
+     "YnVsay9iMi9mMDc5LmJpbg==",
+     "YnVsay9iMi9mMTM1LmJpbg==",
+     "YnVsay9iMy9mMDMxLmJpbg==",
+     "YnVsay9iMy9mMDg3LmJpbg==",
+     "YnVsay9iMy9mMTQzLmJpbg==",
+     "YnVsay9iNC9mMDM5LmJpbg==",
+     "YnVsay9iNC9mMDk1LmJpbg==",
+     "YnVsay9iNS9mMDQ3LmJpbg==",
+     "YnVsay9iNS9mMTAzLmJpbg==",
+     "YnVsay9iNi9mMDU1LmJpbg==",
+     "YnVsay9iNi9mMTExLmJpbg==",
+     "bm9leHQveQ==",
+     "djEuMi9kYXRh",
+     "eC51bmtub3duZXh0"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g2",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/atom+xml; charset=utf-8",
+     "--dry-run"
+    ],
+    "files": [
+     "feeds/b.atom"
+    ],
+    "text": [
+     "ZmVlZHMvYi5hdG9t"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g3",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/geo+json",
+     "--dry-run"
+    ],
+    "files": [
+     "g/h/i/j/k.geojson"
+    ],
+    "text": [
+     "Zy9oL2kvai9rLmdlb2pzb24="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g4",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "n.gz"
+    ],
+    "text": [
+     "bi5neg=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g5",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/json",
+     "--dry-run"
+    ],
+    "files": [
+     "a b/c d.json",
+     "bulk/b0/f000.json",
+     "bulk/b0/f056.json",
+     "bulk/b0/f112.json",
+     "bulk/b1/f008.json",
+     "bulk/b1/f064.json",
+     "bulk/b1/f120.json",
+     "bulk/b2/f016.json",
+     "bulk/b2/f072.json",
+     "bulk/b2/f128.json",
+     "bulk/b3/f024.json",
+     "bulk/b3/f080.json",
+     "bulk/b3/f136.json",
+     "bulk/b4/f032.json",
+     "bulk/b4/f088.json",
+     "bulk/b4/f144.json",
+     "bulk/b5/f040.json",
+     "bulk/b5/f096.json",
+     "bulk/b6/f048.json",
+     "bulk/b6/f104.json",
+     "changes/20260101.json",
+     "changes/latest.json",
+     "collection.json",
+     "dir.with.dots/z.json",
+     "feeds/index.json",
+     "items/a.json",
+     "items/b.json",
+     "v1.2/data.JSON"
+    ],
+    "text": [
+     "YSBiL2MgZC5qc29u",
+     "YnVsay9iMC9mMDAwLmpzb24=",
+     "YnVsay9iMC9mMDU2Lmpzb24=",
+     "YnVsay9iMC9mMTEyLmpzb24=",
+     "YnVsay9iMS9mMDA4Lmpzb24=",
+     "YnVsay9iMS9mMDY0Lmpzb24=",
+     "YnVsay9iMS9mMTIwLmpzb24=",
+     "YnVsay9iMi9mMDE2Lmpzb24=",
+     "YnVsay9iMi9mMDcyLmpzb24=",
+     "YnVsay9iMi9mMTI4Lmpzb24=",
+     "YnVsay9iMy9mMDI0Lmpzb24=",
+     "YnVsay9iMy9mMDgwLmpzb24=",
+     "YnVsay9iMy9mMTM2Lmpzb24=",
+     "YnVsay9iNC9mMDMyLmpzb24=",
+     "YnVsay9iNC9mMDg4Lmpzb24=",
+     "YnVsay9iNC9mMTQ0Lmpzb24=",
+     "YnVsay9iNS9mMDQwLmpzb24=",
+     "YnVsay9iNS9mMDk2Lmpzb24=",
+     "YnVsay9iNi9mMDQ4Lmpzb24=",
+     "YnVsay9iNi9mMTA0Lmpzb24=",
+     "Y2hhbmdlcy8yMDI2MDEwMS5qc29u",
+     "Y2hhbmdlcy9sYXRlc3QuanNvbg==",
+     "Y29sbGVjdGlvbi5qc29u",
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "ZmVlZHMvaW5kZXguanNvbg==",
+     "aXRlbXMvYS5qc29u",
+     "aXRlbXMvYi5qc29u",
+     "djEuMi9kYXRhLkpTT04="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g6",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/vnd.apache.parquet",
+     "--dry-run"
+    ],
+    "files": [
+     "a b/e.PARQUET",
+     "bulk/b0/f049.parquet",
+     "bulk/b0/f105.parquet",
+     "bulk/b1/f001.parquet",
+     "bulk/b1/f057.parquet",
+     "bulk/b1/f113.parquet",
+     "bulk/b2/f009.parquet",
+     "bulk/b2/f065.parquet",
+     "bulk/b2/f121.parquet",
+     "bulk/b3/f017.parquet",
+     "bulk/b3/f073.parquet",
+     "bulk/b3/f129.parquet",
+     "bulk/b4/f025.parquet",
+     "bulk/b4/f081.parquet",
+     "bulk/b4/f137.parquet",
+     "bulk/b5/f033.parquet",
+     "bulk/b5/f089.parquet",
+     "bulk/b5/f145.parquet",
+     "bulk/b6/f041.parquet",
+     "bulk/b6/f097.parquet",
+     "changes/20260102.parquet"
+    ],
+    "text": [
+     "YSBiL2UuUEFSUVVFVA==",
+     "YnVsay9iMC9mMDQ5LnBhcnF1ZXQ=",
+     "YnVsay9iMC9mMTA1LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDAxLnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDU3LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMTEzLnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDA5LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDY1LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMTIxLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDE3LnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDczLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMTI5LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDI1LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDgxLnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMTM3LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDMzLnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDg5LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMTQ1LnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDQxLnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDk3LnBhcnF1ZXQ=",
+     "Y2hhbmdlcy8yMDI2MDEwMi5wYXJxdWV0"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g7",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/vnd.pmtiles",
+     "--dry-run"
+    ],
+    "files": [
+     "t.pmtiles"
+    ],
+    "text": [
+     "dC5wbXRpbGVz"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g8",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/x-netcdf",
+     "--dry-run"
+    ],
+    "files": [
+     "m.nc"
+    ],
+    "text": [
+     "bS5uYw=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g9",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/xml",
+     "--dry-run"
+    ],
+    "files": [
+     "bulk/b0/f035.xml",
+     "bulk/b0/f091.xml",
+     "bulk/b0/f147.xml",
+     "bulk/b1/f043.xml",
+     "bulk/b1/f099.xml",
+     "bulk/b2/f051.xml",
+     "bulk/b2/f107.xml",
+     "bulk/b3/f003.xml",
+     "bulk/b3/f059.xml",
+     "bulk/b3/f115.xml",
+     "bulk/b4/f011.xml",
+     "bulk/b4/f067.xml",
+     "bulk/b4/f123.xml",
+     "bulk/b5/f019.xml",
+     "bulk/b5/f075.xml",
+     "bulk/b5/f131.xml",
+     "bulk/b6/f027.xml",
+     "bulk/b6/f083.xml",
+     "bulk/b6/f139.xml",
+     "feeds/a.xml"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDM1LnhtbA==",
+     "YnVsay9iMC9mMDkxLnhtbA==",
+     "YnVsay9iMC9mMTQ3LnhtbA==",
+     "YnVsay9iMS9mMDQzLnhtbA==",
+     "YnVsay9iMS9mMDk5LnhtbA==",
+     "YnVsay9iMi9mMDUxLnhtbA==",
+     "YnVsay9iMi9mMTA3LnhtbA==",
+     "YnVsay9iMy9mMDAzLnhtbA==",
+     "YnVsay9iMy9mMDU5LnhtbA==",
+     "YnVsay9iMy9mMTE1LnhtbA==",
+     "YnVsay9iNC9mMDExLnhtbA==",
+     "YnVsay9iNC9mMDY3LnhtbA==",
+     "YnVsay9iNC9mMTIzLnhtbA==",
+     "YnVsay9iNS9mMDE5LnhtbA==",
+     "YnVsay9iNS9mMDc1LnhtbA==",
+     "YnVsay9iNS9mMTMxLnhtbA==",
+     "YnVsay9iNi9mMDI3LnhtbA==",
+     "YnVsay9iNi9mMDgzLnhtbA==",
+     "YnVsay9iNi9mMTM5LnhtbA==",
+     "ZmVlZHMvYS54bWw="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g10",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/zip",
+     "--dry-run"
+    ],
+    "files": [
+     "o.zip"
+    ],
+    "text": [
+     "by56aXA="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g11",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/jpeg",
+     "--dry-run"
+    ],
+    "files": [
+     "q.jpg",
+     "r.jpeg"
+    ],
+    "text": [
+     "cS5qcGc=",
+     "ci5qcGVn"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g12",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/png",
+     "--dry-run"
+    ],
+    "files": [
+     "bulk/b0/f028.png",
+     "bulk/b0/f084.png",
+     "bulk/b0/f140.png",
+     "bulk/b1/f036.png",
+     "bulk/b1/f092.png",
+     "bulk/b1/f148.png",
+     "bulk/b2/f044.png",
+     "bulk/b2/f100.png",
+     "bulk/b3/f052.png",
+     "bulk/b3/f108.png",
+     "bulk/b4/f004.png",
+     "bulk/b4/f060.png",
+     "bulk/b4/f116.png",
+     "bulk/b5/f012.png",
+     "bulk/b5/f068.png",
+     "bulk/b5/f124.png",
+     "bulk/b6/f020.png",
+     "bulk/b6/f076.png",
+     "bulk/b6/f132.png",
+     "s.png"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDI4LnBuZw==",
+     "YnVsay9iMC9mMDg0LnBuZw==",
+     "YnVsay9iMC9mMTQwLnBuZw==",
+     "YnVsay9iMS9mMDM2LnBuZw==",
+     "YnVsay9iMS9mMDkyLnBuZw==",
+     "YnVsay9iMS9mMTQ4LnBuZw==",
+     "YnVsay9iMi9mMDQ0LnBuZw==",
+     "YnVsay9iMi9mMTAwLnBuZw==",
+     "YnVsay9iMy9mMDUyLnBuZw==",
+     "YnVsay9iMy9mMTA4LnBuZw==",
+     "YnVsay9iNC9mMDA0LnBuZw==",
+     "YnVsay9iNC9mMDYwLnBuZw==",
+     "YnVsay9iNC9mMTE2LnBuZw==",
+     "YnVsay9iNS9mMDEyLnBuZw==",
+     "YnVsay9iNS9mMDY4LnBuZw==",
+     "YnVsay9iNS9mMTI0LnBuZw==",
+     "YnVsay9iNi9mMDIwLnBuZw==",
+     "YnVsay9iNi9mMDc2LnBuZw==",
+     "YnVsay9iNi9mMTMyLnBuZw==",
+     "cy5wbmc="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g13",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/svg+xml",
+     "--dry-run"
+    ],
+    "files": [
+     "p.svg"
+    ],
+    "text": [
+     "cC5zdmc="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g14",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/tiff",
+     "--dry-run"
+    ],
+    "files": [
+     "bulk/b0/f021.tif",
+     "bulk/b0/f077.tif",
+     "bulk/b0/f133.tif",
+     "bulk/b1/f029.tif",
+     "bulk/b1/f085.tif",
+     "bulk/b1/f141.tif",
+     "bulk/b2/f037.tif",
+     "bulk/b2/f093.tif",
+     "bulk/b2/f149.tif",
+     "bulk/b3/f045.tif",
+     "bulk/b3/f101.tif",
+     "bulk/b4/f053.tif",
+     "bulk/b4/f109.tif",
+     "bulk/b5/f005.tif",
+     "bulk/b5/f061.tif",
+     "bulk/b5/f117.tif",
+     "bulk/b6/f013.tif",
+     "bulk/b6/f069.tif",
+     "bulk/b6/f125.tif",
+     "score_1.tif",
+     "score_1_3857.tif",
+     "score_2.Tiff"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDIxLnRpZg==",
+     "YnVsay9iMC9mMDc3LnRpZg==",
+     "YnVsay9iMC9mMTMzLnRpZg==",
+     "YnVsay9iMS9mMDI5LnRpZg==",
+     "YnVsay9iMS9mMDg1LnRpZg==",
+     "YnVsay9iMS9mMTQxLnRpZg==",
+     "YnVsay9iMi9mMDM3LnRpZg==",
+     "YnVsay9iMi9mMDkzLnRpZg==",
+     "YnVsay9iMi9mMTQ5LnRpZg==",
+     "YnVsay9iMy9mMDQ1LnRpZg==",
+     "YnVsay9iMy9mMTAxLnRpZg==",
+     "YnVsay9iNC9mMDUzLnRpZg==",
+     "YnVsay9iNC9mMTA5LnRpZg==",
+     "YnVsay9iNS9mMDA1LnRpZg==",
+     "YnVsay9iNS9mMDYxLnRpZg==",
+     "YnVsay9iNS9mMTE3LnRpZg==",
+     "YnVsay9iNi9mMDEzLnRpZg==",
+     "YnVsay9iNi9mMDY5LnRpZg==",
+     "YnVsay9iNi9mMTI1LnRpZg==",
+     "c2NvcmVfMS50aWY=",
+     "c2NvcmVfMV8zODU3LnRpZg==",
+     "c2NvcmVfMi5UaWZm"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g15",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/csv; charset=utf-8",
+     "--dry-run"
+    ],
+    "files": [
+     "bulk/b0/f014.csv",
+     "bulk/b0/f070.csv",
+     "bulk/b0/f126.csv",
+     "bulk/b1/f022.csv",
+     "bulk/b1/f078.csv",
+     "bulk/b1/f134.csv",
+     "bulk/b2/f030.csv",
+     "bulk/b2/f086.csv",
+     "bulk/b2/f142.csv",
+     "bulk/b3/f038.csv",
+     "bulk/b3/f094.csv",
+     "bulk/b4/f046.csv",
+     "bulk/b4/f102.csv",
+     "bulk/b5/f054.csv",
+     "bulk/b5/f110.csv",
+     "bulk/b6/f006.csv",
+     "bulk/b6/f062.csv",
+     "bulk/b6/f118.csv",
+     "u.csv"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDE0LmNzdg==",
+     "YnVsay9iMC9mMDcwLmNzdg==",
+     "YnVsay9iMC9mMTI2LmNzdg==",
+     "YnVsay9iMS9mMDIyLmNzdg==",
+     "YnVsay9iMS9mMDc4LmNzdg==",
+     "YnVsay9iMS9mMTM0LmNzdg==",
+     "YnVsay9iMi9mMDMwLmNzdg==",
+     "YnVsay9iMi9mMDg2LmNzdg==",
+     "YnVsay9iMi9mMTQyLmNzdg==",
+     "YnVsay9iMy9mMDM4LmNzdg==",
+     "YnVsay9iMy9mMDk0LmNzdg==",
+     "YnVsay9iNC9mMDQ2LmNzdg==",
+     "YnVsay9iNC9mMTAyLmNzdg==",
+     "YnVsay9iNS9mMDU0LmNzdg==",
+     "YnVsay9iNS9mMTEwLmNzdg==",
+     "YnVsay9iNi9mMDA2LmNzdg==",
+     "YnVsay9iNi9mMDYyLmNzdg==",
+     "YnVsay9iNi9mMTE4LmNzdg==",
+     "dS5jc3Y="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g16",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/html; charset=utf-8",
+     "--dry-run"
+    ],
+    "files": [
+     "bulk/b0/f042.html",
+     "bulk/b0/f098.html",
+     "bulk/b1/f050.html",
+     "bulk/b1/f106.html",
+     "bulk/b2/f002.html",
+     "bulk/b2/f058.html",
+     "bulk/b2/f114.html",
+     "bulk/b3/f010.html",
+     "bulk/b3/f066.html",
+     "bulk/b3/f122.html",
+     "bulk/b4/f018.html",
+     "bulk/b4/f074.html",
+     "bulk/b4/f130.html",
+     "bulk/b5/f026.html",
+     "bulk/b5/f082.html",
+     "bulk/b5/f138.html",
+     "bulk/b6/f034.html",
+     "bulk/b6/f090.html",
+     "bulk/b6/f146.html",
+     "index.html"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDQyLmh0bWw=",
+     "YnVsay9iMC9mMDk4Lmh0bWw=",
+     "YnVsay9iMS9mMDUwLmh0bWw=",
+     "YnVsay9iMS9mMTA2Lmh0bWw=",
+     "YnVsay9iMi9mMDAyLmh0bWw=",
+     "YnVsay9iMi9mMDU4Lmh0bWw=",
+     "YnVsay9iMi9mMTE0Lmh0bWw=",
+     "YnVsay9iMy9mMDEwLmh0bWw=",
+     "YnVsay9iMy9mMDY2Lmh0bWw=",
+     "YnVsay9iMy9mMTIyLmh0bWw=",
+     "YnVsay9iNC9mMDE4Lmh0bWw=",
+     "YnVsay9iNC9mMDc0Lmh0bWw=",
+     "YnVsay9iNC9mMTMwLmh0bWw=",
+     "YnVsay9iNS9mMDI2Lmh0bWw=",
+     "YnVsay9iNS9mMDgyLmh0bWw=",
+     "YnVsay9iNS9mMTM4Lmh0bWw=",
+     "YnVsay9iNi9mMDM0Lmh0bWw=",
+     "YnVsay9iNi9mMDkwLmh0bWw=",
+     "YnVsay9iNi9mMTQ2Lmh0bWw=",
+     "aW5kZXguaHRtbA=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g17",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/markdown; charset=utf-8",
+     "--dry-run"
+    ],
+    "files": [
+     "README.MD",
+     "w.md"
+    ],
+    "text": [
+     "UkVBRE1FLk1E",
+     "dy5tZA=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g18",
+     "r2:oceanmetrics-io-public-enam/obis-h3/v1",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/plain; charset=utf-8",
+     "--dry-run"
+    ],
+    "files": [
+     "v.txt"
+    ],
+    "text": [
+     "di50eHQ="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g1",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--dryrun"
+    ],
+    "files": [
+     ".hidden",
+     "LICENSE",
+     "bulk/b0/f007.bin",
+     "bulk/b0/f063.bin",
+     "bulk/b0/f119.bin",
+     "bulk/b1/f015.bin",
+     "bulk/b1/f071.bin",
+     "bulk/b1/f127.bin",
+     "bulk/b2/f023.bin",
+     "bulk/b2/f079.bin",
+     "bulk/b2/f135.bin",
+     "bulk/b3/f031.bin",
+     "bulk/b3/f087.bin",
+     "bulk/b3/f143.bin",
+     "bulk/b4/f039.bin",
+     "bulk/b4/f095.bin",
+     "bulk/b5/f047.bin",
+     "bulk/b5/f103.bin",
+     "bulk/b6/f055.bin",
+     "bulk/b6/f111.bin",
+     "noext/y",
+     "v1.2/data",
+     "x.unknownext"
+    ],
+    "text": [
+     "LmhpZGRlbg==",
+     "TElDRU5TRQ==",
+     "YnVsay9iMC9mMDA3LmJpbg==",
+     "YnVsay9iMC9mMDYzLmJpbg==",
+     "YnVsay9iMC9mMTE5LmJpbg==",
+     "YnVsay9iMS9mMDE1LmJpbg==",
+     "YnVsay9iMS9mMDcxLmJpbg==",
+     "YnVsay9iMS9mMTI3LmJpbg==",
+     "YnVsay9iMi9mMDIzLmJpbg==",
+     "YnVsay9iMi9mMDc5LmJpbg==",
+     "YnVsay9iMi9mMTM1LmJpbg==",
+     "YnVsay9iMy9mMDMxLmJpbg==",
+     "YnVsay9iMy9mMDg3LmJpbg==",
+     "YnVsay9iMy9mMTQzLmJpbg==",
+     "YnVsay9iNC9mMDM5LmJpbg==",
+     "YnVsay9iNC9mMDk1LmJpbg==",
+     "YnVsay9iNS9mMDQ3LmJpbg==",
+     "YnVsay9iNS9mMTAzLmJpbg==",
+     "YnVsay9iNi9mMDU1LmJpbg==",
+     "YnVsay9iNi9mMTExLmJpbg==",
+     "bm9leHQveQ==",
+     "djEuMi9kYXRh",
+     "eC51bmtub3duZXh0"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g2",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "application/atom+xml; charset=utf-8",
+     "--dryrun"
+    ],
+    "files": [
+     "feeds/b.atom"
+    ],
+    "text": [
+     "ZmVlZHMvYi5hdG9t"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g3",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "application/geo+json",
+     "--dryrun"
+    ],
+    "files": [
+     "g/h/i/j/k.geojson"
+    ],
+    "text": [
+     "Zy9oL2kvai9rLmdlb2pzb24="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g4",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "application/gzip",
+     "--dryrun"
+    ],
+    "files": [
+     "n.gz"
+    ],
+    "text": [
+     "bi5neg=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g5",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "application/json",
+     "--dryrun"
+    ],
+    "files": [
+     "a b/c d.json",
+     "bulk/b0/f000.json",
+     "bulk/b0/f056.json",
+     "bulk/b0/f112.json",
+     "bulk/b1/f008.json",
+     "bulk/b1/f064.json",
+     "bulk/b1/f120.json",
+     "bulk/b2/f016.json",
+     "bulk/b2/f072.json",
+     "bulk/b2/f128.json",
+     "bulk/b3/f024.json",
+     "bulk/b3/f080.json",
+     "bulk/b3/f136.json",
+     "bulk/b4/f032.json",
+     "bulk/b4/f088.json",
+     "bulk/b4/f144.json",
+     "bulk/b5/f040.json",
+     "bulk/b5/f096.json",
+     "bulk/b6/f048.json",
+     "bulk/b6/f104.json",
+     "changes/20260101.json",
+     "changes/latest.json",
+     "collection.json",
+     "dir.with.dots/z.json",
+     "feeds/index.json",
+     "items/a.json",
+     "items/b.json",
+     "v1.2/data.JSON"
+    ],
+    "text": [
+     "YSBiL2MgZC5qc29u",
+     "YnVsay9iMC9mMDAwLmpzb24=",
+     "YnVsay9iMC9mMDU2Lmpzb24=",
+     "YnVsay9iMC9mMTEyLmpzb24=",
+     "YnVsay9iMS9mMDA4Lmpzb24=",
+     "YnVsay9iMS9mMDY0Lmpzb24=",
+     "YnVsay9iMS9mMTIwLmpzb24=",
+     "YnVsay9iMi9mMDE2Lmpzb24=",
+     "YnVsay9iMi9mMDcyLmpzb24=",
+     "YnVsay9iMi9mMTI4Lmpzb24=",
+     "YnVsay9iMy9mMDI0Lmpzb24=",
+     "YnVsay9iMy9mMDgwLmpzb24=",
+     "YnVsay9iMy9mMTM2Lmpzb24=",
+     "YnVsay9iNC9mMDMyLmpzb24=",
+     "YnVsay9iNC9mMDg4Lmpzb24=",
+     "YnVsay9iNC9mMTQ0Lmpzb24=",
+     "YnVsay9iNS9mMDQwLmpzb24=",
+     "YnVsay9iNS9mMDk2Lmpzb24=",
+     "YnVsay9iNi9mMDQ4Lmpzb24=",
+     "YnVsay9iNi9mMTA0Lmpzb24=",
+     "Y2hhbmdlcy8yMDI2MDEwMS5qc29u",
+     "Y2hhbmdlcy9sYXRlc3QuanNvbg==",
+     "Y29sbGVjdGlvbi5qc29u",
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "ZmVlZHMvaW5kZXguanNvbg==",
+     "aXRlbXMvYS5qc29u",
+     "aXRlbXMvYi5qc29u",
+     "djEuMi9kYXRhLkpTT04="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g6",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "application/vnd.apache.parquet",
+     "--dryrun"
+    ],
+    "files": [
+     "a b/e.PARQUET",
+     "bulk/b0/f049.parquet",
+     "bulk/b0/f105.parquet",
+     "bulk/b1/f001.parquet",
+     "bulk/b1/f057.parquet",
+     "bulk/b1/f113.parquet",
+     "bulk/b2/f009.parquet",
+     "bulk/b2/f065.parquet",
+     "bulk/b2/f121.parquet",
+     "bulk/b3/f017.parquet",
+     "bulk/b3/f073.parquet",
+     "bulk/b3/f129.parquet",
+     "bulk/b4/f025.parquet",
+     "bulk/b4/f081.parquet",
+     "bulk/b4/f137.parquet",
+     "bulk/b5/f033.parquet",
+     "bulk/b5/f089.parquet",
+     "bulk/b5/f145.parquet",
+     "bulk/b6/f041.parquet",
+     "bulk/b6/f097.parquet",
+     "changes/20260102.parquet"
+    ],
+    "text": [
+     "YSBiL2UuUEFSUVVFVA==",
+     "YnVsay9iMC9mMDQ5LnBhcnF1ZXQ=",
+     "YnVsay9iMC9mMTA1LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDAxLnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDU3LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMTEzLnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDA5LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDY1LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMTIxLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDE3LnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDczLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMTI5LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDI1LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDgxLnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMTM3LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDMzLnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDg5LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMTQ1LnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDQxLnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDk3LnBhcnF1ZXQ=",
+     "Y2hhbmdlcy8yMDI2MDEwMi5wYXJxdWV0"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g7",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "application/vnd.pmtiles",
+     "--dryrun"
+    ],
+    "files": [
+     "t.pmtiles"
+    ],
+    "text": [
+     "dC5wbXRpbGVz"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g8",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "application/x-netcdf",
+     "--dryrun"
+    ],
+    "files": [
+     "m.nc"
+    ],
+    "text": [
+     "bS5uYw=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g9",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "application/xml",
+     "--dryrun"
+    ],
+    "files": [
+     "bulk/b0/f035.xml",
+     "bulk/b0/f091.xml",
+     "bulk/b0/f147.xml",
+     "bulk/b1/f043.xml",
+     "bulk/b1/f099.xml",
+     "bulk/b2/f051.xml",
+     "bulk/b2/f107.xml",
+     "bulk/b3/f003.xml",
+     "bulk/b3/f059.xml",
+     "bulk/b3/f115.xml",
+     "bulk/b4/f011.xml",
+     "bulk/b4/f067.xml",
+     "bulk/b4/f123.xml",
+     "bulk/b5/f019.xml",
+     "bulk/b5/f075.xml",
+     "bulk/b5/f131.xml",
+     "bulk/b6/f027.xml",
+     "bulk/b6/f083.xml",
+     "bulk/b6/f139.xml",
+     "feeds/a.xml"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDM1LnhtbA==",
+     "YnVsay9iMC9mMDkxLnhtbA==",
+     "YnVsay9iMC9mMTQ3LnhtbA==",
+     "YnVsay9iMS9mMDQzLnhtbA==",
+     "YnVsay9iMS9mMDk5LnhtbA==",
+     "YnVsay9iMi9mMDUxLnhtbA==",
+     "YnVsay9iMi9mMTA3LnhtbA==",
+     "YnVsay9iMy9mMDAzLnhtbA==",
+     "YnVsay9iMy9mMDU5LnhtbA==",
+     "YnVsay9iMy9mMTE1LnhtbA==",
+     "YnVsay9iNC9mMDExLnhtbA==",
+     "YnVsay9iNC9mMDY3LnhtbA==",
+     "YnVsay9iNC9mMTIzLnhtbA==",
+     "YnVsay9iNS9mMDE5LnhtbA==",
+     "YnVsay9iNS9mMDc1LnhtbA==",
+     "YnVsay9iNS9mMTMxLnhtbA==",
+     "YnVsay9iNi9mMDI3LnhtbA==",
+     "YnVsay9iNi9mMDgzLnhtbA==",
+     "YnVsay9iNi9mMTM5LnhtbA==",
+     "ZmVlZHMvYS54bWw="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g10",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "application/zip",
+     "--dryrun"
+    ],
+    "files": [
+     "o.zip"
+    ],
+    "text": [
+     "by56aXA="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g11",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "image/jpeg",
+     "--dryrun"
+    ],
+    "files": [
+     "q.jpg",
+     "r.jpeg"
+    ],
+    "text": [
+     "cS5qcGc=",
+     "ci5qcGVn"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g12",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "image/png",
+     "--dryrun"
+    ],
+    "files": [
+     "bulk/b0/f028.png",
+     "bulk/b0/f084.png",
+     "bulk/b0/f140.png",
+     "bulk/b1/f036.png",
+     "bulk/b1/f092.png",
+     "bulk/b1/f148.png",
+     "bulk/b2/f044.png",
+     "bulk/b2/f100.png",
+     "bulk/b3/f052.png",
+     "bulk/b3/f108.png",
+     "bulk/b4/f004.png",
+     "bulk/b4/f060.png",
+     "bulk/b4/f116.png",
+     "bulk/b5/f012.png",
+     "bulk/b5/f068.png",
+     "bulk/b5/f124.png",
+     "bulk/b6/f020.png",
+     "bulk/b6/f076.png",
+     "bulk/b6/f132.png",
+     "s.png"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDI4LnBuZw==",
+     "YnVsay9iMC9mMDg0LnBuZw==",
+     "YnVsay9iMC9mMTQwLnBuZw==",
+     "YnVsay9iMS9mMDM2LnBuZw==",
+     "YnVsay9iMS9mMDkyLnBuZw==",
+     "YnVsay9iMS9mMTQ4LnBuZw==",
+     "YnVsay9iMi9mMDQ0LnBuZw==",
+     "YnVsay9iMi9mMTAwLnBuZw==",
+     "YnVsay9iMy9mMDUyLnBuZw==",
+     "YnVsay9iMy9mMTA4LnBuZw==",
+     "YnVsay9iNC9mMDA0LnBuZw==",
+     "YnVsay9iNC9mMDYwLnBuZw==",
+     "YnVsay9iNC9mMTE2LnBuZw==",
+     "YnVsay9iNS9mMDEyLnBuZw==",
+     "YnVsay9iNS9mMDY4LnBuZw==",
+     "YnVsay9iNS9mMTI0LnBuZw==",
+     "YnVsay9iNi9mMDIwLnBuZw==",
+     "YnVsay9iNi9mMDc2LnBuZw==",
+     "YnVsay9iNi9mMTMyLnBuZw==",
+     "cy5wbmc="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g13",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "image/svg+xml",
+     "--dryrun"
+    ],
+    "files": [
+     "p.svg"
+    ],
+    "text": [
+     "cC5zdmc="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g14",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "image/tiff",
+     "--dryrun"
+    ],
+    "files": [
+     "bulk/b0/f021.tif",
+     "bulk/b0/f077.tif",
+     "bulk/b0/f133.tif",
+     "bulk/b1/f029.tif",
+     "bulk/b1/f085.tif",
+     "bulk/b1/f141.tif",
+     "bulk/b2/f037.tif",
+     "bulk/b2/f093.tif",
+     "bulk/b2/f149.tif",
+     "bulk/b3/f045.tif",
+     "bulk/b3/f101.tif",
+     "bulk/b4/f053.tif",
+     "bulk/b4/f109.tif",
+     "bulk/b5/f005.tif",
+     "bulk/b5/f061.tif",
+     "bulk/b5/f117.tif",
+     "bulk/b6/f013.tif",
+     "bulk/b6/f069.tif",
+     "bulk/b6/f125.tif",
+     "score_1.tif",
+     "score_1_3857.tif",
+     "score_2.Tiff"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDIxLnRpZg==",
+     "YnVsay9iMC9mMDc3LnRpZg==",
+     "YnVsay9iMC9mMTMzLnRpZg==",
+     "YnVsay9iMS9mMDI5LnRpZg==",
+     "YnVsay9iMS9mMDg1LnRpZg==",
+     "YnVsay9iMS9mMTQxLnRpZg==",
+     "YnVsay9iMi9mMDM3LnRpZg==",
+     "YnVsay9iMi9mMDkzLnRpZg==",
+     "YnVsay9iMi9mMTQ5LnRpZg==",
+     "YnVsay9iMy9mMDQ1LnRpZg==",
+     "YnVsay9iMy9mMTAxLnRpZg==",
+     "YnVsay9iNC9mMDUzLnRpZg==",
+     "YnVsay9iNC9mMTA5LnRpZg==",
+     "YnVsay9iNS9mMDA1LnRpZg==",
+     "YnVsay9iNS9mMDYxLnRpZg==",
+     "YnVsay9iNS9mMTE3LnRpZg==",
+     "YnVsay9iNi9mMDEzLnRpZg==",
+     "YnVsay9iNi9mMDY5LnRpZg==",
+     "YnVsay9iNi9mMTI1LnRpZg==",
+     "c2NvcmVfMS50aWY=",
+     "c2NvcmVfMV8zODU3LnRpZg==",
+     "c2NvcmVfMi5UaWZm"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g15",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "text/csv; charset=utf-8",
+     "--dryrun"
+    ],
+    "files": [
+     "bulk/b0/f014.csv",
+     "bulk/b0/f070.csv",
+     "bulk/b0/f126.csv",
+     "bulk/b1/f022.csv",
+     "bulk/b1/f078.csv",
+     "bulk/b1/f134.csv",
+     "bulk/b2/f030.csv",
+     "bulk/b2/f086.csv",
+     "bulk/b2/f142.csv",
+     "bulk/b3/f038.csv",
+     "bulk/b3/f094.csv",
+     "bulk/b4/f046.csv",
+     "bulk/b4/f102.csv",
+     "bulk/b5/f054.csv",
+     "bulk/b5/f110.csv",
+     "bulk/b6/f006.csv",
+     "bulk/b6/f062.csv",
+     "bulk/b6/f118.csv",
+     "u.csv"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDE0LmNzdg==",
+     "YnVsay9iMC9mMDcwLmNzdg==",
+     "YnVsay9iMC9mMTI2LmNzdg==",
+     "YnVsay9iMS9mMDIyLmNzdg==",
+     "YnVsay9iMS9mMDc4LmNzdg==",
+     "YnVsay9iMS9mMTM0LmNzdg==",
+     "YnVsay9iMi9mMDMwLmNzdg==",
+     "YnVsay9iMi9mMDg2LmNzdg==",
+     "YnVsay9iMi9mMTQyLmNzdg==",
+     "YnVsay9iMy9mMDM4LmNzdg==",
+     "YnVsay9iMy9mMDk0LmNzdg==",
+     "YnVsay9iNC9mMDQ2LmNzdg==",
+     "YnVsay9iNC9mMTAyLmNzdg==",
+     "YnVsay9iNS9mMDU0LmNzdg==",
+     "YnVsay9iNS9mMTEwLmNzdg==",
+     "YnVsay9iNi9mMDA2LmNzdg==",
+     "YnVsay9iNi9mMDYyLmNzdg==",
+     "YnVsay9iNi9mMTE4LmNzdg==",
+     "dS5jc3Y="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g16",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "text/html; charset=utf-8",
+     "--dryrun"
+    ],
+    "files": [
+     "bulk/b0/f042.html",
+     "bulk/b0/f098.html",
+     "bulk/b1/f050.html",
+     "bulk/b1/f106.html",
+     "bulk/b2/f002.html",
+     "bulk/b2/f058.html",
+     "bulk/b2/f114.html",
+     "bulk/b3/f010.html",
+     "bulk/b3/f066.html",
+     "bulk/b3/f122.html",
+     "bulk/b4/f018.html",
+     "bulk/b4/f074.html",
+     "bulk/b4/f130.html",
+     "bulk/b5/f026.html",
+     "bulk/b5/f082.html",
+     "bulk/b5/f138.html",
+     "bulk/b6/f034.html",
+     "bulk/b6/f090.html",
+     "bulk/b6/f146.html",
+     "index.html"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDQyLmh0bWw=",
+     "YnVsay9iMC9mMDk4Lmh0bWw=",
+     "YnVsay9iMS9mMDUwLmh0bWw=",
+     "YnVsay9iMS9mMTA2Lmh0bWw=",
+     "YnVsay9iMi9mMDAyLmh0bWw=",
+     "YnVsay9iMi9mMDU4Lmh0bWw=",
+     "YnVsay9iMi9mMTE0Lmh0bWw=",
+     "YnVsay9iMy9mMDEwLmh0bWw=",
+     "YnVsay9iMy9mMDY2Lmh0bWw=",
+     "YnVsay9iMy9mMTIyLmh0bWw=",
+     "YnVsay9iNC9mMDE4Lmh0bWw=",
+     "YnVsay9iNC9mMDc0Lmh0bWw=",
+     "YnVsay9iNC9mMTMwLmh0bWw=",
+     "YnVsay9iNS9mMDI2Lmh0bWw=",
+     "YnVsay9iNS9mMDgyLmh0bWw=",
+     "YnVsay9iNS9mMTM4Lmh0bWw=",
+     "YnVsay9iNi9mMDM0Lmh0bWw=",
+     "YnVsay9iNi9mMDkwLmh0bWw=",
+     "YnVsay9iNi9mMTQ2Lmh0bWw=",
+     "aW5kZXguaHRtbA=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g17",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "text/markdown; charset=utf-8",
+     "--dryrun"
+    ],
+    "files": [
+     "README.MD",
+     "w.md"
+    ],
+    "text": [
+     "UkVBRE1FLk1E",
+     "dy5tZA=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g18",
+     "s3://oceanmetrics.io-public/obis-h3/v1",
+     "--no-progress",
+     "--content-type",
+     "text/plain; charset=utf-8",
+     "--dryrun"
+    ],
+    "files": [
+     "v.txt"
+    ],
+    "text": [
+     "di50eHQ="
+    ]
+   }
+  ]
+ },
+ {
+  "name": "really, history, two files differ",
+  "code": 0,
+  "out": "om-publish: 185 files from <SRC> -> indicators/ on r2 s3\nr2  history: 2 overwritten -> r2:oceanmetrics-io-public-enam/indicators/_history/2026-10-23/\n    collection.json\n    items/a.json\nr2  (guessed)  23 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/atom+xml; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/geo+json  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/gzip  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/json  28 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/vnd.apache.parquet  21 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/vnd.pmtiles  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/x-netcdf  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/xml  20 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/zip  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  image/jpeg  2 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  image/png  20 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  image/svg+xml  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  image/tiff  22 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  text/csv; charset=utf-8  19 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  text/html; charset=utf-8  20 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  text/markdown; charset=utf-8  2 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  text/plain; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/indicators/\ns3  (guessed)  23 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/atom+xml; charset=utf-8  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/geo+json  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/gzip  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/json  28 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/vnd.apache.parquet  21 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/vnd.pmtiles  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/x-netcdf  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/xml  20 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/zip  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  image/jpeg  2 files -> s3://oceanmetrics.io-public/indicators/\ns3  image/png  20 files -> s3://oceanmetrics.io-public/indicators/\ns3  image/svg+xml  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  image/tiff  22 files -> s3://oceanmetrics.io-public/indicators/\ns3  text/csv; charset=utf-8  19 files -> s3://oceanmetrics.io-public/indicators/\ns3  text/html; charset=utf-8  20 files -> s3://oceanmetrics.io-public/indicators/\ns3  text/markdown; charset=utf-8  2 files -> s3://oceanmetrics.io-public/indicators/\ns3  text/plain; charset=utf-8  1 files -> s3://oceanmetrics.io-public/indicators/\n",
+  "err": "",
+  "calls": [
+   {
+    "tool": "rclone",
+    "args": [
+     "check",
+     "<TMP>/all",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--one-way",
+     "--copy-links",
+     "--differ",
+     "<TMP>/differ.N"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "r2:oceanmetrics-io-public-enam/indicators/_history/2026-10-23",
+     "--files-from-raw",
+     "<TMP>/differ.N",
+     "--no-traverse",
+     "--ignore-existing",
+     "--stats-one-line",
+     "--stats",
+     "0"
+    ],
+    "list": [
+     "collection.json",
+     "items/a.json"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g1",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum"
+    ],
+    "files": [
+     ".hidden",
+     "LICENSE",
+     "bulk/b0/f007.bin",
+     "bulk/b0/f063.bin",
+     "bulk/b0/f119.bin",
+     "bulk/b1/f015.bin",
+     "bulk/b1/f071.bin",
+     "bulk/b1/f127.bin",
+     "bulk/b2/f023.bin",
+     "bulk/b2/f079.bin",
+     "bulk/b2/f135.bin",
+     "bulk/b3/f031.bin",
+     "bulk/b3/f087.bin",
+     "bulk/b3/f143.bin",
+     "bulk/b4/f039.bin",
+     "bulk/b4/f095.bin",
+     "bulk/b5/f047.bin",
+     "bulk/b5/f103.bin",
+     "bulk/b6/f055.bin",
+     "bulk/b6/f111.bin",
+     "noext/y",
+     "v1.2/data",
+     "x.unknownext"
+    ],
+    "text": [
+     "LmhpZGRlbg==",
+     "TElDRU5TRQ==",
+     "YnVsay9iMC9mMDA3LmJpbg==",
+     "YnVsay9iMC9mMDYzLmJpbg==",
+     "YnVsay9iMC9mMTE5LmJpbg==",
+     "YnVsay9iMS9mMDE1LmJpbg==",
+     "YnVsay9iMS9mMDcxLmJpbg==",
+     "YnVsay9iMS9mMTI3LmJpbg==",
+     "YnVsay9iMi9mMDIzLmJpbg==",
+     "YnVsay9iMi9mMDc5LmJpbg==",
+     "YnVsay9iMi9mMTM1LmJpbg==",
+     "YnVsay9iMy9mMDMxLmJpbg==",
+     "YnVsay9iMy9mMDg3LmJpbg==",
+     "YnVsay9iMy9mMTQzLmJpbg==",
+     "YnVsay9iNC9mMDM5LmJpbg==",
+     "YnVsay9iNC9mMDk1LmJpbg==",
+     "YnVsay9iNS9mMDQ3LmJpbg==",
+     "YnVsay9iNS9mMTAzLmJpbg==",
+     "YnVsay9iNi9mMDU1LmJpbg==",
+     "YnVsay9iNi9mMTExLmJpbg==",
+     "bm9leHQveQ==",
+     "djEuMi9kYXRh",
+     "eC51bmtub3duZXh0"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g2",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/atom+xml; charset=utf-8"
+    ],
+    "files": [
+     "feeds/b.atom"
+    ],
+    "text": [
+     "ZmVlZHMvYi5hdG9t"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g3",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/geo+json"
+    ],
+    "files": [
+     "g/h/i/j/k.geojson"
+    ],
+    "text": [
+     "Zy9oL2kvai9rLmdlb2pzb24="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g4",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/gzip"
+    ],
+    "files": [
+     "n.gz"
+    ],
+    "text": [
+     "bi5neg=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g5",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/json"
+    ],
+    "files": [
+     "a b/c d.json",
+     "bulk/b0/f000.json",
+     "bulk/b0/f056.json",
+     "bulk/b0/f112.json",
+     "bulk/b1/f008.json",
+     "bulk/b1/f064.json",
+     "bulk/b1/f120.json",
+     "bulk/b2/f016.json",
+     "bulk/b2/f072.json",
+     "bulk/b2/f128.json",
+     "bulk/b3/f024.json",
+     "bulk/b3/f080.json",
+     "bulk/b3/f136.json",
+     "bulk/b4/f032.json",
+     "bulk/b4/f088.json",
+     "bulk/b4/f144.json",
+     "bulk/b5/f040.json",
+     "bulk/b5/f096.json",
+     "bulk/b6/f048.json",
+     "bulk/b6/f104.json",
+     "changes/20260101.json",
+     "changes/latest.json",
+     "collection.json",
+     "dir.with.dots/z.json",
+     "feeds/index.json",
+     "items/a.json",
+     "items/b.json",
+     "v1.2/data.JSON"
+    ],
+    "text": [
+     "YSBiL2MgZC5qc29u",
+     "YnVsay9iMC9mMDAwLmpzb24=",
+     "YnVsay9iMC9mMDU2Lmpzb24=",
+     "YnVsay9iMC9mMTEyLmpzb24=",
+     "YnVsay9iMS9mMDA4Lmpzb24=",
+     "YnVsay9iMS9mMDY0Lmpzb24=",
+     "YnVsay9iMS9mMTIwLmpzb24=",
+     "YnVsay9iMi9mMDE2Lmpzb24=",
+     "YnVsay9iMi9mMDcyLmpzb24=",
+     "YnVsay9iMi9mMTI4Lmpzb24=",
+     "YnVsay9iMy9mMDI0Lmpzb24=",
+     "YnVsay9iMy9mMDgwLmpzb24=",
+     "YnVsay9iMy9mMTM2Lmpzb24=",
+     "YnVsay9iNC9mMDMyLmpzb24=",
+     "YnVsay9iNC9mMDg4Lmpzb24=",
+     "YnVsay9iNC9mMTQ0Lmpzb24=",
+     "YnVsay9iNS9mMDQwLmpzb24=",
+     "YnVsay9iNS9mMDk2Lmpzb24=",
+     "YnVsay9iNi9mMDQ4Lmpzb24=",
+     "YnVsay9iNi9mMTA0Lmpzb24=",
+     "Y2hhbmdlcy8yMDI2MDEwMS5qc29u",
+     "Y2hhbmdlcy9sYXRlc3QuanNvbg==",
+     "Y29sbGVjdGlvbi5qc29u",
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "ZmVlZHMvaW5kZXguanNvbg==",
+     "aXRlbXMvYS5qc29u",
+     "aXRlbXMvYi5qc29u",
+     "djEuMi9kYXRhLkpTT04="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g6",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/vnd.apache.parquet"
+    ],
+    "files": [
+     "a b/e.PARQUET",
+     "bulk/b0/f049.parquet",
+     "bulk/b0/f105.parquet",
+     "bulk/b1/f001.parquet",
+     "bulk/b1/f057.parquet",
+     "bulk/b1/f113.parquet",
+     "bulk/b2/f009.parquet",
+     "bulk/b2/f065.parquet",
+     "bulk/b2/f121.parquet",
+     "bulk/b3/f017.parquet",
+     "bulk/b3/f073.parquet",
+     "bulk/b3/f129.parquet",
+     "bulk/b4/f025.parquet",
+     "bulk/b4/f081.parquet",
+     "bulk/b4/f137.parquet",
+     "bulk/b5/f033.parquet",
+     "bulk/b5/f089.parquet",
+     "bulk/b5/f145.parquet",
+     "bulk/b6/f041.parquet",
+     "bulk/b6/f097.parquet",
+     "changes/20260102.parquet"
+    ],
+    "text": [
+     "YSBiL2UuUEFSUVVFVA==",
+     "YnVsay9iMC9mMDQ5LnBhcnF1ZXQ=",
+     "YnVsay9iMC9mMTA1LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDAxLnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDU3LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMTEzLnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDA5LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDY1LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMTIxLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDE3LnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDczLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMTI5LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDI1LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDgxLnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMTM3LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDMzLnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDg5LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMTQ1LnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDQxLnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDk3LnBhcnF1ZXQ=",
+     "Y2hhbmdlcy8yMDI2MDEwMi5wYXJxdWV0"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g7",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/vnd.pmtiles"
+    ],
+    "files": [
+     "t.pmtiles"
+    ],
+    "text": [
+     "dC5wbXRpbGVz"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g8",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/x-netcdf"
+    ],
+    "files": [
+     "m.nc"
+    ],
+    "text": [
+     "bS5uYw=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g9",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/xml"
+    ],
+    "files": [
+     "bulk/b0/f035.xml",
+     "bulk/b0/f091.xml",
+     "bulk/b0/f147.xml",
+     "bulk/b1/f043.xml",
+     "bulk/b1/f099.xml",
+     "bulk/b2/f051.xml",
+     "bulk/b2/f107.xml",
+     "bulk/b3/f003.xml",
+     "bulk/b3/f059.xml",
+     "bulk/b3/f115.xml",
+     "bulk/b4/f011.xml",
+     "bulk/b4/f067.xml",
+     "bulk/b4/f123.xml",
+     "bulk/b5/f019.xml",
+     "bulk/b5/f075.xml",
+     "bulk/b5/f131.xml",
+     "bulk/b6/f027.xml",
+     "bulk/b6/f083.xml",
+     "bulk/b6/f139.xml",
+     "feeds/a.xml"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDM1LnhtbA==",
+     "YnVsay9iMC9mMDkxLnhtbA==",
+     "YnVsay9iMC9mMTQ3LnhtbA==",
+     "YnVsay9iMS9mMDQzLnhtbA==",
+     "YnVsay9iMS9mMDk5LnhtbA==",
+     "YnVsay9iMi9mMDUxLnhtbA==",
+     "YnVsay9iMi9mMTA3LnhtbA==",
+     "YnVsay9iMy9mMDAzLnhtbA==",
+     "YnVsay9iMy9mMDU5LnhtbA==",
+     "YnVsay9iMy9mMTE1LnhtbA==",
+     "YnVsay9iNC9mMDExLnhtbA==",
+     "YnVsay9iNC9mMDY3LnhtbA==",
+     "YnVsay9iNC9mMTIzLnhtbA==",
+     "YnVsay9iNS9mMDE5LnhtbA==",
+     "YnVsay9iNS9mMDc1LnhtbA==",
+     "YnVsay9iNS9mMTMxLnhtbA==",
+     "YnVsay9iNi9mMDI3LnhtbA==",
+     "YnVsay9iNi9mMDgzLnhtbA==",
+     "YnVsay9iNi9mMTM5LnhtbA==",
+     "ZmVlZHMvYS54bWw="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g10",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/zip"
+    ],
+    "files": [
+     "o.zip"
+    ],
+    "text": [
+     "by56aXA="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g11",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/jpeg"
+    ],
+    "files": [
+     "q.jpg",
+     "r.jpeg"
+    ],
+    "text": [
+     "cS5qcGc=",
+     "ci5qcGVn"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g12",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/png"
+    ],
+    "files": [
+     "bulk/b0/f028.png",
+     "bulk/b0/f084.png",
+     "bulk/b0/f140.png",
+     "bulk/b1/f036.png",
+     "bulk/b1/f092.png",
+     "bulk/b1/f148.png",
+     "bulk/b2/f044.png",
+     "bulk/b2/f100.png",
+     "bulk/b3/f052.png",
+     "bulk/b3/f108.png",
+     "bulk/b4/f004.png",
+     "bulk/b4/f060.png",
+     "bulk/b4/f116.png",
+     "bulk/b5/f012.png",
+     "bulk/b5/f068.png",
+     "bulk/b5/f124.png",
+     "bulk/b6/f020.png",
+     "bulk/b6/f076.png",
+     "bulk/b6/f132.png",
+     "s.png"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDI4LnBuZw==",
+     "YnVsay9iMC9mMDg0LnBuZw==",
+     "YnVsay9iMC9mMTQwLnBuZw==",
+     "YnVsay9iMS9mMDM2LnBuZw==",
+     "YnVsay9iMS9mMDkyLnBuZw==",
+     "YnVsay9iMS9mMTQ4LnBuZw==",
+     "YnVsay9iMi9mMDQ0LnBuZw==",
+     "YnVsay9iMi9mMTAwLnBuZw==",
+     "YnVsay9iMy9mMDUyLnBuZw==",
+     "YnVsay9iMy9mMTA4LnBuZw==",
+     "YnVsay9iNC9mMDA0LnBuZw==",
+     "YnVsay9iNC9mMDYwLnBuZw==",
+     "YnVsay9iNC9mMTE2LnBuZw==",
+     "YnVsay9iNS9mMDEyLnBuZw==",
+     "YnVsay9iNS9mMDY4LnBuZw==",
+     "YnVsay9iNS9mMTI0LnBuZw==",
+     "YnVsay9iNi9mMDIwLnBuZw==",
+     "YnVsay9iNi9mMDc2LnBuZw==",
+     "YnVsay9iNi9mMTMyLnBuZw==",
+     "cy5wbmc="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g13",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/svg+xml"
+    ],
+    "files": [
+     "p.svg"
+    ],
+    "text": [
+     "cC5zdmc="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g14",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/tiff"
+    ],
+    "files": [
+     "bulk/b0/f021.tif",
+     "bulk/b0/f077.tif",
+     "bulk/b0/f133.tif",
+     "bulk/b1/f029.tif",
+     "bulk/b1/f085.tif",
+     "bulk/b1/f141.tif",
+     "bulk/b2/f037.tif",
+     "bulk/b2/f093.tif",
+     "bulk/b2/f149.tif",
+     "bulk/b3/f045.tif",
+     "bulk/b3/f101.tif",
+     "bulk/b4/f053.tif",
+     "bulk/b4/f109.tif",
+     "bulk/b5/f005.tif",
+     "bulk/b5/f061.tif",
+     "bulk/b5/f117.tif",
+     "bulk/b6/f013.tif",
+     "bulk/b6/f069.tif",
+     "bulk/b6/f125.tif",
+     "score_1.tif",
+     "score_1_3857.tif",
+     "score_2.Tiff"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDIxLnRpZg==",
+     "YnVsay9iMC9mMDc3LnRpZg==",
+     "YnVsay9iMC9mMTMzLnRpZg==",
+     "YnVsay9iMS9mMDI5LnRpZg==",
+     "YnVsay9iMS9mMDg1LnRpZg==",
+     "YnVsay9iMS9mMTQxLnRpZg==",
+     "YnVsay9iMi9mMDM3LnRpZg==",
+     "YnVsay9iMi9mMDkzLnRpZg==",
+     "YnVsay9iMi9mMTQ5LnRpZg==",
+     "YnVsay9iMy9mMDQ1LnRpZg==",
+     "YnVsay9iMy9mMTAxLnRpZg==",
+     "YnVsay9iNC9mMDUzLnRpZg==",
+     "YnVsay9iNC9mMTA5LnRpZg==",
+     "YnVsay9iNS9mMDA1LnRpZg==",
+     "YnVsay9iNS9mMDYxLnRpZg==",
+     "YnVsay9iNS9mMTE3LnRpZg==",
+     "YnVsay9iNi9mMDEzLnRpZg==",
+     "YnVsay9iNi9mMDY5LnRpZg==",
+     "YnVsay9iNi9mMTI1LnRpZg==",
+     "c2NvcmVfMS50aWY=",
+     "c2NvcmVfMV8zODU3LnRpZg==",
+     "c2NvcmVfMi5UaWZm"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g15",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/csv; charset=utf-8"
+    ],
+    "files": [
+     "bulk/b0/f014.csv",
+     "bulk/b0/f070.csv",
+     "bulk/b0/f126.csv",
+     "bulk/b1/f022.csv",
+     "bulk/b1/f078.csv",
+     "bulk/b1/f134.csv",
+     "bulk/b2/f030.csv",
+     "bulk/b2/f086.csv",
+     "bulk/b2/f142.csv",
+     "bulk/b3/f038.csv",
+     "bulk/b3/f094.csv",
+     "bulk/b4/f046.csv",
+     "bulk/b4/f102.csv",
+     "bulk/b5/f054.csv",
+     "bulk/b5/f110.csv",
+     "bulk/b6/f006.csv",
+     "bulk/b6/f062.csv",
+     "bulk/b6/f118.csv",
+     "u.csv"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDE0LmNzdg==",
+     "YnVsay9iMC9mMDcwLmNzdg==",
+     "YnVsay9iMC9mMTI2LmNzdg==",
+     "YnVsay9iMS9mMDIyLmNzdg==",
+     "YnVsay9iMS9mMDc4LmNzdg==",
+     "YnVsay9iMS9mMTM0LmNzdg==",
+     "YnVsay9iMi9mMDMwLmNzdg==",
+     "YnVsay9iMi9mMDg2LmNzdg==",
+     "YnVsay9iMi9mMTQyLmNzdg==",
+     "YnVsay9iMy9mMDM4LmNzdg==",
+     "YnVsay9iMy9mMDk0LmNzdg==",
+     "YnVsay9iNC9mMDQ2LmNzdg==",
+     "YnVsay9iNC9mMTAyLmNzdg==",
+     "YnVsay9iNS9mMDU0LmNzdg==",
+     "YnVsay9iNS9mMTEwLmNzdg==",
+     "YnVsay9iNi9mMDA2LmNzdg==",
+     "YnVsay9iNi9mMDYyLmNzdg==",
+     "YnVsay9iNi9mMTE4LmNzdg==",
+     "dS5jc3Y="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g16",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/html; charset=utf-8"
+    ],
+    "files": [
+     "bulk/b0/f042.html",
+     "bulk/b0/f098.html",
+     "bulk/b1/f050.html",
+     "bulk/b1/f106.html",
+     "bulk/b2/f002.html",
+     "bulk/b2/f058.html",
+     "bulk/b2/f114.html",
+     "bulk/b3/f010.html",
+     "bulk/b3/f066.html",
+     "bulk/b3/f122.html",
+     "bulk/b4/f018.html",
+     "bulk/b4/f074.html",
+     "bulk/b4/f130.html",
+     "bulk/b5/f026.html",
+     "bulk/b5/f082.html",
+     "bulk/b5/f138.html",
+     "bulk/b6/f034.html",
+     "bulk/b6/f090.html",
+     "bulk/b6/f146.html",
+     "index.html"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDQyLmh0bWw=",
+     "YnVsay9iMC9mMDk4Lmh0bWw=",
+     "YnVsay9iMS9mMDUwLmh0bWw=",
+     "YnVsay9iMS9mMTA2Lmh0bWw=",
+     "YnVsay9iMi9mMDAyLmh0bWw=",
+     "YnVsay9iMi9mMDU4Lmh0bWw=",
+     "YnVsay9iMi9mMTE0Lmh0bWw=",
+     "YnVsay9iMy9mMDEwLmh0bWw=",
+     "YnVsay9iMy9mMDY2Lmh0bWw=",
+     "YnVsay9iMy9mMTIyLmh0bWw=",
+     "YnVsay9iNC9mMDE4Lmh0bWw=",
+     "YnVsay9iNC9mMDc0Lmh0bWw=",
+     "YnVsay9iNC9mMTMwLmh0bWw=",
+     "YnVsay9iNS9mMDI2Lmh0bWw=",
+     "YnVsay9iNS9mMDgyLmh0bWw=",
+     "YnVsay9iNS9mMTM4Lmh0bWw=",
+     "YnVsay9iNi9mMDM0Lmh0bWw=",
+     "YnVsay9iNi9mMDkwLmh0bWw=",
+     "YnVsay9iNi9mMTQ2Lmh0bWw=",
+     "aW5kZXguaHRtbA=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g17",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/markdown; charset=utf-8"
+    ],
+    "files": [
+     "README.MD",
+     "w.md"
+    ],
+    "text": [
+     "UkVBRE1FLk1E",
+     "dy5tZA=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g18",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/plain; charset=utf-8"
+    ],
+    "files": [
+     "v.txt"
+    ],
+    "text": [
+     "di50eHQ="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g1",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress"
+    ],
+    "files": [
+     ".hidden",
+     "LICENSE",
+     "bulk/b0/f007.bin",
+     "bulk/b0/f063.bin",
+     "bulk/b0/f119.bin",
+     "bulk/b1/f015.bin",
+     "bulk/b1/f071.bin",
+     "bulk/b1/f127.bin",
+     "bulk/b2/f023.bin",
+     "bulk/b2/f079.bin",
+     "bulk/b2/f135.bin",
+     "bulk/b3/f031.bin",
+     "bulk/b3/f087.bin",
+     "bulk/b3/f143.bin",
+     "bulk/b4/f039.bin",
+     "bulk/b4/f095.bin",
+     "bulk/b5/f047.bin",
+     "bulk/b5/f103.bin",
+     "bulk/b6/f055.bin",
+     "bulk/b6/f111.bin",
+     "noext/y",
+     "v1.2/data",
+     "x.unknownext"
+    ],
+    "text": [
+     "LmhpZGRlbg==",
+     "TElDRU5TRQ==",
+     "YnVsay9iMC9mMDA3LmJpbg==",
+     "YnVsay9iMC9mMDYzLmJpbg==",
+     "YnVsay9iMC9mMTE5LmJpbg==",
+     "YnVsay9iMS9mMDE1LmJpbg==",
+     "YnVsay9iMS9mMDcxLmJpbg==",
+     "YnVsay9iMS9mMTI3LmJpbg==",
+     "YnVsay9iMi9mMDIzLmJpbg==",
+     "YnVsay9iMi9mMDc5LmJpbg==",
+     "YnVsay9iMi9mMTM1LmJpbg==",
+     "YnVsay9iMy9mMDMxLmJpbg==",
+     "YnVsay9iMy9mMDg3LmJpbg==",
+     "YnVsay9iMy9mMTQzLmJpbg==",
+     "YnVsay9iNC9mMDM5LmJpbg==",
+     "YnVsay9iNC9mMDk1LmJpbg==",
+     "YnVsay9iNS9mMDQ3LmJpbg==",
+     "YnVsay9iNS9mMTAzLmJpbg==",
+     "YnVsay9iNi9mMDU1LmJpbg==",
+     "YnVsay9iNi9mMTExLmJpbg==",
+     "bm9leHQveQ==",
+     "djEuMi9kYXRh",
+     "eC51bmtub3duZXh0"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g2",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/atom+xml; charset=utf-8"
+    ],
+    "files": [
+     "feeds/b.atom"
+    ],
+    "text": [
+     "ZmVlZHMvYi5hdG9t"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g3",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/geo+json"
+    ],
+    "files": [
+     "g/h/i/j/k.geojson"
+    ],
+    "text": [
+     "Zy9oL2kvai9rLmdlb2pzb24="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g4",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/gzip"
+    ],
+    "files": [
+     "n.gz"
+    ],
+    "text": [
+     "bi5neg=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g5",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/json"
+    ],
+    "files": [
+     "a b/c d.json",
+     "bulk/b0/f000.json",
+     "bulk/b0/f056.json",
+     "bulk/b0/f112.json",
+     "bulk/b1/f008.json",
+     "bulk/b1/f064.json",
+     "bulk/b1/f120.json",
+     "bulk/b2/f016.json",
+     "bulk/b2/f072.json",
+     "bulk/b2/f128.json",
+     "bulk/b3/f024.json",
+     "bulk/b3/f080.json",
+     "bulk/b3/f136.json",
+     "bulk/b4/f032.json",
+     "bulk/b4/f088.json",
+     "bulk/b4/f144.json",
+     "bulk/b5/f040.json",
+     "bulk/b5/f096.json",
+     "bulk/b6/f048.json",
+     "bulk/b6/f104.json",
+     "changes/20260101.json",
+     "changes/latest.json",
+     "collection.json",
+     "dir.with.dots/z.json",
+     "feeds/index.json",
+     "items/a.json",
+     "items/b.json",
+     "v1.2/data.JSON"
+    ],
+    "text": [
+     "YSBiL2MgZC5qc29u",
+     "YnVsay9iMC9mMDAwLmpzb24=",
+     "YnVsay9iMC9mMDU2Lmpzb24=",
+     "YnVsay9iMC9mMTEyLmpzb24=",
+     "YnVsay9iMS9mMDA4Lmpzb24=",
+     "YnVsay9iMS9mMDY0Lmpzb24=",
+     "YnVsay9iMS9mMTIwLmpzb24=",
+     "YnVsay9iMi9mMDE2Lmpzb24=",
+     "YnVsay9iMi9mMDcyLmpzb24=",
+     "YnVsay9iMi9mMTI4Lmpzb24=",
+     "YnVsay9iMy9mMDI0Lmpzb24=",
+     "YnVsay9iMy9mMDgwLmpzb24=",
+     "YnVsay9iMy9mMTM2Lmpzb24=",
+     "YnVsay9iNC9mMDMyLmpzb24=",
+     "YnVsay9iNC9mMDg4Lmpzb24=",
+     "YnVsay9iNC9mMTQ0Lmpzb24=",
+     "YnVsay9iNS9mMDQwLmpzb24=",
+     "YnVsay9iNS9mMDk2Lmpzb24=",
+     "YnVsay9iNi9mMDQ4Lmpzb24=",
+     "YnVsay9iNi9mMTA0Lmpzb24=",
+     "Y2hhbmdlcy8yMDI2MDEwMS5qc29u",
+     "Y2hhbmdlcy9sYXRlc3QuanNvbg==",
+     "Y29sbGVjdGlvbi5qc29u",
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "ZmVlZHMvaW5kZXguanNvbg==",
+     "aXRlbXMvYS5qc29u",
+     "aXRlbXMvYi5qc29u",
+     "djEuMi9kYXRhLkpTT04="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g6",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/vnd.apache.parquet"
+    ],
+    "files": [
+     "a b/e.PARQUET",
+     "bulk/b0/f049.parquet",
+     "bulk/b0/f105.parquet",
+     "bulk/b1/f001.parquet",
+     "bulk/b1/f057.parquet",
+     "bulk/b1/f113.parquet",
+     "bulk/b2/f009.parquet",
+     "bulk/b2/f065.parquet",
+     "bulk/b2/f121.parquet",
+     "bulk/b3/f017.parquet",
+     "bulk/b3/f073.parquet",
+     "bulk/b3/f129.parquet",
+     "bulk/b4/f025.parquet",
+     "bulk/b4/f081.parquet",
+     "bulk/b4/f137.parquet",
+     "bulk/b5/f033.parquet",
+     "bulk/b5/f089.parquet",
+     "bulk/b5/f145.parquet",
+     "bulk/b6/f041.parquet",
+     "bulk/b6/f097.parquet",
+     "changes/20260102.parquet"
+    ],
+    "text": [
+     "YSBiL2UuUEFSUVVFVA==",
+     "YnVsay9iMC9mMDQ5LnBhcnF1ZXQ=",
+     "YnVsay9iMC9mMTA1LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDAxLnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDU3LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMTEzLnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDA5LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDY1LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMTIxLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDE3LnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDczLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMTI5LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDI1LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDgxLnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMTM3LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDMzLnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDg5LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMTQ1LnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDQxLnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDk3LnBhcnF1ZXQ=",
+     "Y2hhbmdlcy8yMDI2MDEwMi5wYXJxdWV0"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g7",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/vnd.pmtiles"
+    ],
+    "files": [
+     "t.pmtiles"
+    ],
+    "text": [
+     "dC5wbXRpbGVz"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g8",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/x-netcdf"
+    ],
+    "files": [
+     "m.nc"
+    ],
+    "text": [
+     "bS5uYw=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g9",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/xml"
+    ],
+    "files": [
+     "bulk/b0/f035.xml",
+     "bulk/b0/f091.xml",
+     "bulk/b0/f147.xml",
+     "bulk/b1/f043.xml",
+     "bulk/b1/f099.xml",
+     "bulk/b2/f051.xml",
+     "bulk/b2/f107.xml",
+     "bulk/b3/f003.xml",
+     "bulk/b3/f059.xml",
+     "bulk/b3/f115.xml",
+     "bulk/b4/f011.xml",
+     "bulk/b4/f067.xml",
+     "bulk/b4/f123.xml",
+     "bulk/b5/f019.xml",
+     "bulk/b5/f075.xml",
+     "bulk/b5/f131.xml",
+     "bulk/b6/f027.xml",
+     "bulk/b6/f083.xml",
+     "bulk/b6/f139.xml",
+     "feeds/a.xml"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDM1LnhtbA==",
+     "YnVsay9iMC9mMDkxLnhtbA==",
+     "YnVsay9iMC9mMTQ3LnhtbA==",
+     "YnVsay9iMS9mMDQzLnhtbA==",
+     "YnVsay9iMS9mMDk5LnhtbA==",
+     "YnVsay9iMi9mMDUxLnhtbA==",
+     "YnVsay9iMi9mMTA3LnhtbA==",
+     "YnVsay9iMy9mMDAzLnhtbA==",
+     "YnVsay9iMy9mMDU5LnhtbA==",
+     "YnVsay9iMy9mMTE1LnhtbA==",
+     "YnVsay9iNC9mMDExLnhtbA==",
+     "YnVsay9iNC9mMDY3LnhtbA==",
+     "YnVsay9iNC9mMTIzLnhtbA==",
+     "YnVsay9iNS9mMDE5LnhtbA==",
+     "YnVsay9iNS9mMDc1LnhtbA==",
+     "YnVsay9iNS9mMTMxLnhtbA==",
+     "YnVsay9iNi9mMDI3LnhtbA==",
+     "YnVsay9iNi9mMDgzLnhtbA==",
+     "YnVsay9iNi9mMTM5LnhtbA==",
+     "ZmVlZHMvYS54bWw="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g10",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/zip"
+    ],
+    "files": [
+     "o.zip"
+    ],
+    "text": [
+     "by56aXA="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g11",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "image/jpeg"
+    ],
+    "files": [
+     "q.jpg",
+     "r.jpeg"
+    ],
+    "text": [
+     "cS5qcGc=",
+     "ci5qcGVn"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g12",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "image/png"
+    ],
+    "files": [
+     "bulk/b0/f028.png",
+     "bulk/b0/f084.png",
+     "bulk/b0/f140.png",
+     "bulk/b1/f036.png",
+     "bulk/b1/f092.png",
+     "bulk/b1/f148.png",
+     "bulk/b2/f044.png",
+     "bulk/b2/f100.png",
+     "bulk/b3/f052.png",
+     "bulk/b3/f108.png",
+     "bulk/b4/f004.png",
+     "bulk/b4/f060.png",
+     "bulk/b4/f116.png",
+     "bulk/b5/f012.png",
+     "bulk/b5/f068.png",
+     "bulk/b5/f124.png",
+     "bulk/b6/f020.png",
+     "bulk/b6/f076.png",
+     "bulk/b6/f132.png",
+     "s.png"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDI4LnBuZw==",
+     "YnVsay9iMC9mMDg0LnBuZw==",
+     "YnVsay9iMC9mMTQwLnBuZw==",
+     "YnVsay9iMS9mMDM2LnBuZw==",
+     "YnVsay9iMS9mMDkyLnBuZw==",
+     "YnVsay9iMS9mMTQ4LnBuZw==",
+     "YnVsay9iMi9mMDQ0LnBuZw==",
+     "YnVsay9iMi9mMTAwLnBuZw==",
+     "YnVsay9iMy9mMDUyLnBuZw==",
+     "YnVsay9iMy9mMTA4LnBuZw==",
+     "YnVsay9iNC9mMDA0LnBuZw==",
+     "YnVsay9iNC9mMDYwLnBuZw==",
+     "YnVsay9iNC9mMTE2LnBuZw==",
+     "YnVsay9iNS9mMDEyLnBuZw==",
+     "YnVsay9iNS9mMDY4LnBuZw==",
+     "YnVsay9iNS9mMTI0LnBuZw==",
+     "YnVsay9iNi9mMDIwLnBuZw==",
+     "YnVsay9iNi9mMDc2LnBuZw==",
+     "YnVsay9iNi9mMTMyLnBuZw==",
+     "cy5wbmc="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g13",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "image/svg+xml"
+    ],
+    "files": [
+     "p.svg"
+    ],
+    "text": [
+     "cC5zdmc="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g14",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "image/tiff"
+    ],
+    "files": [
+     "bulk/b0/f021.tif",
+     "bulk/b0/f077.tif",
+     "bulk/b0/f133.tif",
+     "bulk/b1/f029.tif",
+     "bulk/b1/f085.tif",
+     "bulk/b1/f141.tif",
+     "bulk/b2/f037.tif",
+     "bulk/b2/f093.tif",
+     "bulk/b2/f149.tif",
+     "bulk/b3/f045.tif",
+     "bulk/b3/f101.tif",
+     "bulk/b4/f053.tif",
+     "bulk/b4/f109.tif",
+     "bulk/b5/f005.tif",
+     "bulk/b5/f061.tif",
+     "bulk/b5/f117.tif",
+     "bulk/b6/f013.tif",
+     "bulk/b6/f069.tif",
+     "bulk/b6/f125.tif",
+     "score_1.tif",
+     "score_1_3857.tif",
+     "score_2.Tiff"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDIxLnRpZg==",
+     "YnVsay9iMC9mMDc3LnRpZg==",
+     "YnVsay9iMC9mMTMzLnRpZg==",
+     "YnVsay9iMS9mMDI5LnRpZg==",
+     "YnVsay9iMS9mMDg1LnRpZg==",
+     "YnVsay9iMS9mMTQxLnRpZg==",
+     "YnVsay9iMi9mMDM3LnRpZg==",
+     "YnVsay9iMi9mMDkzLnRpZg==",
+     "YnVsay9iMi9mMTQ5LnRpZg==",
+     "YnVsay9iMy9mMDQ1LnRpZg==",
+     "YnVsay9iMy9mMTAxLnRpZg==",
+     "YnVsay9iNC9mMDUzLnRpZg==",
+     "YnVsay9iNC9mMTA5LnRpZg==",
+     "YnVsay9iNS9mMDA1LnRpZg==",
+     "YnVsay9iNS9mMDYxLnRpZg==",
+     "YnVsay9iNS9mMTE3LnRpZg==",
+     "YnVsay9iNi9mMDEzLnRpZg==",
+     "YnVsay9iNi9mMDY5LnRpZg==",
+     "YnVsay9iNi9mMTI1LnRpZg==",
+     "c2NvcmVfMS50aWY=",
+     "c2NvcmVfMV8zODU3LnRpZg==",
+     "c2NvcmVfMi5UaWZm"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g15",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "text/csv; charset=utf-8"
+    ],
+    "files": [
+     "bulk/b0/f014.csv",
+     "bulk/b0/f070.csv",
+     "bulk/b0/f126.csv",
+     "bulk/b1/f022.csv",
+     "bulk/b1/f078.csv",
+     "bulk/b1/f134.csv",
+     "bulk/b2/f030.csv",
+     "bulk/b2/f086.csv",
+     "bulk/b2/f142.csv",
+     "bulk/b3/f038.csv",
+     "bulk/b3/f094.csv",
+     "bulk/b4/f046.csv",
+     "bulk/b4/f102.csv",
+     "bulk/b5/f054.csv",
+     "bulk/b5/f110.csv",
+     "bulk/b6/f006.csv",
+     "bulk/b6/f062.csv",
+     "bulk/b6/f118.csv",
+     "u.csv"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDE0LmNzdg==",
+     "YnVsay9iMC9mMDcwLmNzdg==",
+     "YnVsay9iMC9mMTI2LmNzdg==",
+     "YnVsay9iMS9mMDIyLmNzdg==",
+     "YnVsay9iMS9mMDc4LmNzdg==",
+     "YnVsay9iMS9mMTM0LmNzdg==",
+     "YnVsay9iMi9mMDMwLmNzdg==",
+     "YnVsay9iMi9mMDg2LmNzdg==",
+     "YnVsay9iMi9mMTQyLmNzdg==",
+     "YnVsay9iMy9mMDM4LmNzdg==",
+     "YnVsay9iMy9mMDk0LmNzdg==",
+     "YnVsay9iNC9mMDQ2LmNzdg==",
+     "YnVsay9iNC9mMTAyLmNzdg==",
+     "YnVsay9iNS9mMDU0LmNzdg==",
+     "YnVsay9iNS9mMTEwLmNzdg==",
+     "YnVsay9iNi9mMDA2LmNzdg==",
+     "YnVsay9iNi9mMDYyLmNzdg==",
+     "YnVsay9iNi9mMTE4LmNzdg==",
+     "dS5jc3Y="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g16",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "text/html; charset=utf-8"
+    ],
+    "files": [
+     "bulk/b0/f042.html",
+     "bulk/b0/f098.html",
+     "bulk/b1/f050.html",
+     "bulk/b1/f106.html",
+     "bulk/b2/f002.html",
+     "bulk/b2/f058.html",
+     "bulk/b2/f114.html",
+     "bulk/b3/f010.html",
+     "bulk/b3/f066.html",
+     "bulk/b3/f122.html",
+     "bulk/b4/f018.html",
+     "bulk/b4/f074.html",
+     "bulk/b4/f130.html",
+     "bulk/b5/f026.html",
+     "bulk/b5/f082.html",
+     "bulk/b5/f138.html",
+     "bulk/b6/f034.html",
+     "bulk/b6/f090.html",
+     "bulk/b6/f146.html",
+     "index.html"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDQyLmh0bWw=",
+     "YnVsay9iMC9mMDk4Lmh0bWw=",
+     "YnVsay9iMS9mMDUwLmh0bWw=",
+     "YnVsay9iMS9mMTA2Lmh0bWw=",
+     "YnVsay9iMi9mMDAyLmh0bWw=",
+     "YnVsay9iMi9mMDU4Lmh0bWw=",
+     "YnVsay9iMi9mMTE0Lmh0bWw=",
+     "YnVsay9iMy9mMDEwLmh0bWw=",
+     "YnVsay9iMy9mMDY2Lmh0bWw=",
+     "YnVsay9iMy9mMTIyLmh0bWw=",
+     "YnVsay9iNC9mMDE4Lmh0bWw=",
+     "YnVsay9iNC9mMDc0Lmh0bWw=",
+     "YnVsay9iNC9mMTMwLmh0bWw=",
+     "YnVsay9iNS9mMDI2Lmh0bWw=",
+     "YnVsay9iNS9mMDgyLmh0bWw=",
+     "YnVsay9iNS9mMTM4Lmh0bWw=",
+     "YnVsay9iNi9mMDM0Lmh0bWw=",
+     "YnVsay9iNi9mMDkwLmh0bWw=",
+     "YnVsay9iNi9mMTQ2Lmh0bWw=",
+     "aW5kZXguaHRtbA=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g17",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "text/markdown; charset=utf-8"
+    ],
+    "files": [
+     "README.MD",
+     "w.md"
+    ],
+    "text": [
+     "UkVBRE1FLk1E",
+     "dy5tZA=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g18",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "text/plain; charset=utf-8"
+    ],
+    "files": [
+     "v.txt"
+    ],
+    "text": [
+     "di50eHQ="
+    ]
+   }
+  ]
+ },
+ {
+  "name": "the indicators chain: --last, --type, --cache-control",
+  "code": 0,
+  "out": "om-publish: 185 files from <SRC> -> indicators/ on r2 s3\nr2  (guessed)  5 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/atom+xml; charset=utf-8  20 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/geo+json  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/gzip  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/json  24 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/vnd.apache.parquet  20 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/vnd.pmtiles  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/x-bin  18 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/x-netcdf  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/zip  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  image/jpeg  2 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  image/png  20 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  image/svg+xml  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  image/tiff  22 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  text/csv; charset=utf-8  19 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  text/html; charset=utf-8  20 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  text/markdown; charset=utf-8  2 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  text/plain; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/vnd.apache.parquet  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/json  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/atom+xml; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/json  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/json  1 files -> r2:oceanmetrics-io-public-enam/indicators/\nr2  application/json  1 files -> r2:oceanmetrics-io-public-enam/indicators/\ns3  (guessed)  5 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/atom+xml; charset=utf-8  20 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/geo+json  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/gzip  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/json  24 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/vnd.apache.parquet  20 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/vnd.pmtiles  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/x-bin  18 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/x-netcdf  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/zip  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  image/jpeg  2 files -> s3://oceanmetrics.io-public/indicators/\ns3  image/png  20 files -> s3://oceanmetrics.io-public/indicators/\ns3  image/svg+xml  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  image/tiff  22 files -> s3://oceanmetrics.io-public/indicators/\ns3  text/csv; charset=utf-8  19 files -> s3://oceanmetrics.io-public/indicators/\ns3  text/html; charset=utf-8  20 files -> s3://oceanmetrics.io-public/indicators/\ns3  text/markdown; charset=utf-8  2 files -> s3://oceanmetrics.io-public/indicators/\ns3  text/plain; charset=utf-8  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/vnd.apache.parquet  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/json  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/atom+xml; charset=utf-8  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/json  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/json  1 files -> s3://oceanmetrics.io-public/indicators/\ns3  application/json  1 files -> s3://oceanmetrics.io-public/indicators/\n",
+  "err": "",
+  "calls": [
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g1",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     ".hidden",
+     "LICENSE",
+     "noext/y",
+     "v1.2/data",
+     "x.unknownext"
+    ],
+    "text": [
+     "LmhpZGRlbg==",
+     "TElDRU5TRQ==",
+     "bm9leHQveQ==",
+     "djEuMi9kYXRh",
+     "eC51bmtub3duZXh0"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g2",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/atom+xml; charset=utf-8",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f035.xml",
+     "bulk/b0/f091.xml",
+     "bulk/b0/f147.xml",
+     "bulk/b1/f043.xml",
+     "bulk/b1/f099.xml",
+     "bulk/b2/f051.xml",
+     "bulk/b2/f107.xml",
+     "bulk/b3/f003.xml",
+     "bulk/b3/f059.xml",
+     "bulk/b3/f115.xml",
+     "bulk/b4/f011.xml",
+     "bulk/b4/f067.xml",
+     "bulk/b4/f123.xml",
+     "bulk/b5/f019.xml",
+     "bulk/b5/f075.xml",
+     "bulk/b5/f131.xml",
+     "bulk/b6/f027.xml",
+     "bulk/b6/f083.xml",
+     "bulk/b6/f139.xml",
+     "feeds/b.atom"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDM1LnhtbA==",
+     "YnVsay9iMC9mMDkxLnhtbA==",
+     "YnVsay9iMC9mMTQ3LnhtbA==",
+     "YnVsay9iMS9mMDQzLnhtbA==",
+     "YnVsay9iMS9mMDk5LnhtbA==",
+     "YnVsay9iMi9mMDUxLnhtbA==",
+     "YnVsay9iMi9mMTA3LnhtbA==",
+     "YnVsay9iMy9mMDAzLnhtbA==",
+     "YnVsay9iMy9mMDU5LnhtbA==",
+     "YnVsay9iMy9mMTE1LnhtbA==",
+     "YnVsay9iNC9mMDExLnhtbA==",
+     "YnVsay9iNC9mMDY3LnhtbA==",
+     "YnVsay9iNC9mMTIzLnhtbA==",
+     "YnVsay9iNS9mMDE5LnhtbA==",
+     "YnVsay9iNS9mMDc1LnhtbA==",
+     "YnVsay9iNS9mMTMxLnhtbA==",
+     "YnVsay9iNi9mMDI3LnhtbA==",
+     "YnVsay9iNi9mMDgzLnhtbA==",
+     "YnVsay9iNi9mMTM5LnhtbA==",
+     "ZmVlZHMvYi5hdG9t"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g3",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/geo+json",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "g/h/i/j/k.geojson"
+    ],
+    "text": [
+     "Zy9oL2kvai9rLmdlb2pzb24="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g4",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/gzip",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "n.gz"
+    ],
+    "text": [
+     "bi5neg=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g5",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/json",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "a b/c d.json",
+     "bulk/b0/f000.json",
+     "bulk/b0/f056.json",
+     "bulk/b0/f112.json",
+     "bulk/b1/f008.json",
+     "bulk/b1/f064.json",
+     "bulk/b1/f120.json",
+     "bulk/b2/f016.json",
+     "bulk/b2/f072.json",
+     "bulk/b2/f128.json",
+     "bulk/b3/f024.json",
+     "bulk/b3/f080.json",
+     "bulk/b3/f136.json",
+     "bulk/b4/f032.json",
+     "bulk/b4/f088.json",
+     "bulk/b4/f144.json",
+     "bulk/b5/f040.json",
+     "bulk/b5/f096.json",
+     "bulk/b6/f048.json",
+     "bulk/b6/f104.json",
+     "dir.with.dots/z.json",
+     "items/a.json",
+     "items/b.json",
+     "v1.2/data.JSON"
+    ],
+    "text": [
+     "YSBiL2MgZC5qc29u",
+     "YnVsay9iMC9mMDAwLmpzb24=",
+     "YnVsay9iMC9mMDU2Lmpzb24=",
+     "YnVsay9iMC9mMTEyLmpzb24=",
+     "YnVsay9iMS9mMDA4Lmpzb24=",
+     "YnVsay9iMS9mMDY0Lmpzb24=",
+     "YnVsay9iMS9mMTIwLmpzb24=",
+     "YnVsay9iMi9mMDE2Lmpzb24=",
+     "YnVsay9iMi9mMDcyLmpzb24=",
+     "YnVsay9iMi9mMTI4Lmpzb24=",
+     "YnVsay9iMy9mMDI0Lmpzb24=",
+     "YnVsay9iMy9mMDgwLmpzb24=",
+     "YnVsay9iMy9mMTM2Lmpzb24=",
+     "YnVsay9iNC9mMDMyLmpzb24=",
+     "YnVsay9iNC9mMDg4Lmpzb24=",
+     "YnVsay9iNC9mMTQ0Lmpzb24=",
+     "YnVsay9iNS9mMDQwLmpzb24=",
+     "YnVsay9iNS9mMDk2Lmpzb24=",
+     "YnVsay9iNi9mMDQ4Lmpzb24=",
+     "YnVsay9iNi9mMTA0Lmpzb24=",
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "aXRlbXMvYS5qc29u",
+     "aXRlbXMvYi5qc29u",
+     "djEuMi9kYXRhLkpTT04="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g6",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/vnd.apache.parquet",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "a b/e.PARQUET",
+     "bulk/b0/f049.parquet",
+     "bulk/b0/f105.parquet",
+     "bulk/b1/f001.parquet",
+     "bulk/b1/f057.parquet",
+     "bulk/b1/f113.parquet",
+     "bulk/b2/f009.parquet",
+     "bulk/b2/f065.parquet",
+     "bulk/b2/f121.parquet",
+     "bulk/b3/f017.parquet",
+     "bulk/b3/f073.parquet",
+     "bulk/b3/f129.parquet",
+     "bulk/b4/f025.parquet",
+     "bulk/b4/f081.parquet",
+     "bulk/b4/f137.parquet",
+     "bulk/b5/f033.parquet",
+     "bulk/b5/f089.parquet",
+     "bulk/b5/f145.parquet",
+     "bulk/b6/f041.parquet",
+     "bulk/b6/f097.parquet"
+    ],
+    "text": [
+     "YSBiL2UuUEFSUVVFVA==",
+     "YnVsay9iMC9mMDQ5LnBhcnF1ZXQ=",
+     "YnVsay9iMC9mMTA1LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDAxLnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDU3LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMTEzLnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDA5LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDY1LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMTIxLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDE3LnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDczLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMTI5LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDI1LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDgxLnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMTM3LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDMzLnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDg5LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMTQ1LnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDQxLnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDk3LnBhcnF1ZXQ="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g7",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/vnd.pmtiles",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "t.pmtiles"
+    ],
+    "text": [
+     "dC5wbXRpbGVz"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g8",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/x-bin",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f007.bin",
+     "bulk/b0/f063.bin",
+     "bulk/b0/f119.bin",
+     "bulk/b1/f015.bin",
+     "bulk/b1/f071.bin",
+     "bulk/b1/f127.bin",
+     "bulk/b2/f023.bin",
+     "bulk/b2/f079.bin",
+     "bulk/b2/f135.bin",
+     "bulk/b3/f031.bin",
+     "bulk/b3/f087.bin",
+     "bulk/b3/f143.bin",
+     "bulk/b4/f039.bin",
+     "bulk/b4/f095.bin",
+     "bulk/b5/f047.bin",
+     "bulk/b5/f103.bin",
+     "bulk/b6/f055.bin",
+     "bulk/b6/f111.bin"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDA3LmJpbg==",
+     "YnVsay9iMC9mMDYzLmJpbg==",
+     "YnVsay9iMC9mMTE5LmJpbg==",
+     "YnVsay9iMS9mMDE1LmJpbg==",
+     "YnVsay9iMS9mMDcxLmJpbg==",
+     "YnVsay9iMS9mMTI3LmJpbg==",
+     "YnVsay9iMi9mMDIzLmJpbg==",
+     "YnVsay9iMi9mMDc5LmJpbg==",
+     "YnVsay9iMi9mMTM1LmJpbg==",
+     "YnVsay9iMy9mMDMxLmJpbg==",
+     "YnVsay9iMy9mMDg3LmJpbg==",
+     "YnVsay9iMy9mMTQzLmJpbg==",
+     "YnVsay9iNC9mMDM5LmJpbg==",
+     "YnVsay9iNC9mMDk1LmJpbg==",
+     "YnVsay9iNS9mMDQ3LmJpbg==",
+     "YnVsay9iNS9mMTAzLmJpbg==",
+     "YnVsay9iNi9mMDU1LmJpbg==",
+     "YnVsay9iNi9mMTExLmJpbg=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g9",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/x-netcdf",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "m.nc"
+    ],
+    "text": [
+     "bS5uYw=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g10",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/zip",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "o.zip"
+    ],
+    "text": [
+     "by56aXA="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g11",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/jpeg",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "q.jpg",
+     "r.jpeg"
+    ],
+    "text": [
+     "cS5qcGc=",
+     "ci5qcGVn"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g12",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/png",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f028.png",
+     "bulk/b0/f084.png",
+     "bulk/b0/f140.png",
+     "bulk/b1/f036.png",
+     "bulk/b1/f092.png",
+     "bulk/b1/f148.png",
+     "bulk/b2/f044.png",
+     "bulk/b2/f100.png",
+     "bulk/b3/f052.png",
+     "bulk/b3/f108.png",
+     "bulk/b4/f004.png",
+     "bulk/b4/f060.png",
+     "bulk/b4/f116.png",
+     "bulk/b5/f012.png",
+     "bulk/b5/f068.png",
+     "bulk/b5/f124.png",
+     "bulk/b6/f020.png",
+     "bulk/b6/f076.png",
+     "bulk/b6/f132.png",
+     "s.png"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDI4LnBuZw==",
+     "YnVsay9iMC9mMDg0LnBuZw==",
+     "YnVsay9iMC9mMTQwLnBuZw==",
+     "YnVsay9iMS9mMDM2LnBuZw==",
+     "YnVsay9iMS9mMDkyLnBuZw==",
+     "YnVsay9iMS9mMTQ4LnBuZw==",
+     "YnVsay9iMi9mMDQ0LnBuZw==",
+     "YnVsay9iMi9mMTAwLnBuZw==",
+     "YnVsay9iMy9mMDUyLnBuZw==",
+     "YnVsay9iMy9mMTA4LnBuZw==",
+     "YnVsay9iNC9mMDA0LnBuZw==",
+     "YnVsay9iNC9mMDYwLnBuZw==",
+     "YnVsay9iNC9mMTE2LnBuZw==",
+     "YnVsay9iNS9mMDEyLnBuZw==",
+     "YnVsay9iNS9mMDY4LnBuZw==",
+     "YnVsay9iNS9mMTI0LnBuZw==",
+     "YnVsay9iNi9mMDIwLnBuZw==",
+     "YnVsay9iNi9mMDc2LnBuZw==",
+     "YnVsay9iNi9mMTMyLnBuZw==",
+     "cy5wbmc="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g13",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/svg+xml",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "p.svg"
+    ],
+    "text": [
+     "cC5zdmc="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g14",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/tiff",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f021.tif",
+     "bulk/b0/f077.tif",
+     "bulk/b0/f133.tif",
+     "bulk/b1/f029.tif",
+     "bulk/b1/f085.tif",
+     "bulk/b1/f141.tif",
+     "bulk/b2/f037.tif",
+     "bulk/b2/f093.tif",
+     "bulk/b2/f149.tif",
+     "bulk/b3/f045.tif",
+     "bulk/b3/f101.tif",
+     "bulk/b4/f053.tif",
+     "bulk/b4/f109.tif",
+     "bulk/b5/f005.tif",
+     "bulk/b5/f061.tif",
+     "bulk/b5/f117.tif",
+     "bulk/b6/f013.tif",
+     "bulk/b6/f069.tif",
+     "bulk/b6/f125.tif",
+     "score_1.tif",
+     "score_1_3857.tif",
+     "score_2.Tiff"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDIxLnRpZg==",
+     "YnVsay9iMC9mMDc3LnRpZg==",
+     "YnVsay9iMC9mMTMzLnRpZg==",
+     "YnVsay9iMS9mMDI5LnRpZg==",
+     "YnVsay9iMS9mMDg1LnRpZg==",
+     "YnVsay9iMS9mMTQxLnRpZg==",
+     "YnVsay9iMi9mMDM3LnRpZg==",
+     "YnVsay9iMi9mMDkzLnRpZg==",
+     "YnVsay9iMi9mMTQ5LnRpZg==",
+     "YnVsay9iMy9mMDQ1LnRpZg==",
+     "YnVsay9iMy9mMTAxLnRpZg==",
+     "YnVsay9iNC9mMDUzLnRpZg==",
+     "YnVsay9iNC9mMTA5LnRpZg==",
+     "YnVsay9iNS9mMDA1LnRpZg==",
+     "YnVsay9iNS9mMDYxLnRpZg==",
+     "YnVsay9iNS9mMTE3LnRpZg==",
+     "YnVsay9iNi9mMDEzLnRpZg==",
+     "YnVsay9iNi9mMDY5LnRpZg==",
+     "YnVsay9iNi9mMTI1LnRpZg==",
+     "c2NvcmVfMS50aWY=",
+     "c2NvcmVfMV8zODU3LnRpZg==",
+     "c2NvcmVfMi5UaWZm"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g15",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/csv; charset=utf-8",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f014.csv",
+     "bulk/b0/f070.csv",
+     "bulk/b0/f126.csv",
+     "bulk/b1/f022.csv",
+     "bulk/b1/f078.csv",
+     "bulk/b1/f134.csv",
+     "bulk/b2/f030.csv",
+     "bulk/b2/f086.csv",
+     "bulk/b2/f142.csv",
+     "bulk/b3/f038.csv",
+     "bulk/b3/f094.csv",
+     "bulk/b4/f046.csv",
+     "bulk/b4/f102.csv",
+     "bulk/b5/f054.csv",
+     "bulk/b5/f110.csv",
+     "bulk/b6/f006.csv",
+     "bulk/b6/f062.csv",
+     "bulk/b6/f118.csv",
+     "u.csv"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDE0LmNzdg==",
+     "YnVsay9iMC9mMDcwLmNzdg==",
+     "YnVsay9iMC9mMTI2LmNzdg==",
+     "YnVsay9iMS9mMDIyLmNzdg==",
+     "YnVsay9iMS9mMDc4LmNzdg==",
+     "YnVsay9iMS9mMTM0LmNzdg==",
+     "YnVsay9iMi9mMDMwLmNzdg==",
+     "YnVsay9iMi9mMDg2LmNzdg==",
+     "YnVsay9iMi9mMTQyLmNzdg==",
+     "YnVsay9iMy9mMDM4LmNzdg==",
+     "YnVsay9iMy9mMDk0LmNzdg==",
+     "YnVsay9iNC9mMDQ2LmNzdg==",
+     "YnVsay9iNC9mMTAyLmNzdg==",
+     "YnVsay9iNS9mMDU0LmNzdg==",
+     "YnVsay9iNS9mMTEwLmNzdg==",
+     "YnVsay9iNi9mMDA2LmNzdg==",
+     "YnVsay9iNi9mMDYyLmNzdg==",
+     "YnVsay9iNi9mMTE4LmNzdg==",
+     "dS5jc3Y="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g16",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/html; charset=utf-8",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f042.html",
+     "bulk/b0/f098.html",
+     "bulk/b1/f050.html",
+     "bulk/b1/f106.html",
+     "bulk/b2/f002.html",
+     "bulk/b2/f058.html",
+     "bulk/b2/f114.html",
+     "bulk/b3/f010.html",
+     "bulk/b3/f066.html",
+     "bulk/b3/f122.html",
+     "bulk/b4/f018.html",
+     "bulk/b4/f074.html",
+     "bulk/b4/f130.html",
+     "bulk/b5/f026.html",
+     "bulk/b5/f082.html",
+     "bulk/b5/f138.html",
+     "bulk/b6/f034.html",
+     "bulk/b6/f090.html",
+     "bulk/b6/f146.html",
+     "index.html"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDQyLmh0bWw=",
+     "YnVsay9iMC9mMDk4Lmh0bWw=",
+     "YnVsay9iMS9mMDUwLmh0bWw=",
+     "YnVsay9iMS9mMTA2Lmh0bWw=",
+     "YnVsay9iMi9mMDAyLmh0bWw=",
+     "YnVsay9iMi9mMDU4Lmh0bWw=",
+     "YnVsay9iMi9mMTE0Lmh0bWw=",
+     "YnVsay9iMy9mMDEwLmh0bWw=",
+     "YnVsay9iMy9mMDY2Lmh0bWw=",
+     "YnVsay9iMy9mMTIyLmh0bWw=",
+     "YnVsay9iNC9mMDE4Lmh0bWw=",
+     "YnVsay9iNC9mMDc0Lmh0bWw=",
+     "YnVsay9iNC9mMTMwLmh0bWw=",
+     "YnVsay9iNS9mMDI2Lmh0bWw=",
+     "YnVsay9iNS9mMDgyLmh0bWw=",
+     "YnVsay9iNS9mMTM4Lmh0bWw=",
+     "YnVsay9iNi9mMDM0Lmh0bWw=",
+     "YnVsay9iNi9mMDkwLmh0bWw=",
+     "YnVsay9iNi9mMTQ2Lmh0bWw=",
+     "aW5kZXguaHRtbA=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g17",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/markdown; charset=utf-8",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "README.MD",
+     "w.md"
+    ],
+    "text": [
+     "UkVBRE1FLk1E",
+     "dy5tZA=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g18",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: text/plain; charset=utf-8",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "v.txt"
+    ],
+    "text": [
+     "di50eHQ="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g19",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/vnd.apache.parquet",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "changes/20260102.parquet"
+    ],
+    "text": [
+     "Y2hhbmdlcy8yMDI2MDEwMi5wYXJxdWV0"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g20",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/json",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "changes/20260101.json"
+    ],
+    "text": [
+     "Y2hhbmdlcy8yMDI2MDEwMS5qc29u"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g21",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/atom+xml; charset=utf-8",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "feeds/a.xml"
+    ],
+    "text": [
+     "ZmVlZHMvYS54bWw="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g22",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/json",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "feeds/index.json"
+    ],
+    "text": [
+     "ZmVlZHMvaW5kZXguanNvbg=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g23",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/json",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "changes/latest.json"
+    ],
+    "text": [
+     "Y2hhbmdlcy9sYXRlc3QuanNvbg=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g24",
+     "r2:oceanmetrics-io-public-enam/indicators",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/json",
+     "--header-upload",
+     "Cache-Control: public, max-age=300"
+    ],
+    "files": [
+     "collection.json"
+    ],
+    "text": [
+     "Y29sbGVjdGlvbi5qc29u"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g1",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     ".hidden",
+     "LICENSE",
+     "noext/y",
+     "v1.2/data",
+     "x.unknownext"
+    ],
+    "text": [
+     "LmhpZGRlbg==",
+     "TElDRU5TRQ==",
+     "bm9leHQveQ==",
+     "djEuMi9kYXRh",
+     "eC51bmtub3duZXh0"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g2",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/atom+xml; charset=utf-8",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f035.xml",
+     "bulk/b0/f091.xml",
+     "bulk/b0/f147.xml",
+     "bulk/b1/f043.xml",
+     "bulk/b1/f099.xml",
+     "bulk/b2/f051.xml",
+     "bulk/b2/f107.xml",
+     "bulk/b3/f003.xml",
+     "bulk/b3/f059.xml",
+     "bulk/b3/f115.xml",
+     "bulk/b4/f011.xml",
+     "bulk/b4/f067.xml",
+     "bulk/b4/f123.xml",
+     "bulk/b5/f019.xml",
+     "bulk/b5/f075.xml",
+     "bulk/b5/f131.xml",
+     "bulk/b6/f027.xml",
+     "bulk/b6/f083.xml",
+     "bulk/b6/f139.xml",
+     "feeds/b.atom"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDM1LnhtbA==",
+     "YnVsay9iMC9mMDkxLnhtbA==",
+     "YnVsay9iMC9mMTQ3LnhtbA==",
+     "YnVsay9iMS9mMDQzLnhtbA==",
+     "YnVsay9iMS9mMDk5LnhtbA==",
+     "YnVsay9iMi9mMDUxLnhtbA==",
+     "YnVsay9iMi9mMTA3LnhtbA==",
+     "YnVsay9iMy9mMDAzLnhtbA==",
+     "YnVsay9iMy9mMDU5LnhtbA==",
+     "YnVsay9iMy9mMTE1LnhtbA==",
+     "YnVsay9iNC9mMDExLnhtbA==",
+     "YnVsay9iNC9mMDY3LnhtbA==",
+     "YnVsay9iNC9mMTIzLnhtbA==",
+     "YnVsay9iNS9mMDE5LnhtbA==",
+     "YnVsay9iNS9mMDc1LnhtbA==",
+     "YnVsay9iNS9mMTMxLnhtbA==",
+     "YnVsay9iNi9mMDI3LnhtbA==",
+     "YnVsay9iNi9mMDgzLnhtbA==",
+     "YnVsay9iNi9mMTM5LnhtbA==",
+     "ZmVlZHMvYi5hdG9t"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g3",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/geo+json",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "g/h/i/j/k.geojson"
+    ],
+    "text": [
+     "Zy9oL2kvai9rLmdlb2pzb24="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g4",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/gzip",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "n.gz"
+    ],
+    "text": [
+     "bi5neg=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g5",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/json",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "a b/c d.json",
+     "bulk/b0/f000.json",
+     "bulk/b0/f056.json",
+     "bulk/b0/f112.json",
+     "bulk/b1/f008.json",
+     "bulk/b1/f064.json",
+     "bulk/b1/f120.json",
+     "bulk/b2/f016.json",
+     "bulk/b2/f072.json",
+     "bulk/b2/f128.json",
+     "bulk/b3/f024.json",
+     "bulk/b3/f080.json",
+     "bulk/b3/f136.json",
+     "bulk/b4/f032.json",
+     "bulk/b4/f088.json",
+     "bulk/b4/f144.json",
+     "bulk/b5/f040.json",
+     "bulk/b5/f096.json",
+     "bulk/b6/f048.json",
+     "bulk/b6/f104.json",
+     "dir.with.dots/z.json",
+     "items/a.json",
+     "items/b.json",
+     "v1.2/data.JSON"
+    ],
+    "text": [
+     "YSBiL2MgZC5qc29u",
+     "YnVsay9iMC9mMDAwLmpzb24=",
+     "YnVsay9iMC9mMDU2Lmpzb24=",
+     "YnVsay9iMC9mMTEyLmpzb24=",
+     "YnVsay9iMS9mMDA4Lmpzb24=",
+     "YnVsay9iMS9mMDY0Lmpzb24=",
+     "YnVsay9iMS9mMTIwLmpzb24=",
+     "YnVsay9iMi9mMDE2Lmpzb24=",
+     "YnVsay9iMi9mMDcyLmpzb24=",
+     "YnVsay9iMi9mMTI4Lmpzb24=",
+     "YnVsay9iMy9mMDI0Lmpzb24=",
+     "YnVsay9iMy9mMDgwLmpzb24=",
+     "YnVsay9iMy9mMTM2Lmpzb24=",
+     "YnVsay9iNC9mMDMyLmpzb24=",
+     "YnVsay9iNC9mMDg4Lmpzb24=",
+     "YnVsay9iNC9mMTQ0Lmpzb24=",
+     "YnVsay9iNS9mMDQwLmpzb24=",
+     "YnVsay9iNS9mMDk2Lmpzb24=",
+     "YnVsay9iNi9mMDQ4Lmpzb24=",
+     "YnVsay9iNi9mMTA0Lmpzb24=",
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "aXRlbXMvYS5qc29u",
+     "aXRlbXMvYi5qc29u",
+     "djEuMi9kYXRhLkpTT04="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g6",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/vnd.apache.parquet",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "a b/e.PARQUET",
+     "bulk/b0/f049.parquet",
+     "bulk/b0/f105.parquet",
+     "bulk/b1/f001.parquet",
+     "bulk/b1/f057.parquet",
+     "bulk/b1/f113.parquet",
+     "bulk/b2/f009.parquet",
+     "bulk/b2/f065.parquet",
+     "bulk/b2/f121.parquet",
+     "bulk/b3/f017.parquet",
+     "bulk/b3/f073.parquet",
+     "bulk/b3/f129.parquet",
+     "bulk/b4/f025.parquet",
+     "bulk/b4/f081.parquet",
+     "bulk/b4/f137.parquet",
+     "bulk/b5/f033.parquet",
+     "bulk/b5/f089.parquet",
+     "bulk/b5/f145.parquet",
+     "bulk/b6/f041.parquet",
+     "bulk/b6/f097.parquet"
+    ],
+    "text": [
+     "YSBiL2UuUEFSUVVFVA==",
+     "YnVsay9iMC9mMDQ5LnBhcnF1ZXQ=",
+     "YnVsay9iMC9mMTA1LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDAxLnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMDU3LnBhcnF1ZXQ=",
+     "YnVsay9iMS9mMTEzLnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDA5LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMDY1LnBhcnF1ZXQ=",
+     "YnVsay9iMi9mMTIxLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDE3LnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMDczLnBhcnF1ZXQ=",
+     "YnVsay9iMy9mMTI5LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDI1LnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMDgxLnBhcnF1ZXQ=",
+     "YnVsay9iNC9mMTM3LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDMzLnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMDg5LnBhcnF1ZXQ=",
+     "YnVsay9iNS9mMTQ1LnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDQxLnBhcnF1ZXQ=",
+     "YnVsay9iNi9mMDk3LnBhcnF1ZXQ="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g7",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/vnd.pmtiles",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "t.pmtiles"
+    ],
+    "text": [
+     "dC5wbXRpbGVz"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g8",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/x-bin",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f007.bin",
+     "bulk/b0/f063.bin",
+     "bulk/b0/f119.bin",
+     "bulk/b1/f015.bin",
+     "bulk/b1/f071.bin",
+     "bulk/b1/f127.bin",
+     "bulk/b2/f023.bin",
+     "bulk/b2/f079.bin",
+     "bulk/b2/f135.bin",
+     "bulk/b3/f031.bin",
+     "bulk/b3/f087.bin",
+     "bulk/b3/f143.bin",
+     "bulk/b4/f039.bin",
+     "bulk/b4/f095.bin",
+     "bulk/b5/f047.bin",
+     "bulk/b5/f103.bin",
+     "bulk/b6/f055.bin",
+     "bulk/b6/f111.bin"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDA3LmJpbg==",
+     "YnVsay9iMC9mMDYzLmJpbg==",
+     "YnVsay9iMC9mMTE5LmJpbg==",
+     "YnVsay9iMS9mMDE1LmJpbg==",
+     "YnVsay9iMS9mMDcxLmJpbg==",
+     "YnVsay9iMS9mMTI3LmJpbg==",
+     "YnVsay9iMi9mMDIzLmJpbg==",
+     "YnVsay9iMi9mMDc5LmJpbg==",
+     "YnVsay9iMi9mMTM1LmJpbg==",
+     "YnVsay9iMy9mMDMxLmJpbg==",
+     "YnVsay9iMy9mMDg3LmJpbg==",
+     "YnVsay9iMy9mMTQzLmJpbg==",
+     "YnVsay9iNC9mMDM5LmJpbg==",
+     "YnVsay9iNC9mMDk1LmJpbg==",
+     "YnVsay9iNS9mMDQ3LmJpbg==",
+     "YnVsay9iNS9mMTAzLmJpbg==",
+     "YnVsay9iNi9mMDU1LmJpbg==",
+     "YnVsay9iNi9mMTExLmJpbg=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g9",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/x-netcdf",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "m.nc"
+    ],
+    "text": [
+     "bS5uYw=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g10",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/zip",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "o.zip"
+    ],
+    "text": [
+     "by56aXA="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g11",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "image/jpeg",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "q.jpg",
+     "r.jpeg"
+    ],
+    "text": [
+     "cS5qcGc=",
+     "ci5qcGVn"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g12",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "image/png",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f028.png",
+     "bulk/b0/f084.png",
+     "bulk/b0/f140.png",
+     "bulk/b1/f036.png",
+     "bulk/b1/f092.png",
+     "bulk/b1/f148.png",
+     "bulk/b2/f044.png",
+     "bulk/b2/f100.png",
+     "bulk/b3/f052.png",
+     "bulk/b3/f108.png",
+     "bulk/b4/f004.png",
+     "bulk/b4/f060.png",
+     "bulk/b4/f116.png",
+     "bulk/b5/f012.png",
+     "bulk/b5/f068.png",
+     "bulk/b5/f124.png",
+     "bulk/b6/f020.png",
+     "bulk/b6/f076.png",
+     "bulk/b6/f132.png",
+     "s.png"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDI4LnBuZw==",
+     "YnVsay9iMC9mMDg0LnBuZw==",
+     "YnVsay9iMC9mMTQwLnBuZw==",
+     "YnVsay9iMS9mMDM2LnBuZw==",
+     "YnVsay9iMS9mMDkyLnBuZw==",
+     "YnVsay9iMS9mMTQ4LnBuZw==",
+     "YnVsay9iMi9mMDQ0LnBuZw==",
+     "YnVsay9iMi9mMTAwLnBuZw==",
+     "YnVsay9iMy9mMDUyLnBuZw==",
+     "YnVsay9iMy9mMTA4LnBuZw==",
+     "YnVsay9iNC9mMDA0LnBuZw==",
+     "YnVsay9iNC9mMDYwLnBuZw==",
+     "YnVsay9iNC9mMTE2LnBuZw==",
+     "YnVsay9iNS9mMDEyLnBuZw==",
+     "YnVsay9iNS9mMDY4LnBuZw==",
+     "YnVsay9iNS9mMTI0LnBuZw==",
+     "YnVsay9iNi9mMDIwLnBuZw==",
+     "YnVsay9iNi9mMDc2LnBuZw==",
+     "YnVsay9iNi9mMTMyLnBuZw==",
+     "cy5wbmc="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g13",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "image/svg+xml",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "p.svg"
+    ],
+    "text": [
+     "cC5zdmc="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g14",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "image/tiff",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f021.tif",
+     "bulk/b0/f077.tif",
+     "bulk/b0/f133.tif",
+     "bulk/b1/f029.tif",
+     "bulk/b1/f085.tif",
+     "bulk/b1/f141.tif",
+     "bulk/b2/f037.tif",
+     "bulk/b2/f093.tif",
+     "bulk/b2/f149.tif",
+     "bulk/b3/f045.tif",
+     "bulk/b3/f101.tif",
+     "bulk/b4/f053.tif",
+     "bulk/b4/f109.tif",
+     "bulk/b5/f005.tif",
+     "bulk/b5/f061.tif",
+     "bulk/b5/f117.tif",
+     "bulk/b6/f013.tif",
+     "bulk/b6/f069.tif",
+     "bulk/b6/f125.tif",
+     "score_1.tif",
+     "score_1_3857.tif",
+     "score_2.Tiff"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDIxLnRpZg==",
+     "YnVsay9iMC9mMDc3LnRpZg==",
+     "YnVsay9iMC9mMTMzLnRpZg==",
+     "YnVsay9iMS9mMDI5LnRpZg==",
+     "YnVsay9iMS9mMDg1LnRpZg==",
+     "YnVsay9iMS9mMTQxLnRpZg==",
+     "YnVsay9iMi9mMDM3LnRpZg==",
+     "YnVsay9iMi9mMDkzLnRpZg==",
+     "YnVsay9iMi9mMTQ5LnRpZg==",
+     "YnVsay9iMy9mMDQ1LnRpZg==",
+     "YnVsay9iMy9mMTAxLnRpZg==",
+     "YnVsay9iNC9mMDUzLnRpZg==",
+     "YnVsay9iNC9mMTA5LnRpZg==",
+     "YnVsay9iNS9mMDA1LnRpZg==",
+     "YnVsay9iNS9mMDYxLnRpZg==",
+     "YnVsay9iNS9mMTE3LnRpZg==",
+     "YnVsay9iNi9mMDEzLnRpZg==",
+     "YnVsay9iNi9mMDY5LnRpZg==",
+     "YnVsay9iNi9mMTI1LnRpZg==",
+     "c2NvcmVfMS50aWY=",
+     "c2NvcmVfMV8zODU3LnRpZg==",
+     "c2NvcmVfMi5UaWZm"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g15",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "text/csv; charset=utf-8",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f014.csv",
+     "bulk/b0/f070.csv",
+     "bulk/b0/f126.csv",
+     "bulk/b1/f022.csv",
+     "bulk/b1/f078.csv",
+     "bulk/b1/f134.csv",
+     "bulk/b2/f030.csv",
+     "bulk/b2/f086.csv",
+     "bulk/b2/f142.csv",
+     "bulk/b3/f038.csv",
+     "bulk/b3/f094.csv",
+     "bulk/b4/f046.csv",
+     "bulk/b4/f102.csv",
+     "bulk/b5/f054.csv",
+     "bulk/b5/f110.csv",
+     "bulk/b6/f006.csv",
+     "bulk/b6/f062.csv",
+     "bulk/b6/f118.csv",
+     "u.csv"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDE0LmNzdg==",
+     "YnVsay9iMC9mMDcwLmNzdg==",
+     "YnVsay9iMC9mMTI2LmNzdg==",
+     "YnVsay9iMS9mMDIyLmNzdg==",
+     "YnVsay9iMS9mMDc4LmNzdg==",
+     "YnVsay9iMS9mMTM0LmNzdg==",
+     "YnVsay9iMi9mMDMwLmNzdg==",
+     "YnVsay9iMi9mMDg2LmNzdg==",
+     "YnVsay9iMi9mMTQyLmNzdg==",
+     "YnVsay9iMy9mMDM4LmNzdg==",
+     "YnVsay9iMy9mMDk0LmNzdg==",
+     "YnVsay9iNC9mMDQ2LmNzdg==",
+     "YnVsay9iNC9mMTAyLmNzdg==",
+     "YnVsay9iNS9mMDU0LmNzdg==",
+     "YnVsay9iNS9mMTEwLmNzdg==",
+     "YnVsay9iNi9mMDA2LmNzdg==",
+     "YnVsay9iNi9mMDYyLmNzdg==",
+     "YnVsay9iNi9mMTE4LmNzdg==",
+     "dS5jc3Y="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g16",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "text/html; charset=utf-8",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "bulk/b0/f042.html",
+     "bulk/b0/f098.html",
+     "bulk/b1/f050.html",
+     "bulk/b1/f106.html",
+     "bulk/b2/f002.html",
+     "bulk/b2/f058.html",
+     "bulk/b2/f114.html",
+     "bulk/b3/f010.html",
+     "bulk/b3/f066.html",
+     "bulk/b3/f122.html",
+     "bulk/b4/f018.html",
+     "bulk/b4/f074.html",
+     "bulk/b4/f130.html",
+     "bulk/b5/f026.html",
+     "bulk/b5/f082.html",
+     "bulk/b5/f138.html",
+     "bulk/b6/f034.html",
+     "bulk/b6/f090.html",
+     "bulk/b6/f146.html",
+     "index.html"
+    ],
+    "text": [
+     "YnVsay9iMC9mMDQyLmh0bWw=",
+     "YnVsay9iMC9mMDk4Lmh0bWw=",
+     "YnVsay9iMS9mMDUwLmh0bWw=",
+     "YnVsay9iMS9mMTA2Lmh0bWw=",
+     "YnVsay9iMi9mMDAyLmh0bWw=",
+     "YnVsay9iMi9mMDU4Lmh0bWw=",
+     "YnVsay9iMi9mMTE0Lmh0bWw=",
+     "YnVsay9iMy9mMDEwLmh0bWw=",
+     "YnVsay9iMy9mMDY2Lmh0bWw=",
+     "YnVsay9iMy9mMTIyLmh0bWw=",
+     "YnVsay9iNC9mMDE4Lmh0bWw=",
+     "YnVsay9iNC9mMDc0Lmh0bWw=",
+     "YnVsay9iNC9mMTMwLmh0bWw=",
+     "YnVsay9iNS9mMDI2Lmh0bWw=",
+     "YnVsay9iNS9mMDgyLmh0bWw=",
+     "YnVsay9iNS9mMTM4Lmh0bWw=",
+     "YnVsay9iNi9mMDM0Lmh0bWw=",
+     "YnVsay9iNi9mMDkwLmh0bWw=",
+     "YnVsay9iNi9mMTQ2Lmh0bWw=",
+     "aW5kZXguaHRtbA=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g17",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "text/markdown; charset=utf-8",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "README.MD",
+     "w.md"
+    ],
+    "text": [
+     "UkVBRE1FLk1E",
+     "dy5tZA=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g18",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "text/plain; charset=utf-8",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "v.txt"
+    ],
+    "text": [
+     "di50eHQ="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g19",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/vnd.apache.parquet",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "changes/20260102.parquet"
+    ],
+    "text": [
+     "Y2hhbmdlcy8yMDI2MDEwMi5wYXJxdWV0"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g20",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/json",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "changes/20260101.json"
+    ],
+    "text": [
+     "Y2hhbmdlcy8yMDI2MDEwMS5qc29u"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g21",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/atom+xml; charset=utf-8",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "feeds/a.xml"
+    ],
+    "text": [
+     "ZmVlZHMvYS54bWw="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g22",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/json",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "feeds/index.json"
+    ],
+    "text": [
+     "ZmVlZHMvaW5kZXguanNvbg=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g23",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/json",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "changes/latest.json"
+    ],
+    "text": [
+     "Y2hhbmdlcy9sYXRlc3QuanNvbg=="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g24",
+     "s3://oceanmetrics.io-public/indicators",
+     "--no-progress",
+     "--content-type",
+     "application/json",
+     "--cache-control",
+     "public, max-age=300"
+    ],
+    "files": [
+     "collection.json"
+    ],
+    "text": [
+     "Y29sbGVjdGlvbi5qc29u"
+    ]
+   }
+  ]
+ },
+ {
+  "name": "include and exclude",
+  "code": 0,
+  "out": "om-publish: 8 files from <SRC> -> gazetteer/x/ on r2 s3 (dry run; --really to upload)\nr2  application/json  7 files -> r2:oceanmetrics-io-public-enam/gazetteer/x/  (dry run)\nr2  image/png  1 files -> r2:oceanmetrics-io-public-enam/gazetteer/x/  (dry run)\ns3  application/json  7 files -> s3://oceanmetrics.io-public/gazetteer/x/  (dry run)\ns3  image/png  1 files -> s3://oceanmetrics.io-public/gazetteer/x/  (dry run)\n",
+  "err": "",
+  "calls": [
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g1",
+     "r2:oceanmetrics-io-public-enam/gazetteer/x",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/json",
+     "--dry-run"
+    ],
+    "files": [
+     "changes/20260101.json",
+     "changes/latest.json",
+     "collection.json",
+     "dir.with.dots/z.json",
+     "feeds/index.json",
+     "items/a.json",
+     "items/b.json"
+    ],
+    "text": [
+     "Y2hhbmdlcy8yMDI2MDEwMS5qc29u",
+     "Y2hhbmdlcy9sYXRlc3QuanNvbg==",
+     "Y29sbGVjdGlvbi5qc29u",
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "ZmVlZHMvaW5kZXguanNvbg==",
+     "aXRlbXMvYS5qc29u",
+     "aXRlbXMvYi5qc29u"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g2",
+     "r2:oceanmetrics-io-public-enam/gazetteer/x",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: image/png",
+     "--dry-run"
+    ],
+    "files": [
+     "s.png"
+    ],
+    "text": [
+     "cy5wbmc="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g1",
+     "s3://oceanmetrics.io-public/gazetteer/x",
+     "--no-progress",
+     "--content-type",
+     "application/json",
+     "--dryrun"
+    ],
+    "files": [
+     "changes/20260101.json",
+     "changes/latest.json",
+     "collection.json",
+     "dir.with.dots/z.json",
+     "feeds/index.json",
+     "items/a.json",
+     "items/b.json"
+    ],
+    "text": [
+     "Y2hhbmdlcy8yMDI2MDEwMS5qc29u",
+     "Y2hhbmdlcy9sYXRlc3QuanNvbg==",
+     "Y29sbGVjdGlvbi5qc29u",
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "ZmVlZHMvaW5kZXguanNvbg==",
+     "aXRlbXMvYS5qc29u",
+     "aXRlbXMvYi5qc29u"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g2",
+     "s3://oceanmetrics.io-public/gazetteer/x",
+     "--no-progress",
+     "--content-type",
+     "image/png",
+     "--dryrun"
+    ],
+    "files": [
+     "s.png"
+    ],
+    "text": [
+     "cy5wbmc="
+    ]
+   }
+  ]
+ },
+ {
+  "name": "one file with --as",
+  "code": 0,
+  "out": "om-publish: 1 files from <SRC>/collection.json -> atlas/ on r2 s3 (dry run; --really to upload)\nr2  application/json  1 files -> r2:oceanmetrics-io-public-enam/atlas/  (dry run)\ns3  application/json  1 files -> s3://oceanmetrics.io-public/atlas/  (dry run)\n",
+  "err": "",
+  "calls": [
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g1",
+     "r2:oceanmetrics-io-public-enam/atlas",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--checksum",
+     "--header-upload",
+     "Content-Type: application/json",
+     "--header-upload",
+     "Cache-Control: no-cache",
+     "--dry-run"
+    ],
+    "files": [
+     "catalog.json"
+    ],
+    "text": [
+     "Y29sbGVjdGlvbi5qc29u"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g1",
+     "s3://oceanmetrics.io-public/atlas",
+     "--no-progress",
+     "--content-type",
+     "application/json",
+     "--cache-control",
+     "no-cache",
+     "--dryrun"
+    ],
+    "files": [
+     "catalog.json"
+    ],
+    "text": [
+     "Y29sbGVjdGlvbi5qc29u"
+    ]
+   }
+  ]
+ },
+ {
+  "name": "r2 only, size-only, gzip",
+  "code": 0,
+  "out": "om-publish: 35 files from <SRC> -> atlas/aquamaps_native/ on r2 (dry run; --really to upload)\nr2  (guessed)  5 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  application/atom+xml; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  application/geo+json  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  application/gzip  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  application/json  9 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  application/vnd.apache.parquet  2 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  application/vnd.pmtiles  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  application/x-netcdf  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  application/xml  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  application/zip  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  image/jpeg  2 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  image/png  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  image/svg+xml  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  image/tiff  3 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  text/csv; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  text/html; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  text/markdown; charset=utf-8  2 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\nr2  text/plain; charset=utf-8  1 files -> r2:oceanmetrics-io-public-enam/atlas/aquamaps_native/  (dry run)\n",
+  "err": "",
+  "calls": [
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g1",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     ".hidden",
+     "LICENSE",
+     "noext/y",
+     "v1.2/data",
+     "x.unknownext"
+    ],
+    "text": [
+     "LmhpZGRlbg==",
+     "TElDRU5TRQ==",
+     "bm9leHQveQ==",
+     "djEuMi9kYXRh",
+     "eC51bmtub3duZXh0"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g2",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: application/atom+xml; charset=utf-8",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "feeds/b.atom"
+    ],
+    "text": [
+     "ZmVlZHMvYi5hdG9t"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g3",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: application/geo+json",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "g/h/i/j/k.geojson"
+    ],
+    "text": [
+     "Zy9oL2kvai9rLmdlb2pzb24="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g4",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: application/gzip",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "n.gz"
+    ],
+    "text": [
+     "bi5neg=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g5",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: application/json",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "a b/c d.json",
+     "changes/20260101.json",
+     "changes/latest.json",
+     "collection.json",
+     "dir.with.dots/z.json",
+     "feeds/index.json",
+     "items/a.json",
+     "items/b.json",
+     "v1.2/data.JSON"
+    ],
+    "text": [
+     "YSBiL2MgZC5qc29u",
+     "Y2hhbmdlcy8yMDI2MDEwMS5qc29u",
+     "Y2hhbmdlcy9sYXRlc3QuanNvbg==",
+     "Y29sbGVjdGlvbi5qc29u",
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "ZmVlZHMvaW5kZXguanNvbg==",
+     "aXRlbXMvYS5qc29u",
+     "aXRlbXMvYi5qc29u",
+     "djEuMi9kYXRhLkpTT04="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g6",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: application/vnd.apache.parquet",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "a b/e.PARQUET",
+     "changes/20260102.parquet"
+    ],
+    "text": [
+     "YSBiL2UuUEFSUVVFVA==",
+     "Y2hhbmdlcy8yMDI2MDEwMi5wYXJxdWV0"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g7",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: application/vnd.pmtiles",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "t.pmtiles"
+    ],
+    "text": [
+     "dC5wbXRpbGVz"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g8",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: application/x-netcdf",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "m.nc"
+    ],
+    "text": [
+     "bS5uYw=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g9",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: application/xml",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "feeds/a.xml"
+    ],
+    "text": [
+     "ZmVlZHMvYS54bWw="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g10",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: application/zip",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "o.zip"
+    ],
+    "text": [
+     "by56aXA="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g11",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: image/jpeg",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "q.jpg",
+     "r.jpeg"
+    ],
+    "text": [
+     "cS5qcGc=",
+     "ci5qcGVn"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g12",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: image/png",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "s.png"
+    ],
+    "text": [
+     "cy5wbmc="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g13",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: image/svg+xml",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "p.svg"
+    ],
+    "text": [
+     "cC5zdmc="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g14",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: image/tiff",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "score_1.tif",
+     "score_1_3857.tif",
+     "score_2.Tiff"
+    ],
+    "text": [
+     "c2NvcmVfMS50aWY=",
+     "c2NvcmVfMV8zODU3LnRpZg==",
+     "c2NvcmVfMi5UaWZm"
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g15",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: text/csv; charset=utf-8",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "u.csv"
+    ],
+    "text": [
+     "dS5jc3Y="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g16",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: text/html; charset=utf-8",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "index.html"
+    ],
+    "text": [
+     "aW5kZXguaHRtbA=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g17",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: text/markdown; charset=utf-8",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "README.MD",
+     "w.md"
+    ],
+    "text": [
+     "UkVBRE1FLk1E",
+     "dy5tZA=="
+    ]
+   },
+   {
+    "tool": "rclone",
+    "args": [
+     "copy",
+     "<TMP>/g18",
+     "r2:oceanmetrics-io-public-enam/atlas/aquamaps_native",
+     "--copy-links",
+     "--stats-one-line",
+     "--stats",
+     "0",
+     "--size-only",
+     "--header-upload",
+     "Content-Type: text/plain; charset=utf-8",
+     "--header-upload",
+     "Content-Encoding: gzip",
+     "--dry-run"
+    ],
+    "files": [
+     "v.txt"
+    ],
+    "text": [
+     "di50eHQ="
+    ]
+   }
+  ]
+ },
+ {
+  "name": "s3 only, the pmtiles and the dotted folder",
+  "code": 0,
+  "out": "om-publish: 4 files from <SRC> -> basemap/ on s3 (dry run; --really to upload)\ns3  (guessed)  1 files -> s3://oceanmetrics.io-public/basemap/  (dry run)\ns3  application/json  2 files -> s3://oceanmetrics.io-public/basemap/  (dry run)\ns3  application/vnd.pmtiles  1 files -> s3://oceanmetrics.io-public/basemap/  (dry run)\n",
+  "err": "",
+  "calls": [
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g1",
+     "s3://oceanmetrics.io-public/basemap",
+     "--no-progress",
+     "--dryrun"
+    ],
+    "files": [
+     "v1.2/data"
+    ],
+    "text": [
+     "djEuMi9kYXRh"
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g2",
+     "s3://oceanmetrics.io-public/basemap",
+     "--no-progress",
+     "--content-type",
+     "application/json",
+     "--dryrun"
+    ],
+    "files": [
+     "dir.with.dots/z.json",
+     "v1.2/data.JSON"
+    ],
+    "text": [
+     "ZGlyLndpdGguZG90cy96Lmpzb24=",
+     "djEuMi9kYXRhLkpTT04="
+    ]
+   },
+   {
+    "tool": "aws",
+    "args": [
+     "s3",
+     "sync",
+     "<TMP>/g3",
+     "s3://oceanmetrics.io-public/basemap",
+     "--no-progress",
+     "--content-type",
+     "application/vnd.pmtiles",
+     "--dryrun"
+    ],
+    "files": [
+     "t.pmtiles"
+    ],
+    "text": [
+     "dC5wbXRpbGVz"
+    ]
+   }
+  ]
+ }
+]

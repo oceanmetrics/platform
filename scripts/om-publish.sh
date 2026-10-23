@@ -56,32 +56,40 @@ die() { echo "om-publish: $*" >&2; exit 2; }
 usage() { sed -n '9,11p' "$0" | sed 's/^# \{0,3\}//' >&2; exit 2; }
 
 # ---- the content types by extension ----
+# one awk pass over the whole list (a subprocess per file made staging 13,000 files a minute; see README, "Staging speed")
 TYPES_OVERRIDE=""   # lines "ext<TAB>type", from --type
-type_for() {
-  local ext; ext="$(printf '%s' "${1##*.}" | tr '[:upper:]' '[:lower:]')"
-  [ "$ext" = "$1" ] && ext=""
-  local o; o="$(printf '%s' "$TYPES_OVERRIDE" | awk -F'\t' -v e="$ext" '$1 == e { t = $2 } END { print t }')"
-  if [ -n "$o" ]; then printf '%s' "$o"; return; fi
-  case "$ext" in
-    json) printf 'application/json' ;;
-    geojson) printf 'application/geo+json' ;;
-    parquet) printf 'application/vnd.apache.parquet' ;;
-    pmtiles) printf 'application/vnd.pmtiles' ;;
-    tif|tiff) printf 'image/tiff' ;;
-    atom) printf 'application/atom+xml; charset=utf-8' ;;
-    xml) printf 'application/xml' ;;
-    md) printf 'text/markdown; charset=utf-8' ;;
-    csv) printf 'text/csv; charset=utf-8' ;;
-    html) printf 'text/html; charset=utf-8' ;;
-    txt) printf 'text/plain; charset=utf-8' ;;
-    png) printf 'image/png' ;;
-    jpg|jpeg) printf 'image/jpeg' ;;
-    svg) printf 'image/svg+xml' ;;
-    nc) printf 'application/x-netcdf' ;;
-    zip) printf 'application/zip' ;;
-    gz) printf 'application/gzip' ;;
-    *) printf '' ;;   # the tool guesses
-  esac
+# stdin: "<source><TAB><published path>" lines; stdout: the same plus "<TAB><content type>" (empty: the tool guesses).
+# the extension is what follows the last `.` of the whole path, lower-cased; no `.` at all: none
+add_types() {
+  TYPES_OVERRIDE="$TYPES_OVERRIDE" awk -F'\t' '
+    BEGIN {
+      n = split(ENVIRON["TYPES_OVERRIDE"], L, "\n")
+      for (i = 1; i <= n; i++) if (L[i] != "") { k = index(L[i], "\t"); ov[substr(L[i], 1, k - 1)] = substr(L[i], k + 1) }
+      T["json"] = "application/json"
+      T["geojson"] = "application/geo+json"
+      T["parquet"] = "application/vnd.apache.parquet"
+      T["pmtiles"] = "application/vnd.pmtiles"
+      T["tif"] = T["tiff"] = "image/tiff"
+      T["atom"] = "application/atom+xml; charset=utf-8"
+      T["xml"] = "application/xml"
+      T["md"] = "text/markdown; charset=utf-8"
+      T["csv"] = "text/csv; charset=utf-8"
+      T["html"] = "text/html; charset=utf-8"
+      T["txt"] = "text/plain; charset=utf-8"
+      T["png"] = "image/png"
+      T["jpg"] = T["jpeg"] = "image/jpeg"
+      T["svg"] = "image/svg+xml"
+      T["nc"] = "application/x-netcdf"
+      T["zip"] = "application/zip"
+      T["gz"] = "application/gzip"
+    }
+    {
+      ext = ""
+      if (index($2, ".") > 0) { ext = $2; sub(/^.*\./, "", ext); ext = tolower(ext) }
+      t = ""
+      if (ext in ov && ov[ext] != "") t = ov[ext]; else if (ext in T) t = T[ext]
+      print $1 "\t" $2 "\t" t
+    }'
 }
 
 # ---- options ----
@@ -177,15 +185,29 @@ upload_group() {
   fi
 }
 
-# stage <dir> <list file of relative paths> <source root>: a folder of symlinks mirroring the paths
+# stage <dir> <list file of "<source path>\t<published path>"> <source root>: a folder of symlinks mirroring the paths.
+# one perl process makes every folder and link (a mkdir, a dirname and an ln per file cost ~8 subprocesses a file)
 stage() {
   local dir="$1" list="$2" src="$3" rel
   mkdir -p "$dir"
-  while IFS= read -r rel; do
-    [ -n "$rel" ] || continue
-    mkdir -p "$dir/$(dirname "$rel")"
-    ln -s "$src/${rel%%"$TAB"*}" "$dir/${rel#*"$TAB"}"
-  done < "$list"
+  if command -v perl >/dev/null 2>&1; then
+    perl -e '
+      use strict; use File::Path qw(make_path);
+      my ($dir, $list, $src) = @ARGV; my %made;
+      open(my $fh, "<", $list) or die "stage: $list: $!\n";
+      while (my $l = <$fh>) {
+        chomp $l; next if $l eq "";
+        my ($s, $p) = split /\t/, $l, 2;
+        if ((my $d = $p) =~ s{/[^/]*$}{}) { make_path("$dir/$d") unless $made{$d}++ }
+        symlink("$src/$s", "$dir/$p") or die "stage: ln -s $src/$s $dir/$p: $!\n";
+      }' "$dir" "$list" "$src"
+  else   # no perl: the slow way
+    while IFS= read -r rel; do
+      [ -n "$rel" ] || continue
+      mkdir -p "$dir/$(dirname "${rel#*"$TAB"}")"
+      ln -s "$src/${rel%%"$TAB"*}" "$dir/${rel#*"$TAB"}"
+    done < "$list"
+  fi
 }
 
 # keep_history <prefix> <stage dir>: on R2, copy the objects the stage would overwrite with other bytes to _history/
@@ -214,7 +236,7 @@ matches_any() {   # matches_any <path> <glob>...
 
 # ---- publish <local> <prefix> ----
 publish() {
-  local src="$1" prefix files="$TMP/files" kind
+  local src="$1" prefix files="$TMP/files"
   prefix="$(clean_prefix "$2")"
   [ -e "$src" ] || die "$src does not exist"
   # the list: "<source path relative to root><TAB><published path>"
@@ -239,17 +261,17 @@ publish() {
   # the groups, in upload order: the files not matched by --last, by content type; then each --last glob, by type
   local groups="$TMP/groups" i=0 line rel pub t g
   : > "$groups"
-  : > "$TMP/rest"
-  while IFS= read -r line; do
-    pub="${line#*"$TAB"}"
+  add_types < "$files" > "$TMP/typed"
+  local lastnames=() l
+  i=0; for l in ${LASTS[@]+"${LASTS[@]}"}; do i=$((i + 1)); lastnames+=("last$(printf '%03d' "$i")"); done
+  while IFS=$'\t' read -r rel pub t; do
     g="first"
     if [ ${#LASTS[@]} -gt 0 ]; then
       i=0
-      for l in "${LASTS[@]}"; do i=$((i + 1)); if [[ "$pub" == $l ]]; then g="last$(printf '%03d' "$i")"; break; fi; done
+      for l in "${LASTS[@]}"; do if [[ "$pub" == $l ]]; then g="${lastnames[$i]}"; break; fi; i=$((i + 1)); done
     fi
-    t="$(type_for "$pub")"
-    printf '%s\t%s\t%s\n' "$g" "$t" "$line" >> "$groups"
-  done < "$files"
+    printf '%s\t%s\t%s\t%s\n' "$g" "$t" "$rel" "$pub"
+  done < "$TMP/typed" > "$groups"
   # one stage folder per (phase, type)
   local keys; keys="$(cut -f1,2 "$groups" | LC_ALL=C sort -u)"
   local n=0 dirs="$TMP/dirs"

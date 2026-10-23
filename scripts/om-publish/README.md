@@ -38,6 +38,31 @@ Environment: `OM_STORE`, `OM_S3_BUCKET`, `OM_R2_BUCKET`, `OM_RCLONE` (the wrappe
 per prefix, which deletes on R2 what S3 lacks: it would delete every `_history/` copy at its next run. Until the mirror
 becomes the nightly `rclone check` (week 6 step 1), it needs `--filter '- _history/**'`, or `--keep-history` waits.
 
+## Staging speed
+
+Before anything is copied, every file is given its content type and a symlink in the stage folder of its (phase, type)
+group. The first version did that with a subprocess or three per file: `type_for` ran `printf`, `tr`, `awk` and `printf`
+in a command substitution, and `stage` ran `dirname`, `mkdir -p` and `ln -s`. That was 6,500 files a minute on the
+mini-class laptop that measured it (13,000 a minute on the first live runs), so the 215,000-file obis-h3 release of
+2026-11-01 would have spent about 30 minutes staging before the first byte moved. Now the types come from one `awk`
+pass over the list (the extension table is the `awk` program in `add_types`, with `--type` overrides read from the
+environment), the `--last` groups are matched by bash itself (no subprocess), and one `perl` process makes every
+folder and symlink (`perl` is on macOS and every Linux runner; without it `stage` falls back to the slow loop).
+
+Measured with `--dry-run` against a no-op `rclone` and `aws` (so only the staging counts), on a synthetic tree of 50,000
+small files in 500 folders, ten extensions (ten groups of 5,000), 2026-10-23:
+
+| | wall time | files a minute | 215,000 files |
+|---|---:|---:|---:|
+| one subprocess per file (before) | 464 s (7 min 44 s) | 6,500 | 33 min |
+| one pass (after) | 6.9 s (user 2.2 s, sys 4.8 s) | 434,000 | 30 s |
+
+The output of the two is byte-identical on that tree (`cmp` of the dry-run output), and `scripts/om-publish.test.ts`
+pins the staged plan of a fixture tree (names with spaces, upper-case and missing extensions, a dotted folder,
+`.DS_Store`, `--last` chains, `--type` overrides, `--include`/`--exclude`, `--as`, history) against
+`scripts/om-publish/staging-plan.golden.json`, recorded from the per-file version. A change of the plan is a change of
+what reaches the bucket: regenerate the file only on purpose (`UPDATE_GOLDEN=1 npx vitest run scripts/om-publish.test.ts`).
+
 ## rewrite: the cutover's href rewrite
 
 ```sh
