@@ -1,0 +1,70 @@
+== 1 hyparquet (metadata + 3 columns of row group 0)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 1159.5 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601262 B, all206=true
+  s3 #1: 900.7 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601207 B, all206=true
+  worker #2: 1011.6 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601257 B, all206=true
+  s3 #2: 861.7 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601147 B, all206=true
+  worker #3: 1211 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601274 B, all206=true
+  s3 #3: 902.2 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601207 B, all206=true
+  worker #4: 987.4 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601262 B, all206=true
+  s3 #4: 843.8 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601207 B, all206=true
+  worker #5: 1239.3 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601257 B, all206=true
+  s3 #5: 875.4 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601207 B, all206=true
+  worker #6: 1087.8 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601251 B, all206=true
+  s3 #6: 778.7 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601147 B, all206=true
+  worker #7: 1001.6 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601223 B, all206=true
+  s3 #7: 901.7 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601147 B, all206=true
+  worker #8: 1375.9 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601269 B, all206=true
+  s3 #8: 839.6 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601147 B, all206=true
+  worker #9: 1094.2 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601253 B, all206=true
+  s3 #9: 864.6 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601147 B, all206=true
+  worker #10: 1284.5 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601254 B, all206=true
+  s3 #10: 790.7 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601147 B, all206=true
+== 2a duckdb-wasm forceFullHTTPReads:false
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 8824.5 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407879 B, all206=true
+  s3 #1: 2569.1 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408655 B, all206=true
+  worker #2: 6895.8 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407892 B, all206=true
+  s3 #2: 2678.8 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408275 B, all206=true
+  worker #3: Error: page.evaluate: Error: Invalid Error: Error: Range request for https://om-gazetteer.ben-f07.workers.dev/gazetteer/index/places_index.parquet?key=<preview-key> failed with error: NetworkError: Failed to execute 'send' on 'XMLHttpRequest': Failed to load 'https://om-gazetteer.ben-f07.workers.dev/gazetteer/index/places_index.parquet?key=<preview-key>'."
+  s3 #3: 2623.1 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408275 B, all206=true
+  worker #4: 10768.2 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407851 B, all206=true
+  s3 #4: 2653 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408655 B, all206=true
+  worker #5: 38387.7 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407912 B, all206=true
+  s3 #5: 2628.6 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408275 B, all206=true
+  worker #6: 6687.7 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407894 B, all206=true
+  s3 #6: 2796.3 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408655 B, all206=true
+  worker #7: 6472.4 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407885 B, all206=true
+  s3 #7: 2600.6 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408275 B, all206=true
+  worker #8: 6111.5 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407883 B, all206=true
+  s3 #8: 2505 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408275 B, all206=true
+  worker #9: 6785.6 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407867 B, all206=true
+  s3 #9: 2867.6 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408655 B, all206=true
+  worker #10: 6383.8 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407885 B, all206=true
+  s3 #10: 2642 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408655 B, all206=true
+== 2b duckdb-wasm default open
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 1530.1 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261880 B, all206=false
+  s3 #1: 1807.4 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+  worker #2: 1518.1 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261841 B, all206=false
+  s3 #2: 1873.5 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+  worker #3: 1240.5 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261873 B, all206=false
+  s3 #3: 1691 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+  worker #4: 1475.9 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261799 B, all206=false
+  s3 #4: 1574.1 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260874 B, all206=false
+  worker #5: 1227.2 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261885 B, all206=false
+  s3 #5: 1665 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260874 B, all206=false
+  worker #6: 1401.8 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261875 B, all206=false
+  s3 #6: 1753.5 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+  worker #7: 1263 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261893 B, all206=false
+  s3 #7: 1718.7 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+  worker #8: 1294.2 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261845 B, all206=false
+  s3 #8: 1660.3 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+  worker #9: 1489.6 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261805 B, all206=false
+  s3 #9: 1804.5 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+  worker #10: 1574.4 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261810 B, all206=false
+  s3 #10: 1703.1 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+== 5 cors
+  worker [{"method":"GET","type":"Fetch","status":206,"acao":"http://localhost:5190","vary":"Origin"},{"method":"OPTIONS","type":"Other","status":204,"acao":"*"}]
+  s3 [{"method":"GET","type":"Fetch","status":206,"acao":"*","vary":"Origin, Access-Control-Request-Headers, Access-Control-Request-Method"},{"method":"OPTIONS","type":"Other","status":200,"acao":"*","vary":"Origin, Access-Control-Request-Headers, Access-Control-Request-Method"}]
+done a

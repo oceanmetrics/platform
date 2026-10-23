@@ -1,0 +1,28 @@
+== 1 hyparquet (metadata + 3 columns of row group 0)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 1468.6 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601288 B, all206=true
+  s3 #1: 957.7 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601207 B, all206=true
+  worker #2: 990.6 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601212 B, all206=true
+  s3 #2: 862.1 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601147 B, all206=true
+  worker #3: 1036 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601174 B, all206=true
+  s3 #3: 860.4 ms, 4 req ({"HEAD 200":1,"GET 206":3}), 601147 B, all206=true
+== 2a duckdb-wasm forceFullHTTPReads:false
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 5859.6 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407856 B, all206=true
+  s3 #1: 2669.3 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408275 B, all206=true
+  worker #2: 6162.9 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407878 B, all206=true
+  s3 #2: 2585 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408275 B, all206=true
+  worker #3: 6006 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 407895 B, all206=true
+  s3 #3: 2661.6 ms, 19 req ({"HEAD 200":1,"GET 206":17,"HEAD 206":1}), 408655 B, all206=true
+== 2b duckdb-wasm default open
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 1190.2 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261655 B, all206=false
+  s3 #1: 1735.4 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+  worker #2: 1145.7 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261721 B, all206=false
+  s3 #2: 1676 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+  worker #3: 1882.1 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5261681 B, all206=false
+  s3 #3: 1675.5 ms, 2 req ({"HEAD 200":1,"GET 200":1}), 5260914 B, all206=false
+== 5 cors
+  worker [{"method":"GET","type":"Fetch","status":206,"acao":"http://localhost:5190","vary":"Origin"},{"method":"OPTIONS","type":"Other","status":204,"acao":"*"}]
+  s3 [{"method":"GET","type":"Fetch","status":206,"acao":"*","vary":"Origin, Access-Control-Request-Headers, Access-Control-Request-Method"},{"method":"OPTIONS","type":"Other","status":200,"acao":"*","vary":"Origin, Access-Control-Request-Headers, Access-Control-Request-Method"}]
+done a

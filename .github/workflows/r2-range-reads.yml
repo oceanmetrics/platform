@@ -59,7 +59,8 @@ jobs:
           phases="${{ inputs.phase }}"
           [ "$phases" = "ab" ] && phases="a b"
           for p in $phases; do
-            node run.mjs "$p" 2>&1 | tee "results/$OUT_NAME.$p.log"
+            # the page's error messages echo the request url, key included: redact before the log is written
+            node run.mjs "$p" 2>&1 | sed "s/$OM_KEY/<preview-key>/g" | tee "results/$OUT_NAME.$p.log"
           done
       - name: Summary table
         if: always()

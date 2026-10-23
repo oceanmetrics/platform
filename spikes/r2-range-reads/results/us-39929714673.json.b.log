@@ -1,0 +1,133 @@
+== 3a pmtiles getHeader + getZxy(2,0,1)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 1075.9 ms, 3 req ({"GET 206":3}), 26275 B, all206=true
+  s3 #1: 559 ms, 3 req ({"GET 206":3}), 26342 B, all206=true
+  worker #2: 826.5 ms, 3 req ({"GET 206":3}), 26285 B, all206=true
+  s3 #2: 428.6 ms, 3 req ({"GET 206":3}), 26342 B, all206=true
+  worker #3: 1055.6 ms, 3 req ({"GET 206":3}), 26293 B, all206=true
+  s3 #3: 436.1 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+  worker #4: 808.3 ms, 3 req ({"GET 206":3}), 26282 B, all206=true
+  s3 #4: 467.4 ms, 3 req ({"GET 206":3}), 26342 B, all206=true
+  worker #5: 1069 ms, 3 req ({"GET 206":3}), 26278 B, all206=true
+  s3 #5: 453.1 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+  worker #6: 1015.7 ms, 3 req ({"GET 206":3}), 26279 B, all206=true
+  s3 #6: 483.4 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+  worker #7: 865.8 ms, 3 req ({"GET 206":3}), 26289 B, all206=true
+  s3 #7: 445.5 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+  worker #8: 1211.9 ms, 3 req ({"GET 206":3}), 26291 B, all206=true
+  s3 #8: 462.9 ms, 3 req ({"GET 206":3}), 26402 B, all206=true
+  worker #9: 850 ms, 3 req ({"GET 206":3}), 26287 B, all206=true
+  s3 #9: 471.4 ms, 3 req ({"GET 206":3}), 26342 B, all206=true
+  worker #10: 1053.3 ms, 3 req ({"GET 206":3}), 26286 B, all206=true
+  s3 #10: 454.5 ms, 3 req ({"GET 206":3}), 26342 B, all206=true
+== 3b maplibre 6 pmtiles:// zoom 3 to idle
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 948.1 ms, 6 req ({"GET 206":6}), 30019 B, all206=true
+  s3 #1: 675.2 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+  worker #2: 988.7 ms, 6 req ({"GET 206":6}), 30026 B, all206=true
+  s3 #2: 707.5 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+  worker #3: 961.1 ms, 6 req ({"GET 206":6}), 29646 B, all206=true
+  s3 #3: 654.5 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+  worker #4: 974.2 ms, 6 req ({"GET 206":6}), 30018 B, all206=true
+  s3 #4: 659 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+  worker #5: 1067.3 ms, 6 req ({"GET 206":6}), 30014 B, all206=true
+  s3 #5: 652.3 ms, 6 req ({"GET 206":6}), 30287 B, all206=true
+  worker #6: 1005.1 ms, 6 req ({"GET 206":6}), 30018 B, all206=true
+  s3 #6: 694.5 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+  worker #7: 1024.4 ms, 6 req ({"GET 206":6}), 30015 B, all206=true
+  s3 #7: 709.1 ms, 6 req ({"GET 206":6}), 30287 B, all206=true
+  worker #8: 1024.1 ms, 6 req ({"GET 206":6}), 30006 B, all206=true
+  s3 #8: 724.1 ms, 6 req ({"GET 206":6}), 30287 B, all206=true
+  worker #9: 1008.9 ms, 6 req ({"GET 206":6}), 30007 B, all206=true
+  s3 #9: 646.5 ms, 6 req ({"GET 206":6}), 30287 B, all206=true
+  worker #10: 927.6 ms, 6 req ({"GET 206":6}), 30022 B, all206=true
+  s3 #10: 698.7 ms, 6 req ({"GET 206":6}), 30287 B, all206=true
+== 4a geotiff.js gazetteer Then vs Now FKNMS 2024 (no overviews)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 3184.7 ms, 13 req ({"GET 206":13}), 26863 B, all206=true
+  s3 #1: 1463.2 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #2: 3586.8 ms, 13 req ({"GET 206":13}), 26864 B, all206=true
+  s3 #2: 1428.8 ms, 13 req ({"GET 206":13}), 27263 B, all206=true
+  worker #3: 3500.2 ms, 13 req ({"GET 206":13}), 26880 B, all206=true
+  s3 #3: 1383 ms, 13 req ({"GET 206":13}), 27263 B, all206=true
+  worker #4: 3703.2 ms, 13 req ({"GET 206":13}), 26868 B, all206=true
+  s3 #4: 1445.4 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #5: 3683.5 ms, 13 req ({"GET 206":13}), 26901 B, all206=true
+  s3 #5: 1434.7 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #6: 3733 ms, 13 req ({"GET 206":13}), 26873 B, all206=true
+  s3 #6: 1444.6 ms, 13 req ({"GET 206":13}), 27263 B, all206=true
+  worker #7: 3540 ms, 13 req ({"GET 206":13}), 26892 B, all206=true
+  s3 #7: 1463.2 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #8: 3537.5 ms, 13 req ({"GET 206":13}), 26872 B, all206=true
+  s3 #8: 1391.3 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #9: 3650.7 ms, 13 req ({"GET 206":13}), 26885 B, all206=true
+  s3 #9: 1396 ms, 13 req ({"GET 206":13}), 27263 B, all206=true
+  worker #10: 3532.4 ms, 13 req ({"GET 206":13}), 26898 B, all206=true
+  s3 #10: 1455.8 ms, 13 req ({"GET 206":13}), 27263 B, all206=true
+== 4b geotiff.js atlas aquamaps_eov score_risk (overviews)
+  probe: {"path":"atlas/aquamaps_eov/score_risk.tif","status":200}
+  worker #1: 4718.7 ms, 19 req ({"GET 206":19}), 110036 B, all206=true
+  s3 #1: 1940 ms, 19 req ({"GET 206":19}), 111935 B, all206=true
+  worker #2: 4331.7 ms, 19 req ({"GET 206":19}), 110057 B, all206=true
+  s3 #2: 1906.4 ms, 19 req ({"GET 206":19}), 111935 B, all206=true
+  worker #3: 4503.7 ms, 19 req ({"GET 206":19}), 110034 B, all206=true
+  s3 #3: 1902.6 ms, 19 req ({"GET 206":19}), 111555 B, all206=true
+  worker #4: 4352.6 ms, 19 req ({"GET 206":19}), 110015 B, all206=true
+  s3 #4: 1840.7 ms, 19 req ({"GET 206":19}), 111555 B, all206=true
+  worker #5: 4117.2 ms, 19 req ({"GET 206":19}), 110070 B, all206=true
+  s3 #5: 1802.7 ms, 19 req ({"GET 206":19}), 111935 B, all206=true
+  worker #6: 3998.8 ms, 19 req ({"GET 206":19}), 110055 B, all206=true
+  s3 #6: 1880.1 ms, 19 req ({"GET 206":19}), 111935 B, all206=true
+  worker #7: 4560.1 ms, 19 req ({"GET 206":19}), 110031 B, all206=true
+  s3 #7: 1881.6 ms, 19 req ({"GET 206":19}), 111555 B, all206=true
+  worker #8: 4434.2 ms, 19 req ({"GET 206":19}), 110032 B, all206=true
+  s3 #8: 1891.5 ms, 19 req ({"GET 206":19}), 111555 B, all206=true
+  worker #9: 4061.3 ms, 19 req ({"GET 206":19}), 110043 B, all206=true
+  s3 #9: 1872.2 ms, 19 req ({"GET 206":19}), 111555 B, all206=true
+  worker #10: 4355.2 ms, 19 req ({"GET 206":19}), 110028 B, all206=true
+  s3 #10: 1835.3 ms, 19 req ({"GET 206":19}), 111555 B, all206=true
+== 4c geotiff.js atlas aquamaps_eov score_risk_3857 (overviews)
+  probe: {"path":"atlas/aquamaps_eov/score_risk_3857.tif","status":200}
+  worker #1: 4200.9 ms, 24 req ({"GET 206":24}), 109825 B, all206=true
+  s3 #1: 1973.1 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+  worker #2: 4372.9 ms, 24 req ({"GET 206":24}), 109804 B, all206=true
+  s3 #2: 1912.3 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+  worker #3: 4480.8 ms, 24 req ({"GET 206":24}), 109820 B, all206=true
+  s3 #3: 1833.4 ms, 24 req ({"GET 206":24}), 111783 B, all206=true
+  worker #4: 4236.3 ms, 24 req ({"GET 206":24}), 109820 B, all206=true
+  s3 #4: 1790.2 ms, 24 req ({"GET 206":24}), 111783 B, all206=true
+  worker #5: 4367.6 ms, 24 req ({"GET 206":24}), 109809 B, all206=true
+  s3 #5: 1786.2 ms, 24 req ({"GET 206":24}), 111783 B, all206=true
+  worker #6: 3879.9 ms, 24 req ({"GET 206":24}), 109802 B, all206=true
+  s3 #6: 1879.7 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+  worker #7: 4266.6 ms, 24 req ({"GET 206":24}), 109820 B, all206=true
+  s3 #7: 1788.4 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+  worker #8: 4365.7 ms, 24 req ({"GET 206":24}), 109798 B, all206=true
+  s3 #8: 1825.4 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+  worker #9: 4348.6 ms, 24 req ({"GET 206":24}), 109821 B, all206=true
+  s3 #9: 1840.3 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+  worker #10: 4284.4 ms, 24 req ({"GET 206":24}), 109809 B, all206=true
+  s3 #10: 1795.1 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+== 3c pmtiles getHeader + getZxy(2,1,1) basemap/gebco/far
+  probe: {"path":"basemap/gebco/far.pmtiles","status":200}
+  worker #1: 618.6 ms, 2 req ({"GET 206":2}), 323480 B, all206=true
+  s3 #1: 774.3 ms, 2 req ({"GET 206":2}), 323624 B, all206=true
+  worker #2: 919.7 ms, 2 req ({"GET 206":2}), 323476 B, all206=true
+  s3 #2: 553.5 ms, 2 req ({"GET 206":2}), 323624 B, all206=true
+  worker #3: 550.4 ms, 2 req ({"GET 206":2}), 323479 B, all206=true
+  s3 #3: 585.2 ms, 2 req ({"GET 206":2}), 323584 B, all206=true
+  worker #4: 823.8 ms, 2 req ({"GET 206":2}), 323487 B, all206=true
+  s3 #4: 710.4 ms, 2 req ({"GET 206":2}), 323584 B, all206=true
+  worker #5: 567.5 ms, 2 req ({"GET 206":2}), 323502 B, all206=true
+  s3 #5: 624.5 ms, 2 req ({"GET 206":2}), 323624 B, all206=true
+  worker #6: 571.4 ms, 2 req ({"GET 206":2}), 323488 B, all206=true
+  s3 #6: 570.2 ms, 2 req ({"GET 206":2}), 323624 B, all206=true
+  worker #7: 823.6 ms, 2 req ({"GET 206":2}), 323491 B, all206=true
+  s3 #7: 572.9 ms, 2 req ({"GET 206":2}), 323624 B, all206=true
+  worker #8: 810.9 ms, 2 req ({"GET 206":2}), 323492 B, all206=true
+  s3 #8: 551.3 ms, 2 req ({"GET 206":2}), 323584 B, all206=true
+  worker #9: 542 ms, 2 req ({"GET 206":2}), 323475 B, all206=true
+  s3 #9: 571.9 ms, 2 req ({"GET 206":2}), 323624 B, all206=true
+  worker #10: 637.2 ms, 2 req ({"GET 206":2}), 323495 B, all206=true
+  s3 #10: 584.4 ms, 2 req ({"GET 206":2}), 323624 B, all206=true
+done b
