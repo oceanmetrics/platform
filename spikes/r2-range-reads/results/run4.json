@@ -1,0 +1,6711 @@
+{
+ "meta": {
+  "note": null,
+  "chrome": "156.0.8078.47",
+  "when": "2026-10-23T01:15:38.040Z",
+  "page_origin": "http://localhost:5190",
+  "worker": "https://om-gazetteer.ben-f07.workers.dev/",
+  "s3": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/",
+  "runs_per_check": 3,
+  "key_used": "preview-tier ?key= (redacted)",
+  "platform": "darwin arm64"
+ },
+ "c3a_pmtiles_raw": {
+  "title": "pmtiles getHeader + getZxy(2,0,1)",
+  "files": {
+   "worker": {
+    "url": "https://om-gazetteer.ben-f07.workers.dev/gazetteer/noaa_sanctuaries/places.pmtiles?key=<preview-key>",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 371.2,
+    "wall_ms_median": 314.5,
+    "wall_ms_all": [
+     371.2,
+     301,
+     314.5
+    ],
+    "net_span_ms_median": 312.94,
+    "n_requests": 3,
+    "n_get": 3,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 25946,
+    "bytes_body": 24022,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 3
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 371.2,
+      "net_span_ms": 370.23,
+      "n_requests": 3,
+      "n_get": 3,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 3
+      },
+      "bytes_wire": 25946,
+      "bytes_body": 24022,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 371.2,
+       "ms_header": 186,
+       "ms_tile": 185.2,
+       "header": {
+        "minZoom": 0,
+        "maxZoom": 13,
+        "numAddressedTiles": 119064,
+        "tileType": 1,
+        "rootDirectoryLength": 108,
+        "minLon": null,
+        "maxLon": null
+       },
+       "tile_bytes": 5821
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17191,
+        "ms": 184.83,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6035,
+        "ms": 75.44,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=38742-40666",
+        "status": 206,
+        "content_length": "1925",
+        "content_range": "bytes 38742-40666/3059491",
+        "bytes": 2720,
+        "ms": 108.06,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 301,
+      "net_span_ms": 299.6,
+      "n_requests": 3,
+      "n_get": 3,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 3
+      },
+      "bytes_wire": 25937,
+      "bytes_body": 24022,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 301,
+       "ms_header": 117.4,
+       "ms_tile": 183.6,
+       "header": {
+        "minZoom": 0,
+        "maxZoom": 13,
+        "numAddressedTiles": 119064,
+        "tileType": 1,
+        "rootDirectoryLength": 108,
+        "minLon": null,
+        "maxLon": null
+       },
+       "tile_bytes": 5821
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17184,
+        "ms": 116.21,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6038,
+        "ms": 94.83,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=38742-40666",
+        "status": 206,
+        "content_length": "1925",
+        "content_range": "bytes 38742-40666/3059491",
+        "bytes": 2715,
+        "ms": 86.43,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 314.5,
+      "net_span_ms": 312.94,
+      "n_requests": 3,
+      "n_get": 3,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 3
+      },
+      "bytes_wire": 25967,
+      "bytes_body": 24022,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 314.5,
+       "ms_header": 107,
+       "ms_tile": 207.4,
+       "header": {
+        "minZoom": 0,
+        "maxZoom": 13,
+        "numAddressedTiles": 119064,
+        "tileType": 1,
+        "rootDirectoryLength": 108,
+        "minLon": null,
+        "maxLon": null
+       },
+       "tile_bytes": 5821
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17190,
+        "ms": 105.67,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6065,
+        "ms": 70.95,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=38742-40666",
+        "status": 206,
+        "content_length": "1925",
+        "content_range": "bytes 38742-40666/3059491",
+        "bytes": 2712,
+        "ms": 134.46,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     }
+    ]
+   },
+   "s3": {
+    "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/gazetteer/noaa_sanctuaries/places.pmtiles",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 808.6,
+    "wall_ms_median": 765.8,
+    "wall_ms_all": [
+     808.6,
+     765.8,
+     667.6
+    ],
+    "net_span_ms_median": 764.79,
+    "n_requests": 3,
+    "n_get": 3,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 26402,
+    "bytes_body": 24022,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 3
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 808.6,
+      "net_span_ms": 807.63,
+      "n_requests": 3,
+      "n_get": 3,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 3
+      },
+      "bytes_wire": 26402,
+      "bytes_body": 24022,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 808.6,
+       "ms_header": 480.5,
+       "ms_tile": 328.1,
+       "header": {
+        "minZoom": 0,
+        "maxZoom": 13,
+        "numAddressedTiles": 119064,
+        "tileType": 1,
+        "rootDirectoryLength": 108,
+        "minLon": null,
+        "maxLon": null
+       },
+       "tile_bytes": 5821
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17176,
+        "ms": 479.13,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6506,
+        "ms": 147.91,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=38742-40666",
+        "status": 206,
+        "content_length": "1925",
+        "content_range": "bytes 38742-40666/3059491",
+        "bytes": 2720,
+        "ms": 178.56,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 765.8,
+      "net_span_ms": 764.79,
+      "n_requests": 3,
+      "n_get": 3,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 3
+      },
+      "bytes_wire": 26342,
+      "bytes_body": 24022,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 765.8,
+       "ms_header": 494.8,
+       "ms_tile": 271,
+       "header": {
+        "minZoom": 0,
+        "maxZoom": 13,
+        "numAddressedTiles": 119064,
+        "tileType": 1,
+        "rootDirectoryLength": 108,
+        "minLon": null,
+        "maxLon": null
+       },
+       "tile_bytes": 5821
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17156,
+        "ms": 493.67,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6486,
+        "ms": 133.99,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=38742-40666",
+        "status": 206,
+        "content_length": "1925",
+        "content_range": "bytes 38742-40666/3059491",
+        "bytes": 2700,
+        "ms": 134.6,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 667.6,
+      "net_span_ms": 666.52,
+      "n_requests": 3,
+      "n_get": 3,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 3
+      },
+      "bytes_wire": 26342,
+      "bytes_body": 24022,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 667.6,
+       "ms_header": 388.6,
+       "ms_tile": 279,
+       "header": {
+        "minZoom": 0,
+        "maxZoom": 13,
+        "numAddressedTiles": 119064,
+        "tileType": 1,
+        "rootDirectoryLength": 108,
+        "minLon": null,
+        "maxLon": null
+       },
+       "tile_bytes": 5821
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17156,
+        "ms": 386.5,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6486,
+        "ms": 139.06,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=38742-40666",
+        "status": 206,
+        "content_length": "1925",
+        "content_range": "bytes 38742-40666/3059491",
+        "bytes": 2700,
+        "ms": 137.81,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "wait": {
+   "ok": true,
+   "status": 200,
+   "waited_s": 0
+  }
+ },
+ "c3b_pmtiles_draw": {
+  "title": "maplibre 6 pmtiles:// zoom 3 to idle",
+  "files": {
+   "worker": {
+    "url": "https://om-gazetteer.ben-f07.workers.dev/gazetteer/noaa_sanctuaries/places.pmtiles?key=<preview-key>",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 377.7,
+    "wall_ms_median": 370.2,
+    "wall_ms_all": [
+     377.7,
+     344.1,
+     370.2
+    ],
+    "net_span_ms_median": 315.64,
+    "n_requests": 6,
+    "n_get": 6,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 29731,
+    "bytes_body": 25525,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 6
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 377.7,
+      "net_span_ms": 322.01,
+      "n_requests": 6,
+      "n_get": 6,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 6
+      },
+      "bytes_wire": 29731,
+      "bytes_body": 25525,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms_to_idle": 377.7,
+       "rendered_features": 30,
+       "tiles_loaded": true,
+       "maplibre": "6.15.0"
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17195,
+        "ms": 109.85,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6041,
+        "ms": 88.71,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42827-44458",
+        "status": 206,
+        "content_length": "1632",
+        "content_range": "bytes 42827-44458/3059491",
+        "bytes": 2383,
+        "ms": 90.04,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=44459-44755",
+        "status": 206,
+        "content_length": "297",
+        "content_range": "bytes 44459-44755/3059491",
+        "bytes": 1095,
+        "ms": 89.16,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42037-42826",
+        "status": 206,
+        "content_length": "790",
+        "content_range": "bytes 42037-42826/3059491",
+        "bytes": 1547,
+        "ms": 100.4,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=41328-42036",
+        "status": 206,
+        "content_length": "709",
+        "content_range": "bytes 41328-42036/3059491",
+        "bytes": 1470,
+        "ms": 106.88,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 344.1,
+      "net_span_ms": 297.78,
+      "n_requests": 6,
+      "n_get": 6,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 6
+      },
+      "bytes_wire": 29732,
+      "bytes_body": 25525,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms_to_idle": 344.1,
+       "rendered_features": 30,
+       "tiles_loaded": true,
+       "maplibre": "6.15.0"
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17201,
+        "ms": 94.77,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6035,
+        "ms": 76.28,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42827-44458",
+        "status": 206,
+        "content_length": "1632",
+        "content_range": "bytes 42827-44458/3059491",
+        "bytes": 2397,
+        "ms": 107.08,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=44459-44755",
+        "status": 206,
+        "content_length": "297",
+        "content_range": "bytes 44459-44755/3059491",
+        "bytes": 1091,
+        "ms": 98.74,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42037-42826",
+        "status": 206,
+        "content_length": "790",
+        "content_range": "bytes 42037-42826/3059491",
+        "bytes": 1539,
+        "ms": 114.13,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=41328-42036",
+        "status": 206,
+        "content_length": "709",
+        "content_range": "bytes 41328-42036/3059491",
+        "bytes": 1469,
+        "ms": 100.13,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 370.2,
+      "net_span_ms": 315.64,
+      "n_requests": 6,
+      "n_get": 6,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 6
+      },
+      "bytes_wire": 29730,
+      "bytes_body": 25525,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms_to_idle": 370.2,
+       "rendered_features": 30,
+       "tiles_loaded": true,
+       "maplibre": "6.15.0"
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17197,
+        "ms": 127.67,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6039,
+        "ms": 76.73,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42827-44458",
+        "status": 206,
+        "content_length": "1632",
+        "content_range": "bytes 42827-44458/3059491",
+        "bytes": 2423,
+        "ms": 80.4,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=44459-44755",
+        "status": 206,
+        "content_length": "297",
+        "content_range": "bytes 44459-44755/3059491",
+        "bytes": 1057,
+        "ms": 106.55,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42037-42826",
+        "status": 206,
+        "content_length": "790",
+        "content_range": "bytes 42037-42826/3059491",
+        "bytes": 1548,
+        "ms": 101.07,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=41328-42036",
+        "status": 206,
+        "content_length": "709",
+        "content_range": "bytes 41328-42036/3059491",
+        "bytes": 1466,
+        "ms": 95.93,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     }
+    ]
+   },
+   "s3": {
+    "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/gazetteer/noaa_sanctuaries/places.pmtiles",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 958.7,
+    "wall_ms_median": 958.7,
+    "wall_ms_all": [
+     958.7,
+     957,
+     974.7
+    ],
+    "net_span_ms_median": 911.97,
+    "n_requests": 6,
+    "n_get": 6,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 30287,
+    "bytes_body": 25525,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 6
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 958.7,
+      "net_span_ms": 908.39,
+      "n_requests": 6,
+      "n_get": 6,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 6
+      },
+      "bytes_wire": 30287,
+      "bytes_body": 25525,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms_to_idle": 958.7,
+       "rendered_features": 30,
+       "tiles_loaded": true,
+       "maplibre": "6.15.0"
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17176,
+        "ms": 398.31,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6506,
+        "ms": 136.22,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42827-44458",
+        "status": 206,
+        "content_length": "1632",
+        "content_range": "bytes 42827-44458/3059491",
+        "bytes": 2427,
+        "ms": 146.23,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=44459-44755",
+        "status": 206,
+        "content_length": "297",
+        "content_range": "bytes 44459-44755/3059491",
+        "bytes": 1091,
+        "ms": 292.2,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42037-42826",
+        "status": 206,
+        "content_length": "790",
+        "content_range": "bytes 42037-42826/3059491",
+        "bytes": 1584,
+        "ms": 367.48,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=41328-42036",
+        "status": 206,
+        "content_length": "709",
+        "content_range": "bytes 41328-42036/3059491",
+        "bytes": 1503,
+        "ms": 369.6,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 957,
+      "net_span_ms": 911.97,
+      "n_requests": 6,
+      "n_get": 6,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 6
+      },
+      "bytes_wire": 30167,
+      "bytes_body": 25525,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms_to_idle": 957,
+       "rendered_features": 30,
+       "tiles_loaded": true,
+       "maplibre": "6.15.0"
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17156,
+        "ms": 394.28,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6486,
+        "ms": 140.77,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42827-44458",
+        "status": 206,
+        "content_length": "1632",
+        "content_range": "bytes 42827-44458/3059491",
+        "bytes": 2407,
+        "ms": 137.77,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=44459-44755",
+        "status": 206,
+        "content_length": "297",
+        "content_range": "bytes 44459-44755/3059491",
+        "bytes": 1071,
+        "ms": 277.51,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42037-42826",
+        "status": 206,
+        "content_length": "790",
+        "content_range": "bytes 42037-42826/3059491",
+        "bytes": 1564,
+        "ms": 347.15,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=41328-42036",
+        "status": 206,
+        "content_length": "709",
+        "content_range": "bytes 41328-42036/3059491",
+        "bytes": 1483,
+        "ms": 367.82,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 974.7,
+      "net_span_ms": 935.44,
+      "n_requests": 6,
+      "n_get": 6,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 6
+      },
+      "bytes_wire": 30287,
+      "bytes_body": 25525,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms_to_idle": 974.7,
+       "rendered_features": 30,
+       "tiles_loaded": true,
+       "maplibre": "6.15.0"
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-16383",
+        "status": 206,
+        "content_length": "16384",
+        "content_range": "bytes 0-16383/3059491",
+        "bytes": 17176,
+        "ms": 390.9,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2192-7904",
+        "status": 206,
+        "content_length": "5713",
+        "content_range": "bytes 2192-7904/3059491",
+        "bytes": 6506,
+        "ms": 130.79,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42827-44458",
+        "status": 206,
+        "content_length": "1632",
+        "content_range": "bytes 42827-44458/3059491",
+        "bytes": 2427,
+        "ms": 135.92,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=44459-44755",
+        "status": 206,
+        "content_length": "297",
+        "content_range": "bytes 44459-44755/3059491",
+        "bytes": 1091,
+        "ms": 266.14,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=42037-42826",
+        "status": 206,
+        "content_length": "790",
+        "content_range": "bytes 42037-42826/3059491",
+        "bytes": 1584,
+        "ms": 407.67,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=41328-42036",
+        "status": 206,
+        "content_length": "709",
+        "content_range": "bytes 41328-42036/3059491",
+        "bytes": 1503,
+        "ms": 388.45,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "wait": {
+   "ok": true,
+   "status": 200,
+   "waited_s": 0
+  }
+ },
+ "c4a_cog_gazetteer": {
+  "title": "geotiff.js gazetteer Then vs Now FKNMS 2024 (no overviews)",
+  "files": {
+   "worker": {
+    "url": "https://om-gazetteer.ben-f07.workers.dev/gazetteer/rasters/dhw_5km/CRW_SST/NMS:FKNMS/2024.tif?key=<preview-key>",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 1103.1,
+    "wall_ms_median": 1136.1,
+    "wall_ms_all": [
+     1103.1,
+     1136.1,
+     1227.9
+    ],
+    "net_span_ms_median": 1132.24,
+    "n_requests": 13,
+    "n_get": 13,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 26700,
+    "bytes_body": 17318,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 13
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 1103.1,
+      "net_span_ms": 1099.15,
+      "n_requests": 13,
+      "n_get": 13,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 13
+      },
+      "bytes_wire": 26700,
+      "bytes_body": 17318,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 1103.1,
+       "ms_open": 775.7,
+       "ms_small_overview": 234.3,
+       "ms_window": 93,
+       "n_images": 1,
+       "full": [
+        78,
+        43
+       ],
+       "bands_small": 366,
+       "small": [
+        78,
+        43
+       ],
+       "small_is_overview": false,
+       "small_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "window": [
+        78,
+        43
+       ],
+       "window_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 366
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/2454397",
+        "bytes": 1816,
+        "ms": 130.73,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=208-1231",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 208-1231/2454397",
+        "bytes": 1370,
+        "ms": 67.13,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1198-1927",
+        "status": 206,
+        "content_length": "730",
+        "content_range": "bytes 1198-1927/2454397",
+        "bytes": 1510,
+        "ms": 75.58,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1928-2659",
+        "status": 206,
+        "content_length": "732",
+        "content_range": "bytes 1928-2659/2454397",
+        "bytes": 1477,
+        "ms": 115.93,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144412-144435",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 144412-144435/2454397",
+        "bytes": 770,
+        "ms": 69.46,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144436-144483",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 144436-144483/2454397",
+        "bytes": 800,
+        "ms": 73.3,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144484-144547",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 144484-144547/2454397",
+        "bytes": 813,
+        "ms": 71.16,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144548-144563",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 144548-144563/2454397",
+        "bytes": 759,
+        "ms": 89.19,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144564-144571",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 144564-144571/2454397",
+        "bytes": 752,
+        "ms": 69.98,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144572-144575",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 144572-144575/2454397",
+        "bytes": 750,
+        "ms": 73.94,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=146036-146039",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 146036-146039/2454397",
+        "bytes": 749,
+        "ms": 69.06,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7567,
+        "ms": 72.21,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7567,
+        "ms": 88.87,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 1136.1,
+      "net_span_ms": 1132.24,
+      "n_requests": 13,
+      "n_get": 13,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 13
+      },
+      "bytes_wire": 26670,
+      "bytes_body": 17318,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 1136.1,
+       "ms_open": 796.2,
+       "ms_small_overview": 260.9,
+       "ms_window": 78.8,
+       "n_images": 1,
+       "full": [
+        78,
+        43
+       ],
+       "bands_small": 366,
+       "small": [
+        78,
+        43
+       ],
+       "small_is_overview": false,
+       "small_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "window": [
+        78,
+        43
+       ],
+       "window_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 366
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/2454397",
+        "bytes": 1810,
+        "ms": 112.06,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=208-1231",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 208-1231/2454397",
+        "bytes": 1343,
+        "ms": 76.93,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1198-1927",
+        "status": 206,
+        "content_length": "730",
+        "content_range": "bytes 1198-1927/2454397",
+        "bytes": 1504,
+        "ms": 85.28,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1928-2659",
+        "status": 206,
+        "content_length": "732",
+        "content_range": "bytes 1928-2659/2454397",
+        "bytes": 1481,
+        "ms": 84.56,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144412-144435",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 144412-144435/2454397",
+        "bytes": 770,
+        "ms": 78.64,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144436-144483",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 144436-144483/2454397",
+        "bytes": 795,
+        "ms": 80.95,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144484-144547",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 144484-144547/2454397",
+        "bytes": 814,
+        "ms": 77.71,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144548-144563",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 144548-144563/2454397",
+        "bytes": 759,
+        "ms": 94,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144564-144571",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 144564-144571/2454397",
+        "bytes": 758,
+        "ms": 92.06,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144572-144575",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 144572-144575/2454397",
+        "bytes": 746,
+        "ms": 75.69,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=146036-146039",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 146036-146039/2454397",
+        "bytes": 749,
+        "ms": 86.86,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7570,
+        "ms": 77.75,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7571,
+        "ms": 75.08,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 1227.9,
+      "net_span_ms": 1225.03,
+      "n_requests": 13,
+      "n_get": 13,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 13
+      },
+      "bytes_wire": 26682,
+      "bytes_body": 17318,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 1227.9,
+       "ms_open": 863,
+       "ms_small_overview": 280,
+       "ms_window": 84.9,
+       "n_images": 1,
+       "full": [
+        78,
+        43
+       ],
+       "bands_small": 366,
+       "small": [
+        78,
+        43
+       ],
+       "small_is_overview": false,
+       "small_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "window": [
+        78,
+        43
+       ],
+       "window_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 366
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/2454397",
+        "bytes": 1813,
+        "ms": 143.49,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=208-1231",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 208-1231/2454397",
+        "bytes": 1346,
+        "ms": 85.99,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1198-1927",
+        "status": 206,
+        "content_length": "730",
+        "content_range": "bytes 1198-1927/2454397",
+        "bytes": 1515,
+        "ms": 81.2,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1928-2659",
+        "status": 206,
+        "content_length": "732",
+        "content_range": "bytes 1928-2659/2454397",
+        "bytes": 1474,
+        "ms": 138.46,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144412-144435",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 144412-144435/2454397",
+        "bytes": 772,
+        "ms": 85.33,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144436-144483",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 144436-144483/2454397",
+        "bytes": 799,
+        "ms": 76.03,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144484-144547",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 144484-144547/2454397",
+        "bytes": 813,
+        "ms": 81.5,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144548-144563",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 144548-144563/2454397",
+        "bytes": 762,
+        "ms": 85.75,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144564-144571",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 144564-144571/2454397",
+        "bytes": 755,
+        "ms": 78.27,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144572-144575",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 144572-144575/2454397",
+        "bytes": 751,
+        "ms": 75.28,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=146036-146039",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 146036-146039/2454397",
+        "bytes": 744,
+        "ms": 120.74,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7568,
+        "ms": 75.22,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7570,
+        "ms": 82.14,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     }
+    ]
+   },
+   "s3": {
+    "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/gazetteer/rasters/dhw_5km/CRW_SST/NMS:FKNMS/2024.tif",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 2248.3,
+    "wall_ms_median": 2242.3,
+    "wall_ms_all": [
+     2248.3,
+     2075.1,
+     2242.3
+    ],
+    "net_span_ms_median": 2235.9,
+    "n_requests": 13,
+    "n_get": 13,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 27263,
+    "bytes_body": 17318,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 13
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 2248.3,
+      "net_span_ms": 2245.2,
+      "n_requests": 13,
+      "n_get": 13,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 13
+      },
+      "bytes_wire": 27263,
+      "bytes_body": 17318,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 2248.3,
+       "ms_open": 1645.2,
+       "ms_small_overview": 460.2,
+       "ms_window": 142.8,
+       "n_images": 1,
+       "full": [
+        78,
+        43
+       ],
+       "bands_small": 366,
+       "small": [
+        78,
+        43
+       ],
+       "small_is_overview": false,
+       "small_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "window": [
+        78,
+        43
+       ],
+       "window_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 366
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/2454397",
+        "bytes": 1785,
+        "ms": 461.61,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=208-1231",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 208-1231/2454397",
+        "bytes": 1787,
+        "ms": 150.01,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1198-1927",
+        "status": 206,
+        "content_length": "730",
+        "content_range": "bytes 1198-1927/2454397",
+        "bytes": 1493,
+        "ms": 144.78,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1928-2659",
+        "status": 206,
+        "content_length": "732",
+        "content_range": "bytes 1928-2659/2454397",
+        "bytes": 1495,
+        "ms": 148.46,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144412-144435",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 144412-144435/2454397",
+        "bytes": 790,
+        "ms": 144.81,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144436-144483",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 144436-144483/2454397",
+        "bytes": 814,
+        "ms": 140.6,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144484-144547",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 144484-144547/2454397",
+        "bytes": 830,
+        "ms": 145.21,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144548-144563",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 144548-144563/2454397",
+        "bytes": 782,
+        "ms": 144.13,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144564-144571",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 144564-144571/2454397",
+        "bytes": 773,
+        "ms": 148.25,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144572-144575",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 144572-144575/2454397",
+        "bytes": 769,
+        "ms": 149.65,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=146036-146039",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 146036-146039/2454397",
+        "bytes": 769,
+        "ms": 150.65,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7588,
+        "ms": 143.26,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7588,
+        "ms": 139.8,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 2075.1,
+      "net_span_ms": 2071.81,
+      "n_requests": 13,
+      "n_get": 13,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 13
+      },
+      "bytes_wire": 27523,
+      "bytes_body": 17318,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 2075.1,
+       "ms_open": 1507,
+       "ms_small_overview": 424.5,
+       "ms_window": 143.4,
+       "n_images": 1,
+       "full": [
+        78,
+        43
+       ],
+       "bands_small": 366,
+       "small": [
+        78,
+        43
+       ],
+       "small_is_overview": false,
+       "small_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "window": [
+        78,
+        43
+       ],
+       "window_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 366
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/2454397",
+        "bytes": 1805,
+        "ms": 386.53,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=208-1231",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 208-1231/2454397",
+        "bytes": 1807,
+        "ms": 140.39,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1198-1927",
+        "status": 206,
+        "content_length": "730",
+        "content_range": "bytes 1198-1927/2454397",
+        "bytes": 1513,
+        "ms": 131.28,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1928-2659",
+        "status": 206,
+        "content_length": "732",
+        "content_range": "bytes 1928-2659/2454397",
+        "bytes": 1515,
+        "ms": 145.96,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144412-144435",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 144412-144435/2454397",
+        "bytes": 810,
+        "ms": 135.94,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144436-144483",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 144436-144483/2454397",
+        "bytes": 834,
+        "ms": 137.71,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144484-144547",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 144484-144547/2454397",
+        "bytes": 850,
+        "ms": 133.59,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144548-144563",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 144548-144563/2454397",
+        "bytes": 802,
+        "ms": 138.74,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144564-144571",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 144564-144571/2454397",
+        "bytes": 793,
+        "ms": 138.57,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144572-144575",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 144572-144575/2454397",
+        "bytes": 789,
+        "ms": 137.97,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=146036-146039",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 146036-146039/2454397",
+        "bytes": 789,
+        "ms": 138.65,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7608,
+        "ms": 130.72,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7608,
+        "ms": 140.29,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 2242.3,
+      "net_span_ms": 2235.9,
+      "n_requests": 13,
+      "n_get": 13,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 13
+      },
+      "bytes_wire": 27523,
+      "bytes_body": 17318,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 2242.3,
+       "ms_open": 1625,
+       "ms_small_overview": 463.7,
+       "ms_window": 153.4,
+       "n_images": 1,
+       "full": [
+        78,
+        43
+       ],
+       "bands_small": 366,
+       "small": [
+        78,
+        43
+       ],
+       "small_is_overview": false,
+       "small_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "window": [
+        78,
+        43
+       ],
+       "window_stat": {
+        "n": 3000,
+        "mean": 23.260500018437703
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 366
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/2454397",
+        "bytes": 1805,
+        "ms": 416.45,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=208-1231",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 208-1231/2454397",
+        "bytes": 1807,
+        "ms": 154.89,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1198-1927",
+        "status": 206,
+        "content_length": "730",
+        "content_range": "bytes 1198-1927/2454397",
+        "bytes": 1513,
+        "ms": 149.89,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1928-2659",
+        "status": 206,
+        "content_length": "732",
+        "content_range": "bytes 1928-2659/2454397",
+        "bytes": 1515,
+        "ms": 155.63,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144412-144435",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 144412-144435/2454397",
+        "bytes": 810,
+        "ms": 145.31,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144436-144483",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 144436-144483/2454397",
+        "bytes": 834,
+        "ms": 146.33,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144484-144547",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 144484-144547/2454397",
+        "bytes": 850,
+        "ms": 147.01,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144548-144563",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 144548-144563/2454397",
+        "bytes": 802,
+        "ms": 153.28,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144564-144571",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 144564-144571/2454397",
+        "bytes": 793,
+        "ms": 149.02,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=144572-144575",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 144572-144575/2454397",
+        "bytes": 789,
+        "ms": 153.16,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=146036-146039",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 146036-146039/2454397",
+        "bytes": 789,
+        "ms": 150.89,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7608,
+        "ms": 139.34,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=147504-154323",
+        "status": 206,
+        "content_length": "6820",
+        "content_range": "bytes 147504-154323/2454397",
+        "bytes": 7608,
+        "ms": 146.97,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "wait": {
+   "ok": true,
+   "status": 200,
+   "waited_s": 0
+  }
+ },
+ "c4b_cog_atlas": {
+  "title": "geotiff.js atlas aquamaps_eov score_risk (overviews)",
+  "files": {
+   "worker": {
+    "url": "https://om-gazetteer.ben-f07.workers.dev/atlas/aquamaps_eov/score_risk.tif?key=<preview-key>",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 1650,
+    "wall_ms_median": 1601.4,
+    "wall_ms_all": [
+     1650,
+     1601.4,
+     1368
+    ],
+    "net_span_ms_median": 1592.71,
+    "n_requests": 19,
+    "n_get": 19,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 109973,
+    "bytes_body": 97050,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 19
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 1650,
+      "net_span_ms": 1632.98,
+      "n_requests": 19,
+      "n_get": 19,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 19
+      },
+      "bytes_wire": 109973,
+      "bytes_body": 97050,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 1650,
+       "ms_open": 1136.6,
+       "ms_small_overview": 99.6,
+       "ms_window": 413.7,
+       "n_images": 6,
+       "full": [
+        7200,
+        3600
+       ],
+       "bands_small": 9,
+       "small": [
+        225,
+        112
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 25200,
+        "mean": 97.11757936507937
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 20.510299682617188
+       },
+       "block": [
+        512,
+        512
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/7082279",
+        "bytes": 1760,
+        "ms": 173.74,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/7082279",
+        "bytes": 1346,
+        "ms": 92.39,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3264-3287",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 3264-3287/7082279",
+        "bytes": 750,
+        "ms": 107.9,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3288-3335",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 3288-3335/7082279",
+        "bytes": 742,
+        "ms": 101.6,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3336-3399",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 3336-3399/7082279",
+        "bytes": 759,
+        "ms": 79.84,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3400-3415",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 3400-3415/7082279",
+        "bytes": 708,
+        "ms": 88.45,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3416-3423",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 3416-3423/7082279",
+        "bytes": 695,
+        "ms": 90.21,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3424-4447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3424-4447/7082279",
+        "bytes": 1720,
+        "ms": 88.6,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3674-4697",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3674-4697/7082279",
+        "bytes": 1720,
+        "ms": 74.29,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3924-4947",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3924-4947/7082279",
+        "bytes": 1718,
+        "ms": 74.16,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4174-5197",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4174-5197/7082279",
+        "bytes": 1721,
+        "ms": 76.81,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4424-5447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4424-5447/7082279",
+        "bytes": 1716,
+        "ms": 74.91,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5974-27103",
+        "status": 206,
+        "content_length": "21130",
+        "content_range": "bytes 5974-27103/7082279",
+        "bytes": 21829,
+        "ms": 76.8,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4878-4881",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4878-4881/7082279",
+        "bytes": 699,
+        "ms": 72.3,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4882-4885",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4882-4885/7082279",
+        "bytes": 692,
+        "ms": 94.55,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5358-5361",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5358-5361/7082279",
+        "bytes": 696,
+        "ms": 79.04,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5362-5365",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5362-5365/7082279",
+        "bytes": 693,
+        "ms": 76.22,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4801481-4828434",
+        "status": 206,
+        "content_length": "26954",
+        "content_range": "bytes 4801481-4828434/7082279",
+        "bytes": 27674,
+        "ms": 242.64,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4828443-4870064",
+        "status": 206,
+        "content_length": "41622",
+        "content_range": "bytes 4828443-4870064/7082279",
+        "bytes": 42335,
+        "ms": 218.41,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 1601.4,
+      "net_span_ms": 1592.71,
+      "n_requests": 19,
+      "n_get": 19,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 19
+      },
+      "bytes_wire": 109964,
+      "bytes_body": 97050,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 1601.4,
+       "ms_open": 1038,
+       "ms_small_overview": 285.9,
+       "ms_window": 277.4,
+       "n_images": 6,
+       "full": [
+        7200,
+        3600
+       ],
+       "bands_small": 9,
+       "small": [
+        225,
+        112
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 25200,
+        "mean": 97.11757936507937
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 20.510299682617188
+       },
+       "block": [
+        512,
+        512
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/7082279",
+        "bytes": 1758,
+        "ms": 119.16,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/7082279",
+        "bytes": 1345,
+        "ms": 71.31,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3264-3287",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 3264-3287/7082279",
+        "bytes": 747,
+        "ms": 72.41,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3288-3335",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 3288-3335/7082279",
+        "bytes": 734,
+        "ms": 83.36,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3336-3399",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 3336-3399/7082279",
+        "bytes": 756,
+        "ms": 87.72,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3400-3415",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 3400-3415/7082279",
+        "bytes": 707,
+        "ms": 89.52,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3416-3423",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 3416-3423/7082279",
+        "bytes": 698,
+        "ms": 81.91,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3424-4447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3424-4447/7082279",
+        "bytes": 1719,
+        "ms": 82.97,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3674-4697",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3674-4697/7082279",
+        "bytes": 1724,
+        "ms": 89.5,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3924-4947",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3924-4947/7082279",
+        "bytes": 1720,
+        "ms": 82.54,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4174-5197",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4174-5197/7082279",
+        "bytes": 1716,
+        "ms": 82.9,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4424-5447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4424-5447/7082279",
+        "bytes": 1724,
+        "ms": 83.17,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5974-27103",
+        "status": 206,
+        "content_length": "21130",
+        "content_range": "bytes 5974-27103/7082279",
+        "bytes": 21831,
+        "ms": 258.84,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4878-4881",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4878-4881/7082279",
+        "bytes": 696,
+        "ms": 91.7,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4882-4885",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4882-4885/7082279",
+        "bytes": 693,
+        "ms": 82.97,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5362-5365",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5362-5365/7082279",
+        "bytes": 702,
+        "ms": 83.06,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5358-5361",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5358-5361/7082279",
+        "bytes": 692,
+        "ms": 76.19,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4828443-4870064",
+        "status": 206,
+        "content_length": "41622",
+        "content_range": "bytes 4828443-4870064/7082279",
+        "bytes": 42341,
+        "ms": 100.51,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4801481-4828434",
+        "status": 206,
+        "content_length": "26954",
+        "content_range": "bytes 4801481-4828434/7082279",
+        "bytes": 27661,
+        "ms": 88.08,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 1368,
+      "net_span_ms": 1357.66,
+      "n_requests": 19,
+      "n_get": 19,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 19
+      },
+      "bytes_wire": 109973,
+      "bytes_body": 97050,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 1368,
+       "ms_open": 985.7,
+       "ms_small_overview": 104.2,
+       "ms_window": 277.8,
+       "n_images": 6,
+       "full": [
+        7200,
+        3600
+       ],
+       "bands_small": 9,
+       "small": [
+        225,
+        112
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 25200,
+        "mean": 97.11757936507937
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 20.510299682617188
+       },
+       "block": [
+        512,
+        512
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/7082279",
+        "bytes": 1762,
+        "ms": 95.98,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/7082279",
+        "bytes": 1350,
+        "ms": 78.12,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3264-3287",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 3264-3287/7082279",
+        "bytes": 753,
+        "ms": 84.92,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3288-3335",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 3288-3335/7082279",
+        "bytes": 738,
+        "ms": 86.39,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3336-3399",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 3336-3399/7082279",
+        "bytes": 758,
+        "ms": 79.08,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3400-3415",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 3400-3415/7082279",
+        "bytes": 710,
+        "ms": 78.64,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3416-3423",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 3416-3423/7082279",
+        "bytes": 702,
+        "ms": 76.79,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3424-4447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3424-4447/7082279",
+        "bytes": 1717,
+        "ms": 69.58,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3674-4697",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3674-4697/7082279",
+        "bytes": 1729,
+        "ms": 74.87,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3924-4947",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3924-4947/7082279",
+        "bytes": 1713,
+        "ms": 94.24,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4174-5197",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4174-5197/7082279",
+        "bytes": 1723,
+        "ms": 76.26,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4424-5447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4424-5447/7082279",
+        "bytes": 1720,
+        "ms": 77.34,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5974-27103",
+        "status": 206,
+        "content_length": "21130",
+        "content_range": "bytes 5974-27103/7082279",
+        "bytes": 21827,
+        "ms": 85.55,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4878-4881",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4878-4881/7082279",
+        "bytes": 694,
+        "ms": 95.54,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4882-4885",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4882-4885/7082279",
+        "bytes": 692,
+        "ms": 89.46,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5362-5365",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5362-5365/7082279",
+        "bytes": 696,
+        "ms": 101.61,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5358-5361",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5358-5361/7082279",
+        "bytes": 696,
+        "ms": 85.9,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4801481-4828434",
+        "status": 206,
+        "content_length": "26954",
+        "content_range": "bytes 4801481-4828434/7082279",
+        "bytes": 27659,
+        "ms": 75.85,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4828443-4870064",
+        "status": 206,
+        "content_length": "41622",
+        "content_range": "bytes 4828443-4870064/7082279",
+        "bytes": 42334,
+        "ms": 74.95,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     }
+    ]
+   },
+   "s3": {
+    "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk.tif",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 2881.4,
+    "wall_ms_median": 2788.3,
+    "wall_ms_all": [
+     2881.4,
+     2762.9,
+     2788.3
+    ],
+    "net_span_ms_median": 2773.32,
+    "n_requests": 19,
+    "n_get": 19,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 111555,
+    "bytes_body": 97050,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 19
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 2881.4,
+      "net_span_ms": 2869.77,
+      "n_requests": 19,
+      "n_get": 19,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 19
+      },
+      "bytes_wire": 111555,
+      "bytes_body": 97050,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 2881.4,
+       "ms_open": 2018.3,
+       "ms_small_overview": 162.2,
+       "ms_window": 700.5,
+       "n_images": 6,
+       "full": [
+        7200,
+        3600
+       ],
+       "bands_small": 9,
+       "small": [
+        225,
+        112
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 25200,
+        "mean": 97.11757936507937
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 20.510299682617188
+       },
+       "block": [
+        512,
+        512
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/7082279",
+        "bytes": 1785,
+        "ms": 437.87,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/7082279",
+        "bytes": 1787,
+        "ms": 144.12,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3264-3287",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 3264-3287/7082279",
+        "bytes": 786,
+        "ms": 142.86,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3288-3335",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 3288-3335/7082279",
+        "bytes": 810,
+        "ms": 139.43,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3336-3399",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 3336-3399/7082279",
+        "bytes": 826,
+        "ms": 144.84,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3400-3415",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 3400-3415/7082279",
+        "bytes": 778,
+        "ms": 136.01,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3416-3423",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 3416-3423/7082279",
+        "bytes": 769,
+        "ms": 137.93,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3424-4447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3424-4447/7082279",
+        "bytes": 1788,
+        "ms": 146.81,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3674-4697",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3674-4697/7082279",
+        "bytes": 1788,
+        "ms": 140.19,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3924-4947",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3924-4947/7082279",
+        "bytes": 1788,
+        "ms": 141.14,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4174-5197",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4174-5197/7082279",
+        "bytes": 1788,
+        "ms": 141.37,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4424-5447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4424-5447/7082279",
+        "bytes": 1788,
+        "ms": 139.66,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5974-27103",
+        "status": 206,
+        "content_length": "21130",
+        "content_range": "bytes 5974-27103/7082279",
+        "bytes": 21896,
+        "ms": 136.71,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4878-4881",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4878-4881/7082279",
+        "bytes": 765,
+        "ms": 143.94,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4882-4885",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4882-4885/7082279",
+        "bytes": 765,
+        "ms": 287.51,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5358-5361",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5358-5361/7082279",
+        "bytes": 765,
+        "ms": 250.29,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5362-5365",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5362-5365/7082279",
+        "bytes": 765,
+        "ms": 143.96,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4801481-4828434",
+        "status": 206,
+        "content_length": "26954",
+        "content_range": "bytes 4801481-4828434/7082279",
+        "bytes": 27725,
+        "ms": 249.18,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4828443-4870064",
+        "status": 206,
+        "content_length": "41622",
+        "content_range": "bytes 4828443-4870064/7082279",
+        "bytes": 42393,
+        "ms": 253.39,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 2762.9,
+      "net_span_ms": 2751.53,
+      "n_requests": 19,
+      "n_get": 19,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 19
+      },
+      "bytes_wire": 111935,
+      "bytes_body": 97050,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 2762.9,
+       "ms_open": 1914.2,
+       "ms_small_overview": 174.6,
+       "ms_window": 673.9,
+       "n_images": 6,
+       "full": [
+        7200,
+        3600
+       ],
+       "bands_small": 9,
+       "small": [
+        225,
+        112
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 25200,
+        "mean": 97.11757936507937
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 20.510299682617188
+       },
+       "block": [
+        512,
+        512
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/7082279",
+        "bytes": 1805,
+        "ms": 393.01,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/7082279",
+        "bytes": 1807,
+        "ms": 138.65,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3264-3287",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 3264-3287/7082279",
+        "bytes": 806,
+        "ms": 137.87,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3288-3335",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 3288-3335/7082279",
+        "bytes": 830,
+        "ms": 134.35,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3336-3399",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 3336-3399/7082279",
+        "bytes": 846,
+        "ms": 135.12,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3400-3415",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 3400-3415/7082279",
+        "bytes": 798,
+        "ms": 134.17,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3416-3423",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 3416-3423/7082279",
+        "bytes": 789,
+        "ms": 139.17,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3424-4447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3424-4447/7082279",
+        "bytes": 1808,
+        "ms": 133.02,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3674-4697",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3674-4697/7082279",
+        "bytes": 1808,
+        "ms": 135.41,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3924-4947",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3924-4947/7082279",
+        "bytes": 1808,
+        "ms": 139.53,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4174-5197",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4174-5197/7082279",
+        "bytes": 1808,
+        "ms": 138.54,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4424-5447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4424-5447/7082279",
+        "bytes": 1808,
+        "ms": 137.33,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5974-27103",
+        "status": 206,
+        "content_length": "21130",
+        "content_range": "bytes 5974-27103/7082279",
+        "bytes": 21916,
+        "ms": 152.78,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4878-4881",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4878-4881/7082279",
+        "bytes": 785,
+        "ms": 136.73,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4882-4885",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4882-4885/7082279",
+        "bytes": 785,
+        "ms": 271.27,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5358-5361",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5358-5361/7082279",
+        "bytes": 785,
+        "ms": 237.82,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5362-5365",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5362-5365/7082279",
+        "bytes": 785,
+        "ms": 145.09,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4801481-4828434",
+        "status": 206,
+        "content_length": "26954",
+        "content_range": "bytes 4801481-4828434/7082279",
+        "bytes": 27745,
+        "ms": 241.95,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4828443-4870064",
+        "status": 206,
+        "content_length": "41622",
+        "content_range": "bytes 4828443-4870064/7082279",
+        "bytes": 42413,
+        "ms": 241.75,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 2788.3,
+      "net_span_ms": 2773.32,
+      "n_requests": 19,
+      "n_get": 19,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 19
+      },
+      "bytes_wire": 111935,
+      "bytes_body": 97050,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 2788.3,
+       "ms_open": 1920.8,
+       "ms_small_overview": 158.7,
+       "ms_window": 708.7,
+       "n_images": 6,
+       "full": [
+        7200,
+        3600
+       ],
+       "bands_small": 9,
+       "small": [
+        225,
+        112
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 25200,
+        "mean": 97.11757936507937
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 20.510299682617188
+       },
+       "block": [
+        512,
+        512
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/7082279",
+        "bytes": 1805,
+        "ms": 381.22,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/7082279",
+        "bytes": 1807,
+        "ms": 140.29,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3264-3287",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 3264-3287/7082279",
+        "bytes": 806,
+        "ms": 134.93,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3288-3335",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 3288-3335/7082279",
+        "bytes": 830,
+        "ms": 138,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3336-3399",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 3336-3399/7082279",
+        "bytes": 846,
+        "ms": 135.9,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3400-3415",
+        "status": 206,
+        "content_length": "16",
+        "content_range": "bytes 3400-3415/7082279",
+        "bytes": 798,
+        "ms": 139.33,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3416-3423",
+        "status": 206,
+        "content_length": "8",
+        "content_range": "bytes 3416-3423/7082279",
+        "bytes": 789,
+        "ms": 138.19,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3424-4447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3424-4447/7082279",
+        "bytes": 1808,
+        "ms": 133.77,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3674-4697",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3674-4697/7082279",
+        "bytes": 1808,
+        "ms": 132.4,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=3924-4947",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 3924-4947/7082279",
+        "bytes": 1808,
+        "ms": 139.88,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4174-5197",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4174-5197/7082279",
+        "bytes": 1808,
+        "ms": 144.55,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4424-5447",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 4424-5447/7082279",
+        "bytes": 1808,
+        "ms": 139.1,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5974-27103",
+        "status": 206,
+        "content_length": "21130",
+        "content_range": "bytes 5974-27103/7082279",
+        "bytes": 21916,
+        "ms": 136.76,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4878-4881",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4878-4881/7082279",
+        "bytes": 785,
+        "ms": 144.93,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4882-4885",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4882-4885/7082279",
+        "bytes": 785,
+        "ms": 282.58,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5358-5361",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5358-5361/7082279",
+        "bytes": 785,
+        "ms": 228.7,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=5362-5365",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 5362-5365/7082279",
+        "bytes": 785,
+        "ms": 148.14,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4801481-4828434",
+        "status": 206,
+        "content_length": "26954",
+        "content_range": "bytes 4801481-4828434/7082279",
+        "bytes": 27745,
+        "ms": 235.49,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4828443-4870064",
+        "status": 206,
+        "content_length": "41622",
+        "content_range": "bytes 4828443-4870064/7082279",
+        "bytes": 42413,
+        "ms": 260.04,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "wait": null,
+  "worker_probe": {
+   "path": "atlas/aquamaps_eov/score_risk.tif",
+   "status": 200
+  }
+ },
+ "c4c_cog_atlas_3857": {
+  "title": "geotiff.js atlas aquamaps_eov score_risk_3857 (overviews)",
+  "files": {
+   "worker": {
+    "url": "https://om-gazetteer.ben-f07.workers.dev/atlas/aquamaps_eov/score_risk_3857.tif?key=<preview-key>",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 1613.4,
+    "wall_ms_median": 1464,
+    "wall_ms_all": [
+     1613.4,
+     1464,
+     1337.4
+    ],
+    "net_span_ms_median": 1458.16,
+    "n_requests": 24,
+    "n_get": 24,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 109786,
+    "bytes_body": 93381,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 24
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 1613.4,
+      "net_span_ms": 1602.53,
+      "n_requests": 24,
+      "n_get": 24,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 24
+      },
+      "bytes_wire": 109786,
+      "bytes_body": 93381,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 1613.4,
+       "ms_open": 1188,
+       "ms_small_overview": 94.3,
+       "ms_window": 331,
+       "n_images": 6,
+       "full": [
+        8192,
+        8192
+       ],
+       "bands_small": 9,
+       "small": [
+        256,
+        256
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 65536,
+        "mean": 113.28738403320312
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 7.9534454345703125
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/11121693",
+        "bytes": 1764,
+        "ms": 267.89,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/11121693",
+        "bytes": 1336,
+        "ms": 120.21,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1384-1407",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 1384-1407/11121693",
+        "bytes": 756,
+        "ms": 102.4,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1408-1455",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 1408-1455/11121693",
+        "bytes": 743,
+        "ms": 95.58,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1456-1519",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 1456-1519/11121693",
+        "bytes": 758,
+        "ms": 109.89,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1520-1552",
+        "status": 206,
+        "content_length": "33",
+        "content_range": "bytes 1520-1552/11121693",
+        "bytes": 731,
+        "ms": 89.56,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1554-2577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1554-2577/11121693",
+        "bytes": 1720,
+        "ms": 78.72,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1804-2827",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1804-2827/11121693",
+        "bytes": 1720,
+        "ms": 77.58,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2054-3077",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2054-3077/11121693",
+        "bytes": 1719,
+        "ms": 92.07,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2304-3327",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2304-3327/11121693",
+        "bytes": 1721,
+        "ms": 73.21,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2554-3577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2554-3577/11121693",
+        "bytes": 1722,
+        "ms": 65.78,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=13720-45922",
+        "status": 206,
+        "content_length": "32203",
+        "content_range": "bytes 13720-45922/11121693",
+        "bytes": 32909,
+        "ms": 73.69,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4784-4787",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4784-4787/11121693",
+        "bytes": 694,
+        "ms": 83.49,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4788-4791",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4788-4791/11121693",
+        "bytes": 695,
+        "ms": 84.36,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4912-4915",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4912-4915/11121693",
+        "bytes": 699,
+        "ms": 111.29,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4916-4919",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4916-4919/11121693",
+        "bytes": 695,
+        "ms": 92.72,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8880-8883",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8880-8883/11121693",
+        "bytes": 695,
+        "ms": 97.07,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8884-8887",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8884-8887/11121693",
+        "bytes": 700,
+        "ms": 88.78,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9012-9015",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9012-9015/11121693",
+        "bytes": 694,
+        "ms": 88.71,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9008-9011",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9008-9011/11121693",
+        "bytes": 695,
+        "ms": 77.26,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7859363-7883011",
+        "status": 206,
+        "content_length": "23649",
+        "content_range": "bytes 7859363-7883011/11121693",
+        "bytes": 24353,
+        "ms": 143.3,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7844377-7859354",
+        "status": 206,
+        "content_length": "14978",
+        "content_range": "bytes 7844377-7859354/11121693",
+        "bytes": 15678,
+        "ms": 134.42,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8566171-8580076",
+        "status": 206,
+        "content_length": "13906",
+        "content_range": "bytes 8566171-8580076/11121693",
+        "bytes": 14612,
+        "ms": 133.97,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8564887-8566162",
+        "status": 206,
+        "content_length": "1276",
+        "content_range": "bytes 8564887-8566162/11121693",
+        "bytes": 1977,
+        "ms": 126,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 1464,
+      "net_span_ms": 1458.16,
+      "n_requests": 24,
+      "n_get": 24,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 24
+      },
+      "bytes_wire": 109804,
+      "bytes_body": 93381,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 1464,
+       "ms_open": 1064.4,
+       "ms_small_overview": 92.8,
+       "ms_window": 306.6,
+       "n_images": 6,
+       "full": [
+        8192,
+        8192
+       ],
+       "bands_small": 9,
+       "small": [
+        256,
+        256
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 65536,
+        "mean": 113.28738403320312
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 7.9534454345703125
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/11121693",
+        "bytes": 1766,
+        "ms": 168.48,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/11121693",
+        "bytes": 1347,
+        "ms": 89.33,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1384-1407",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 1384-1407/11121693",
+        "bytes": 756,
+        "ms": 85.89,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1408-1455",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 1408-1455/11121693",
+        "bytes": 737,
+        "ms": 96.35,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1456-1519",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 1456-1519/11121693",
+        "bytes": 764,
+        "ms": 78.78,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1520-1552",
+        "status": 206,
+        "content_length": "33",
+        "content_range": "bytes 1520-1552/11121693",
+        "bytes": 721,
+        "ms": 76.7,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1554-2577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1554-2577/11121693",
+        "bytes": 1721,
+        "ms": 75.7,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1804-2827",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1804-2827/11121693",
+        "bytes": 1725,
+        "ms": 78.57,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2054-3077",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2054-3077/11121693",
+        "bytes": 1721,
+        "ms": 109.4,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2304-3327",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2304-3327/11121693",
+        "bytes": 1724,
+        "ms": 88.92,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2554-3577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2554-3577/11121693",
+        "bytes": 1722,
+        "ms": 100.51,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=13720-45922",
+        "status": 206,
+        "content_length": "32203",
+        "content_range": "bytes 13720-45922/11121693",
+        "bytes": 32910,
+        "ms": 77.92,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4784-4787",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4784-4787/11121693",
+        "bytes": 697,
+        "ms": 85.07,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4788-4791",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4788-4791/11121693",
+        "bytes": 702,
+        "ms": 96.74,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4912-4915",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4912-4915/11121693",
+        "bytes": 696,
+        "ms": 90.32,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4916-4919",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4916-4919/11121693",
+        "bytes": 697,
+        "ms": 90.69,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8880-8883",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8880-8883/11121693",
+        "bytes": 696,
+        "ms": 82.27,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9008-9011",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9008-9011/11121693",
+        "bytes": 696,
+        "ms": 91.16,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9012-9015",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9012-9015/11121693",
+        "bytes": 698,
+        "ms": 80.99,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8884-8887",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8884-8887/11121693",
+        "bytes": 689,
+        "ms": 88.42,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7844377-7859354",
+        "status": 206,
+        "content_length": "14978",
+        "content_range": "bytes 7844377-7859354/11121693",
+        "bytes": 15680,
+        "ms": 130.99,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8566171-8580076",
+        "status": 206,
+        "content_length": "13906",
+        "content_range": "bytes 8566171-8580076/11121693",
+        "bytes": 14607,
+        "ms": 122.56,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8564887-8566162",
+        "status": 206,
+        "content_length": "1276",
+        "content_range": "bytes 8564887-8566162/11121693",
+        "bytes": 1980,
+        "ms": 108.26,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7859363-7883011",
+        "status": 206,
+        "content_length": "23649",
+        "content_range": "bytes 7859363-7883011/11121693",
+        "bytes": 24352,
+        "ms": 112.07,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 1337.4,
+      "net_span_ms": 1334.11,
+      "n_requests": 24,
+      "n_get": 24,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 24
+      },
+      "bytes_wire": 109802,
+      "bytes_body": 93381,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 1337.4,
+       "ms_open": 939.8,
+       "ms_small_overview": 103,
+       "ms_window": 294.4,
+       "n_images": 6,
+       "full": [
+        8192,
+        8192
+       ],
+       "bands_small": 9,
+       "small": [
+        256,
+        256
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 65536,
+        "mean": 113.28738403320312
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 7.9534454345703125
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/11121693",
+        "bytes": 1762,
+        "ms": 102.58,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/11121693",
+        "bytes": 1340,
+        "ms": 83.9,
+        "protocol": "h2",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1384-1407",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 1384-1407/11121693",
+        "bytes": 758,
+        "ms": 79.04,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1408-1455",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 1408-1455/11121693",
+        "bytes": 742,
+        "ms": 72.52,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1456-1519",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 1456-1519/11121693",
+        "bytes": 760,
+        "ms": 74.48,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1520-1552",
+        "status": 206,
+        "content_length": "33",
+        "content_range": "bytes 1520-1552/11121693",
+        "bytes": 728,
+        "ms": 82.88,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1554-2577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1554-2577/11121693",
+        "bytes": 1719,
+        "ms": 92.87,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1804-2827",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1804-2827/11121693",
+        "bytes": 1722,
+        "ms": 75.51,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2054-3077",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2054-3077/11121693",
+        "bytes": 1721,
+        "ms": 92.86,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2304-3327",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2304-3327/11121693",
+        "bytes": 1722,
+        "ms": 87.67,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2554-3577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2554-3577/11121693",
+        "bytes": 1726,
+        "ms": 79.47,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=13720-45922",
+        "status": 206,
+        "content_length": "32203",
+        "content_range": "bytes 13720-45922/11121693",
+        "bytes": 32906,
+        "ms": 79.03,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4784-4787",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4784-4787/11121693",
+        "bytes": 694,
+        "ms": 84.6,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4788-4791",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4788-4791/11121693",
+        "bytes": 699,
+        "ms": 77.86,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4912-4915",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4912-4915/11121693",
+        "bytes": 693,
+        "ms": 93.16,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4916-4919",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4916-4919/11121693",
+        "bytes": 692,
+        "ms": 115.76,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8884-8887",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8884-8887/11121693",
+        "bytes": 698,
+        "ms": 94.68,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8880-8883",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8880-8883/11121693",
+        "bytes": 695,
+        "ms": 94.87,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9008-9011",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9008-9011/11121693",
+        "bytes": 703,
+        "ms": 77.6,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9012-9015",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9012-9015/11121693",
+        "bytes": 700,
+        "ms": 99.53,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8564887-8566162",
+        "status": 206,
+        "content_length": "1276",
+        "content_range": "bytes 8564887-8566162/11121693",
+        "bytes": 1973,
+        "ms": 81.8,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7859363-7883011",
+        "status": 206,
+        "content_length": "23649",
+        "content_range": "bytes 7859363-7883011/11121693",
+        "bytes": 24358,
+        "ms": 94.06,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7844377-7859354",
+        "status": 206,
+        "content_length": "14978",
+        "content_range": "bytes 7844377-7859354/11121693",
+        "bytes": 15684,
+        "ms": 86.82,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8566171-8580076",
+        "status": 206,
+        "content_length": "13906",
+        "content_range": "bytes 8566171-8580076/11121693",
+        "bytes": 14607,
+        "ms": 74.77,
+        "protocol": "h3",
+        "acao": "http://localhost:5190",
+        "vary": "Origin"
+       }
+      ]
+     }
+    ]
+   },
+   "s3": {
+    "url": "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/atlas/aquamaps_eov/score_risk_3857.tif",
+    "n_runs": 3,
+    "n_ok": 3,
+    "wall_ms_cold": 2893.3,
+    "wall_ms_median": 2803,
+    "wall_ms_all": [
+     2893.3,
+     2737.1,
+     2803
+    ],
+    "net_span_ms_median": 2801.49,
+    "n_requests": 24,
+    "n_get": 24,
+    "n_head": 0,
+    "n_options": 0,
+    "bytes_wire": 111783,
+    "bytes_body": 93381,
+    "all_206": true,
+    "full_file_warn": false,
+    "statuses": {
+     "GET 206": 24
+    },
+    "errors": [],
+    "runs": [
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 2893.3,
+      "net_span_ms": 2886.93,
+      "n_requests": 24,
+      "n_get": 24,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 24
+      },
+      "bytes_wire": 111783,
+      "bytes_body": 93381,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 2893.3,
+       "ms_open": 1838.9,
+       "ms_small_overview": 272.2,
+       "ms_window": 781.8,
+       "n_images": 6,
+       "full": [
+        8192,
+        8192
+       ],
+       "bands_small": 9,
+       "small": [
+        256,
+        256
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 65536,
+        "mean": 113.28738403320312
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 7.9534454345703125
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/11121693",
+        "bytes": 1788,
+        "ms": 446.3,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/11121693",
+        "bytes": 1790,
+        "ms": 132.49,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1384-1407",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 1384-1407/11121693",
+        "bytes": 789,
+        "ms": 134.8,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1408-1455",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 1408-1455/11121693",
+        "bytes": 813,
+        "ms": 132.81,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1456-1519",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 1456-1519/11121693",
+        "bytes": 829,
+        "ms": 139.86,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1520-1552",
+        "status": 206,
+        "content_length": "33",
+        "content_range": "bytes 1520-1552/11121693",
+        "bytes": 798,
+        "ms": 140.51,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1554-2577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1554-2577/11121693",
+        "bytes": 1791,
+        "ms": 136.19,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1804-2827",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1804-2827/11121693",
+        "bytes": 1791,
+        "ms": 144.84,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2054-3077",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2054-3077/11121693",
+        "bytes": 1791,
+        "ms": 136.24,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2304-3327",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2304-3327/11121693",
+        "bytes": 1791,
+        "ms": 135.04,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2554-3577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2554-3577/11121693",
+        "bytes": 1791,
+        "ms": 139.72,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=13720-45922",
+        "status": 206,
+        "content_length": "32203",
+        "content_range": "bytes 13720-45922/11121693",
+        "bytes": 32973,
+        "ms": 251.46,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4784-4787",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4784-4787/11121693",
+        "bytes": 768,
+        "ms": 140.51,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4788-4791",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4788-4791/11121693",
+        "bytes": 768,
+        "ms": 278.23,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4912-4915",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4912-4915/11121693",
+        "bytes": 768,
+        "ms": 405.14,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4916-4919",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4916-4919/11121693",
+        "bytes": 768,
+        "ms": 379.06,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8880-8883",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8880-8883/11121693",
+        "bytes": 768,
+        "ms": 260.13,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8884-8887",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8884-8887/11121693",
+        "bytes": 768,
+        "ms": 138.34,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9012-9015",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9012-9015/11121693",
+        "bytes": 768,
+        "ms": 140.97,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7844377-7859354",
+        "status": 206,
+        "content_length": "14978",
+        "content_range": "bytes 7844377-7859354/11121693",
+        "bytes": 15752,
+        "ms": 137.94,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9008-9011",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9008-9011/11121693",
+        "bytes": 768,
+        "ms": 143.4,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7859363-7883011",
+        "status": 206,
+        "content_length": "23649",
+        "content_range": "bytes 7859363-7883011/11121693",
+        "bytes": 24423,
+        "ms": 132.59,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8566171-8580076",
+        "status": 206,
+        "content_length": "13906",
+        "content_range": "bytes 8566171-8580076/11121693",
+        "bytes": 14680,
+        "ms": 250.62,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8564887-8566162",
+        "status": 206,
+        "content_length": "1276",
+        "content_range": "bytes 8564887-8566162/11121693",
+        "bytes": 2049,
+        "ms": 224.84,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 2737.1,
+      "net_span_ms": 2731.93,
+      "n_requests": 24,
+      "n_get": 24,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 24
+      },
+      "bytes_wire": 112263,
+      "bytes_body": 93381,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 2737.1,
+       "ms_open": 1801.5,
+       "ms_small_overview": 275.9,
+       "ms_window": 659.5,
+       "n_images": 6,
+       "full": [
+        8192,
+        8192
+       ],
+       "bands_small": 9,
+       "small": [
+        256,
+        256
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 65536,
+        "mean": 113.28738403320312
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 7.9534454345703125
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/11121693",
+        "bytes": 1808,
+        "ms": 402.34,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/11121693",
+        "bytes": 1810,
+        "ms": 148.04,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1384-1407",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 1384-1407/11121693",
+        "bytes": 809,
+        "ms": 135.63,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1408-1455",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 1408-1455/11121693",
+        "bytes": 833,
+        "ms": 137.75,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1456-1519",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 1456-1519/11121693",
+        "bytes": 849,
+        "ms": 140.92,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1520-1552",
+        "status": 206,
+        "content_length": "33",
+        "content_range": "bytes 1520-1552/11121693",
+        "bytes": 818,
+        "ms": 135.43,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1554-2577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1554-2577/11121693",
+        "bytes": 1811,
+        "ms": 143.46,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1804-2827",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1804-2827/11121693",
+        "bytes": 1811,
+        "ms": 132.27,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2054-3077",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2054-3077/11121693",
+        "bytes": 1811,
+        "ms": 137.82,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2304-3327",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2304-3327/11121693",
+        "bytes": 1811,
+        "ms": 141.04,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2554-3577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2554-3577/11121693",
+        "bytes": 1811,
+        "ms": 134,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=13720-45922",
+        "status": 206,
+        "content_length": "32203",
+        "content_range": "bytes 13720-45922/11121693",
+        "bytes": 32993,
+        "ms": 257.09,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4784-4787",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4784-4787/11121693",
+        "bytes": 788,
+        "ms": 140.19,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4788-4791",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4788-4791/11121693",
+        "bytes": 788,
+        "ms": 282.01,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4912-4915",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4912-4915/11121693",
+        "bytes": 788,
+        "ms": 386.59,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4916-4919",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4916-4919/11121693",
+        "bytes": 788,
+        "ms": 388.77,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8880-8883",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8880-8883/11121693",
+        "bytes": 788,
+        "ms": 257.53,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8884-8887",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8884-8887/11121693",
+        "bytes": 788,
+        "ms": 138.47,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9008-9011",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9008-9011/11121693",
+        "bytes": 788,
+        "ms": 130.95,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9012-9015",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9012-9015/11121693",
+        "bytes": 788,
+        "ms": 131.59,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7844377-7859354",
+        "status": 206,
+        "content_length": "14978",
+        "content_range": "bytes 7844377-7859354/11121693",
+        "bytes": 15772,
+        "ms": 142.1,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7859363-7883011",
+        "status": 206,
+        "content_length": "23649",
+        "content_range": "bytes 7859363-7883011/11121693",
+        "bytes": 24443,
+        "ms": 137.27,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8564887-8566162",
+        "status": 206,
+        "content_length": "1276",
+        "content_range": "bytes 8564887-8566162/11121693",
+        "bytes": 2069,
+        "ms": 127.89,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8566171-8580076",
+        "status": 206,
+        "content_length": "13906",
+        "content_range": "bytes 8566171-8580076/11121693",
+        "bytes": 14700,
+        "ms": 131.05,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     },
+     {
+      "error": null,
+      "boot": null,
+      "wall_ms": 2803,
+      "net_span_ms": 2801.49,
+      "n_requests": 24,
+      "n_get": 24,
+      "n_head": 0,
+      "n_options": 0,
+      "statuses": {
+       "GET 206": 24
+      },
+      "bytes_wire": 112263,
+      "bytes_body": 93381,
+      "all_206": true,
+      "full_file_warn": false,
+      "result": {
+       "ms": 2803,
+       "ms_open": 1861.9,
+       "ms_small_overview": 261,
+       "ms_window": 679.8,
+       "n_images": 6,
+       "full": [
+        8192,
+        8192
+       ],
+       "bands_small": 9,
+       "small": [
+        256,
+        256
+       ],
+       "small_is_overview": true,
+       "small_stat": {
+        "n": 65536,
+        "mean": 113.28738403320312
+       },
+       "window": [
+        256,
+        256
+       ],
+       "window_stat": {
+        "n": 65536,
+        "mean": 7.9534454345703125
+       },
+       "block": [
+        256,
+        256
+       ],
+       "samples_per_pixel": 9
+      },
+      "requests": [
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=0-1023",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 0-1023/11121693",
+        "bytes": 1808,
+        "ms": 415.71,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=192-1215",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 192-1215/11121693",
+        "bytes": 1810,
+        "ms": 139.08,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1384-1407",
+        "status": 206,
+        "content_length": "24",
+        "content_range": "bytes 1384-1407/11121693",
+        "bytes": 809,
+        "ms": 150.26,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1408-1455",
+        "status": 206,
+        "content_length": "48",
+        "content_range": "bytes 1408-1455/11121693",
+        "bytes": 833,
+        "ms": 139.21,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1456-1519",
+        "status": 206,
+        "content_length": "64",
+        "content_range": "bytes 1456-1519/11121693",
+        "bytes": 849,
+        "ms": 143.17,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1520-1552",
+        "status": 206,
+        "content_length": "33",
+        "content_range": "bytes 1520-1552/11121693",
+        "bytes": 818,
+        "ms": 147.49,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1554-2577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1554-2577/11121693",
+        "bytes": 1811,
+        "ms": 141.14,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=1804-2827",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 1804-2827/11121693",
+        "bytes": 1811,
+        "ms": 142.11,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2054-3077",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2054-3077/11121693",
+        "bytes": 1811,
+        "ms": 145.45,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2304-3327",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2304-3327/11121693",
+        "bytes": 1811,
+        "ms": 140.41,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=2554-3577",
+        "status": 206,
+        "content_length": "1024",
+        "content_range": "bytes 2554-3577/11121693",
+        "bytes": 1811,
+        "ms": 141.91,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=13720-45922",
+        "status": 206,
+        "content_length": "32203",
+        "content_range": "bytes 13720-45922/11121693",
+        "bytes": 32993,
+        "ms": 250.49,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4784-4787",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4784-4787/11121693",
+        "bytes": 788,
+        "ms": 153.23,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4788-4791",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4788-4791/11121693",
+        "bytes": 788,
+        "ms": 298.5,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4912-4915",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4912-4915/11121693",
+        "bytes": 788,
+        "ms": 396.63,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=4916-4919",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 4916-4919/11121693",
+        "bytes": 788,
+        "ms": 396.8,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8880-8883",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8880-8883/11121693",
+        "bytes": 788,
+        "ms": 250.35,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8884-8887",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 8884-8887/11121693",
+        "bytes": 788,
+        "ms": 147.76,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9008-9011",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9008-9011/11121693",
+        "bytes": 788,
+        "ms": 142.65,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=9012-9015",
+        "status": 206,
+        "content_length": "4",
+        "content_range": "bytes 9012-9015/11121693",
+        "bytes": 788,
+        "ms": 138.8,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7844377-7859354",
+        "status": 206,
+        "content_length": "14978",
+        "content_range": "bytes 7844377-7859354/11121693",
+        "bytes": 15772,
+        "ms": 137.15,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=7859363-7883011",
+        "status": 206,
+        "content_length": "23649",
+        "content_range": "bytes 7859363-7883011/11121693",
+        "bytes": 24443,
+        "ms": 139.4,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8566171-8580076",
+        "status": 206,
+        "content_length": "13906",
+        "content_range": "bytes 8566171-8580076/11121693",
+        "bytes": 14700,
+        "ms": 132.76,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       },
+       {
+        "method": "GET",
+        "type": "Fetch",
+        "range": "bytes=8564887-8566162",
+        "status": 206,
+        "content_length": "1276",
+        "content_range": "bytes 8564887-8566162/11121693",
+        "bytes": 2069,
+        "ms": 138.11,
+        "protocol": "http/1.1",
+        "acao": "*",
+        "vary": "Origin, Access-Control-Request-Headers, Access-Control-Request-Method"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "wait": null,
+  "worker_probe": {
+   "path": "atlas/aquamaps_eov/score_risk_3857.tif",
+   "status": 200
+  }
+ }
+}
