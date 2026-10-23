@@ -1,0 +1,46 @@
+== 3a pmtiles getHeader + getZxy(2,0,1)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 360.9 ms, 3 req ({"GET 206":3}), 25952 B, all206=true
+  s3 #1: 798.1 ms, 3 req ({"GET 206":3}), 26342 B, all206=true
+  worker #2: 311.7 ms, 3 req ({"GET 206":3}), 25972 B, all206=true
+  s3 #2: 703.6 ms, 3 req ({"GET 206":3}), 26342 B, all206=true
+  worker #3: 293 ms, 3 req ({"GET 206":3}), 25950 B, all206=true
+  s3 #3: 694 ms, 3 req ({"GET 206":3}), 26342 B, all206=true
+== 3b maplibre 6 pmtiles:// zoom 3 to idle
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 445.1 ms, 6 req ({"GET 206":6}), 29730 B, all206=true
+  s3 #1: 1031.4 ms, 6 req ({"GET 206":6}), 30167 B, all206=true
+  worker #2: 425.2 ms, 6 req ({"GET 206":6}), 29725 B, all206=true
+  s3 #2: 977.8 ms, 6 req ({"GET 206":6}), 30287 B, all206=true
+  worker #3: 425 ms, 6 req ({"GET 206":6}), 29721 B, all206=true
+  s3 #3: 1016.1 ms, 6 req ({"GET 206":6}), 30287 B, all206=true
+== 4a geotiff.js gazetteer Then vs Now FKNMS 2024 (no overviews)
+  wait: {"ok":true,"status":200,"waited_s":0}
+  worker #1: 1089.7 ms, 13 req ({"GET 206":13}), 26693 B, all206=true
+  s3 #1: 2123.4 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #2: 1122.9 ms, 13 req ({"GET 206":13}), 26686 B, all206=true
+  s3 #2: 2051.4 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+  worker #3: 1104.2 ms, 13 req ({"GET 206":13}), 26682 B, all206=true
+  s3 #3: 1995.4 ms, 13 req ({"GET 206":13}), 27523 B, all206=true
+== 4b geotiff.js atlas aquamaps_eov score_risk (overviews)
+  probe: {"path":"atlas/aquamaps_eov/score_risk.tif","status":200}
+  worker #1: 1685.5 ms, 18 req ({"GET 206":18}), 160890 B, all206=true
+  s3 #1: 2998.5 ms, 19 req ({"GET 206":19}), 111935 B, all206=true
+  worker #2: 1205.2 ms, 18 req ({"GET 206":18}), 160887 B, all206=true
+  s3 #2: 2893.6 ms, 19 req ({"GET 206":19}), 111935 B, all206=true
+  worker #3: 1447.4 ms, 18 req ({"GET 206":18}), 160903 B, all206=true
+  s3 #3: 2741.8 ms, 19 req ({"GET 206":19}), 111935 B, all206=true
+== 4c geotiff.js atlas aquamaps_eov score_risk_3857 (overviews)
+  probe: {"path":"atlas/aquamaps_eov/score_risk_3857.tif","status":404}
+  s3 #1: 2923.2 ms, 24 req ({"GET 206":24}), 112263 B, all206=true
+  s3 #2: 2760.4 ms, 24 req ({"GET 206":24}), 111783 B, all206=true
+  s3 #3: 2759.9 ms, 24 req ({"GET 206":24}), 111783 B, all206=true
+== 3c pmtiles getHeader + getZxy(2,1,1) basemap/gebco/far
+  probe: {"path":"basemap/gebco/far.pmtiles","status":200}
+  worker #1: 415.8 ms, 2 req ({"GET 206":2}), 323426 B, all206=true
+  s3 #1: 834.4 ms, 2 req ({"GET 206":2}), 323584 B, all206=true
+  worker #2: 265.3 ms, 2 req ({"GET 206":2}), 323433 B, all206=true
+  s3 #2: 899 ms, 2 req ({"GET 206":2}), 323584 B, all206=true
+  worker #3: 353.4 ms, 2 req ({"GET 206":2}), 323434 B, all206=true
+  s3 #3: 806.7 ms, 2 req ({"GET 206":2}), 323624 B, all206=true
+done b
