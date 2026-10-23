@@ -277,6 +277,18 @@ describe('sliceSource', () => {
     expect((await tables(e)).filter((t) => t.startsWith('slice_mask'))).toHaveLength(1)
   }, 30_000)
 
+  it('regression (engine 0.1.1): two overlapping slabs give each cell once', async () => {
+    const { fetchFn, hits } = erddap('stats_3x3x2.parquet')
+    // slab 1 is the whole 3 x 3 grid, slab 2 its last two columns: six cells are in both; the mask (the places' union) has each once
+    const axes = [AXES[0], { lon: LONS.slice(1), lat: LATS }]
+    const mask = LATS.flatMap((lat) => LONS.map((lon) => ({ lat, lon, weight: 1 })))
+    const src = sliceSource({ dataset: DS, variable: SST, mask, axes, engine: nodeEngine(), fetch: fetchFn })
+    const cells = await src.slice('2026-01-01')
+    expect(hits).toHaveLength(2)
+    expect(cells).toHaveLength(9)
+    expect(new Set(cells.map((c) => `${c.lat},${c.lon}`)).size).toBe(9)
+  }, 30_000)
+
   it('an aborted slice rejects', async () => {
     const { fetchFn } = erddap('stats_3x3x2.parquet')
     const src = sliceSource({ dataset: DS, variable: SST, mask: DIAGONAL, axes: AXES, engine: nodeEngine(), fetch: fetchFn })

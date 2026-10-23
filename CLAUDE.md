@@ -41,7 +41,7 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
   (`@oceanmetrics/map/h3-worker`). The spike conditions are tests: geojson-vt `tolerance: 0`, the antimeridian unwrap on
   `fixtures/h3/crossing55.json`, the 3857 guard, legends from STAC only. The basemap tiers come from
   `scripts/basemap/build_gebco.sh`.
-- **`engine` is the browser engine** (0.1.0): erddap-places' `gridMask`, `wkb`, `placeLobes`, `erddap`, `extent`, `fetchRetry`,
+- **`engine` is the browser engine** (0.1.1): erddap-places' `gridMask`, `wkb`, `placeLobes`, `erddap`, `extent`, `fetchRetry`,
   `cells`, `toDataset`, the chunk rules and the five `sql/` templates moved in byte for byte (`test/moved.test.ts` proves it
   against the erddap-places checkout; `test/parity.test.ts` reproduces the 15 Python mask fixtures exactly), plus `Engine`
   over DuckDB-WASM (a peer; the app passes its module to `connectBrowser`), `runPreview` (the chunked live preview: 90 days

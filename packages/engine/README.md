@@ -112,7 +112,9 @@ const run = await runPreview({
 `@oceanmetrics/map`'s `gridSlot(spec, source)`: `slice(t)` fetches the one step `t` (a day or an ISO instant;
 `null` is the extent's end, or ERDDAP's `last` without an extent) of every lobe and returns `last_step`'s rows as
 `{ lat, lon, value, weight }`, the mask's own centres, a cell without data kept with `value: null`. The mask goes into
-the engine once, at the first slice.
+the engine once, at the first slice. The slabs of the lobes are read as `SELECT DISTINCT *` (as `runPreview` does), so a
+cell inside two overlapping boxes (Channel Islands and Chumash) comes back once, not twice (0.1.1); the mask you pass is
+the places' union and must hold each cell once.
 
 ## DuckDB-WASM: the peer and the worker setup
 

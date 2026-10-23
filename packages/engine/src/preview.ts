@@ -109,6 +109,9 @@ async function loadSlabs(engine: Engine, urls: string[], format: Format, signal:
   return files
 }
 const readList = (files: string[]) => `read_parquet([${files.map((f) => `'${f}'`).join(', ')}])`
+// the lobes' slabs as one relation without a row twice: where two places' boxes overlap (Channel Islands and Chumash)
+// both slabs hold the cells of the overlap, and the join over the mask would return each of them twice
+const distinctSlab = (files: string[]) => `(SELECT DISTINCT * FROM ${readList(files)})`
 
 // ---- the preview ----
 
@@ -205,7 +208,7 @@ export async function runPreview(o: PreviewOptions): Promise<PreviewResult> {
       try {
         for (const s of slabs) { const f = `${uid('slab')}.parquet`; await engine.registerBuffer(f, s.buffer!); files.push(f) }
         // DISTINCT: a coarse axis (the 8-day grid) can snap a chunk's two endpoints onto one step
-        const slab = `(SELECT DISTINCT * FROM ${readList(files)})`
+        const slab = distinctSlab(files)
         const out  = await engine.runTemplate(name, { expr, slab, mask })
         aborted(signal)
         // two chunks snapped onto the same step of a coarse axis give that step twice, identical: keep the first
@@ -266,7 +269,7 @@ export function sliceSource(o: SliceSourceOptions): SliceSource {
       try {
         await inserted
         aborted(signal)
-        const rows = await o.engine.runTemplate('last_step', { expr: valueExpr(o.variable), slab: readList(files), mask })
+        const rows = await o.engine.runTemplate('last_step', { expr: valueExpr(o.variable), slab: distinctSlab(files), mask })
         return rows.map((r) => ({
           lat: Number(r.latitude), lon: Number(r.longitude), weight: Number(r.weight),
           value: r.value === null || r.value === undefined ? null : Number(r.value),

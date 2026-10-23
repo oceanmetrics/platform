@@ -1,6 +1,6 @@
 {
   "name": "@oceanmetrics/engine",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "the browser engine of Ocean Metrics: the place mask, ERDDAP requests, the SQL shared with the Python engine, DuckDB-WASM statistics and the chunked live preview",
   "keywords": [
     "ocean",

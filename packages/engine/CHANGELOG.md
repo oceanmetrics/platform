@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 (2026-10-23)
+
+- Fix: `sliceSource().slice()` read the lobes' slabs without the `SELECT DISTINCT` that `runPreview` applies, so where two
+  places' boxes overlap (Channel Islands and Chumash) every cell of the overlap came back twice. Regression test with two
+  overlapping synthetic slabs.
+
 ## 0.1.0 (2026-10-23)
 
 The browser engine, build week 2 step 2b: erddap-places' engine as a platform package, so the indicators Map's `grid`
