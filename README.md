@@ -82,8 +82,8 @@ what an app pays per provider); catalog 10 000 B (measured 6 726 on 2026-10-23 a
 cards landed; 404 B before, the profile constants alone; its Node-only validator and CLI left out: they never reach a
 browser; hyparquet and `@oceanmetrics/status` are dependencies and not counted); engine 40 000 B (measured 26 794 on 2026-10-23
 at 0.1.0, the five SQL templates included; DuckDB-WASM and Apache Arrow are peers and not counted; packages/engine/README.md
-has what an app pays per entry). Catalog raised to 15 000 B on 2026-10-23 at 0.5.0 (measured 11 560): two subpaths
-landed, `/changes` (3 696 B: the diff, the sentences, the Atom builder and the feed names) and `/report` (2 170 B: the
+has what an app pays per entry). Catalog raised to 15 000 B on 2026-10-23 at 0.5.0 (measured 11 610): two subpaths
+landed, `/changes` (3 753 B: the diff, the sentences, the Atom builder and the feed names) and `/report` (2 170 B: the
 selection rules moved from the indicators repo), and the budget sums every file while no app loads them all (an app on
 `/cards` pays nothing for `/changes`; the viewer's rules cost what its own copy did). Raise a budget only with the reason
 written here.

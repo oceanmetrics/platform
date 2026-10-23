@@ -15,7 +15,7 @@
 - Four schemas join `PROFILES`, each with valid and invalid fixtures: `changes-row`, `changes-latest`, `feeds-index`,
   `alerts-subscription` (no address: a plain `email` key fails).
 - A test fails on any address in `fixtures/` outside example.org, example.com and oceanmetrics.io.
-- Size budget 15 000 B (was 10 000; measured 11 560), the reason in the README.
+- Size budget 15 000 B (was 10 000; measured 11 610), the reason in the README.
 
 ## 0.4.0
 

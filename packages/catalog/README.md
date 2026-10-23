@@ -299,8 +299,8 @@ it reads differently from ajv (ajv runs in strict mode to keep it so).
 ## Size budget
 
 15 000 B gzip of `dist/**/*.js`, leaving out `dist/validate*.js` and `dist/cli*.js`: the validator and the CLI are Node
-only (ajv) and never reach a browser (`scripts/size-budget.mjs`, `NODE_ONLY`). Measured 11 560 B on 2026-10-23 at 0.5.0
-(`cards.js` 5 486, `changes.js` 3 696, `report.js` 2 170, `indicators.js` 878, `index.js` 543, `manifest.js` 527, each
+only (ajv) and never reach a browser (`scripts/size-budget.mjs`, `NODE_ONLY`). Measured 11 610 B on 2026-10-23 at 0.5.0
+(`cards.js` 5 486, `changes.js` 3 753, `report.js` 2 170, `indicators.js` 878, `index.js` 543, `manifest.js` 527, each
 gzipped alone). Raised from 10 000 B (6 726 B at 0.3.0) when `/changes` and `/report` landed: the budget sums every
 file, while an app loads only its subpaths (the places page on `/cards` pays nothing for `/changes`; the viewer's rules
 cost what its own copy did). `hyparquet` and `@oceanmetrics/status` are dependencies and not counted: an app that
