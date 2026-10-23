@@ -22,6 +22,7 @@ const ROOT = new URL('../packages/', import.meta.url).pathname
 // SQL templates as strings; DuckDB-WASM and Apache Arrow are peers and not counted), so 40_000.
 // catalog 0.5.0: 11_610 on 2026-10-23: /changes (diff, sentences, Atom, feed names; 3_753) and /report (the rules moved
 // from indicators; 2_170) land, each loaded only by its own users, so 15_000 (README "Size budget").
+// catalog 0.5.1: 13_896 on 2026-10-23: /storage lands (2_679 alone, mostly comments; under 1 kB minified), budget unchanged.
 // nav: 7_776 on 2026-10-23 (0.1.0: the element, its stylesheet, the theme file, the rules, the mark and three glyphs,
 // comments counted), so 12_000; what a page fetches is the bundled line below (4_947, the 6 kB target).
 const BUDGET = { places: 18_000, status: 12_000, map: 48_000, catalog: 15_000, engine: 40_000, nav: 12_000 }

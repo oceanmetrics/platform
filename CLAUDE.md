@@ -37,6 +37,10 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
   and the places record page: `@oceanmetrics/catalog/indicators` (the readers of `indicators.json` and `coverage.parquet`,
   hyparquet, plus every card rule) and `@oceanmetrics/catalog/cards` (the pure rules alone: cards, the three absences, the
   OBIS fold, Reproduce, rollups). The root index stays types and constants. The status words come from `status`.
+- **`catalog/storage` is the one storage url rule** (0.5.1): the hosts as constants, `DEFAULT_STORAGE_HOST` (path-style
+  S3 until the DNS cutover flips it), `storageUrl()`, `rewriteStorageUrls()`; no app keeps a base url of its own. The
+  python twin `om_extract.storage` runs the same `fixtures/storage/cases.json`. Uploads go through
+  `scripts/om-publish.sh` (both stores, never a delete; tested with the fakes in `scripts/om-publish/fake/`).
 - **`map` is the map stack** (0.3.0): the `LayerSlot` contract (`slot.ts`, moved from indicators), `setupMapLibre`, the
   basemap (`composeStyle`, ported from CalCOFI explore), the ramps, and the `grid`, `cog` and `h3` providers; the `h3`
   kind also reads a release itself (`h3ReleaseSlot`: the obis-h3 Parquet in the worker over `h3r://`, row groups pruned

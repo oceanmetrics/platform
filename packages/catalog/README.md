@@ -244,6 +244,40 @@ Schemas:
 Fixtures use RFC 2606 addresses only; a test fails on any address in `fixtures/` outside example.org, example.com and
 the publisher's own oceanmetrics.io contact.
 
+## Storage urls
+
+`@oceanmetrics/catalog/storage` is the one rule for where the public bucket is read (build week 6, step 0). No app,
+Worker or pipeline keeps a base url of its own: each builds its urls with `storageUrl()` and rebases hrefs it reads from
+published files with `rewriteStorageUrls()`, so the storage cutover is one setting.
+
+| constant | value |
+|---|---|
+| `STORAGE_HOST` | `https://storage.oceanmetrics.io` (the om-gazetteer Worker over R2 after the cutover) |
+| `S3_PATH_STYLE` | `https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public` (what the apps read today) |
+| `S3_VIRTUAL_HOST` | `https://oceanmetrics.io-public.s3.amazonaws.com` (a legacy form) |
+| `WORKER_PREVIEW` | `https://om-gazetteer.ben-f07.workers.dev` (the preview and rehearsal host) |
+| `DEFAULT_STORAGE_HOST` | `S3_PATH_STYLE` until the DNS cutover of `storage.oceanmetrics.io`; the cutover flips this line |
+
+**The override**, read once at an app's start and passed to `resolveStorageHost()` in precedence order (a malformed
+value is skipped): the page attribute `data-om-storage` on `<html>` (embeds), the build's `VITE_OM_STORAGE` (browser
+apps), `OM_STORAGE` (Node, a Worker's vars, the python twin). A value is a name (`storage`, `s3`, `s3-virtual`,
+`preview`), a constant name (`STORAGE_HOST`, ...), an https url, or `http://localhost:<port>`.
+
+```ts
+import { resolveStorageHost, rewriteStorageUrls, storageUrl } from '@oceanmetrics/catalog/storage'
+
+export const STORAGE = resolveStorageHost(document.documentElement.dataset.omStorage, import.meta.env.VITE_OM_STORAGE)
+const layers = storageUrl('gazetteer/index/layers.json', { host: STORAGE })      // + { apiKey } for ?key=
+const doc = rewriteStorageUrls(json, { from: ['s3', 's3-virtual', 'storage'], to: STORAGE })   // hrefs of a release
+```
+
+`rewriteStorageUrls` takes a string (rewritten as text: a published file keeps its bytes apart from the hosts) or a
+JSON value (string values walked, keys left alone, a new value returned); a host matches only when a path, query,
+fragment, quote, bracket, space or the end follows it. `rewriteStorageUrlsCounted` also returns the count, which
+`om-catalog rewrite-storage` prints per file. The case table `fixtures/storage/cases.json` holds both directions and
+the urls that must not change (a Marine Regions tile url, ERDDAP urls, `oceanmetrics.io-public-logs`,
+`storage.oceanmetrics.io.example.org`); the python twin `om_extract.storage` runs the same table.
+
 ## Layout
 
 ```
@@ -260,6 +294,8 @@ src/indicators.ts                   @oceanmetrics/catalog/indicators: loadManife
 src/cards.ts                        @oceanmetrics/catalog/cards: the card rules, absences, fold, Reproduce, rollups (pure)
 src/changes.ts                      @oceanmetrics/catalog/changes: diffCoverage, changeSentence, atomFeed, feedsFor (pure)
 src/report.ts                       @oceanmetrics/catalog/report: the selection rules and the pi px ii ix keys (pure)
+src/storage.ts                      @oceanmetrics/catalog/storage: the storage hosts, storageUrl, rewriteStorageUrls (pure)
+fixtures/storage/cases.json         the storage rule's case table (TS and python)
 fixtures/changes-diff/              the real 10-23 coverage pair, rows of two sanctuaries (public)
 fixtures/indicators/                indicators.json, coverage.parquet (make_coverage.sql): the cards' synthetic fixtures
 src/validate.ts                     listProfiles(), loadSchema(name), validate(name, doc) -> { ok, errors } (Node, ajv)
@@ -278,6 +314,7 @@ they are names, and readers load the files from this package.
 npx om-catalog profiles                                      # list the profiles
 npx om-catalog validate <profile> <file...>                  # print each file's errors; exit 1 if any fails
 npx om-catalog validate erddap-grid ../erddap-places/catalog/gazetteer/erddap/*/collection.json
+npx om-catalog rewrite-storage --from S3_PATH_STYLE --to STORAGE_HOST indicators.json   # count; --write to rewrite
 ```
 
 ```ts

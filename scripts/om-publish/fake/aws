@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+// a fake aws for scripts/om-publish.test.ts: records each call as a JSON line in $OM_FAKE_LOG, with the files of the
+// local source folder of `s3 sync`
+import fs from 'node:fs'
+import path from 'node:path'
+const args = process.argv.slice(2)
+const files = d => fs.readdirSync(d, { recursive: true }).filter(f => fs.statSync(path.join(d, f)).isFile()).sort()
+const rec = { tool: 'aws', args }
+if (args[0] === 's3' && args[1] === 'sync' && fs.existsSync(args[2])) { rec.files = files(args[2]); rec.text = rec.files.map(f => fs.readFileSync(path.join(args[2], f)).subarray(0, 200).toString('base64')) }
+fs.appendFileSync(process.env.OM_FAKE_LOG, JSON.stringify(rec) + '\n')

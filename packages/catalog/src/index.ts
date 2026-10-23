@@ -4,7 +4,7 @@
 // the indicators readers (hyparquet) in @oceanmetrics/catalog/indicators and the pure card rules in
 // @oceanmetrics/catalog/cards. the JSON Schemas in schemas/ are the contract, these types mirror them.
 
-export const PACKAGE = { name: '@oceanmetrics/catalog', version: '0.5.0' } as const
+export const PACKAGE = { name: '@oceanmetrics/catalog', version: '0.5.1' } as const
 
 export type * from './manifest.js'
 export type { Absence, AbsenceKind, AbsenceTextOptions, CardsOptions, Fold, FoldOptions, IndicatorCard, Reproduce, Rollup, Rollups, Slot, SlotOptions, StatusCounts, StatusGlyph, TrendGlyph } from './cards.js'

@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.5.1 (unreleased)
+
+- `@oceanmetrics/catalog/storage` (new, pure, no dependency; build week 6 step 0): the one rule for where the public
+  bucket is read. The hosts `STORAGE_HOST` (`https://storage.oceanmetrics.io`), `S3_PATH_STYLE`
+  (`https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public`), `S3_VIRTUAL_HOST`, `WORKER_PREVIEW` (the om-gazetteer
+  Worker on workers.dev) and `STORAGE_HOSTS` by name; `DEFAULT_STORAGE_HOST` (path-style S3 until the DNS cutover,
+  which flips this one line); `STORAGE_ENV` (the override each app reads once: `VITE_OM_STORAGE`, `OM_STORAGE`, the
+  `data-om-storage` attribute); `parseStorageHost`, `resolveStorageHost(...candidates)`, `storageUrl(key, { host?,
+  apiKey? })`, `rewriteStorageUrls(text | json, { from, to })`, `rewriteStorageUrlsCounted` and `countStorageUrls`.
+  A url on any other host (Marine Regions, ERDDAP, a host that only begins with a storage host's name) is never changed.
+- The case table `fixtures/storage/cases.json`, which the python twin `om_extract.storage` (oceanmetrics/extract 0.6.1)
+  is held to as well.
+- `om-catalog rewrite-storage --from <host>[,<host>] --to <host> [--write] <file...>`: the urls each file would move, a
+  total, and with `--write` the files rewritten in place (scripts/om-publish.sh `rewrite` calls it).
+
 ## 0.5.0 (unreleased)
 
 - `@oceanmetrics/catalog/changes` (new, pure): `diffCoverage(before, after, { seen?, manifest? })` -> `ChangeRow[]`, one

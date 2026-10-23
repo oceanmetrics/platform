@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+// a fake rclone for scripts/om-publish.test.ts: records each call as a JSON line in $OM_FAKE_LOG (with the files of a
+// local source folder) and serves "remote" objects from $OM_FAKE_REMOTE/<remote>/<bucket>/<key> (metadata in <key>.meta.json)
+import fs from 'node:fs'
+import path from 'node:path'
+const args = process.argv.slice(2)
+const files = d => fs.existsSync(d) ? fs.readdirSync(d, { recursive: true }).filter(f => fs.statSync(path.join(d, f)).isFile()).sort() : []
+const opt = name => { const i = args.indexOf(name); return i < 0 ? null : args[i + 1] }
+const remote = s => { const m = /^([a-z0-9]+):(.*)$/.exec(s); return m ? path.join(process.env.OM_FAKE_REMOTE ?? '/nonexistent', m[1], m[2]) : null }
+const VALUED = new Set(['--differ', '--files-from-raw', '--header-upload', '--max-depth', '--include', '--exclude', '--filter', '--stats', '--missing-on-dst'])
+const pos = []
+for (let i = 0; i < args.length; i++) { if (VALUED.has(args[i])) i++; else if (!args[i].startsWith('-')) pos.push(args[i]) }
+const [cmd, src, dst] = pos
+const rec = { tool: 'rclone', args }
+if (cmd === 'copy' && src && !remote(src)) { rec.files = files(src); rec.text = rec.files.map(f => fs.readFileSync(path.join(src, f)).subarray(0, 200).toString('base64')) }
+const list = opt('--files-from-raw')
+if (list) rec.list = fs.readFileSync(list, 'utf8').split('\n').filter(Boolean)
+fs.appendFileSync(process.env.OM_FAKE_LOG, JSON.stringify(rec) + '\n')
+if (cmd === 'check') {
+  const d = process.env.OM_FAKE_DIFFER ?? ''
+  fs.writeFileSync(opt('--differ'), d ? d.split(',').join('\n') + '\n' : '')
+  process.exit(d ? 1 : 0)
+}
+if (cmd === 'lsf') {
+  const root = remote(src), depth = Number(opt('--max-depth') ?? 99)
+  for (const f of files(root)) if (f.endsWith('.json') && !f.endsWith('.meta.json') && !f.startsWith('_history/') && f.split('/').length <= depth) console.log(f)
+}
+if (cmd === 'copy' && remote(src) && !remote(dst) && list) {
+  for (const k of rec.list) { fs.mkdirSync(path.dirname(path.join(dst, k)), { recursive: true }); fs.copyFileSync(path.join(remote(src), k), path.join(dst, k)) }
+}
+if (cmd === 'lsjson') {
+  const root = remote(pos[1])
+  console.log(JSON.stringify(rec.list.map(k => {
+    const m = path.join(root, k + '.meta.json')
+    return { Path: k, Metadata: fs.existsSync(m) ? JSON.parse(fs.readFileSync(m, 'utf8')) : {} }
+  })))
+}

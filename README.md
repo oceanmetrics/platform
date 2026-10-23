@@ -19,6 +19,11 @@ workspace but not a package (`private`, never published); its README has the rou
 Beside it, **[`workers/usage/`](workers/usage/)** is not a Worker but a Node script: the weekly usage numbers per catalog from the
 Workers' Analytics Engine datasets (`--dry-run` prints the SQL; needs a read token only to run for real).
 
+The bucket has one publisher: **[`scripts/om-publish.sh`](scripts/om-publish/)** uploads a folder to a prefix of both
+stores (R2 and S3, never a delete, `--dry-run` by default), keeps dated copies on R2 with `--keep-history`, and
+`om-publish.sh rewrite` moves the storage hosts in published JSON for the cutover. Its README has the per-repo scripts it
+replaces. The host every url uses is one setting, `@oceanmetrics/catalog/storage` (and `om_extract.storage`).
+
 ## Rules
 
 - **Apps import these packages and never each other.** Shared code goes here; an app that needs something from another
