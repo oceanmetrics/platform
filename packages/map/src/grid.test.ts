@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { axisSpacing, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, gridFillColor, gridLegend, gridOutline, gridSlot, normalizeLon } from './grid.js'
-import type { SliceCell } from './grid.js'
+import { axisSpacing, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, gridFillColor, gridIds, gridLegend, gridOutline, gridSlot, normalizeLon } from './grid.js'
+import type { GridSlot, SliceCell, SliceSource } from './grid.js'
 
 // a 2x2 lattice on a 0.25 degree grid, one cell without data on this step
 const LATTICE: SliceCell[] = [
@@ -108,5 +108,82 @@ describe('the outline (map 0.2.2)', () => {
     const r = await mounted(0.01, '#00f')
     expect(r.layer.paint['fill-outline-color']).toBe('#00f')
     expect(r.paint['fill-outline-color']).toBe('#00f')
+  })
+})
+
+describe('two slots of one layer (map 0.2.3)', () => {
+  // a map that keeps sources and layers by id and refuses a duplicate, as MapLibre does
+  const strictMap = () => {
+    const sources = new Map<string, unknown>()
+    const layers = new Map<string, { id: string; source: string; paint: Record<string, unknown> }>()
+    const order: string[] = []
+    const m = {
+      addSource(id: string, s: unknown) { if (sources.has(id)) throw new Error(`There is already a source with ID "${id}".`); sources.set(id, s) },
+      addLayer(l: { id: string; source: string; paint: Record<string, unknown> }, before?: string) {
+        if (layers.has(l.id)) throw new Error(`Layer "${l.id}" already exists on this map.`)
+        layers.set(l.id, { ...l, paint: { ...l.paint } })
+        const at = before ? order.indexOf(before) : -1
+        if (at >= 0) order.splice(at, 0, l.id); else order.push(l.id)
+      },
+      getSource: (id: string) => (sources.has(id) ? { setData() {} } : undefined),
+      getLayer: (id: string) => layers.get(id),
+      removeLayer(id: string) { layers.delete(id); order.splice(order.indexOf(id), 1) },
+      removeSource(id: string) { sources.delete(id) },
+      setPaintProperty(id: string, k: string, v: unknown) { layers.get(id)!.paint[k] = v },
+    }
+    return { m, sources, layers, order }
+  }
+  const at = (v: number): SliceSource => ({ slice: async () => [{ lat: 0, lon: 0, value: v, weight: 1 }, { lat: 0, lon: 0.25, value: v + 2, weight: 1 }] })
+  const tick = () => new Promise((r) => setTimeout(r, 0))
+  const spec = { kind: 'grid' as const, id: 'g', variable: 'v' }
+
+  it('gridIds: the default ids, and an instance kept apart under slot:', () => {
+    expect(gridIds()).toEqual({ source: 'slot:grid', layer: 'slot:grid:fill' })
+    expect(gridIds('t2')).toEqual({ source: 'slot:grid@t2', layer: 'slot:grid@t2:fill' })
+    expect(() => gridIds('a b')).toThrow(/letters, digits/)
+  })
+  it('two slots mount side by side when one names an instance, and unmount only their own', async () => {
+    const { m, sources, layers, order } = strictMap()
+    const a = gridSlot(spec, at(10))
+    const b = gridSlot(spec, at(20), { instance: 't2' })
+    a.mount(m as never, null, '2024-07-01')
+    b.mount(m as never, null, '2016-07-01')
+    expect([...sources.keys()]).toEqual(['slot:grid', 'slot:grid@t2'])
+    expect(order).toEqual(['slot:grid:fill', 'slot:grid@t2:fill'])
+    expect(b.ids).toEqual(gridIds('t2'))
+    await tick()
+    b.unmount(m as never)
+    expect([...layers.keys()]).toEqual(['slot:grid:fill'])
+    // without an instance the second one collides, as before
+    expect(() => gridSlot(spec, at(30)).mount(m as never, null, null)).toThrow(/already/)
+  })
+  it('a shared domain: both read the union of their ranges, repaint() redraws the first once the second is in', async () => {
+    const { m, layers } = strictMap()
+    let a: GridSlot | null = null, b: GridSlot | null = null
+    const union = (): [number, number] | null => {
+      const r = [a?.cellRange(), b?.cellRange()].filter((x): x is [number, number] => !!x)
+      return r.length ? [Math.min(...r.map((x) => x[0])), Math.max(...r.map((x) => x[1]))] : null
+    }
+    a = gridSlot(spec, at(10), { domain: union })
+    b = gridSlot(spec, at(20), { domain: union, instance: 't2' })
+    a.mount(m as never, null, null)
+    await tick()
+    expect(a.cellRange()).toEqual([10, 12])
+    expect(a.legend()!.ramp).toMatchObject({ min: 10, max: 12 })
+    b.mount(m as never, null, null)
+    await tick()
+    expect(b.cellRange()).toEqual([20, 22])
+    expect(b.legend()!.ramp).toMatchObject({ min: 10, max: 22 })
+    a.repaint()
+    expect(a.legend()!.ramp).toMatchObject({ min: 10, max: 22 })
+    expect(layers.get('slot:grid:fill')!.paint['fill-color']).toEqual(gridFillColor({ range: [10, 22] }))
+  })
+  it('a fixed domain still wins, and cellRange is the slice own range', async () => {
+    const { m } = strictMap()
+    const a = gridSlot(spec, at(10), { domain: [0, 100] })
+    a.mount(m as never, null, null)
+    await tick()
+    expect(a.legend()!.ramp).toMatchObject({ min: 0, max: 100 })
+    expect(a.cellRange()).toEqual([10, 12])
   })
 })

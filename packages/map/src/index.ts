@@ -31,9 +31,9 @@ export type { Ramp, RampFamily, RampKind, Rgb } from './ramps.js'
 
 // ---- the providers ----
 export {
-  axisSpacing, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, GRID_SOURCE, gridFillColor, gridLegend, gridOutline, gridSlot, normalizeLon, OUTLINE_BELOW, pickCenter,
+  axisSpacing, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, GRID_SOURCE, gridFillColor, gridIds, gridLegend, gridOutline, gridSlot, normalizeLon, OUTLINE_BELOW, pickCenter,
 } from './grid.js'
-export type { CellProps, CellSquares, CellSquaresOptions, GridClass, GridSlotOptions, LonCenter, SliceCell, SliceSource } from './grid.js'
+export type { CellProps, CellSquares, CellSquaresOptions, GridClass, GridSlot, GridSlotOptions, LonCenter, SliceCell, SliceSource } from './grid.js'
 export {
   assertWebMercator, bucketCounts, COG_LAYER, COG_SOURCE, cogBand, cogBands, cogColorFunction, CogProjectionError, cogRange,
   cogHref, cogSlot, cogUrl, legendFromStac, nodataValue, openCog, overviewHistogram, pickCogAssets, pointValue, WEB_MERCATOR,

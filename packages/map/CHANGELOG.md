@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.3 (unreleased)
+
+For the indicators Map's compare mode (Then vs Now as two slices of one layer, build week 2 step 4).
+
+- New: `gridSlot` option `instance?: string`: the slot's ids become `slot:grid@<instance>` and `slot:grid@<instance>:fill`
+  (still `slot:`, so `isSlotLayer` and an app's `clear()` treat them as the slot's), so two slots of one layer, at two
+  periods, mount on one map side by side; without it the second `addSource('slot:grid')` threw. `gridIds(instance)`
+  names both ids.
+- New: `gridSlot`'s `domain` may be a function, read at each slice and at `repaint()` (null = the slice's own range),
+  so two slots share one colour scale (the union of their ranges); the slot returned is a `GridSlot` with `ids`,
+  `cellRange()` (the last slice's own value range) and `repaint()` (the colours again under the current domain, no new
+  slice). A fixed `[min, max]` behaves as before.
+
 ## 0.2.2 (2026-10-23)
 
 Fixes found by the first two consumers (the indicators Map and the atlas).

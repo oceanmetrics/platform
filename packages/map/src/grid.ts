@@ -139,8 +139,9 @@ export interface GridSlotOptions {
   ramp?: string
   /** a categorical grid's classes, in legend order; set = draw classes, not a ramp */
   classes?: readonly GridClass[]
-  /** a fixed colour domain; default the slice's own value range */
-  domain?: [number, number]
+  /** the colour domain: fixed, or read at each slice and at `repaint()` (null = the slice's own value range, as when
+   * omitted). a function lets two slots share one scale: both read the union of their `cellRange()`s (0.2.3) */
+  domain?: [number, number] | (() => [number, number] | null | undefined)
   opacity?: number
   /** the squares' outline colour. `undefined` = by the grid: `GRID_OUTLINE` for a grid coarser than `OUTLINE_BELOW`
    * degrees, none for a finer one (the outlines of 0.01 degree squares draw a mesh over the data); `null` = none; a
@@ -148,11 +149,32 @@ export interface GridSlotOptions {
   outline?: string | null
   /** the legend's `via` */
   via?: string
+  /** a name that keeps this slot's ids apart from another grid slot's on the same map (`gridIds(instance)`): two slots
+   * of one layer at two periods (a Then vs Now swipe) mount side by side. omitted = `slot:grid`, as before (0.2.3) */
+  instance?: string
   onchange?: () => void
+}
+
+/** a grid slot with what a second slot beside it needs: its ids, the value range of its last slice, a repaint */
+export interface GridSlot extends LayerSlot {
+  /** the source and fill layer ids this slot adds (`gridIds(opts.instance)`) */
+  ids: { source: string; layer: string }
+  /** the value range of the last slice drawn, whatever the domain (null before one arrives or when it had no value) */
+  cellRange(): [number, number] | null
+  /** paint the squares again under the current `domain` without a new slice (the other slot's range moved) */
+  repaint(): void
 }
 
 export const GRID_SOURCE = `${SLOT_PREFIX}grid`
 export const GRID_LAYER = `${SLOT_PREFIX}grid:fill`
+const INSTANCE = /^[A-Za-z0-9_-]+$/
+/** the source and fill ids of a grid slot: `slot:grid` and `slot:grid:fill`, or `slot:grid@<instance>` and
+ * `slot:grid@<instance>:fill` (still `slot:`, so `isSlotLayer` and an app's clear() treat them as the slot's) */
+export function gridIds(instance?: string | null): { source: string; layer: string } {
+  if (!instance) return { source: GRID_SOURCE, layer: GRID_LAYER }
+  if (!INSTANCE.test(instance)) throw new Error(`gridSlot instance "${instance}" must be letters, digits, _ or -`)
+  return { source: `${GRID_SOURCE}@${instance}`, layer: `${GRID_SOURCE}@${instance}:fill` }
+}
 /** the outline of a coarse grid's squares */
 export const GRID_OUTLINE = 'rgba(0,0,0,0.12)'
 /** the axis step (degrees) above which the automatic outline is drawn: at 0.05 and finer it is a mesh */
@@ -165,12 +187,15 @@ export function gridOutline(spacing: number, outline?: string | null): string | 
 }
 
 /** the grid slot: mount adds an empty GeoJSON source and its fill, then each step's rows replace the data */
-export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOptions = {}): LayerSlot {
+export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOptions = {}): GridSlot {
   const title = opts.title ?? spec.variable ?? spec.id
   const classes = opts.classes ? classLegend(opts.classes, opts.ramp) : null
+  const ids = gridIds(opts.instance)
+  const domainNow = () => (typeof opts.domain === 'function' ? opts.domain() ?? null : opts.domain ?? null)
   let map: MlMap | null = null
   let t: string | null = null
   let range: [number, number] | null = null
+  let own: [number, number] | null = null
   let problem: string | null = null
   let ctl: AbortController | null = null
   const changed = () => opts.onchange?.()
@@ -181,13 +206,14 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
     try {
       const sq = cellSquares(await source.slice(t, mine.signal))
       if (mine.signal.aborted || !map) return
-      range = opts.domain ?? sq.range
+      own = sq.geojson.features.some((f) => f.properties.value !== null) ? sq.range : null
+      range = domainNow() ?? sq.range
       problem = sq.geojson.features.length ? null : 'no cells in this period'
-      ;(map.getSource(GRID_SOURCE) as GeoJSONSource | undefined)?.setData(sq.geojson)
-      map.setPaintProperty(GRID_LAYER, 'fill-color', gridFillColor({ range, ramp: opts.ramp, classes }))
+      ;(map.getSource(ids.source) as GeoJSONSource | undefined)?.setData(sq.geojson)
+      map.setPaintProperty(ids.layer, 'fill-color', gridFillColor({ range, ramp: opts.ramp, classes }))
       if (sq.geojson.features.length) {
         const o = gridOutline(Math.min(sq.lonSpacing, sq.latSpacing), opts.outline)
-        map.setPaintProperty(GRID_LAYER, 'fill-outline-color', o ?? undefined)
+        map.setPaintProperty(ids.layer, 'fill-outline-color', o ?? undefined)
       }
     } catch (err) {
       if (mine.signal.aborted) return
@@ -201,12 +227,13 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
     kind: 'grid',
     title,
     credit: opts.credit,
+    ids,
     mount(m, beforeId, t0) {
       map = m
       t = t0
-      m.addSource(GRID_SOURCE, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
-      m.addLayer({ id: GRID_LAYER, type: 'fill', source: GRID_SOURCE,
-        paint: { 'fill-color': gridFillColor({ range: opts.domain ?? [0, 1], ramp: opts.ramp, classes }), 'fill-opacity': opts.opacity ?? 0.8,
+      m.addSource(ids.source, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
+      m.addLayer({ id: ids.layer, type: 'fill', source: ids.source,
+        paint: { 'fill-color': gridFillColor({ range: domainNow() ?? [0, 1], ramp: opts.ramp, classes }), 'fill-opacity': opts.opacity ?? 0.8,
           ...(typeof opts.outline === 'string' ? { 'fill-outline-color': opts.outline } : {}) } },
       beforeId ?? undefined)
       void load()
@@ -217,9 +244,18 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
     },
     unmount(m) {
       ctl?.abort()
-      if (m.getLayer(GRID_LAYER)) m.removeLayer(GRID_LAYER)
-      if (m.getSource(GRID_SOURCE)) m.removeSource(GRID_SOURCE)
+      if (m.getLayer(ids.layer)) m.removeLayer(ids.layer)
+      if (m.getSource(ids.source)) m.removeSource(ids.source)
       map = null
+    },
+    cellRange: () => own,
+    repaint() {
+      if (!map || !own || classes) return
+      const next = domainNow() ?? own
+      if (range && next[0] === range[0] && next[1] === range[1]) return
+      range = next
+      map.setPaintProperty(ids.layer, 'fill-color', gridFillColor({ range, ramp: opts.ramp, classes }))
+      changed()
     },
     legend() {
       return gridLegend({ title, t, via: opts.via ?? 'grid slice', problem, units: opts.units ?? null, range, ramp: opts.ramp, classes })
