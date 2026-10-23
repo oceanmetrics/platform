@@ -304,19 +304,22 @@ z5, 100-750 from z7, 50 from z9), the OSM land mask, the GEBCO undersea names, a
 themes. `dem: false` gives the boot style (first paint does not wait for terrain). `baseStyle(theme)` fetches CARTO's
 style once.
 
-The tiers live at `DEFAULT_TILES`, under `https://storage.oceanmetrics.io/basemap/`. All are global except the regional
+The tiers live at `DEFAULT_TILES`, under `https://storage.oceanmetrics.io/basemap/<set>/v<BASEMAP_VERSION>/` (0.3.5: `BASEMAP_VERSION` is the build
+date, `'20261023'`, and `tilesAt(version?, base?)` builds the six urls of a build; a `v<digits>/` folder is immutable at the storage Worker's
+edge cache, so a rebuild is a new folder and a new `BASEMAP_VERSION`, never a rewrite; the unversioned `basemap/gebco/core.pmtiles` etc. stay for
+0.3.4 and earlier). All are global except the regional
 tier, built from GEBCO 2025 (`GEBCO_2025` grid, 15 arc-second, ice-surface version, downloaded 2026-10-23 from
 `dap.ceda.ac.uk/bodc/gebco/global/gebco_2025/`, 4.2 GB zip of eight GeoTIFFs) on the Mac mini by
 `scripts/basemap/build_gebco.sh` (about 1 h 20 min end to end with 10 parallel blocks):
 
 | part | url | zooms | tiles | bytes | what |
 |---|---|---|---|---|---|
-| far | `gebco/far.pmtiles` | 0-5 | 1,365 | 205,342,212 (196 MB) | terrain-RGB, the globe; a small tier for first paint |
-| core | `gebco/core.pmtiles` | 0-8 | 87,381 | 5,690,322,235 (5.3 GiB) | terrain-RGB, the globe (z0-5 are far's tiles; z6 449.6 MB, z7 1.30 GB, z8 3.78 GB of PNG) |
-| regional | `gebco/core-sanctuaries.pmtiles` | 9-10 | 6,742 | 457,140,143 (436 MiB) | terrain-RGB, the 18 sanctuaries' boxes padded 1° (PMNM in two), z9 1,430 tiles, z10 5,312 |
-| contours | `gebco/contours.pmtiles` | 0-10 | 582,050 | 640,315,888 (611 MiB) | isobaths, source layer `contours` (`ele`, `level`): z0-6 the 500/1000 m lines of a ~4.6 km grid, z7-10 every level at the full 15" resolution, gated by zoom as `CONTOUR_LEVELS` |
-| land | `osm/land.pmtiles` | 0-10 | 610,484 | 161,505,661 (154 MiB) | OpenStreetMap land polygons (osmdata.openstreetmap.de, 2026-08-31 extract), source layer `land` |
-| names | `gebco/names.pmtiles` | 0-10 | 56,614 | 11,075,106 (10.6 MiB) | IHO-IOC GEBCO gazetteer, 5,412 records (2,632 points, 1,128 lines, 1,652 polygons as inside points), source layer `names` (`label`, `rank` 1-3) |
+| far | `gebco/v20261023/far.pmtiles` | 0-5 | 1,365 | 205,342,212 (196 MB) | terrain-RGB, the globe; a small tier for first paint |
+| core | `gebco/v20261023/core.pmtiles` | 0-8 | 87,381 | 5,690,322,235 (5.3 GiB) | terrain-RGB, the globe (z0-5 are far's tiles; z6 449.6 MB, z7 1.30 GB, z8 3.78 GB of PNG) |
+| regional | `gebco/v20261023/core-sanctuaries.pmtiles` | 9-10 | 6,742 | 457,140,143 (436 MiB) | terrain-RGB, the 18 sanctuaries' boxes padded 1° (PMNM in two), z9 1,430 tiles, z10 5,312 |
+| contours | `gebco/v20261023/contours.pmtiles` | 0-10 | 582,050 | 640,315,888 (611 MiB) | isobaths, source layer `contours` (`ele`, `level`): z0-6 the 500/1000 m lines of a ~4.6 km grid, z7-10 every level at the full 15" resolution, gated by zoom as `CONTOUR_LEVELS` |
+| land | `osm/v20261023/land.pmtiles` | 0-10 | 610,484 | 161,505,661 (154 MiB) | OpenStreetMap land polygons (osmdata.openstreetmap.de, 2026-08-31 extract), source layer `land` |
+| names | `gebco/v20261023/names.pmtiles` | 0-10 | 56,614 | 11,075,106 (10.6 MiB) | IHO-IOC GEBCO gazetteer, 5,412 records (2,632 points, 1,128 lines, 1,652 polygons as inside points), source layer `names` (`label`, `rank` 1-3) |
 
 Total 7,165,701,245 bytes (6.7 GiB) in `s3://oceanmetrics.io-public/basemap/` (mirrored to R2 by the hourly
 `io.oceanmetrics.r2sync`, `basemap` is in its prefix list). The terrain tiers are PNG, 512 px, the custom 1 m encoding
@@ -335,10 +338,15 @@ curl -L -o raw/gebco_2025_geotiff.zip 'https://dap.ceda.ac.uk/bodc/gebco/global/
 unzip -q raw/gebco_2025_geotiff.zip -d raw/gebco        # land: raw/land-polygons-split-4326.zip (osmdata.openstreetmap.de)
 JOBS=10 WORK=$PWD/build RAW=$PWD/raw ~/Github/oceanmetrics/platform/scripts/basemap/build_gebco.sh raw/gebco out \
   prep,far,core,regional,contours,land,names,verify         # tmux om:basemap, log basemap.log, marker basemap.done
-for f in gebco/far gebco/core gebco/core-sanctuaries gebco/contours gebco/names osm/land; do
-  aws s3 cp out/$f.pmtiles s3://oceanmetrics.io-public/basemap/$f.pmtiles --content-type application/vnd.pmtiles; done
-~/.config/oceanmetrics/rclone-r2.sh sync s3:oceanmetrics.io-public/basemap r2:oceanmetrics-io-public-enam/basemap
+scripts/basemap/build_gebco.sh raw/gebco out upload        # versioned keys first (basemap/<set>/v<date>/), then the unversioned ones;
+                                                           # both stores through om-publish.sh; UPLOAD_MODE=--dry-run only lists
 ```
+
+The `upload` step takes the version from `BASEMAP_VERSION` or the newest archive's date, and publishes each set to
+`basemap/<set>/v<date>/<file>.pmtiles` and then to `basemap/<set>/<file>.pmtiles`. A version folder is never rewritten
+(om-publish exits 3 on other bytes under a date already published); a rebuild gets a new date, and then `BASEMAP_VERSION`
+in `basemap.ts` and a new package version follow. The 2026-10-23 archives were copied server-side to their versioned
+keys on both stores (`rclone copyto`, checked with `rclone check`).
 
 Check a terrain tile against the source with `python3 -I scripts/basemap/check_tile.py <archive> <z> <lon> <lat> <gebco.tif>`
 (from z8 a pixel is the bilinear source value rounded to 1 m: Monterey Bay z8 −461 m against −461.3 m; Stellwagen Bank
@@ -467,6 +475,8 @@ the h3 worker module and the COG and geotiff code included.
 0.3.3: 47 148 B (+2 039 B: `h3Tap.ts`, the per-tile tally in the reader and `stats()` on the slot); the worker chunk 101 057 B (+385 B).
 
 0.3.4: 47 403 B (+255 B: the tier ranges in `seaFloorLayers`); the worker chunk is unchanged (101 057 B).
+
+0.3.5: 47 735 B (+332 B: `BASEMAP_VERSION` and `tilesAt`); the worker chunk is unchanged (101 057 B).
 
 **0.3.0 raises the package budget to 48 000 B**: 41 877 B measured, +13.3 kB for the seven modules of the release
 provider (`h3Bits`, `h3Zoom`, `h3ReleaseLayer`, `h3Release`, `h3Parquet`, `h3Stats`, `parquetFile`), comment-heavy as

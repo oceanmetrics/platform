@@ -36,14 +36,24 @@ export interface BasemapTiles {
   land: string | null
 }
 export const BASEMAP_URL = 'https://storage.oceanmetrics.io/basemap/'
-export const DEFAULT_TILES: Readonly<BasemapTiles> = {
-  core: `${BASEMAP_URL}gebco/core.pmtiles`,
-  far: `${BASEMAP_URL}gebco/far.pmtiles`,
-  regional: [`${BASEMAP_URL}gebco/core-sanctuaries.pmtiles`],
-  contours: `${BASEMAP_URL}gebco/contours.pmtiles`,
-  names: `${BASEMAP_URL}gebco/names.pmtiles`,
-  land: `${BASEMAP_URL}osm/land.pmtiles`,
+/** the build of the archives `DEFAULT_TILES` reads, as `YYYYMMDD` (the date of the build, 2026-10-23). The archives are
+ * published under `basemap/<set>/v<BASEMAP_VERSION>/<file>.pmtiles`, which the storage Worker caches at the edge for a
+ * year (a `v<digits>/` folder is immutable); a rebuild is a new date and a new package version, never a rewrite */
+export const BASEMAP_VERSION = '20261023'
+/** the archives of one build: `basemap/<set>/v<version>/<file>.pmtiles` under `base` (default `BASEMAP_URL`) */
+export function tilesAt(version: string = BASEMAP_VERSION, base: string = BASEMAP_URL): BasemapTiles {
+  if (!/^\d{8}$/.test(version)) throw new Error(`basemap version must be YYYYMMDD (got ${JSON.stringify(version)})`)
+  const at = (set: string, file: string): string => `${base}${set}/v${version}/${file}.pmtiles`
+  return {
+    core: at('gebco', 'core'),
+    far: at('gebco', 'far'),
+    regional: [at('gebco', 'core-sanctuaries')],
+    contours: at('gebco', 'contours'),
+    names: at('gebco', 'names'),
+    land: at('osm', 'land'),
+  }
 }
+export const DEFAULT_TILES: Readonly<BasemapTiles> = tilesAt()
 export const SOURCE_LAYERS = { contours: 'contours', names: 'names', land: 'land' } as const
 /** the custom 1 m terrain-RGB encoding of the tiers: elevation = R·65536 + G·256 + B − 10000 (explore D21) */
 export const DEM_ENCODING = { encoding: 'custom', redFactor: 65536, greenFactor: 256, blueFactor: 1, baseShift: 10000, tileSize: 512 } as const

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { StyleSpecification } from 'maplibre-gl'
-import { basemapLayerIds, composeStyle, CONTOUR_LEVELS, CORE_MINZOOM, DEFAULT_TILES, OPEN_WATER, REGIONAL_MINZOOM, regionalSourceId, seaSurfaceId } from './basemap.js'
+import { BASEMAP_URL, BASEMAP_VERSION, basemapLayerIds, composeStyle, CONTOUR_LEVELS, CORE_MINZOOM, DEFAULT_TILES, OPEN_WATER, REGIONAL_MINZOOM, regionalSourceId, seaSurfaceId, tilesAt } from './basemap.js'
 import { clearsLayer, isSlotLayer } from './slot.js'
 
 // a CARTO-shaped base (the layer ids and kinds composeStyle keys on), no network
@@ -74,7 +74,7 @@ describe('composeStyle', () => {
     expect(layer(s, 'gebco-regional-2-shade').source).toBe('gebco-regional-2')
   })
   it('the default regional tier is the sanctuaries at z9-10, and an empty list leaves core overzoomed', () => {
-    expect(DEFAULT_TILES.regional).toEqual(['https://storage.oceanmetrics.io/basemap/gebco/core-sanctuaries.pmtiles'])
+    expect(DEFAULT_TILES.regional).toEqual([`https://storage.oceanmetrics.io/basemap/gebco/v${BASEMAP_VERSION}/core-sanctuaries.pmtiles`])
     const none = composeStyle(BASE, { theme: 'dark', tiles: { regional: [] } })
     expect(Object.keys(none.sources).filter((k) => k.startsWith('gebco-regional'))).toEqual([])
     expect(ids(none).filter((id) => id.includes('regional'))).toEqual([])
@@ -247,5 +247,51 @@ describe('basemapLayerIds: the rule an app\'s clear() keys on', () => {
     expect(onMap.filter((id) => !isSlotLayer(id) && !basemap.has(id))).toEqual(['p0:fill', 'p0:line'])
     // the gap: the base-* rule would clear CARTO's whole style (no CARTO id starts with base-)
     expect(onMap.filter(clearsLayer)).toEqual(onMap)
+  })
+})
+
+describe('the versioned archives (0.3.5)', () => {
+  // the storage Worker's isImmutable (places worker/src/paths.ts) caches basemap/<set>/**/v<digits>/** data files for a year
+  const IMMUTABLE_KEY = /^basemap\/[a-z0-9-]+\/v\d+\/[a-z0-9-]+\.pmtiles$/
+  const urls = (t: ReturnType<typeof tilesAt>): string[] => [t.core, t.far, ...(t.regional ?? []), t.contours, t.names, t.land].filter((u): u is string => !!u)
+
+  it('BASEMAP_VERSION is a build date, YYYYMMDD, and the files now in the bucket are of that build', () => {
+    expect(BASEMAP_VERSION).toBe('20261023')
+    expect(BASEMAP_URL).toBe('https://storage.oceanmetrics.io/basemap/')
+  })
+  it('tilesAt builds basemap/<set>/v<version>/<file>.pmtiles for the six archives', () => {
+    expect(tilesAt('20261023')).toEqual({
+      core: 'https://storage.oceanmetrics.io/basemap/gebco/v20261023/core.pmtiles',
+      far: 'https://storage.oceanmetrics.io/basemap/gebco/v20261023/far.pmtiles',
+      regional: ['https://storage.oceanmetrics.io/basemap/gebco/v20261023/core-sanctuaries.pmtiles'],
+      contours: 'https://storage.oceanmetrics.io/basemap/gebco/v20261023/contours.pmtiles',
+      names: 'https://storage.oceanmetrics.io/basemap/gebco/v20261023/names.pmtiles',
+      land: 'https://storage.oceanmetrics.io/basemap/osm/v20261023/land.pmtiles',
+    })
+  })
+  it('DEFAULT_TILES is tilesAt(BASEMAP_VERSION): every default url is an immutable key (the unversioned keys are not read)', () => {
+    expect(DEFAULT_TILES).toEqual(tilesAt(BASEMAP_VERSION))
+    const urlsOf = urls(DEFAULT_TILES)
+    expect(urlsOf).toHaveLength(6)
+    for (const u of urlsOf) {
+      expect(u.startsWith(BASEMAP_URL)).toBe(true)
+      expect(u.slice('https://storage.oceanmetrics.io/'.length)).toMatch(IMMUTABLE_KEY)
+      expect(u).toContain(`/v${BASEMAP_VERSION}/`)
+    }
+    expect(urlsOf).not.toContain(`${BASEMAP_URL}gebco/core.pmtiles`)
+  })
+  it('a base url and another version move all six, and the composed style reads them', () => {
+    const t = tilesAt('20270101', 'https://x.test/basemap/')
+    expect(urls(t).every((u) => /^https:\/\/x\.test\/basemap\/(gebco|osm)\/v20270101\/[a-z-]+\.pmtiles$/.test(u))).toBe(true)
+    const s = composeStyle(BASE, { theme: 'dark', tiles: t })
+    expect((s.sources['gebco'] as { url: string }).url).toBe('pmtiles://https://x.test/basemap/gebco/v20270101/core.pmtiles')
+    expect((s.sources['osm-land'] as { url: string }).url).toBe('pmtiles://https://x.test/basemap/osm/v20270101/land.pmtiles')
+    // the default style reads the versioned keys of the current build
+    const d = composeStyle(BASE, { theme: 'dark' })
+    expect((d.sources['gebco'] as { url: string }).url).toBe(`pmtiles://${BASEMAP_URL}gebco/v${BASEMAP_VERSION}/core.pmtiles`)
+    expect((d.sources['gebco-far'] as { url: string }).url).toBe(`pmtiles://${BASEMAP_URL}gebco/v${BASEMAP_VERSION}/far.pmtiles`)
+  })
+  it('a version that is not eight digits is refused', () => {
+    for (const bad of ['', '2026-10-23', '2026102', '202610233', 'v20261023', '20261023/../x']) expect(() => tilesAt(bad)).toThrow(/YYYYMMDD/)
   })
 })

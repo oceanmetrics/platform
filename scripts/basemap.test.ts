@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { execFileSync, spawnSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, utimesSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { CONTOUR_LEVELS, NAME_RANKS } from '../packages/map/src/basemap.js'
+import { BASEMAP_VERSION, CONTOUR_LEVELS, NAME_RANKS, tilesAt } from '../packages/map/src/basemap.js'
 
 // the tile build (scripts/basemap/build_gebco.sh) and the style (packages/map/src/basemap.ts) each hold the isobath
 // level gate and the undersea-name ranks; the archives are built once and read for months, so a drift between the two
@@ -67,11 +67,20 @@ describe('build_gebco.sh: undersea names', () => {
 describe('build_gebco.sh: the upload step goes through om-publish.sh', () => {
   // the real om-publish.sh against the fake aws and rclone of om-publish.test.ts: what each call would send is recorded
   const FAKE = new URL('./om-publish/fake', import.meta.url).pathname
-  const upload = (env: Record<string, string> = {}) => {
+  const R2 = 'r2:oceanmetrics-io-public-enam'
+  const S3 = 's3://oceanmetrics.io-public'
+  // the archives get a modification time, so the version (the date of the build) is fixed: the newest one wins
+  const MTIMES: Record<string, string> = {
+    'gebco/far.pmtiles': '2026-10-22T10:00:00Z', 'gebco/core.pmtiles': '2026-10-23T02:04:35Z', 'osm/land.pmtiles': '2026-10-23T02:06:02Z',
+    'work/contours_low.pmtiles': '2026-11-30T00:00:00Z', 'work/far.mbtiles': '2026-11-30T00:00:00Z', 'raw/land.zip': '2026-11-30T00:00:00Z',
+  }
+  const upload = (env: Record<string, string> = {}, only: string[] = Object.keys(MTIMES)) => {
     const out = mkdtempSync(join(tmpdir(), 'gebco-out-'))
-    for (const f of ['gebco/far.pmtiles', 'gebco/core.pmtiles', 'osm/land.pmtiles', 'work/contours_low.pmtiles', 'work/far.mbtiles', 'raw/land.zip']) {
+    for (const f of only) {
       mkdirSync(join(out, f, '..'), { recursive: true })
       writeFileSync(join(out, f), f)
+      const t = new Date(MTIMES[f])
+      utimesSync(join(out, f), t, t)
     }
     const log = join(out, 'calls.log')
     writeFileSync(log, '')
@@ -81,23 +90,58 @@ describe('build_gebco.sh: the upload step goes through om-publish.sh', () => {
     const calls = readFileSync(log, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l) as { tool: string; args: string[]; files?: string[] })
     return { ...r, calls, uploads: calls.filter((c) => c.files) }
   }
+  // the destination of an upload call: r2:<bucket>/<prefix> or s3://<bucket>/<prefix>
+  const dest = (c: { tool: string; args: string[] }) => c.args.find((a) => a.startsWith(c.tool === 'rclone' ? 'r2:' : 's3://'))!.replace(c.tool === 'rclone' ? R2 : S3, '')
 
-  it('sends the archives of gebco/ and osm/ to basemap/ on R2 then S3, as application/vnd.pmtiles, and nothing of work/ or raw/', () => {
+  it('sends the archives to the versioned keys basemap/<set>/v<build date>/ and then the unversioned basemap/<set>/, R2 then S3, as application/vnd.pmtiles, and nothing of work/ or raw/', () => {
     const r = upload()
     expect(r.status).toBe(0)
-    expect(r.uploads.map((c) => c.tool)).toEqual(['rclone', 'aws'])
-    for (const c of r.uploads) expect(c.files).toEqual(['gebco/core.pmtiles', 'gebco/far.pmtiles', 'osm/land.pmtiles'])
-    expect(r.uploads[0].args).toContain('Content-Type: application/vnd.pmtiles')
-    expect(r.uploads[0].args).toContain('r2:oceanmetrics-io-public-enam/basemap')
-    expect(r.uploads[1].args).toContain('s3://oceanmetrics.io-public/basemap')
+    // three om-publish calls (gebco versioned, osm versioned, the unversioned pair), each R2 then S3
+    expect(r.uploads.map((c) => `${c.tool} ${dest(c)}`)).toEqual([
+      'rclone /basemap/gebco/v20261023', 'aws /basemap/gebco/v20261023',
+      'rclone /basemap/osm/v20261023', 'aws /basemap/osm/v20261023',
+      'rclone /basemap', 'aws /basemap',
+    ])
+    expect(r.uploads.map((c) => c.files)).toEqual([
+      ['core.pmtiles', 'far.pmtiles'], ['core.pmtiles', 'far.pmtiles'],
+      ['land.pmtiles'], ['land.pmtiles'],
+      ['gebco/core.pmtiles', 'gebco/far.pmtiles', 'osm/land.pmtiles'], ['gebco/core.pmtiles', 'gebco/far.pmtiles', 'osm/land.pmtiles'],
+    ])
+    expect(r.uploads.filter((c) => c.tool === 'rclone').every((c) => c.args.includes('Content-Type: application/vnd.pmtiles'))).toBe(true)
     for (const c of r.uploads) expect(c.args.some((a) => a.startsWith('--delete') || a === '--dry-run' || a === '--dryrun')).toBe(false)
+  })
+  it('the version is the newest archive\'s date (UTC), BASEMAP_VERSION overrides it, a bad one stops before any call', () => {
+    expect(upload({}, ['gebco/far.pmtiles']).uploads.map(dest)).toEqual(['/basemap/gebco/v20261022', '/basemap/gebco/v20261022', '/basemap', '/basemap'])
+    expect(upload({ BASEMAP_VERSION: '20270105' }).uploads.map(dest).slice(0, 2)).toEqual(['/basemap/gebco/v20270105', '/basemap/gebco/v20270105'])
+    for (const bad of ['2026-10-23', 'v20261023', '202610', '20261023/../x']) {
+      const r = upload({ BASEMAP_VERSION: bad })
+      expect(r.status).toBe(1)
+      expect(r.stderr).toContain('BASEMAP_VERSION must be YYYYMMDD')
+      expect(r.calls).toEqual([])
+    }
+  })
+  it('the keys it writes are the keys @oceanmetrics/map reads (tilesAt), and each versioned key is immutable at the Worker', () => {
+    // the archive names the script writes: far, core, core-sanctuaries, contours, names (gebco/) and land (osm/)
+    const names = ['far', 'core', 'core-sanctuaries', 'contours', 'names'].map((n) => `gebco/${n}`).concat('osm/land')
+    const t = tilesAt(BASEMAP_VERSION)
+    const urls = [t.core, t.far, ...(t.regional ?? []), t.contours, t.names, t.land]
+    expect(urls.map((u) => u!.replace('https://storage.oceanmetrics.io/basemap/', ''))).toEqual(
+      ['core', 'far', 'core-sanctuaries', 'contours', 'names', 'land'].map((n) => `${n === 'land' ? 'osm' : 'gebco'}/v${BASEMAP_VERSION}/${n}.pmtiles`))
+    for (const n of names) expect(SCRIPT).toContain(n.split('/')[0]) // the sets the upload loops over
+    expect(SCRIPT).toContain('for set in gebco osm')
   })
   it('UPLOAD_MODE=--dry-run lists in the tools\' dry-run modes; OM_STORE=r2 leaves S3 alone', () => {
     const d = upload({ UPLOAD_MODE: '--dry-run', OM_STORE: 'r2' })
     expect(d.status).toBe(0)
-    expect(d.uploads.map((c) => c.tool)).toEqual(['rclone'])
-    expect(d.uploads[0].args).toContain('--dry-run')
+    expect(d.uploads.map((c) => c.tool)).toEqual(['rclone', 'rclone', 'rclone'])
+    expect(d.uploads.every((c) => c.args.includes('--dry-run'))).toBe(true)
     expect(d.stdout).toContain('(dry run)')
+  })
+  it('a version folder that already holds other bytes stops the upload (exit 3) before the unversioned keys', () => {
+    const r = upload({ OM_FAKE_DIFFER: 'far.pmtiles' })
+    expect(r.status).toBe(3)
+    expect(r.stderr).toContain('immutable key')
+    expect(r.uploads).toEqual([])
   })
   it('a missing publisher stops with its path', () => {
     const r = upload({ OM_PUBLISH: '/nonexistent/om-publish.sh' })

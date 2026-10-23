@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.3.5 (2026-10-23)
+
+The basemap archives are read from versioned keys the storage Worker can cache at the edge: a `v<digits>/` folder below a
+basemap set is immutable there (`Cache-Control: public, max-age=31536000, immutable`, a copy per data center), and the
+unversioned `basemap/gebco/core.pmtiles` was not.
+
+- Changed: `DEFAULT_TILES` points at `https://storage.oceanmetrics.io/basemap/<set>/v20261023/<file>.pmtiles`
+  (`gebco/v20261023/{far,core,core-sanctuaries,contours,names}.pmtiles`, `osm/v20261023/land.pmtiles`), the build of
+  2026-10-23. The bytes are the files that were at the unversioned keys; those stay in the bucket for map <= 0.3.4.
+- New: `BASEMAP_VERSION` (`'20261023'`, the build date) and `tilesAt(version = BASEMAP_VERSION, base = BASEMAP_URL)`, which
+  builds the six urls of a build (`DEFAULT_TILES` is `tilesAt()`); a version that is not eight digits throws. A rebuild is
+  a new folder (`scripts/basemap/build_gebco.sh` uploads to `basemap/<set>/v<date>/` and, for now, to the unversioned
+  keys) and a new package version with the new `BASEMAP_VERSION`; an app that passes its own `tiles` is unchanged.
+- Fixed: `PACKAGE.version` said 0.3.2.
+- Tests: `tilesAt` (the six urls, a base and another version, a bad version refused), `DEFAULT_TILES` equals
+  `tilesAt(BASEMAP_VERSION)` with every url an immutable key by the Worker's rule (`basemap/<set>/v<digits>/`), the
+  composed style reads them; `scripts/basemap.test.ts` runs the upload step against the fake publisher (versioned keys
+  first, then the unversioned, the version from the archives' date or `BASEMAP_VERSION`, exit 3 on a version folder that
+  holds other bytes).
+- Size: package 47 735 B (47 403 B at 0.3.4; budget 48 000 B), the worker chunk unchanged.
+
 ## 0.3.4 (2026-10-23)
 
 The basemap's relief tiers no longer overlap: a first view at z2 fetched both `far` and `core` for the same pixels.

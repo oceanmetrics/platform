@@ -40,8 +40,15 @@
 #     gebco_dir  the GEBCO 2025 global grid as GeoTIFF tiles (gebco_2025_geotiff.zip, unzipped; any *.tif)
 #     out_dir    the archives under <out_dir>/gebco and <out_dir>/osm; work files under <out_dir>/work, or $WORK
 #     steps      comma-separated, default prep,far,core,regional,contours,land,names,verify; `upload` sends the archives
-#                to basemap/ through om-publish.sh (both stores; UPLOAD_MODE=--dry-run only lists)
-#   environment: OM_PUBLISH (the publisher; default scripts/om-publish.sh), UPLOAD_MODE, WORK (work dir), RAW (downloads: land-polygons-split-4326.zip, gazetteer/), PYTHON (default python3),
+#                through om-publish.sh (both stores; UPLOAD_MODE=--dry-run only lists) to
+#                  basemap/<set>/v<YYYYMMDD>/<file>.pmtiles   the versioned keys (set = gebco, osm): the storage Worker
+#                                                             caches a v<digits>/ folder at the edge for a year; @oceanmetrics/map
+#                                                             >= 0.3.5 reads these (BASEMAP_VERSION in packages/map/src/basemap.ts)
+#                  basemap/<set>/<file>.pmtiles               the unversioned keys, still written for map <= 0.3.4
+#                the date is BASEMAP_VERSION, else the newest modification date (UTC) of the archives: the date of the build.
+#                A version folder is immutable: uploading other bytes under a date already published exits 3 (om-publish);
+#                a rebuild gets a new date, and map gets a new BASEMAP_VERSION.
+#   environment: OM_PUBLISH (the publisher; default scripts/om-publish.sh), UPLOAD_MODE, BASEMAP_VERSION (YYYYMMDD), WORK (work dir), RAW (downloads: land-polygons-split-4326.zip, gazetteer/), PYTHON (default python3),
 #                JOBS (parallel blocks, default 8), LAND_ZMAX (default 10)
 set -euo pipefail
 
@@ -339,14 +346,37 @@ verify() {
   log "verify: far $want_far tiles, core $want_core tiles; every archive verifies"
 }
 
-# upload: gebco/*.pmtiles and osm/*.pmtiles (not the work files under $OUT/work) to basemap/ on both stores through
-# om-publish.sh (R2 then S3; never deletes; checksum-compared, so an unchanged archive is not sent again). It uploads
-# for real, as the step always did; UPLOAD_MODE=--dry-run lists what it would send and writes nothing.
+# upload: gebco/*.pmtiles and osm/*.pmtiles (not the work files under $OUT/work) to the versioned keys
+# basemap/<set>/v<YYYYMMDD>/ and then to the unversioned keys basemap/<set>/, on both stores through om-publish.sh (R2 then S3;
+# never deletes; checksum-compared, so an unchanged archive is not sent again). It uploads for real, as the step always did;
+# UPLOAD_MODE=--dry-run lists what it would send and writes nothing. The versioned keys go first: they are immutable at the edge,
+# so om-publish stops (exit 3) before the unversioned ones when a version folder already holds other bytes.
+# the version is BASEMAP_VERSION, else the date (UTC) of the newest archive: the date of the build.
 # S3_DEST and S3_ENDPOINT are no longer read: the prefix is basemap/ and the stores are om-publish's (OM_STORE).
+basemap_version() {
+  local f newest="" d
+  if [[ -n "${BASEMAP_VERSION:-}" ]]; then
+    [[ "$BASEMAP_VERSION" =~ ^[0-9]{8}$ ]] || { log "upload: BASEMAP_VERSION must be YYYYMMDD (got '$BASEMAP_VERSION')"; exit 1; }
+    printf '%s' "$BASEMAP_VERSION"; return
+  fi
+  for f in "$OUT"/gebco/*.pmtiles "$OUT"/osm/*.pmtiles; do
+    [[ -f "$f" ]] || continue
+    d=$(date -u -r "$f" +%Y%m%d)
+    [[ -z "$newest" || "$d" > "$newest" ]] && newest=$d
+  done
+  [[ -n "$newest" ]] || { log "upload: no archive under $OUT/gebco or $OUT/osm"; exit 1; }
+  printf '%s' "$newest"
+}
 upload() {
-  local publisher="${OM_PUBLISH:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/om-publish.sh}"
+  local publisher="${OM_PUBLISH:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/om-publish.sh}" mode="${UPLOAD_MODE:---really}" v set
   [[ -x "$publisher" ]] || { log "upload: $publisher not found (set OM_PUBLISH)"; exit 1; }
-  "$publisher" "${UPLOAD_MODE:---really}" --include 'gebco/*.pmtiles' --include 'osm/*.pmtiles' "$OUT" basemap
+  v=$(basemap_version)
+  log "upload: basemap/<set>/v$v/ (versioned), then basemap/<set>/ (unversioned, map <= 0.3.4)"
+  for set in gebco osm; do
+    compgen -G "$OUT/$set/*.pmtiles" >/dev/null || continue   # a set with no archive (a partial build) is skipped
+    "$publisher" "$mode" --include '*.pmtiles' "$OUT/$set" "basemap/$set/v$v"
+  done
+  "$publisher" "$mode" --include 'gebco/*.pmtiles' --include 'osm/*.pmtiles' "$OUT" basemap
 }
 
 # the block and chunk workers run under xargs -P, in their own bash

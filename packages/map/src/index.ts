@@ -1,6 +1,6 @@
 // @oceanmetrics/map: the map stack of the Ocean Metrics apps (README.md). every module is free of side effects and of a
 // run-time maplibre-gl import; the h3 worker module is its own entry (`@oceanmetrics/map/h3-worker`), never imported here.
-export const PACKAGE = { name: '@oceanmetrics/map', version: '0.3.2' } as const
+export const PACKAGE = { name: '@oceanmetrics/map', version: '0.3.5' } as const
 
 // ---- the slot contract ----
 export {
@@ -18,9 +18,9 @@ export type { MapLibreModule, ProtocolName, SetupOptions } from './maplibre.js'
 
 // ---- the basemap and the ramps ----
 export {
-  BASEMAP_URL, baseLabelDefaultOpacity, basemapLayerIds, baseStyle, BATHY_PARTS, BATHY_RAMP, bathyDefaultOpacity, CARTO_URL, composeStyle,
+  BASEMAP_URL, BASEMAP_VERSION, baseLabelDefaultOpacity, basemapLayerIds, baseStyle, BATHY_PARTS, BATHY_RAMP, bathyDefaultOpacity, CARTO_URL, composeStyle,
   CONTOUR_LABEL_MINZOOM, CONTOUR_LEVELS, DEFAULT_TILES, DEM_ENCODING, GEBCO_ATTRIBUTION, LAND_ATTRIBUTION, LAND_LAYER,
-  NAME_RANKS, NAMES_ATTRIBUTION, OPEN_WATER, seaSurfaceId, SOURCE_LAYERS,
+  NAME_RANKS, NAMES_ATTRIBUTION, OPEN_WATER, seaSurfaceId, SOURCE_LAYERS, tilesAt,
 } from './basemap.js'
 export type { BasemapOptions, BasemapTiles, BathyPart, Theme } from './basemap.js'
 export {
