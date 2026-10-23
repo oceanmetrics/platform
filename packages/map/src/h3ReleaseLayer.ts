@@ -57,6 +57,8 @@ export interface H3ReleaseLayer {
   idType: 'int64' | 'string'
   /** the indicator columns every tile carries */
   columns: string[]
+  /** the slot's id on the stats channel (h3Tap.ts): the worker copies it into the message of each tile it builds */
+  tap?: string
 }
 
 // ---- periods ----

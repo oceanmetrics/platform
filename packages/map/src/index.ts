@@ -61,8 +61,10 @@ export {
   h3ReleaseIds, h3ReleaseSlot, itemPath, periodOf, releaseDomains, releaseFillColor, releaseFilter, releasePeriods, releaseSource, statsUrl,
 } from './h3Release.js'
 export type { H3ReleaseItem, H3ReleaseSlot, H3ReleaseSlotOptions, H3ReleaseView } from './h3Release.js'
-export { ReleaseReader, releaseProvider, tileRanges } from './h3Parquet.js'
-export type { ReleaseReaderOptions } from './h3Parquet.js'
+export { newTileTally, ReleaseReader, releaseProvider, tileRanges } from './h3Parquet.js'
+export type { ReleaseProviderOptions, ReleaseReaderOptions, TileTally } from './h3Parquet.js'
+export { H3_CHANNEL, listenTileStats, newTap, postTileStats, TileTotals } from './h3Tap.js'
+export type { FileInfo, H3Counts, H3FileStats, H3ReleaseStats, H3TileStats } from './h3Tap.js'
 export { readReleaseStats, statsMatch } from './h3Stats.js'
 export { cellRange, rowCell, speciesForCell } from './h3Species.js'
 export type { CellSpecies, SpeciesForCellOptions, SpeciesValue } from './h3Species.js'

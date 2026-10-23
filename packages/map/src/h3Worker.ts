@@ -4,7 +4,8 @@
 //     with range requests;
 //   - `h3r://<encoded release layer>/{z}/{x}/{y}` (h3ReleaseLayer.ts releaseTileUrl) reads the obis-h3 release's own
 //     Parquet (h3Parquet.ts): the row groups under the tile's parents, every indicator column carried. one reader per
-//     worker, so its row-group cache serves every release layer, period and slot of the page.
+//     worker, so its row-group cache serves every release layer, period and slot of the page. each built tile also posts
+//     its cost (requests, bytes, row groups, ms) on BroadcastChannel('om-h3') for the slot's stats() (h3Tap.ts).
 // both build the hexagons and encode the MVT here (h3Tiles.ts). loaded by setupMapLibre({ h3WorkerUrl }) with
 // importScriptInWorkers; a Vite app imports it as `@oceanmetrics/map/h3-worker?worker&url` with worker chunks named .mjs
 // (MapLibre 6 import()s only those). this module registers the protocols when it loads: the one side effect in the
@@ -13,6 +14,7 @@ import type { AddProtocolAction } from 'maplibre-gl'
 import { PMTiles } from 'pmtiles'
 import { parseH3TileUrl } from './h3.js'
 import { ReleaseReader, releaseProvider } from './h3Parquet.js'
+import { postTileStats } from './h3Tap.js'
 import { H3R_SCHEME, parseReleaseTileUrl, releaseKeyOf } from './h3ReleaseLayer.js'
 import { h3jAction, pmtilesProvider } from './h3Tiles.js'
 import { H3J_SCHEME } from './maplibre.js'
@@ -36,6 +38,6 @@ scope.addProtocol(H3R_SCHEME, (params, abort) => {
   const key = releaseKeyOf(params.url)
   if (!key) return Promise.reject(new Error(`h3r: not a release tile url: ${params.url}`))
   let action = releaseActions.get(key)
-  if (!action) releaseActions.set(key, (action = h3jAction(releaseProvider(parseReleaseTileUrl(params.url)!, releaseReader))))
+  if (!action) releaseActions.set(key, (action = h3jAction(releaseProvider(parseReleaseTileUrl(params.url)!, releaseReader, { onTile: postTileStats }))))
   return action(params, abort)
 })

@@ -1,5 +1,5 @@
 import { readFileSync, statSync } from 'node:fs'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { cellToLatLng, cellToParent, getResolution } from 'h3-js'
 import { VectorTile } from '@mapbox/vector-tile'
 import { PbfReader } from 'pbf'
@@ -16,6 +16,8 @@ import type { H3CollectionLike } from './h3ReleaseLayer.js'
 import { readReleaseStats, statsMatch } from './h3Stats.js'
 import { h3jAction } from './h3Tiles.js'
 import { COMPRESSORS, newReadStats, openRangeFile } from './parquetFile.js'
+import { postTileStats } from './h3Tap.js'
+import type { H3TileStats } from './h3Tap.js'
 
 // ---- the synthetic release (fixtures/h3release/build.mjs) served as S3 would: Range, 206, 403 for a missing key ----
 
@@ -337,7 +339,7 @@ describe('h3ReleaseSlot', () => {
     const slot = h3ReleaseSlot({ collection: COLLECTION, base: BASE, indicator: 'es', fetch: s3().fetch })
     slot.mount(m as never, null, null)
     expect(m.calls).toEqual(['addSource slot:h3', 'addLayer slot:h3:fill'])
-    expect(m.sources.get('slot:h3')).toMatchObject({ type: 'vector', tiles: [releaseTileUrl(layerOf())], maxzoom: 7, promoteId: 'h3' })
+    expect(m.sources.get('slot:h3')).toMatchObject({ type: 'vector', tiles: [releaseTileUrl(slot.layer())], maxzoom: 7, promoteId: 'h3' })
     expect(m.layers.get('slot:h3:fill')).toMatchObject({ type: 'fill', 'source-layer': 'h3', filter: ['has', 'es'] })
     await settle(slot)
     const lg = slot.legend()
@@ -367,7 +369,7 @@ describe('h3ReleaseSlot', () => {
     slot.update({ period: '2000s' })
     slot.update({ res: 2 })
     expect(m.calls.filter((c) => /setTiles|Source/.test(c))).toEqual(['setTiles', 'setTiles'])
-    expect((m.sources.get('slot:h3') as { tiles: string[] }).tiles).toEqual([releaseTileUrl(layerOf({ period: '2000s', res: 2 }))])
+    expect((m.sources.get('slot:h3') as { tiles: string[] }).tiles).toEqual([releaseTileUrl({ ...layerOf({ period: '2000s', res: 2 }), tap: slot.layer().tap })])
     expect(slot.legend().t).toBe('2000s')
     expect(slot.view()).toEqual({ indicator: 'sp', period: '2000s', res: 2 })
   })
@@ -401,5 +403,137 @@ describe('h3ReleaseSlot', () => {
     expect(ramps.map((r) => [r[2], r[3], r[r.length - 2]])).toEqual([1, 2, 3, 4, 5, 6].map((k) => [['get', 'es'], k, k * 10]))
     const pinned = releaseFillColor(layerOf({ res: 2 }), 'es', d) as unknown[]
     expect([pinned[0], pinned[2], pinned[3]]).toEqual(['interpolate', ['get', 'es'], 2])
+  })
+})
+
+// ---- what the tiles cost, from the worker to the page (h3Tap.ts) ----
+
+describe('tile stats: the worker posts per built tile, the slot totals them', () => {
+  afterEach(() => { vi.unstubAllGlobals() })
+  const until = async (f: () => boolean) => { for (let i = 0; i < 400 && !f(); i++) await new Promise((r) => setTimeout(r, 5)); expect(f()).toBe(true) }
+  const slotOf = (extra: Partial<Parameters<typeof h3ReleaseSlot>[0]> = {}) =>
+    h3ReleaseSlot({ collection: COLLECTION, base: BASE, indicator: 'es', statsHref: null, domain: [0, 50], ...extra })
+  // the worker's side: a provider over the slot's own layer (it carries the tap), posting on the channel
+  const workerOf = (slot: ReturnType<typeof slotOf>, reader: ReleaseReader) => releaseProvider(slot.layer(), reader, { onTile: postTileStats })
+  const tile6 = lonLatToTile(...CAL, 6)
+
+  it('the message of a tile: tile, file, requests, bytes, row groups read and skipped, ms, cached', async () => {
+    const { fetch } = s3()
+    const reader = new ReleaseReader({ fetch, tail: 4096 })
+    const got: H3TileStats[] = []
+    const p = releaseProvider({ ...layerOf(), tap: 'abc' }, reader, { onTile: (m) => got.push(m) })
+    const [x, y] = tile6
+    await p(6, x, y, signal)
+    expect(got).toHaveLength(1)
+    const m = got[0]
+    expect(Object.keys(m).sort()).toEqual(['bytes', 'cached', 'file', 'ms', 'requests', 'rowGroupsRead', 'rowGroupsSkipped', 'tap', 'tile'])
+    expect(m).toMatchObject({ tile: { z: 6, x, y }, file: `${BASE}all/res=5/data_0.parquet`, tap: 'abc', requests: 2, rowGroupsRead: 1, rowGroupsSkipped: 2, cached: false })
+    // what the tile read is what the reader read: the footer and one row group, nothing else
+    expect(m.bytes).toBe(reader.stats.bytes)
+    expect(m.bytes).toBeGreaterThan(0)
+    expect(typeof m.ms === 'number' && m.ms >= 0).toBe(true)
+    // the same tile again: no request, no byte, the row group not read again, the skips counted again
+    await p(6, x, y, signal)
+    expect(got[1]).toMatchObject({ requests: 0, bytes: 0, rowGroupsRead: 0, rowGroupsSkipped: 2, cached: true })
+  })
+  it('a tile that reads nothing still reports (open ocean: the footer and no row group; a missing file: one miss)', async () => {
+    const reader = new ReleaseReader({ fetch: s3().fetch, tail: 4096 })
+    const got: H3TileStats[] = []
+    const [x, y] = lonLatToTile(-30, -30, 6)
+    await releaseProvider(layerOf(), reader, { onTile: (m) => got.push(m) })(6, x, y, signal)
+    expect(got[0]).toMatchObject({ requests: 1, rowGroupsRead: 0, rowGroupsSkipped: 3, cached: false })
+    expect(got[0].tap).toBeUndefined()
+    await releaseProvider(layerOf({ keys: { layer: 'taxon/rank=class/taxon=Aves' } }), reader, { onTile: (m) => got.push(m) })(0, 0, 0, signal)
+    expect(got[1]).toMatchObject({ requests: 1, bytes: 0, rowGroupsRead: 0, cached: false })
+  })
+  it('tiles in flight together are billed apart: the one that reads the group pays, the other is cached', async () => {
+    const reader = new ReleaseReader({ fetch: s3().fetch, tail: 4096 })
+    const got: H3TileStats[] = []
+    const p = releaseProvider(layerOf(), reader, { onTile: (m) => got.push(m) })
+    const [x, y] = tile6
+    await Promise.all([p(6, x, y, signal), p(6, x + 1, y, signal)])
+    expect(got.map((m) => m.requests).sort()).toEqual([0, 2])
+    expect(got.reduce((n, m) => n + m.bytes, 0)).toBe(reader.stats.bytes)
+    expect(got.reduce((n, m) => n + m.rowGroupsRead, 0)).toBe(reader.groupsRead)
+  })
+  it('totals after two tiles of one file: the second is cached, 0 bytes; the subscription fires with each', async () => {
+    const slot = slotOf()
+    slot.mount(fakeMap(6) as never, null, null)
+    expect(slot.layer().tap).toMatch(/^[a-z0-9]+$/)
+    expect(slot.stats()).toMatchObject({ tiles: 0, requests: 0, bytes: 0, file: null, files: [] })
+    const seen: [number, H3TileStats][] = []
+    const off = slot.onStats((s, t) => seen.push([s.tiles, t]))
+    const reader = new ReleaseReader({ fetch: s3().fetch, tail: 4096 })
+    const p = workerOf(slot, reader)
+    const [x, y] = tile6
+    await p(6, x, y, signal)
+    await until(() => slot.stats().tiles === 1)
+    await p(6, x + 1, y, signal)
+    await until(() => slot.stats().tiles === 2)
+    const st = slot.stats()
+    expect(seen.map(([n, t]) => [n, t.cached, t.bytes === 0])).toEqual([[1, false, false], [2, true, true]])
+    expect(st).toMatchObject({ tiles: 2, cachedTiles: 1, requests: 2, bytes: reader.stats.bytes, rowGroupsRead: 1, rowGroupsSkipped: 4, file: `${BASE}all/res=5/data_0.parquet` })
+    expect(st.ms).toBeGreaterThanOrEqual(0)
+    expect(st.files).toEqual([{ file: `${BASE}all/res=5/data_0.parquet`, period: null, res: 5, current: true, tiles: 2, cachedTiles: 1, requests: 2, bytes: reader.stats.bytes, rowGroupsRead: 1, rowGroupsSkipped: 4, ms: st.ms }])
+    // a snapshot does not move with later tiles; an unsubscribed callback is not called
+    off()
+    await p(6, x, y, signal)
+    await until(() => slot.stats().tiles === 3)
+    expect([st.tiles, seen.length]).toEqual([2, 2])
+    slot.unmount(fakeMap() as never)
+  })
+  it('update({ indicator }) resets nothing; a period or resolution change keeps the totals and marks the new file', async () => {
+    const slot = slotOf()
+    const m = fakeMap(6)
+    slot.mount(m as never, null, null)
+    const reader = new ReleaseReader({ fetch: s3().fetch, tail: 4096 })
+    const [x, y] = tile6
+    await workerOf(slot, reader)(6, x, y, signal)
+    await until(() => slot.stats().tiles === 1)
+    const before = slot.stats(), tap = slot.layer().tap
+    slot.update({ indicator: 'sp' })
+    expect(slot.stats()).toEqual(before)
+    expect(slot.layer().tap).toBe(tap)
+    // the 2000s stop at res 3: another file, read by the same tap
+    slot.update({ period: '2000s' })
+    expect(slot.layer().tap).toBe(tap)
+    expect(slot.stats().files.map((f) => f.current)).toEqual([false])
+    await workerOf(slot, reader)(6, x, y, signal)
+    await until(() => slot.stats().tiles === 2)
+    const st = slot.stats()
+    expect(st.files.map((f) => [f.file.slice(BASE.length), f.res, f.period, f.current, f.tiles])).toEqual([
+      ['all/res=5/data_0.parquet', 5, null, false, 1],
+      ['decade/all/decade=2000s/res=3/data_0.parquet', 3, { grain: 'decade', value: '2000s' }, true, 1],
+    ])
+    expect(st.file).toBe(`${BASE}decade/all/decade=2000s/res=3/data_0.parquet`)
+    expect(st.bytes).toBe(before.bytes + st.files[1].bytes)
+    expect(st.requests).toBe(reader.stats.requests)
+    // back to all time: the first file is current again, its counts kept
+    slot.update({ period: null })
+    expect(slot.stats().files.map((f) => f.current)).toEqual([true, false])
+    slot.unmount(m as never)
+  })
+  it('counts only its own tap: another slot, another tab and a hand-built layer on the same channel are not counted', async () => {
+    const a = slotOf(), b = slotOf({ instance: 'other' })
+    const m = fakeMap(6)
+    a.mount(m as never, null, null); b.mount(m as never, null, null)
+    expect(a.layer().tap).not.toBe(b.layer().tap)
+    const reader = new ReleaseReader({ fetch: s3().fetch, tail: 4096 })
+    const [x, y] = tile6
+    await releaseProvider(layerOf(), reader, { onTile: postTileStats })(6, x, y, signal)
+    await workerOf(b, reader)(6, x, y, signal)
+    await until(() => b.stats().tiles === 1)
+    expect([a.stats().tiles, b.stats().tiles]).toEqual([0, 1])
+    a.unmount(m as never); b.unmount(m as never)
+  })
+  it('without BroadcastChannel the layer is as before and stats() stays at zero (stats: false is the same)', () => {
+    vi.stubGlobal('BroadcastChannel', undefined)
+    const slot = slotOf()
+    slot.mount(fakeMap(6) as never, null, null)
+    expect(slot.layer()).toEqual(layerOf())
+    expect(slot.stats()).toMatchObject({ tiles: 0, bytes: 0, files: [] })
+    expect(() => postTileStats({ tile: { z: 0, x: 0, y: 0 }, file: 'f', requests: 0, bytes: 0, rowGroupsRead: 0, rowGroupsSkipped: 0, ms: 0, cached: true })).not.toThrow()
+    vi.unstubAllGlobals()
+    expect(slotOf({ stats: false }).layer()).toEqual(layerOf())
   })
 })

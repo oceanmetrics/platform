@@ -96,7 +96,8 @@ What happens, and where:
   `taxon/rank=class/taxon=Aves`; the values go in as given, so pass them url-path-ready, as `taxon_groups.parquet`
   `url_path` holds them). The result, an `H3ReleaseLayer` (absolute templates with `{res}` and `{parent}` open, the
   ladder, the pin, the id column and the indicator columns), travels whole in the tile url
-  `h3r://<encoded json>/{z}/{x}/{y}`, so the worker needs no message channel. One vector source with `promoteId: 'h3'`
+  `h3r://<encoded json>/{z}/{x}/{y}`, so the worker needs no message channel to read it (what the tiles cost comes back
+  on one, see "What the tiles cost" below). One vector source with `promoteId: 'h3'`
   (feature state for hover and selection) and one fill: `filter: ['has', indicator]` (a cell without ES(50) is not
   drawn), `fill-color` the ramp on `['get', indicator]`. With `res: 'auto'` the fill is a `step` on the zoom, each
   resolution on its own domain.
@@ -190,6 +191,59 @@ either way. Tile building stays under 10 ms; a cold tile's time is the fetch.
    base), and the heads are ordinary taxon layers under `taxon/rank=<rank>/taxon=<name>/` (`h3:heads.layer: taxon`).
 
 The h3j PMTiles form (`h3Slot` with `{ url }`) stays for single-value archives.
+
+#### What the tiles cost (`stats()`, `onStats()`, 0.3.3)
+
+The reader runs in MapLibre's worker and counts its requests and bytes, but a protocol action cannot tell the page.
+The package had no worker-to-page channel (the tile url is one way), so the worker posts one message per built tile on
+`BroadcastChannel('om-h3')` (guarded by `typeof BroadcastChannel !== 'undefined'`: without it nothing is posted, the layer
+draws as before and `stats()` stays at zero). The message, `H3TileStats`:
+
+```ts
+{ tile: { z, x, y }, file,            // the layer file at the tile's resolution (split layers: read under this name)
+  tap,                                // the slot that asked (its layer's `tap`)
+  requests, bytes,                    // range requests this tile made and their response bytes
+  rowGroupsRead, rowGroupsSkipped,    // row groups it decoded / its cell_id statistics ruled out
+  ms,                                 // tile request to rows (the read; the geometry is built after)
+  cached }                            // no request: footer and row groups came from the worker's cache
+```
+
+A tile is billed for what it alone read: the tile that opens a file pays for its footer, the one that decodes a row
+group pays for it, and a tile served from the cache (or from another tile's read in flight) is `cached: true`, 0 bytes.
+`rowGroupsSkipped` counts again each time (the statistics are checked per tile).
+
+The slot totals its own tiles (its layer carries a random `tap`, which the worker copies into each message, so another
+slot, map or tab on the channel is not counted):
+
+```ts
+slot.stats()          // H3ReleaseStats, a snapshot: since mount
+// { tiles, cachedTiles, requests, bytes, rowGroupsRead, rowGroupsSkipped, ms,   // ms is the sum over tiles
+//   file,               // the file of the latest tile counted, or null
+//   files: [{ file, period, res, current, tiles, cachedTiles, requests, bytes, rowGroupsRead, rowGroupsSkipped, ms }] }
+const off = slot.onStats((stats, tile) => { ... })   // after each tile is counted; off() stops
+```
+
+`update({ indicator })` fetches nothing and resets nothing. A period or resolution change keeps the totals and the old
+file's counts, and marks the new file: `files[i].current` is true for the files the view reads now (any resolution of
+its ladder), `period` is `{ grain, value }` or null for all time. `h3ReleaseSlot({ ..., stats: false })` turns it off.
+The totals reset when the slot is mounted; `unmount` stops listening but keeps what was counted. Tiles read in parallel
+overlap, so `ms` (a sum of the tiles' own times) can exceed the wall time.
+
+A one-line footer, `N requests, X KB in Y ms, Z row groups skipped`:
+
+```ts
+const footer = (s: H3ReleaseStats) =>
+  `${s.requests} requests, ${(s.bytes / 1000).toFixed(1)} KB in ${Math.round(s.ms)} ms, ${s.rowGroupsSkipped} row groups skipped`
+el.textContent = footer(slot.stats())
+slot.onStats((s) => { el.textContent = footer(s) })
+```
+
+**For the atlas author** (`src/lens/collection/h3/`, the OBIS layer's footer): build the slot once with
+`h3ReleaseSlot(...)`, and call `slot.stats()` (or subscribe with `slot.onStats`) where the footer is rendered, in the
+same component that mounts the slot. Read it after the slot is mounted (before, it is zeros), and drive the footer from
+`onStats` rather than polling: it fires per tile, so throttle the DOM write (one per animation frame) while a view
+loads. Do not reset anything on an indicator change: the counts are the page's session total for this slot, and
+`files` splits them by period and resolution if the footer wants "this file" instead.
 
 ### The species of a cell (`speciesForCell`, 0.3.2)
 
@@ -388,6 +442,8 @@ the h3 worker module and the COG and geotiff code included.
 
 0.3.2: 45 109 B (42 836 B at 0.3.1): `h3Species.ts` and the new `tileParents`; the worker chunk 100 672 B (+457 B).
 
+0.3.3: 47 148 B (+2 039 B: `h3Tap.ts`, the per-tile tally in the reader and `stats()` on the slot); the worker chunk 101 057 B (+385 B).
+
 **0.3.0 raises the package budget to 48 000 B**: 41 877 B measured, +13.3 kB for the seven modules of the release
 provider (`h3Bits`, `h3Zoom`, `h3ReleaseLayer`, `h3Release`, `h3Parquet`, `h3Stats`, `parquetFile`), comment-heavy as
 the rest. What an app pays eagerly for `h3ReleaseSlot` is +5.2 kB minified over the base (h3Slot: +3.0 kB): the zoom
@@ -412,7 +468,7 @@ external, 2026-10-23):
 | + `cogSlot`, `legendFromStac`, `pointValue`, `overviewHistogram` | 22.2 kB (geotiff's core) | the protocol; geotiff's decoders (LERC, ZSTD, deflate ...) only for files that use them |
 | + `h3Slot` | 3.9 kB | the tile builder (h3-js, geojson-vt, vt-pbf) only for an in-memory table |
 | + `h3ReleaseSlot` | 9.0 kB (base + 5.2) | the legend reader (hyparquet, fzstd) 20.9 kB on the first legend |
-| `@oceanmetrics/map/h3-worker` (in MapLibre's worker) | 100.2 kB (0.3.0, with the release reader; 76.4 kB at 0.2.x; 100.7 kB at 0.3.2) | spike 1 measured 68.7 kB for the h3j code |
+| `@oceanmetrics/map/h3-worker` (in MapLibre's worker) | 100.2 kB (0.3.0, with the release reader; 76.4 kB at 0.2.x; 100.7 kB at 0.3.2; 101.1 kB at 0.3.3) | spike 1 measured 68.7 kB for the h3j code |
 | `buildH3jArchive` (producers) | 65.2 kB | |
 
 ## Tests

@@ -7,7 +7,10 @@
 //   - `update({ period })` and `update({ res })` change the tile url only when the file changes (setTiles), the worker's
 //     row-group cache keeps what it read, so going back to a period reads nothing again;
 //   - the colour domain is p02 to p98 of the release's stats.parquet for the layer, period, resolution and indicator
-//     (h3Stats.ts, imported lazily); with res auto the fill steps with the zoom, each resolution on its own domain.
+//     (h3Stats.ts, imported lazily); with res auto the fill steps with the zoom, each resolution on its own domain;
+//   - `stats()` and `onStats(cb)` say what the tiles cost (requests, bytes, row groups, ms), from the messages the
+//     worker posts per built tile (h3Tap.ts, BroadcastChannel 'om-h3'): totals since mount and per file. an indicator
+//     change fetches nothing, so it adds nothing; a period or resolution change keeps the totals and marks the new file.
 // a second slot of the same layer (another period beside it) takes `instance`, as gridSlot does. never imports
 // maplibre-gl at run time.
 import type { ExpressionSpecification, FilterSpecification, Map as MlMap, VectorSourceSpecification, VectorTileSource } from 'maplibre-gl'
@@ -15,6 +18,8 @@ import { H3_LAYER } from './h3.js'
 import { collectionBase, periodSets, pickRes, releaseLayer, releaseMaxzoom, releaseTileUrl, resolvePeriod } from './h3ReleaseLayer.js'
 import type { H3CollectionLike, H3Period, H3ReleaseLayer, H3ResRule } from './h3ReleaseLayer.js'
 import type { StatsMatch, StatsRow } from './h3Stats.js'
+import { listenTileStats, newTap, TileTotals } from './h3Tap.js'
+import type { FileInfo, H3ReleaseStats, H3TileStats } from './h3Tap.js'
 import { DEFAULT_RAMP, interpolateColors, rampStops } from './ramps.js'
 import { formatLayerKey, SLOT_PREFIX } from './slot.js'
 import type { LayerSlot, LayerSpec, LegendSpec } from './slot.js'
@@ -57,6 +62,8 @@ export interface H3ReleaseSlotOptions {
   units?: string | null
   ramp?: string
   opacity?: number
+  /** count what the tiles cost for `stats()` (default true; needs BroadcastChannel, else the counts stay at zero) */
+  stats?: boolean
   /** the fetch the legend read uses (tests) */
   fetch?: typeof fetch
   onchange?: () => void
@@ -74,6 +81,11 @@ export interface H3ReleaseSlot extends LayerSlot {
   legend(): LegendSpec
   /** the legend rows read (every resolution and variable of the layer and period), or null before they arrive */
   statsRows(): StatsRow[] | null
+  /** what the worker's tiles cost since the slot was mounted, in total and per file (a snapshot); zeros before the
+   * first tile, and without BroadcastChannel */
+  stats(): H3ReleaseStats
+  /** call `cb(stats, tile)` after each built tile is counted; returns the function that stops */
+  onStats(cb: (stats: H3ReleaseStats, tile: H3TileStats) => void): () => void
 }
 
 /** the ids of a release slot's source and fill */
@@ -161,8 +173,20 @@ export function h3ReleaseSlot(opts: H3ReleaseSlotOptions): H3ReleaseSlot {
   const item = opts.item ?? { layer: 'all' }
   const keys = opts.keys ?? { layer: itemPath(item) }
   let view: H3ReleaseView = { indicator: opts.indicator, period: opts.period ?? null, res: opts.res ?? 'auto' }
-  const make = (v: H3ReleaseView) => releaseLayer(c, { base: opts.base, keys, period: v.period, res: v.res })
+  const tap = opts.stats === false ? undefined : newTap()
+  const make = (v: H3ReleaseView) => ({ ...releaseLayer(c, { base: opts.base, keys, period: v.period, res: v.res }), ...(tap ? { tap } : {}) })
+  // the period and resolution of every file a view of this slot has read (never forgotten: a tile of the old period
+  // can still arrive after the move), and the files the view reads now
+  const files = new Map<string, FileInfo>()
+  const note = (l: H3ReleaseLayer, v: H3ReleaseView) => {
+    const p = periodOf(c, v.period)
+    for (const r of l.ladder) files.set(l.template.replaceAll('{res}', String(r)), { period: p, res: r })
+  }
   let layer = make(view)
+  note(layer, view)
+  const totals = new TileTotals((f) => files.get(f), (f) => layer.ladder.some((r) => layer.template.replaceAll('{res}', String(r)) === f))
+  const listeners = new Set<(s: H3ReleaseStats, t: H3TileStats) => void>()
+  let stopListening: (() => void) | null = null
   const ids = h3ReleaseIds(opts.instance)
   const spec = opts.spec ?? { kind: 'h3' as const, id: c.id, variable: opts.indicator }
   const ramp = opts.ramp ?? DEFAULT_RAMP
@@ -224,8 +248,15 @@ export function h3ReleaseSlot(opts: H3ReleaseSlotOptions): H3ReleaseSlot {
       map = m
       // the contract's t: a period of this collection moves the slot there; anything else (another app's date) is ignored
       if (typeof t === 'string' && t !== view.period) {
-        try { const l = make({ ...view, period: t }); view = { ...view, period: t }; layer = l } catch { /* not a period here */ }
+        try { const v = { ...view, period: t }, l = make(v); view = v; layer = l; note(l, v) } catch { /* not a period here */ }
       }
+      totals.reset()
+      stopListening?.()
+      if (tap) stopListening = listenTileStats((m) => {
+        totals.add(m)
+        const s = totals.snapshot()
+        for (const cb of [...listeners]) cb(s, m)
+      }, tap)
       m.addSource(ids.source, releaseSource(layer))
       m.addLayer({
         id: ids.fill, type: 'fill', source: ids.source, 'source-layer': H3_LAYER, filter: releaseFilter(view.indicator),
@@ -242,6 +273,7 @@ export function h3ReleaseSlot(opts: H3ReleaseSlotOptions): H3ReleaseSlot {
       const urlWas = releaseTileUrl(layer), urlNow = releaseTileUrl(nextLayer)
       const maxzoomChanged = releaseMaxzoom(layer) !== releaseMaxzoom(nextLayer)
       layer = nextLayer
+      note(layer, view)
       if (map && urlNow !== urlWas) {
         const src = map.getSource(ids.source) as VectorTileSource | undefined
         if (src && typeof src.setTiles === 'function' && !maxzoomChanged) src.setTiles([urlNow])
@@ -263,6 +295,7 @@ export function h3ReleaseSlot(opts: H3ReleaseSlotOptions): H3ReleaseSlot {
     },
     unmount(m) {
       m.off?.('zoomend', onZoom)
+      stopListening?.(); stopListening = null
       if (m.getLayer(ids.fill)) m.removeLayer(ids.fill)
       if (m.getSource(ids.source)) m.removeSource(ids.source)
       map = null
@@ -284,6 +317,11 @@ export function h3ReleaseSlot(opts: H3ReleaseSlotOptions): H3ReleaseSlot {
     layer: () => layer,
     tileUrl: () => releaseTileUrl(layer),
     statsRows: () => rows,
+    stats: () => totals.snapshot(),
+    onStats(cb) {
+      listeners.add(cb)
+      return () => { listeners.delete(cb) }
+    },
   }
   return slot
 }

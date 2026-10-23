@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.3.3 (2026-10-23)
+
+What the tiles cost, for the atlas OBIS layer's footer (obis-hex parity row 80): the release reader keeps request and
+byte counts inside MapLibre's worker and had no way to tell the page.
+
+- New: the worker posts, per built `h3r://` tile, `{ tile: { z, x, y }, file, tap, requests, bytes, rowGroupsRead,
+  rowGroupsSkipped, ms, cached }` (`H3TileStats`) on `BroadcastChannel('om-h3')`. There was no worker-to-page channel
+  (the tile url carries the layer one way, and `setupMapLibre` only `importScriptInWorkers` the module), so this is the
+  channel; every use is guarded by `typeof BroadcastChannel !== 'undefined'`, and without one the layer draws as before
+  and the counts stay zero. Each tile is billed for what it alone read (a tile that opens a file pays for its footer,
+  the tile that decodes a row group pays for it, one served from the worker's cache pays nothing, `cached: true`),
+  also when tiles are in flight together.
+- New: `h3ReleaseSlot` `stats()` (the totals since mount, and per file with its period, resolution and whether the
+  slot's view reads it now) and `onStats(cb)` (called with the totals and the tile after each tile is counted; returns
+  the unsubscribe). `update({ indicator })` fetches nothing and resets nothing; a period or resolution change keeps the
+  totals and the old file's counts and marks the new file (`current`). Option `stats: false` turns it off.
+- Changed: a release slot's layer (so its tile url) now carries a random `tap`, which the worker copies into each
+  message; the slot counts only its own tap, so another slot, map or tab of the same origin on the channel is not
+  counted. `H3ReleaseLayer.tap` is optional; `releaseLayer()` itself is unchanged.
+- New (exports): `releaseProvider(layer, reader, { onTile })`, `newTileTally`, `H3_CHANNEL`, `postTileStats`,
+  `listenTileStats`, `newTap`, `TileTotals` and the types `H3TileStats`, `H3ReleaseStats`, `H3FileStats`, `H3Counts`.
+  `RangeFile.counting(tally)` and `ReleaseReader.open/groupsFor/group/rows` take an optional tally; what is fetched
+  does not change.
+- Size: package 47 148 B (45 109 B at 0.3.2; budget 48 000 B), the worker chunk 101 057 B (+385 B; budget 110 000 B).
+
 ## 0.3.2 (2026-10-23)
 
 The two reads the atlas's OBIS layer measured over their bars (atlas `docs/obis-layer.md`).

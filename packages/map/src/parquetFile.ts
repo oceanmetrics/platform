@@ -24,6 +24,9 @@ export interface RangeFile extends AsyncBuffer {
   url: string
   /** the bytes of the tail read first (the footer is in them) */
   tailBytes: number
+  /** the same file, its reads counted into `tally` as well as into the file's own stats (what one tile cost, while
+   * other tiles read the same file) */
+  counting(tally: ReadStats): AsyncBuffer
 }
 
 export interface RangeFileOptions {
@@ -31,6 +34,8 @@ export interface RangeFileOptions {
   /** the suffix read first; default 64 KiB (a cell-sorted res-5 layer's footer, 68 row groups, is about 20 kB) */
   tail?: number
   stats?: ReadStats
+  /** a second count of this open's own requests (the tile that opened the file pays for its footer) */
+  tally?: ReadStats
 }
 
 export const DEFAULT_TAIL = 65_536
@@ -41,16 +46,21 @@ const isMissing = (status: number) => status === 403 || status === 404
 export async function openRangeFile(url: string, opts: RangeFileOptions = {}): Promise<RangeFile | null> {
   const get = opts.fetch ?? globalThis.fetch
   const stats = opts.stats
+  const bill = (extra: ReadStats | undefined, requests: number, bytes: number, missing = 0) => {
+    for (const s of [stats, extra]) if (s) { s.requests += requests; s.bytes += bytes; s.missing += missing }
+  }
   const tail = opts.tail ?? DEFAULT_TAIL
   const res = await get(url, { headers: { Range: `bytes=-${tail}` } })
-  if (stats) stats.requests++
   if (isMissing(res.status)) {
-    if (stats) stats.missing++
+    bill(opts.tally, 1, 0, 1)
     return null
   }
-  if (res.status !== 200 && res.status !== 206) throw new Error(`${url}: HTTP ${res.status}`)
+  if (res.status !== 200 && res.status !== 206) {
+    bill(opts.tally, 1, 0)
+    throw new Error(`${url}: HTTP ${res.status}`)
+  }
   const body = await res.arrayBuffer()
-  if (stats) stats.bytes += body.byteLength
+  bill(opts.tally, 1, body.byteLength)
   let byteLength = body.byteLength
   let tailStart = 0
   if (res.status === 206) {
@@ -59,19 +69,23 @@ export async function openRangeFile(url: string, opts: RangeFileOptions = {}): P
     byteLength = Number(m[1])
     tailStart = byteLength - body.byteLength
   }
+  const read = async (start: number, end: number, extra?: ReadStats): Promise<ArrayBuffer> => {
+    if (start >= tailStart && end <= byteLength) return body.slice(start - tailStart, end - tailStart)
+    const r = await get(url, { headers: { Range: `bytes=${start}-${end - 1}` } })
+    if (r.status !== 200 && r.status !== 206) {
+      bill(extra, 1, 0)
+      throw new Error(`${url} bytes ${start}-${end - 1}: HTTP ${r.status}`)
+    }
+    const b = await r.arrayBuffer()
+    bill(extra, 1, b.byteLength)
+    // a server that ignores Range answers 200 with the whole file
+    return r.status === 200 && b.byteLength === byteLength ? b.slice(start, end) : b
+  }
   return {
     url,
     byteLength,
     tailBytes: body.byteLength,
-    async slice(start: number, end: number = byteLength): Promise<ArrayBuffer> {
-      if (start >= tailStart && end <= byteLength) return body.slice(start - tailStart, end - tailStart)
-      const r = await get(url, { headers: { Range: `bytes=${start}-${end - 1}` } })
-      if (stats) stats.requests++
-      if (r.status !== 200 && r.status !== 206) throw new Error(`${url} bytes ${start}-${end - 1}: HTTP ${r.status}`)
-      const b = await r.arrayBuffer()
-      if (stats) stats.bytes += b.byteLength
-      // a server that ignores Range answers 200 with the whole file
-      return r.status === 200 && b.byteLength === byteLength ? b.slice(start, end) : b
-    },
+    slice: (start: number, end: number = byteLength) => read(start, end),
+    counting: (tally) => ({ byteLength, slice: (start: number, end: number = byteLength) => read(start, end, tally) }),
   }
 }
