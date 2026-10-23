@@ -115,7 +115,7 @@ describe('om-publish.sh: upload', () => {
     const u = uploads(run([join(d, 'README.md'), 'indicators', '--as', 'README.md']).calls)
     expect(u.map(c => c.files)).toEqual([['README.md'], ['README.md']])
     const v = uploads(run([join(d, 'coverage.parquet'), 'indicators/']).calls)
-    expect(v.map(c => c.args[2].endsWith('/') ? '' : (c.tool === 'aws' ? c.args[3] : c.args[2]))).toEqual(['r2:oceanmetrics-io-public/indicators', 's3://oceanmetrics.io-public/indicators'])
+    expect(v.map(c => c.args[2].endsWith('/') ? '' : (c.tool === 'aws' ? c.args[3] : c.args[2]))).toEqual(['r2:oceanmetrics-io-public-enam/indicators', 's3://oceanmetrics.io-public/indicators'])
   })
   it('--only-r2 and OM_STORE=r2 leave S3 alone; --only-s3 leaves R2 alone; a bad OM_STORE stops', () => {
     for (const r of [run([catalog(), 'indicators', '--only-r2']), run([catalog(), 'indicators'], { OM_STORE: 'r2' })]) {
@@ -130,9 +130,9 @@ describe('om-publish.sh: upload', () => {
   it('--keep-history copies the objects that will change to <top>/_history/<date>/ on R2, before the upload', () => {
     const r = run([catalog(), 'indicators', '--keep-history', '--really'], { OM_FAKE_DIFFER: 'indicators.json,coverage.parquet' })
     const i = r.calls.findIndex(c => c.args[0] === 'check')
-    expect(r.calls[i].args.slice(1, 3)[1]).toBe('r2:oceanmetrics-io-public/indicators')
+    expect(r.calls[i].args.slice(1, 3)[1]).toBe('r2:oceanmetrics-io-public-enam/indicators')
     const copy = r.calls[i + 1]
-    expect(copy.args.slice(0, 3)).toEqual(['copy', 'r2:oceanmetrics-io-public/indicators', 'r2:oceanmetrics-io-public/indicators/_history/2026-10-23'])
+    expect(copy.args.slice(0, 3)).toEqual(['copy', 'r2:oceanmetrics-io-public-enam/indicators', 'r2:oceanmetrics-io-public-enam/indicators/_history/2026-10-23'])
     expect(copy.list).toEqual(['indicators.json', 'coverage.parquet'])
     expect(copy.args).toContain('--ignore-existing')
     expect(copy.args).not.toContain('--dry-run')
@@ -142,7 +142,7 @@ describe('om-publish.sh: upload', () => {
   it('a deeper prefix keeps its rest under the top prefix\'s _history/; nothing changed copies nothing', () => {
     const r = run([catalog(), 'atlas/aquamaps_eov', '--keep-history'], { OM_FAKE_DIFFER: 'indicators.json' })
     const copy = r.calls.find(c => c.args[0] === 'copy' && c.list)!
-    expect(copy.args[2]).toBe('r2:oceanmetrics-io-public/atlas/_history/2026-10-23/aquamaps_eov')
+    expect(copy.args[2]).toBe('r2:oceanmetrics-io-public-enam/atlas/_history/2026-10-23/aquamaps_eov')
     expect(copy.args).toContain('--dry-run')
     const none = run([catalog(), 'indicators', '--keep-history'])
     expect(none.calls.filter(c => c.list)).toEqual([])

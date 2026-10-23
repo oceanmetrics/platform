@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # om-publish.sh: the one publisher of the Ocean Metrics public bucket (build week 6, step 0). it uploads a local folder
-# (or one file) to a prefix of BOTH stores, S3 `oceanmetrics.io-public` and R2 `oceanmetrics-io-public` (R2 first, then
+# (or one file) to a prefix of BOTH stores, S3 `oceanmetrics.io-public` and R2 `oceanmetrics-io-public-enam` (R2 first, then
 # S3), so the freeze is one setting (`OM_STORE=r2` or `--only-r2`) and not twenty edits. it never deletes: no
 # `--delete`, rclone `copy` and never `sync`. the per-repo publish scripts it replaces, and the one-line replacement of
 # each, are in scripts/om-publish/README.md. public, no secret: the R2 keys come from the rclone wrapper's env file
@@ -35,7 +35,7 @@
 # hosts: S3_PATH_STYLE, S3_VIRTUAL_HOST, STORAGE_HOST, WORKER_PREVIEW, s3, s3-virtual, storage, preview or a url;
 # --from takes a comma-separated list.
 #
-# environment: OM_STORE (both|r2|s3), OM_S3_BUCKET (oceanmetrics.io-public), OM_R2_BUCKET (oceanmetrics-io-public),
+# environment: OM_STORE (both|r2|s3), OM_S3_BUCKET (oceanmetrics.io-public), OM_R2_BUCKET (oceanmetrics-io-public-enam, the US bucket since 2026-10-23),
 # OM_RCLONE (~/.config/oceanmetrics/rclone-r2.sh: rclone with the remotes s3: and r2:), OM_AWS (aws),
 # OM_CATALOG_CLI (packages/catalog/dist/cli.js), OM_HISTORY_DATE (the history folder's date, default today UTC).
 #
@@ -45,7 +45,7 @@ set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(dirname "$HERE")"
 S3_BUCKET="${OM_S3_BUCKET:-oceanmetrics.io-public}"
-R2_BUCKET="${OM_R2_BUCKET:-oceanmetrics-io-public}"
+R2_BUCKET="${OM_R2_BUCKET:-oceanmetrics-io-public-enam}"   # US (ENAM), Ben 2026-10-23; the EEUR oceanmetrics-io-public is no longer written (kept until Ben deletes it)
 RCLONE="${OM_RCLONE:-$HOME/.config/oceanmetrics/rclone-r2.sh}"
 AWS="${OM_AWS:-aws}"
 CLI="${OM_CATALOG_CLI:-$ROOT/packages/catalog/dist/cli.js}"

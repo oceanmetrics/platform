@@ -1,7 +1,7 @@
 # om-publish.sh
 
 The one publisher of the Ocean Metrics public bucket (build week 6, step 0). `scripts/om-publish.sh` uploads a local
-folder (or one file) to a prefix of **both** stores, R2 `oceanmetrics-io-public` first, then S3
+folder (or one file) to a prefix of **both** stores, R2 `oceanmetrics-io-public-enam` (the US bucket since 2026-10-23) first, then S3
 `oceanmetrics.io-public`, so the freeze is one setting (`OM_STORE=r2` on the mini, or `--only-r2`) and not twenty edits.
 It never deletes: no `--delete`, rclone `copy` and never `sync`. The repo holds no secret: R2 goes through the rclone
 wrapper `~/.config/oceanmetrics/rclone-r2.sh` (which sources `r2.env`), S3 through the host's AWS profile.

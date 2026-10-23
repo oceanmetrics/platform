@@ -337,7 +337,7 @@ JOBS=10 WORK=$PWD/build RAW=$PWD/raw ~/Github/oceanmetrics/platform/scripts/base
   prep,far,core,regional,contours,land,names,verify         # tmux om:basemap, log basemap.log, marker basemap.done
 for f in gebco/far gebco/core gebco/core-sanctuaries gebco/contours gebco/names osm/land; do
   aws s3 cp out/$f.pmtiles s3://oceanmetrics.io-public/basemap/$f.pmtiles --content-type application/vnd.pmtiles; done
-~/.config/oceanmetrics/rclone-r2.sh sync s3:oceanmetrics.io-public/basemap r2:oceanmetrics-io-public/basemap
+~/.config/oceanmetrics/rclone-r2.sh sync s3:oceanmetrics.io-public/basemap r2:oceanmetrics-io-public-enam/basemap
 ```
 
 Check a terrain tile against the source with `python3 -I scripts/basemap/check_tile.py <archive> <z> <lon> <lat> <gebco.tif>`
