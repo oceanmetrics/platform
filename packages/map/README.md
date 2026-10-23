@@ -5,7 +5,8 @@ contract with three providers (a grid slice, a Cloud-Optimized GeoTIFF, H3 hexag
 obis-hex, erddap-places) import it and draw their own places on top.
 
 Version 0.2.0 (build week 2, step 1). 0.1.0 was the scaffold published on Day 5. 0.2.1 (unreleased) holds the fixes
-of the consumer check (step 2a, `spikes/map-consumer`, `results/checklist.md`).
+of the consumer check (step 2a, `spikes/map-consumer`, `results/checklist.md`). 0.2.2 (unreleased) holds the fixes of the
+first two consumers (the indicators Map and the atlas): see the three notes below and the CHANGELOG.
 
 ## The contract
 
@@ -45,8 +46,8 @@ Each provider is one module: a slot factory plus the pure functions it rests on.
 
 | kind | factory | what the app gives it | rules kept (tested) |
 |---|---|---|---|
-| `grid` (`grid.ts`) | `gridSlot(spec, source, opts)` | a `SliceSource`: `slice(t) → [{ lat, lon, value, weight }]`, the rows of `last_step.sql` (the engine's SQL in DuckDB-WASM, build week 2 step 2) | one square per cell from the axis step (`cellSquares`, erddap-places); a cell without data is a hole; across ±180 the cells go into [0, 360); a ramp fill (`rampStops`) or a class `match` |
-| `cog` (`cog.ts`) | `cogSlot(spec, asset, opts)` | the 3857 data asset of a `cog` STAC item (`pickCogAssets(item)`) | spike 3: refuse anything without `proj:code` EPSG:3857 (`CogProjectionError` names the asset); the legend from STAC `statistics` and `histogram` only (`legendFromStac`); `overviewHistogram` gives a shape, never numbers; `pointValue` reads the 4326 original; colour from `atlas:colormap` and `atlas:rescale`; nodata transparent |
+| `grid` (`grid.ts`) | `gridSlot(spec, source, opts)` | a `SliceSource`: `slice(t) → [{ lat, lon, value, weight }]`, the rows of `last_step.sql` (the engine's SQL in DuckDB-WASM, build week 2 step 2) | one square per cell from the axis step (`cellSquares`, erddap-places); a cell without data is a hole; across ±180 the cells go into [0, 360); a ramp fill (`rampStops`) or a class `match`; the squares' outline (12% black) only on grids coarser than 0.05° (the finer of the two axis steps), since at 0.01° it draws a mesh over the data: `outline: string \| null` overrides (a colour, or `null` for none), `gridOutline(spacing, outline)` is the rule (0.2.2) |
+| `cog` (`cog.ts`) | `cogSlot(spec, asset, opts)` | the 3857 data asset of a `cog` STAC item (`pickCogAssets(item)`) | spike 3: refuse anything without `proj:code` EPSG:3857 (`CogProjectionError` names the asset); the legend from STAC `statistics` and `histogram` only (`legendFromStac`); `overviewHistogram` gives a shape, never numbers; `pointValue` reads the 4326 original; colour from `atlas:colormap` and `atlas:rescale`; nodata transparent. **Bands of one file** (items whose assets share an href and differ in `atlas:bidx`): the protocol's `#color:` grammar has no band key and it caches colour functions, readers and tiles by the href before the `#`, so `cogUrl` adds `b=<bidx>` to the href's query (`cogHref`; the file's server ignores it) and `cogSlot` selects the band in its colour function under that same key (0.2.2); no workaround in the app |
 | `h3` (`h3.ts`, `h3Tiles.ts`, `h3Index.ts`) | `h3Slot(spec, archive, opts)` | `{ url }` of a PMTiles archive of h3j tiles (written by `buildH3jArchive`), or `{ cells }` in memory (small tables only) | spike 1: the protocol in MapLibre's worker; geojson-vt `tolerance: 0`; the resolution stepped with zoom (`RES_FOR_ZOOM`, obis-hex's zoom_to_res); the PR 211 antimeridian unwrap and the ±180 strip, tested on the 55 crossing cells of obis-h3's ES(50) |
 
 Producers write h3 archives with `buildH3jArchive({ levels, maxzoom, metadata, gzip })`: one table per resolution (or
@@ -146,6 +147,10 @@ await setupMapLibre({ maplibre: { addProtocol, importScriptInWorkers, setWorkerU
 
   Pass the three functions, not `import * as maplibre`: the namespace object as an argument keeps every export of
   `maplibre-gl` in the bundle (+11.5 kB gzip measured in a Vite 8 app).
+
+  Give `setupMapLibre` the same maplibre-gl on every call of a page: calling it again with the same module (the same
+  object, or an object rebuilt from the same three functions, as above) adds only what the first call did not, and
+  only a different maplibre-gl throws (0.2.2; 0.2.1 threw for an object literal rebuilt per call).
 
   and in `vite.config.ts`, worker chunks named `.mjs`, because MapLibre 6's `importScriptInWorkers` `import()`s a
   module only when its url ends in `.mjs` (`setupMapLibre` throws a `WorkerUrlError` otherwise):

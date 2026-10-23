@@ -47,6 +47,13 @@ describe('setupMapLibre', () => {
     registerProtocol('cog', async () => ({ data: new ArrayBuffer(0) }))
     expect(calls).toEqual(['setWorkerUrl /w.mjs', 'addProtocol pmtiles', 'addProtocol cog'])
   })
+  it('regression (map 0.2.2): the same module again is a no-op, whether the same object or one rebuilt from the same functions', async () => {
+    const { lib, calls } = fakeMapLibre()
+    await setupMapLibre({ maplibre: lib, workerUrl: '/w.mjs', protocols: ['pmtiles'] })
+    await setupMapLibre({ maplibre: lib, workerUrl: '/w.mjs', protocols: ['pmtiles'] })
+    await setupMapLibre({ maplibre: { ...lib }, workerUrl: '/w.mjs', protocols: ['pmtiles', 'cog'] })
+    expect(calls).toEqual(['setWorkerUrl /w.mjs', 'addProtocol pmtiles', 'addProtocol cog'])
+  })
   it('refuses the h3 protocol without a worker module url, and a second maplibre module', async () => {
     const { lib } = fakeMapLibre()
     await expect(setupMapLibre({ maplibre: lib, workerUrl: '/w.mjs', protocols: ['h3'] })).rejects.toThrow(/needs h3WorkerUrl/)

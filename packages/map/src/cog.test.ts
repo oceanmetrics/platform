@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { fromArrayBuffer, writeArrayBuffer } from 'geotiff'
 import {
-  assertWebMercator, bucketCounts, cogColorFunction, CogProjectionError, cogRange, cogSlot, cogUrl, legendFromStac,
+  assertWebMercator, bucketCounts, cogColorFunction, CogProjectionError, cogRange, cogHref, cogSlot, cogUrl, legendFromStac,
   nodataValue, overviewHistogram, pickCogAssets, pointValue,
 } from './cog.js'
 import type { CogAsset } from './cog.js'
@@ -64,6 +64,30 @@ describe('the cog url and colour', () => {
   it('cog://<href>#color:[stops],min,max,c with the asset\'s colormap and range', () => {
     expect(cogUrl({ ...ASSET_3857, 'atlas:colormap': 'thermal_r', 'atlas:rescale': [5, 30] })).toBe('cog://https://storage.oceanmetrics.io/atlas/score_3857.tif#color:'
       + '["#e8fa5b","#f7cf45","#fca63c","#f2814d","#d66c6b","#b05f82","#8b538d","#684396","#40349f","#0f326b","#042333"],5,30,c')
+  })
+  it('regression (map 0.2.2): two bands of one file give different urls and colour-function keys', () => {
+    const band = (n: number): CogAsset => ({ ...ASSET_3857, 'atlas:bidx': n, 'atlas:rescale': [0, 1] })
+    expect(cogUrl(band(1))).not.toBe(cogUrl(band(2)))
+    expect(cogUrl(band(2))).toContain('cog://https://storage.oceanmetrics.io/atlas/score_3857.tif?b=2#color:')
+    expect(cogHref(band(3))).toBe('https://storage.oceanmetrics.io/atlas/score_3857.tif?b=3')
+    // an href with a query keeps it; an asset without a band keeps its href
+    expect(cogHref({ ...band(4), href: 'https://x.test/a.tif?sig=1' })).toBe('https://x.test/a.tif?sig=1&b=4')
+    expect(cogHref(ASSET_3857)).toBe(ASSET_3857.href)
+  })
+  it('regression (map 0.2.2): cogSlot gives the protocol its colour function under the band\'s own key, for that band', async () => {
+    const calls: Array<[string, unknown]> = []
+    const added: string[] = []
+    const protocol = await import('@geomatico/maplibre-cog-protocol')
+    const spy = vi.spyOn(protocol, 'setColorFunction').mockImplementation(((k: string, f: unknown) => { calls.push([k, f]) }) as never)
+    const m = { addSource: (_: string, s: { url: string }) => { added.push(s.url) }, addLayer: () => {}, on: () => {} }
+    const mk = (n: number) => cogSlot({ kind: 'cog', id: `b${n}`, variable: null }, { ...ASSET_3857, 'atlas:bidx': n })
+    mk(1).mount(m as never, null, null)
+    mk(2).mount(m as never, null, null)
+    await new Promise((r) => setTimeout(r, 50))
+    spy.mockRestore()
+    expect(new Set(added).size).toBe(2)
+    expect(calls.map((c) => c[0])).toEqual(added.map((u) => u.slice('cog://'.length).split('#')[0]))
+    expect(calls.every((c) => typeof c[1] === 'function')).toBe(true)
   })
   it('the colour function draws the band on the ramp and masks STAC nodata, the file\'s noData and NaN', () => {
     const f = cogColorFunction({ band: 2, min: 0, max: 10, ramp: 'viridis', nodata: nodataValue(255) })

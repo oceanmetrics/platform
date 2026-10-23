@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.2 (2026-10-23)
+
+Fixes found by the first two consumers (the indicators Map and the atlas).
+
+- Fix: `cogUrl(asset)` ignored the band, so two Items that are bands of one file (`atlas:bidx` 1..9) collided in the
+  protocol's colour-function cache and in MapLibre's tile cache. The `#color:` grammar of `@geomatico/maplibre-cog-protocol`
+  0.10 has no band key (`<scheme>,<min>,<max>,<modifiers>`, the first band), and the protocol keys its colour function,
+  reader and tile caches by the href before the `#`, so the band goes into that href as `b=<bidx>` (`?b=2`, or `&b=2`
+  after an existing query), which the file's server ignores. New `cogHref(asset)`; `cogSlot` registers its colour
+  function (which selects the band) under that same key. The atlas's `,b<bidx>` workaround can go. An asset without
+  `atlas:bidx` keeps its href unchanged.
+- New: `gridSlot` option `outline?: string | null`. Default by the axis step: the 12% black outline on grids coarser than
+  0.05 degrees, none on finer ones (at 0.01 degrees it drew a visible mesh); a colour forces it, `null` removes it.
+  Exported `gridOutline(spacing, outline)`, `GRID_OUTLINE`, `OUTLINE_BELOW`.
+- Fix: `setupMapLibre` must receive the same maplibre-gl on every call of a page. It is now idempotent for an identical
+  module (the same object, or an object rebuilt from the same `addProtocol`, `setWorkerUrl` and `importScriptInWorkers`)
+  and throws only for a different one; an object literal rebuilt per call used to throw.
+
 ## 0.2.1 (2026-10-23)
 
 The basemap tiers (build week 2 step 2b): the sea floor now serves every app globally.

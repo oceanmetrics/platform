@@ -142,6 +142,10 @@ export interface GridSlotOptions {
   /** a fixed colour domain; default the slice's own value range */
   domain?: [number, number]
   opacity?: number
+  /** the squares' outline colour. `undefined` = by the grid: `GRID_OUTLINE` for a grid coarser than `OUTLINE_BELOW`
+   * degrees, none for a finer one (the outlines of 0.01 degree squares draw a mesh over the data); `null` = none; a
+   * string = that colour whatever the grid. none leaves MapLibre's default, the outline in the fill colour */
+  outline?: string | null
   /** the legend's `via` */
   via?: string
   onchange?: () => void
@@ -149,6 +153,16 @@ export interface GridSlotOptions {
 
 export const GRID_SOURCE = `${SLOT_PREFIX}grid`
 export const GRID_LAYER = `${SLOT_PREFIX}grid:fill`
+/** the outline of a coarse grid's squares */
+export const GRID_OUTLINE = 'rgba(0,0,0,0.12)'
+/** the axis step (degrees) above which the automatic outline is drawn: at 0.05 and finer it is a mesh */
+export const OUTLINE_BELOW = 0.05
+
+/** the outline colour for squares of this axis step (the finer of lon and lat) under the `outline` option; null = none */
+export function gridOutline(spacing: number, outline?: string | null): string | null {
+  if (outline !== undefined) return outline
+  return spacing > OUTLINE_BELOW ? GRID_OUTLINE : null
+}
 
 /** the grid slot: mount adds an empty GeoJSON source and its fill, then each step's rows replace the data */
 export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOptions = {}): LayerSlot {
@@ -171,6 +185,10 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
       problem = sq.geojson.features.length ? null : 'no cells in this period'
       ;(map.getSource(GRID_SOURCE) as GeoJSONSource | undefined)?.setData(sq.geojson)
       map.setPaintProperty(GRID_LAYER, 'fill-color', gridFillColor({ range, ramp: opts.ramp, classes }))
+      if (sq.geojson.features.length) {
+        const o = gridOutline(Math.min(sq.lonSpacing, sq.latSpacing), opts.outline)
+        map.setPaintProperty(GRID_LAYER, 'fill-outline-color', o ?? undefined)
+      }
     } catch (err) {
       if (mine.signal.aborted) return
       problem = `no data: ${(err as Error).message}`
@@ -188,7 +206,8 @@ export function gridSlot(spec: LayerSpec, source: SliceSource, opts: GridSlotOpt
       t = t0
       m.addSource(GRID_SOURCE, { type: 'geojson', data: { type: 'FeatureCollection', features: [] } })
       m.addLayer({ id: GRID_LAYER, type: 'fill', source: GRID_SOURCE,
-        paint: { 'fill-color': gridFillColor({ range: opts.domain ?? [0, 1], ramp: opts.ramp, classes }), 'fill-opacity': opts.opacity ?? 0.8, 'fill-outline-color': 'rgba(0,0,0,0.12)' } },
+        paint: { 'fill-color': gridFillColor({ range: opts.domain ?? [0, 1], ramp: opts.ramp, classes }), 'fill-opacity': opts.opacity ?? 0.8,
+          ...(typeof opts.outline === 'string' ? { 'fill-outline-color': opts.outline } : {}) } },
       beforeId ?? undefined)
       void load()
     },

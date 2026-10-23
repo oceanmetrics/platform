@@ -31,12 +31,12 @@ export type { Ramp, RampFamily, RampKind, Rgb } from './ramps.js'
 
 // ---- the providers ----
 export {
-  axisSpacing, cellSquares, classLegend, GRID_LAYER, GRID_SOURCE, gridFillColor, gridLegend, gridSlot, normalizeLon, pickCenter,
+  axisSpacing, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, GRID_SOURCE, gridFillColor, gridLegend, gridOutline, gridSlot, normalizeLon, OUTLINE_BELOW, pickCenter,
 } from './grid.js'
 export type { CellProps, CellSquares, CellSquaresOptions, GridClass, GridSlotOptions, LonCenter, SliceCell, SliceSource } from './grid.js'
 export {
   assertWebMercator, bucketCounts, COG_LAYER, COG_SOURCE, cogBand, cogBands, cogColorFunction, CogProjectionError, cogRange,
-  cogSlot, cogUrl, legendFromStac, nodataValue, openCog, overviewHistogram, pickCogAssets, pointValue, WEB_MERCATOR,
+  cogHref, cogSlot, cogUrl, legendFromStac, nodataValue, openCog, overviewHistogram, pickCogAssets, pointValue, WEB_MERCATOR,
 } from './cog.js'
 export type { CogAsset, CogBandLike, CogItemLike, CogSlotOptions, OverviewHistogram, StacNodata } from './cog.js'
 export { absoluteArchiveUrl, decodeH3jTile, encodeH3jTile, H3_FILL, H3_LAYER, H3_SOURCE, h3FillColor, h3Slot, h3TileUrl, parseH3TileUrl } from './h3.js'

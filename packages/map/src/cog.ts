@@ -99,11 +99,24 @@ export function cogRange(a: CogAsset): [number, number] | null {
   return s && Number.isFinite(s.minimum) && Number.isFinite(s.maximum) ? [s.minimum, s.maximum] : null
 }
 
-/** the protocol url: `cog://<href>#color:["#..",..],<min>,<max>,c` (the protocol's custom-colours grammar, continuous);
- * the hash also keys MapLibre's tile cache, so a new ramp or range draws new tiles */
+/** the href the protocol is given, and the key of its colour function (`setColorFunction`) and of its reader, geotiff
+ * and tile caches: the asset's href, with `b=<atlas:bidx>` added to its query when the asset names a band. the
+ * protocol (0.10) has no band key in its `#color:` grammar (`<scheme>,<min>,<max>,<modifiers>`, the first band only;
+ * any other band is a custom colour function), and it caches by the href before the `#`, so two bands of one file would
+ * share one colour function and one set of tiles. the `b` parameter is ignored by the object store that serves the
+ * file and only makes the key differ */
+export function cogHref(a: CogAsset): string {
+  const b = a['atlas:bidx']
+  if (b === undefined) return a.href
+  return `${a.href}${a.href.includes('?') ? '&' : '?'}b=${b}`
+}
+
+/** the protocol url: `cog://<cogHref>#color:["#..",..],<min>,<max>,c` (the protocol's custom-colours grammar, continuous);
+ * the hash also keys MapLibre's tile cache, so a new ramp or range draws new tiles, and the band in the href part keeps
+ * the bands of one file apart */
 export function cogUrl(a: CogAsset, range: [number, number] | null = cogRange(a)): string {
   const [lo, hi] = range ?? [0, 1]
-  return `cog://${a.href}#color:${JSON.stringify(rampHex(a['atlas:colormap'] ?? DEFAULT_RAMP))},${lo},${hi},c`
+  return `cog://${cogHref(a)}#color:${JSON.stringify(rampHex(a['atlas:colormap'] ?? DEFAULT_RAMP))},${lo},${hi},c`
 }
 
 /** the protocol's colour function for one band: the ramp over [min, max], nodata, the file's noData and NaN transparent.
@@ -249,6 +262,7 @@ export function cogSlot(spec: LayerSpec, asset: CogAsset, opts: CogSlotOptions =
   assertWebMercator(asset, name, opts.itemProjCode)
   const range = cogRange(asset)
   const { index, band } = cogBand(asset)
+  const href = cogHref(asset)
   const title = opts.title ?? band?.description ?? asset.title ?? spec.id
   let t: string | null = null
   let problem: string | null = null
@@ -265,8 +279,8 @@ export function cogSlot(spec: LayerSpec, asset: CogAsset, opts: CogSlotOptions =
     mount(m, beforeId, t0) {
       t = t0
       const [lo, hi] = range ?? [0, 1]
-      // the colour function covers what the url's hash cannot: a band other than 1, STAC nodata the file may not declare
-      void loadCogProtocol().then((p) => p.setColorFunction(asset.href, cogColorFunction({ band: index, min: lo, max: hi, ramp: asset['atlas:colormap'], nodata: nodataValue(band?.nodata) })))
+      // the colour function covers what the url's hash cannot: the band (the url's grammar has none), STAC nodata the file may not declare
+      void loadCogProtocol().then((p) => p.setColorFunction(href, cogColorFunction({ band: index, min: lo, max: hi, ramp: asset['atlas:colormap'], nodata: nodataValue(band?.nodata) })))
       m.addSource(COG_SOURCE, { type: 'raster', url: cogUrl(asset, range), tileSize: 256 })
       m.addLayer({ id: COG_LAYER, type: 'raster', source: COG_SOURCE, paint: { 'raster-opacity': opts.opacity ?? 0.85, 'raster-resampling': 'nearest' } }, beforeId ?? undefined)
       m.on('error', onError)
@@ -276,7 +290,7 @@ export function cogSlot(spec: LayerSpec, asset: CogAsset, opts: CogSlotOptions =
       m.off('error', onError)
       if (m.getLayer(COG_LAYER)) m.removeLayer(COG_LAYER)
       if (m.getSource(COG_SOURCE)) m.removeSource(COG_SOURCE)
-      void loadCogProtocol().then((p) => p.setColorFunction(asset.href, undefined))
+      void loadCogProtocol().then((p) => p.setColorFunction(href, undefined))
     },
     legend() {
       return legendFromStac(asset, { title, t, problem })

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { axisSpacing, cellSquares, classLegend, gridFillColor, gridLegend, normalizeLon } from './grid.js'
+import { axisSpacing, cellSquares, classLegend, GRID_LAYER, GRID_OUTLINE, gridFillColor, gridLegend, gridOutline, gridSlot, normalizeLon } from './grid.js'
 import type { SliceCell } from './grid.js'
 
 // a 2x2 lattice on a 0.25 degree grid, one cell without data on this step
@@ -65,5 +65,48 @@ describe('the legend', () => {
     expect(l.ramp!.colors).toHaveLength(7)
     expect(l.ramp!.colors[0]).toBe('#042333')
     expect(gridLegend({ title: 'SST', t: null, via: 'grid slice', problem: null, range: null }).ramp).toBeNull()
+  })
+})
+
+describe('the outline (map 0.2.2)', () => {
+  it('by the axis step: drawn on a grid coarser than 0.05 degrees, none on a finer one', () => {
+    expect(gridOutline(0.25)).toBe(GRID_OUTLINE)
+    expect(gridOutline(0.1)).toBe(GRID_OUTLINE)
+    expect(gridOutline(0.05)).toBeNull()
+    expect(gridOutline(0.01)).toBeNull()
+  })
+  it('the option wins: a colour on any grid, null for none', () => {
+    expect(gridOutline(0.01, '#ff0000')).toBe('#ff0000')
+    expect(gridOutline(0.25, null)).toBeNull()
+  })
+  // a map that records what the slot sets on it
+  const fakeMap = () => {
+    const paint: Record<string, unknown> = {}
+    const layers: Array<{ paint: Record<string, unknown> }> = []
+    const m = {
+      addSource() {}, addLayer(l: { paint: Record<string, unknown> }) { layers.push(l) },
+      getSource: () => ({ setData() {} }), getLayer: () => ({}), removeLayer() {}, removeSource() {},
+      setPaintProperty: (id: string, k: string, v: unknown) => { if (id === GRID_LAYER) paint[k] = v },
+    }
+    return { m, paint, layers }
+  }
+  const cells = (step: number): SliceCell[] => [0, 1].flatMap((i) => [0, 1].map((j) => ({ lat: 10 + i * step, lon: -120 + j * step, value: i + j, weight: 1 })))
+  const mounted = async (step: number, outline?: string | null) => {
+    const { m, paint, layers } = fakeMap()
+    gridSlot({ kind: 'grid', id: 'g', variable: null }, { slice: async () => cells(step) }, { outline }).mount(m as never, null, null)
+    await new Promise((r) => setTimeout(r, 0))
+    return { paint, layer: layers[0] }
+  }
+  it('gridSlot sets the 12% black outline on a 0.25 degree grid and none on a 0.01 degree grid', async () => {
+    expect((await mounted(0.25)).paint['fill-outline-color']).toBe(GRID_OUTLINE)
+    const fine = await mounted(0.01)
+    expect('fill-outline-color' in fine.paint).toBe(true)
+    expect(fine.paint['fill-outline-color']).toBeUndefined()
+    expect(fine.layer.paint['fill-outline-color']).toBeUndefined()
+  })
+  it('gridSlot passes an explicit outline into the layer and keeps it after a slice', async () => {
+    const r = await mounted(0.01, '#00f')
+    expect(r.layer.paint['fill-outline-color']).toBe('#00f')
+    expect(r.paint['fill-outline-color']).toBe('#00f')
   })
 })

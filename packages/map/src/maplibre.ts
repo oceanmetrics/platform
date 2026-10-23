@@ -97,6 +97,10 @@ export function mapLibre(): MapLibreModule {
   return wired
 }
 
+/** the same maplibre-gl: one object, or objects made of the same three functions (`{ addProtocol, ... }` built per call) */
+const sameModule = (a: MapLibreModule, b: MapLibreModule) => a === b
+  || (a.setWorkerUrl === b.setWorkerUrl && a.addProtocol === b.addProtocol && a.importScriptInWorkers === b.importScriptInWorkers)
+
 /** register a main-thread protocol once per page (MapLibre's registry is global: a second addProtocol replaces the first) */
 export function registerProtocol(scheme: string, action: AddProtocolAction): void {
   if (registered.has(scheme)) return
@@ -106,11 +110,12 @@ export function registerProtocol(scheme: string, action: AddProtocolAction): voi
 
 /**
  * once per page, before the first map: the worker url, the protocols on the main thread, and the h3j module in
- * MapLibre's worker (resolves when the worker has imported it). a second call adds only what the first did not.
+ * MapLibre's worker (resolves when the worker has imported it). a second call adds only what the first did not; it may pass the same module again (the same object, or an object of
+ * the same three functions) and throws only for a different one.
  */
 export async function setupMapLibre(opts: SetupOptions): Promise<void> {
   const lib = opts.maplibre
-  if (wired && wired !== lib) throw new Error('@oceanmetrics/map: setupMapLibre() was given a second maplibre-gl module')
+  if (wired && !sameModule(wired, lib)) throw new Error('@oceanmetrics/map: setupMapLibre() was given a second maplibre-gl module')
   const protocols = opts.protocols ?? (['pmtiles', 'cog', ...(opts.h3WorkerUrl ? ['h3'] : [])] as ProtocolName[])
   if (protocols.includes('h3') && !opts.h3WorkerUrl) throw new WorkerUrlError('', 'the h3 protocol needs h3WorkerUrl')
   const h3Url = opts.h3WorkerUrl && protocols.includes('h3') ? h3ModuleUrl(opts.h3WorkerUrl, opts.base) : null
