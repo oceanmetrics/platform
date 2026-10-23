@@ -9,6 +9,7 @@
 //   - the resolution steps with zoom (spike 1 condition 3): at res 5 a z1 tile held 25,000 to 50,000 cells and took 40
 //     to 85 ms. RES_FOR_ZOOM is obis-hex's zoom_to_res (MarineSensitivity h3-db app.R) at each tile zoom.
 import { cellToBoundary, cellToParent, getHexagonEdgeLengthAvg, getResolution, polygonToCellsExperimental, POLYGON_TO_CELLS_FLAGS, UNITS } from 'h3-js'
+import { zoomToRes } from './h3Zoom.js'
 
 /** one table of cells, columnar: h3 ids and one value per id (the shape of an h3j tile and of obis-hex's partitions) */
 export interface H3jTile {
@@ -16,29 +17,26 @@ export interface H3jTile {
   v: ArrayLike<number>
 }
 
+/** one table of cells with several value columns (a release row: n, sp, shannon, simpson, es); NaN is a missing value,
+ * left out of the feature's properties. the tiles of the release provider carry every column, so the slot switches
+ * indicator with a paint change and no new tile */
+export interface H3Rows {
+  h3: string[]
+  columns: Record<string, ArrayLike<number>>
+}
+
+/** what a provider returns for a tile: one value per cell (`{ h3, v }`) or several (`{ h3, columns }`) */
+export type H3TileData = H3jTile | H3Rows
+
 /** the MVT tile geometry the lookup grows its bbox by (h3.ts cuts tiles with the same) */
 export const EXTENT = 4096
 export const BUFFER = 64
 const MAX_LAT = 89.5
 const KM_PER_DEG = 111.32
 
-// ---- the resolution per zoom ----
+// ---- the resolution per zoom (h3Zoom.ts: no h3-js, so the main thread's release slot imports it alone) ----
 
-/** obis-hex `ZOOM_BREAKS`: 0, 2.2, 3.4, 4.6, 5.8, 7, 8.2, 9.4, 10.6, 11.8, 22 */
-export const ZOOM_BREAKS: readonly number[] = Array.from({ length: 11 }, (_, i) => (i === 0 ? 0 : i === 10 ? 22 : 1 + ((13 - 1) * i) / 10))
-
-/** the h3 resolution a view zoom draws: R's findInterval(z, ZOOM_BREAKS) clamped to 1..10 (obis-hex zoomToRes) */
-export function zoomToRes(zoom: number): number {
-  let k = 0
-  for (const b of ZOOM_BREAKS) if (zoom >= b) k++
-  return Math.max(1, Math.min(10, k))
-}
-
-/** the resolution of each tile zoom 0..12 (index = z) */
-export const RES_FOR_ZOOM: readonly number[] = Array.from({ length: 13 }, (_, z) => zoomToRes(z))
-
-/** the resolution a tile at zoom z carries, capped at the finest the data has */
-export const resForZoom = (z: number, maxRes = 15): number => Math.min(maxRes, zoomToRes(Math.floor(z)))
+export { RES_FOR_ZOOM, resForZoom, ZOOM_BREAKS, zoomToRes } from './h3Zoom.js'
 
 // ---- tiles ----
 
@@ -109,6 +107,31 @@ export function seamSpans(w: number, e: number): [number, number][] {
   return spans
 }
 
+/** two cells of `res`, in degrees of latitude: how far a cell can poke out of its parent */
+export const marginDegFor = (res: number): number => (2 * getHexagonEdgeLengthAvg(res, UNITS.km)) / KM_PER_DEG
+
+/**
+ * the cells of `parentRes` whose children at `res` may touch tile z/x/y: the tile's bbox grown by geojson-vt's buffer
+ * and two cells of `res`, its edges densified every 2°, split at ±180 so the strip on the other side of the seam comes
+ * too (spike 1 condition 4). the lookup CellIndex keys its groups by, and the release provider turns into cell_id ranges
+ */
+export function tileParents(z: number, x: number, y: number, res: number, parentRes: number): Set<string> {
+  const margin = marginDegFor(res)
+  const [w0, s0, e0, n0] = tileBounds(z, x, y)
+  const pad = ((e0 - w0) * BUFFER) / EXTENT
+  const latPad = margin + ((n0 - s0) * BUFFER) / EXTENT
+  const s = Math.max(-MAX_LAT, s0 - latPad)
+  const n = Math.min(MAX_LAT, n0 + latPad)
+  const cos = Math.cos((Math.max(Math.abs(s), Math.abs(n)) * Math.PI) / 180)
+  const lonPad = pad + margin / Math.max(cos, 0.01)
+  const out = new Set<string>()
+  for (const [a, b] of seamSpans(w0 - lonPad, e0 + lonPad))
+    for (const poly of bboxPolygons(a, s, b, n))
+      for (const c of polygonToCellsExperimental(poly, parentRes, POLYGON_TO_CELLS_FLAGS.containmentOverlapping, true))
+        out.add(c)
+  return out
+}
+
 export class CellIndex {
   readonly byParent = new Map<string, number[]>()
   readonly cells: H3jTile
@@ -122,7 +145,7 @@ export class CellIndex {
     this.cells = cells
     this.res = cells.h3.length ? getResolution(cells.h3[0]) : 0
     this.parentRes = Math.min(this.res, opts.parentRes ?? Math.max(0, this.res - 3))
-    this.marginDeg = (2 * getHexagonEdgeLengthAvg(this.res, UNITS.km)) / KM_PER_DEG
+    this.marginDeg = marginDegFor(this.res)
     for (let i = 0; i < cells.h3.length; i++) {
       const p = cellToParent(cells.h3[i], this.parentRes)
       const list = this.byParent.get(p)
@@ -133,19 +156,7 @@ export class CellIndex {
 
   /** the parents overlapping tile z/x/y plus its margin, across the antimeridian when it is near */
   parents(z: number, x: number, y: number): Set<string> {
-    const [w0, s0, e0, n0] = tileBounds(z, x, y)
-    const pad = ((e0 - w0) * BUFFER) / EXTENT
-    const latPad = this.marginDeg + ((n0 - s0) * BUFFER) / EXTENT
-    const s = Math.max(-MAX_LAT, s0 - latPad)
-    const n = Math.min(MAX_LAT, n0 + latPad)
-    const cos = Math.cos((Math.max(Math.abs(s), Math.abs(n)) * Math.PI) / 180)
-    const lonPad = pad + this.marginDeg / Math.max(cos, 0.01)
-    const out = new Set<string>()
-    for (const [a, b] of seamSpans(w0 - lonPad, e0 + lonPad))
-      for (const poly of bboxPolygons(a, s, b, n))
-        for (const c of polygonToCellsExperimental(poly, this.parentRes, POLYGON_TO_CELLS_FLAGS.containmentOverlapping, true))
-          out.add(c)
-    return out
+    return tileParents(z, x, y, this.res, this.parentRes)
   }
 
   /** the cells (ids and values) that may touch tile z/x/y */
@@ -175,10 +186,18 @@ const AGGREGATES: Record<Exclude<Aggregate, (values: number[]) => number>, (valu
   max: (vs) => Math.max(...vs),
 }
 
+/** the diversity metrics of the obis-h3 release: none of them adds across cells (the richness of a parent is not the
+ * sum, mean or max of its children's; ES(50), Shannon and Simpson come from the parent's own records), so each
+ * resolution is its own file and these never roll up */
+export const NON_ADDITIVE: readonly string[] = ['sp', 'es', 'shannon', 'simpson', 'hill_1', 'hill_2']
+
 /** the cells rolled up to their parents at `res` (sorted by id), each parent's value the aggregate of its children's
- * (NaN children left out); the table unchanged when it is at `res` or coarser. a producer with per-resolution
- * partitions passes those instead: a mean of means is not the mean of the records. */
-export function rollUp(cells: H3jTile, res: number, agg: Aggregate = 'mean'): H3jTile {
+ * (NaN children left out); the table unchanged when it is at `res` or coarser. for additive values only: a producer
+ * with per-resolution partitions passes those instead (a mean of means is not the mean of the records), and a
+ * `variable` among NON_ADDITIVE is refused with any aggregate. */
+export function rollUp(cells: H3jTile, res: number, agg: Aggregate = 'mean', opts: { variable?: string } = {}): H3jTile {
+  if (opts.variable && NON_ADDITIVE.includes(opts.variable))
+    throw new RangeError(`rollUp: ${opts.variable} is a diversity metric and does not add across cells; read the release's own resolution ${res} file`)
   if (!cells.h3.length || getResolution(cells.h3[0]) <= res) return cells
   const f = typeof agg === 'function' ? agg : AGGREGATES[agg]
   const groups = new Map<string, number[]>()

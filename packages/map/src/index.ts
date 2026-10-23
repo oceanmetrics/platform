@@ -1,6 +1,6 @@
 // @oceanmetrics/map: the map stack of the Ocean Metrics apps (README.md). every module is free of side effects and of a
 // run-time maplibre-gl import; the h3 worker module is its own entry (`@oceanmetrics/map/h3-worker`), never imported here.
-export const PACKAGE = { name: '@oceanmetrics/map', version: '0.2.0' } as const
+export const PACKAGE = { name: '@oceanmetrics/map', version: '0.3.0' } as const
 
 // ---- the slot contract ----
 export {
@@ -44,9 +44,27 @@ export type { H3Archive, H3SlotOptions } from './h3.js'
 export { cellRing, cellsProvider, h3jAction, h3jSource, pmtilesProvider, TILE_OPTIONS, tileFeatures, tileToGeoJSON, tileToMvt } from './h3Tiles.js'
 export type { TileProvider } from './h3Tiles.js'
 export {
-  BUFFER, CellIndex, cellTouchesTile, EXTENT, lonLatToTile, RES_FOR_ZOOM, resForZoom, rollUp, seamSpans, tileBounds, ZOOM_BREAKS,
-  zoomToRes,
+  BUFFER, CellIndex, cellTouchesTile, EXTENT, lonLatToTile, marginDegFor, NON_ADDITIVE, RES_FOR_ZOOM, resForZoom, rollUp, seamSpans, tileBounds,
+  tileParents, ZOOM_BREAKS, zoomToRes,
 } from './h3Index.js'
-export type { Aggregate, H3jTile } from './h3Index.js'
+export type { Aggregate, H3jTile, H3Rows, H3TileData } from './h3Index.js'
 export { buildH3jArchive, gzipStream, writePmtiles } from './h3Archive.js'
+
+// ---- the h3 provider over a release (0.3.0) ----
+export { cellIdOf, cellIdRes, childRange, h3OfCellId, inRanges, mergeRanges, overlapsRanges, parentId } from './h3Bits.js'
+export {
+  absoluteTemplate, collectionBase, fillTemplate, H3R_SCHEME, idColumn, indicatorColumns, parseReleaseTileUrl, periodSets, pickRes,
+  releaseFile, releaseKeyOf, releaseLayer, releaseMaxzoom, releaseTileUrl, resolvePeriod, zoomForRes,
+} from './h3ReleaseLayer.js'
+export type { H3CollectionLike, H3Period, H3PeriodSetLike, H3ReleaseLayer, H3ResRule, ReleaseLayerOptions } from './h3ReleaseLayer.js'
+export {
+  h3ReleaseIds, h3ReleaseSlot, itemPath, periodOf, releaseDomains, releaseFillColor, releaseFilter, releasePeriods, releaseSource, statsUrl,
+} from './h3Release.js'
+export type { H3ReleaseItem, H3ReleaseSlot, H3ReleaseSlotOptions, H3ReleaseView } from './h3Release.js'
+export { ReleaseReader, releaseProvider, tileRanges } from './h3Parquet.js'
+export type { ReleaseReaderOptions } from './h3Parquet.js'
+export { readReleaseStats, statsMatch } from './h3Stats.js'
+export type { StatsMatch, StatsRow } from './h3Stats.js'
+export { COMPRESSORS, DEFAULT_TAIL, newReadStats, openRangeFile } from './parquetFile.js'
+export type { RangeFile, RangeFileOptions, ReadStats } from './parquetFile.js'
 export type { Gzip, H3jArchive, H3jArchiveOptions } from './h3Archive.js'

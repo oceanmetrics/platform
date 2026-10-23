@@ -1,0 +1,48 @@
+{
+  "type": "Collection",
+  "stac_version": "1.1.0",
+  "id": "obis_h3_synthetic",
+  "title": "a synthetic obis-h3 0.11-shaped release (the release provider's fixture)",
+  "description": "synthetic: cells from h3-js, values from a hash of the cell id; no OBIS data. built by build.mjs beside this file. layer files sorted by cell_id with small row groups, the decade and year period sets, a res-6 split by res-2 parent, and stats.parquet.",
+  "license": "CC0-1.0",
+  "extent": { "spatial": { "bbox": [[-180, -90, 180, 90]] }, "temporal": { "interval": [[null, null]] } },
+  "links": [],
+  "h3:resolutions": [1, 2, 3, 4, 5, 6],
+  "h3:cell_column": "h3",
+  "h3:cell_type": "string",
+  "h3:layout": {
+    "template": "{layer}/res={res}/data_0.parquet",
+    "parent_template": "{layer}/res={res}/p={parent}/data_0.parquet",
+    "parent_res": { "6": 2 },
+    "keys": ["layer"],
+    "row_group_rows": 10240
+  },
+  "h3:periods": [
+    {
+      "grain": "decade",
+      "values": ["1990s", "2000s"],
+      "placeholder": "decade",
+      "resolutions": [1, 2, 3],
+      "template": "decade/{layer}/decade={decade}/res={res}/data_0.parquet"
+    },
+    {
+      "grain": "year",
+      "values": ["2015"],
+      "placeholder": "year",
+      "resolutions": [1, 2, 3],
+      "template": "year/{layer}/year={year}/res={res}/data_0.parquet"
+    }
+  ],
+  "table:columns": [
+    { "name": "h3", "type": "VARCHAR", "description": "H3 cell id, hex string" },
+    { "name": "cell_id", "type": "BIGINT", "description": "H3 cell id, 64-bit integer" },
+    { "name": "n", "type": "BIGINT", "description": "number of occurrence records" },
+    { "name": "sp", "type": "BIGINT", "description": "number of species" },
+    { "name": "shannon", "type": "DOUBLE", "description": "Shannon diversity index" },
+    { "name": "simpson", "type": "DOUBLE", "description": "Simpson diversity index" },
+    { "name": "es", "type": "DOUBLE", "description": "Hurlbert ES(50); NULL under 50 records" }
+  ],
+  "assets": {
+    "stats": { "href": "stats.parquet", "title": "per layer x key x period x res x variable: min, p02, p50, p98, max, n_cells", "roles": ["metadata"] }
+  }
+}

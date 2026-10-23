@@ -60,7 +60,8 @@ export interface LayerSlot {
   credit?: string
   /** add the slot's sources and layers (every id prefixed `slot:`) under `beforeId`, at `t` (a period start; null = the latest) */
   mount(map: MlMap, beforeId: string | null, t: string | null): void
-  /** draw another period */
+  /** draw another period. a kind may take more: the h3 release slot (h3Release.ts) also takes
+   * `{ indicator?, period?, res? }`, a string or null still being the period */
   update(t: string | null): void
   /** remove what mount added */
   unmount(map: MlMap): void

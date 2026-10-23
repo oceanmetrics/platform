@@ -1,14 +1,15 @@
 {
   "name": "@oceanmetrics/map",
-  "version": "0.2.3",
-  "description": "the map stack of the Ocean Metrics apps: MapLibre 6, PMTiles, the bathymetric basemap, COG and H3 sources",
+  "version": "0.3.0",
+  "description": "the map stack of the Ocean Metrics apps: MapLibre 6, PMTiles, the bathymetric basemap, COG and H3 sources, H3 tiles from a release's Parquet",
   "keywords": [
     "ocean",
     "maplibre",
     "pmtiles",
     "cog",
     "h3",
-    "basemap"
+    "basemap",
+    "parquet"
   ],
   "homepage": "https://github.com/oceanmetrics/platform/tree/main/packages/map#readme",
   "bugs": {
@@ -62,18 +63,23 @@
     "@geomatico/maplibre-cog-protocol": "^0.10.0",
     "@maplibre/geojson-vt": "^6.3.0",
     "@maplibre/vt-pbf": "^4.3.2",
+    "fzstd": "^0.1.1",
     "geotiff": "^3.0.5",
-    "h3-js": "^4.4.0"
+    "h3-js": "^4.4.0",
+    "hyparquet": "^1.31.5"
   },
   "peerDependencies": {
     "maplibre-gl": "^6.13.0",
     "pmtiles": "^4.0.0"
   },
   "devDependencies": {
+    "@mapbox/vector-tile": "^3.0.0",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^24.13.3",
     "maplibre-gl": "^6.15.0",
+    "pbf": "^5.1.2",
     "pmtiles": "^4.5.0",
+    "rolldown": "^1.2.15",
     "typescript": "~5.9.0",
     "vitest": "^5.0.1"
   }

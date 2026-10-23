@@ -37,8 +37,11 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
   and the places record page: `@oceanmetrics/catalog/indicators` (the readers of `indicators.json` and `coverage.parquet`,
   hyparquet, plus every card rule) and `@oceanmetrics/catalog/cards` (the pure rules alone: cards, the three absences, the
   OBIS fold, Reproduce, rollups). The root index stays types and constants. The status words come from `status`.
-- **`map` is the map stack** (0.2.0): the `LayerSlot` contract (`slot.ts`, moved from indicators), `setupMapLibre`, the
-  basemap (`composeStyle`, ported from CalCOFI explore), the ramps, and the `grid`, `cog` and `h3` providers. It never
+- **`map` is the map stack** (0.3.0): the `LayerSlot` contract (`slot.ts`, moved from indicators), `setupMapLibre`, the
+  basemap (`composeStyle`, ported from CalCOFI explore), the ramps, and the `grid`, `cog` and `h3` providers; the `h3`
+  kind also reads a release itself (`h3ReleaseSlot`: the obis-h3 Parquet in the worker over `h3r://`, row groups pruned
+  by `cell_id` statistics, tested on the synthetic release in `packages/map/fixtures/h3release/`; its worker chunk has
+  its own size line). It never
   imports `maplibre-gl` at run time (the app passes its module to `setupMapLibre`; types only elsewhere), so tests run
   without MapLibre; the COG protocol loads lazily and the h3 tile builder runs in MapLibre's worker
   (`@oceanmetrics/map/h3-worker`). The spike conditions are tests: geojson-vt `tolerance: 0`, the antimeridian unwrap on

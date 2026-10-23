@@ -9,20 +9,32 @@ import type { AddProtocolAction, VectorSourceSpecification } from 'maplibre-gl'
 import type { PMTiles } from 'pmtiles'
 import { decodeH3jTile, H3_LAYER } from './h3.js'
 import { BUFFER, CellIndex, cellRing, EXTENT, resForZoom, rollUp } from './h3Index.js'
-import type { Aggregate, H3jTile } from './h3Index.js'
+import type { Aggregate, H3jTile, H3TileData } from './h3Index.js'
 
 export { cellRing } from './h3Index.js'
 
-/** the cells of tile z/x/y, or null for none */
-export type TileProvider = (z: number, x: number, y: number, signal: AbortSignal) => Promise<H3jTile | null>
+/** the cells of tile z/x/y (one value a cell, or several columns), or null for none */
+export type TileProvider = (z: number, x: number, y: number, signal: AbortSignal) => Promise<H3TileData | null>
 
 // ---- one tile ----
 
-/** the tile's cells as polygons with properties { h3, v } */
-export function tileToGeoJSON(t: H3jTile): FeatureCollection<Polygon> {
+/** a cell's properties: `{ h3, v }` for a one-value tile; `{ h3, <column>: value, ... }` for a multi-column one, a
+ * NaN (missing) value left out, so `['has', 'es']` is the cells with an ES(50) */
+function cellProperties(t: H3TileData, i: number): Record<string, string | number> {
+  if ('v' in t) return { h3: t.h3[i], v: t.v[i] }
+  const p: Record<string, string | number> = { h3: t.h3[i] }
+  for (const k in t.columns) {
+    const v = t.columns[k][i]
+    if (v === v) p[k] = v
+  }
+  return p
+}
+
+/** the tile's cells as polygons with properties { h3, v } (or { h3, ...columns }) */
+export function tileToGeoJSON(t: H3TileData): FeatureCollection<Polygon> {
   const features: Feature<Polygon>[] = new Array(t.h3.length)
   for (let i = 0; i < t.h3.length; i++) {
-    features[i] = { type: 'Feature', properties: { h3: t.h3[i], v: t.v[i] }, geometry: { type: 'Polygon', coordinates: [cellRing(t.h3[i])] } }
+    features[i] = { type: 'Feature', properties: cellProperties(t, i), geometry: { type: 'Polygon', coordinates: [cellRing(t.h3[i])] } }
   }
   return { type: 'FeatureCollection', features }
 }
@@ -31,12 +43,12 @@ export function tileToGeoJSON(t: H3jTile): FeatureCollection<Polygon> {
 export const TILE_OPTIONS = { extent: EXTENT, buffer: BUFFER, wrap: true, clip: true, tolerance: 0 } as const
 
 /** one tile cut directly (geoJSONToTile, not a whole geojson-vt index per tile); no features when no cell lands in it */
-export function tileFeatures(t: H3jTile, z: number, x: number, y: number) {
+export function tileFeatures(t: H3TileData, z: number, x: number, y: number) {
   return geoJSONToTile(tileToGeoJSON(t), z, x, y, TILE_OPTIONS)
 }
 
 /** one MVT tile (layer `layer`) from the cells that touch tile z/x/y; an empty buffer when none land in it */
-export function tileToMvt(t: H3jTile, z: number, x: number, y: number, layer = H3_LAYER): ArrayBuffer {
+export function tileToMvt(t: H3TileData, z: number, x: number, y: number, layer = H3_LAYER): ArrayBuffer {
   const vt = tileFeatures(t, z, x, y)
   if (!vt || !vt.features.length) return new ArrayBuffer(0)
   const pbf = fromGeojsonVt({ [layer]: vt }, { version: 2, extent: EXTENT })

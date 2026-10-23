@@ -5,6 +5,7 @@ import { geoJSONToTile } from '@maplibre/geojson-vt'
 import { absoluteArchiveUrl, decodeH3jTile, encodeH3jTile, h3FillColor, h3TileUrl, parseH3TileUrl } from './h3.js'
 import { cellRing, cellsProvider, h3jAction, h3jSource, TILE_OPTIONS, tileFeatures, tileToGeoJSON, tileToMvt } from './h3Tiles.js'
 import { lonLatToTile } from './h3Index.js'
+import type { H3jTile } from './h3Index.js'
 
 const CROSSING = JSON.parse(readFileSync(new URL('../fixtures/h3/crossing55.json', import.meta.url), 'utf8')) as { h3: string[]; v: number[] }
 
@@ -98,7 +99,7 @@ describe('tiles and the protocol', () => {
     const p = cellsProvider(t)
     const z1 = (await p(1, 1, 0, new AbortController().signal))!
     expect(z1.h3.map(getResolution)).toEqual([1])
-    expect(z1.v[0]).toBeCloseTo(3, 12)
+    expect((z1 as H3jTile).v[0]).toBeCloseTo(3, 12)
     const [x, y] = lonLatToTile(10, 10, 6)
     expect((await p(6, x, y, new AbortController().signal))!.h3.sort()).toEqual([...disc].sort())
   })

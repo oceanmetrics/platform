@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.3.0 (2026-10-23)
+
+The h3 provider over a release (build week 4, step 4; decisions D4 and D5 of the week 4 plan): the OBIS layer drawn
+from the obis-h3 release's own Parquet in MapLibre's worker, every indicator in each tile, no prebuilt archive.
+
+- New: `h3ReleaseSlot({ collection, indicator, period, res, item?, keys?, base?, statsHref?, domain?, instance?, ... })`,
+  the `h3` slot over a collection of the `h3` profile 1.1. `update({ indicator })` is a paint and filter change and
+  fetches nothing; `update({ period })` and `update({ res })` change the tile url only when the file changes
+  (`setTiles`; a new source when the maxzoom changes); a string or null is still the period (the LayerSlot contract's
+  `t`). One vector source `h3r://<layer>/{z}/{x}/{y}` with `promoteId: 'h3'`, a fill filtered by `['has', indicator]`;
+  with `res: 'auto'` the fill steps with the zoom, each resolution on its own domain. `instance` ids as gridSlot's.
+- New: the `h3r://` protocol in the worker module (`@oceanmetrics/map/h3-worker`, beside `h3j://`): `releaseProvider`
+  and `ReleaseReader` (`h3Parquet.ts`) read only the row groups whose `cell_id` statistics meet the tile's parents
+  (hyparquet, column projection, ZSTD through fzstd), cache decoded row groups per worker (LRU, 64 MB), read the
+  parent split at `h3:layout.parent_res` with a whole-file fallback, and treat a 403/404 as no cells, asked once.
+- New: the file resolution (`h3ReleaseLayer.ts`): `releaseLayer`, `resolvePeriod` (one set or a list: a bare value,
+  `'<grain>:<value>'` or `{ grain, value }`; an ambiguous value is refused), `fillTemplate`, `releaseFile`, `pickRes`
+  (the release's ladder, never a roll-up), `releaseMaxzoom`, `releaseTileUrl`/`parseReleaseTileUrl`, `idColumn`,
+  `indicatorColumns`.
+- New: H3 by bit arithmetic (`h3Bits.ts`, no h3-js): `cellIdOf`, `h3OfCellId`, `cellIdRes`, `parentId`, `childRange`,
+  `mergeRanges`, `inRanges`, `overlapsRanges`.
+- New: the legend reader `readReleaseStats(url, match)` and `statsMatch(item, period)` over `stats.parquet` (lazy on
+  the main thread); `releaseDomains` gives `[p02, p98]` per resolution.
+- New: `openRangeFile` (a suffix range first: length and footer in one request, no HEAD; bytes counted),
+  `COMPRESSORS` (ZSTD).
+- New: `tileParents(z, x, y, res, parentRes)` and `marginDegFor(res)` in `h3Index.ts` (CellIndex uses them); the
+  types `H3Rows` and `H3TileData`; `tileToGeoJSON`, `tileFeatures`, `tileToMvt` and `TileProvider` take multi-column
+  tiles (`{ h3, columns }`, a NaN left out of the properties).
+- Changed: `rollUp(cells, res, agg, { variable })` refuses a diversity metric (`NON_ADDITIVE`: sp, es, shannon,
+  simpson, hill_1, hill_2) with any aggregate.
+- Changed: `ZOOM_BREAKS`, `zoomToRes`, `RES_FOR_ZOOM` and `resForZoom` live in `h3Zoom.ts` (still exported from
+  `h3Index.ts` and the index), so the main thread's release slot does not pull h3-js in.
+- Changed: `PACKAGE.version` says 0.3.0 (it had stayed at 0.2.0 through 0.2.3).
+- Dependencies: `hyparquet` ^1.31.5 and `fzstd` ^0.1.1; dev `rolldown` (the worker chunk measure).
+- Size: the package budget 39,000 to 48,000 B (41,877 measured) and the worker chunk measured on its own line,
+  100,215 B against a budget of 110,000 B; the reasons in the README "Size".
+- Fixture: `fixtures/h3release/` (a synthetic 0.11-shaped release from `build.mjs`) and `measure.mjs` (bytes and time
+  per tile; the README's table).
+
 ## 0.2.3 (2026-10-23)
 
 For the indicators Map's compare mode (Then vs Now as two slices of one layer, build week 2 step 4).

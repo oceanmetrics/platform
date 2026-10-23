@@ -4,7 +4,8 @@ The map stack of the Ocean Metrics apps: MapLibre 6 setup, the bathymetric basem
 contract with three providers (a grid slice, a Cloud-Optimized GeoTIFF, H3 hexagons). Apps (indicators, atlas,
 obis-hex, erddap-places) import it and draw their own places on top.
 
-Version 0.2.0 (build week 2, step 1). 0.1.0 was the scaffold published on Day 5. 0.2.1 (unreleased) holds the fixes
+Version 0.3.0 (build week 4, step 4): the h3 provider over a release, below. 0.2.0 was build week 2, step 1; 0.1.0 the
+scaffold published on Day 5. 0.2.1 (unreleased) holds the fixes
 of the consumer check (step 2a, `spikes/map-consumer`, `results/checklist.md`). 0.2.2 (unreleased) holds the fixes of the
 first two consumers (the indicators Map and the atlas): see the three notes below and the CHANGELOG.
 
@@ -19,12 +20,16 @@ A **slot** is one data layer under an app's places, at the period `t` the app's 
 interface LayerSlot {
   id: string; kind: 'grid' | 'cog' | 'h3'; title: string; credit?: string
   mount(map, beforeId: string | null, t: string | null): void   // adds sources and layers, ids prefixed `slot:`
-  update(t: string | null): void
+  update(t: string | null): void   // the h3 release slot also takes { indicator?, period?, res? }
   unmount(map): void
   legend(): LegendSpec | null    // title, t, via, problem, units, ramp | classes, histogram, stats
 }
 ```
 
+- `update(t)` draws another period. The `h3` kind's release slot (`h3ReleaseSlot`, 0.3.0) widens it to
+  `update(t | { indicator?, period?, res? })`: a string or null is still the period, an object changes any of the three
+  (see "The h3 provider over a release"). Its `mount(map, beforeId, t)` takes `t` only when it is a period of the
+  collection, so another app's date is ignored, not thrown.
 - The URL key is `layer=<kind>:<id>[:<variable>]` (`parseLayerKey`, `formatLayerKey`). `erddap:` (indicators' Day 6
   links) still parses, as a deprecated alias of `grid:`, and is written back as `grid:`.
 - `registerSlotKind(kind, factory)` and `slotFor(spec)`: the app registers a factory per kind (it knows where the data
@@ -48,11 +53,122 @@ Each provider is one module: a slot factory plus the pure functions it rests on.
 |---|---|---|---|
 | `grid` (`grid.ts`) | `gridSlot(spec, source, opts)` | a `SliceSource`: `slice(t) → [{ lat, lon, value, weight }]`, the rows of `last_step.sql` (the engine's SQL in DuckDB-WASM, build week 2 step 2) | one square per cell from the axis step (`cellSquares`, erddap-places); a cell without data is a hole; across ±180 the cells go into [0, 360); a ramp fill (`rampStops`) or a class `match`; the squares' outline (12% black) only on grids coarser than 0.05° (the finer of the two axis steps), since at 0.01° it draws a mesh over the data: `outline: string \| null` overrides (a colour, or `null` for none), `gridOutline(spacing, outline)` is the rule (0.2.2); `instance` keeps a second slot's ids apart (`gridIds`: `slot:grid@<instance>`) and a `domain` function shares one scale between two slots, with `cellRange()` and `repaint()` on the `GridSlot` (0.2.3) |
 | `cog` (`cog.ts`) | `cogSlot(spec, asset, opts)` | the 3857 data asset of a `cog` STAC item (`pickCogAssets(item)`) | spike 3: refuse anything without `proj:code` EPSG:3857 (`CogProjectionError` names the asset); the legend from STAC `statistics` and `histogram` only (`legendFromStac`); `overviewHistogram` gives a shape, never numbers; `pointValue` reads the 4326 original; colour from `atlas:colormap` and `atlas:rescale`; nodata transparent. **Bands of one file** (items whose assets share an href and differ in `atlas:bidx`): the protocol's `#color:` grammar has no band key and it caches colour functions, readers and tiles by the href before the `#`, so `cogUrl` adds `b=<bidx>` to the href's query (`cogHref`; the file's server ignores it) and `cogSlot` selects the band in its colour function under that same key (0.2.2); no workaround in the app |
+| `h3` over a release (`h3Release.ts`, `h3ReleaseLayer.ts`, `h3Parquet.ts`, `h3Stats.ts`, `h3Bits.ts`; 0.3.0) | `h3ReleaseSlot({ collection, indicator, period, res, ... })` | a collection of the `h3` profile 1.1 (the obis-h3 release), the item (`all`, an EOV, a taxon) | the release's own Parquet read in MapLibre's worker, the row groups under the tile only; every indicator in each tile; the resolution ladder of the release, never a roll-up; the colour domain from `stats.parquet`; the same tile builder and seam rules as the row below |
 | `h3` (`h3.ts`, `h3Tiles.ts`, `h3Index.ts`) | `h3Slot(spec, archive, opts)` | `{ url }` of a PMTiles archive of h3j tiles (written by `buildH3jArchive`), or `{ cells }` in memory (small tables only) | spike 1: the protocol in MapLibre's worker; geojson-vt `tolerance: 0`; the resolution stepped with zoom (`RES_FOR_ZOOM`, obis-hex's zoom_to_res); the PR 211 antimeridian unwrap and the ±180 strip, tested on the 55 crossing cells of obis-h3's ES(50) |
 
 Producers write h3 archives with `buildH3jArchive({ levels, maxzoom, metadata, gzip })`: one table per resolution (or
 one table and `rollUp`), tile type 0 with `"format": "h3j"`, each tile the columnar JSON `{"h3": [...], "v": [...]}` of
 the cells whose hexagon reaches it. In Node pass `gzip: (b) => zlib.gzipSync(b, { level: 9 })`.
+
+### The h3 provider over a release
+
+Decision D4 of the week 4 plan: the OBIS layer is drawn from the obis-h3 release's own Parquet, read in MapLibre's
+worker, with every indicator in each tile, and no prebuilt archive. 7,370 taxon groups, 7 decades and the year layers
+would make archives per layer, period and indicator a second copy of the release. The release already is a pyramid by
+resolution and parent, and its metrics do not roll up.
+
+```ts
+import { h3ReleaseSlot } from '@oceanmetrics/map'
+
+// once per page, with the worker (the release protocol h3r:// lives in the same chunk as h3j://)
+await setupMapLibre({ maplibre: { addProtocol, importScriptInWorkers, setWorkerUrl }, workerUrl, h3WorkerUrl })
+
+const collection = await (await fetch('https://storage.oceanmetrics.io/obis-h3/collection.json')).json()
+const slot = h3ReleaseSlot({
+  collection,                         // h3 profile 1.1: h3:layout, h3:periods (one set or a list), table:columns
+  item: { layer: 'eov', key: 'birds' }, // { layer: 'all' } (default), { layer: 'taxon', key: 'Aves', rank: 'class' }
+  indicator: 'es',                    // any numeric column of table:columns: n, sp, shannon, simpson, es
+  period: '1990s',                    // null (all time), a value of one set, 'year:2015', or { grain, value }
+  res: 'auto',                        // or a resolution the period publishes (pinned)
+  onchange: () => renderLegend(slot.legend()),
+})
+slot.mount(map, beforeId, null)       // on the style recorder, as cogSlot
+slot.update({ indicator: 'sp' })      // a paint and filter change: no tile is fetched
+slot.update({ period: '2015' })       // a new tile url only when the file changes (setTiles)
+slot.update({ res: 4 })
+```
+
+What happens, and where:
+
+- **Main thread** (`h3ReleaseLayer.ts`, `h3Release.ts`, +5.2 kB minified with the slot). The period picks its set, the
+  set's `template` (else `h3:layout.template`) and its `resolutions`; no period is the all-time layer at
+  `h3:resolutions`. The keys fill the other placeholders (`{layer}`: `all`, `eov/eov=birds`,
+  `taxon/rank=class/taxon=Aves`; the values go in as given, so pass them url-path-ready, as `taxon_groups.parquet`
+  `url_path` holds them). The result, an `H3ReleaseLayer` (absolute templates with `{res}` and `{parent}` open, the
+  ladder, the pin, the id column and the indicator columns), travels whole in the tile url
+  `h3r://<encoded json>/{z}/{x}/{y}`, so the worker needs no message channel. One vector source with `promoteId: 'h3'`
+  (feature state for hover and selection) and one fill: `filter: ['has', indicator]` (a cell without ES(50) is not
+  drawn), `fill-color` the ramp on `['get', indicator]`. With `res: 'auto'` the fill is a `step` on the zoom, each
+  resolution on its own domain.
+- **Worker** (`h3Parquet.ts`, in `@oceanmetrics/map/h3-worker`). For a tile at zoom z: the resolution is the pin, or
+  the finest of the ladder at or under `RES_FOR_ZOOM[z]`, else the ladder's coarsest. Never a roll-up: each resolution
+  is its own file, and `rollUp` now refuses `sp`, `es`, `shannon`, `simpson` (`NON_ADDITIVE`) with any aggregate. The
+  cells under the tile are `tileParents` (the bbox grown by geojson-vt's buffer and two cells, densified, split at ±180)
+  at a resolution two coarser, each parent turned into the cell_id range of its children by bit arithmetic
+  (`h3Bits.ts`, spike 4's verdict, tested against h3-js on 100 random cells at res 1 to 7). The reader opens a file
+  with one suffix range request (`bytes=-65536`: the length from Content-Range, which the bucket's CORS exposes, and
+  the footer in one round trip, no HEAD), keeps the row groups whose `cell_id` statistics meet a range and reads only
+  those (columns `cell_id` plus the indicators; the `h3` string is not read, the id gives it). Decoded row groups stay
+  in the worker's cache (LRU, 64 MB), shared by every layer, period and slot of the page: the next tile in the same
+  group, an indicator switch and a return to a period fetch nothing. The rows in the ranges go to the existing tile
+  builder (`h3Tiles.ts`: the PR 211 unwrap, `tolerance: 0`, vt-pbf) as `{ h3, columns }`, one property per column, a
+  NULL left out. At a resolution in `h3:layout.parent_res` the worker reads the files of the parents under the tile
+  (`parent_template`); when none of them is there it tries the whole file once per layer and resolution and
+  remembers which the layer is. A 403 or 404 is a file the release does not have: no cells, asked once.
+- **Legend** (`h3Stats.ts`, a lazy 20.9 kB chunk with hyparquet and fzstd). `stats.parquet` (the collection's `stats`
+  asset, else `stats.parquet` beside it) is read once per layer and period: hyparquet skips the row groups whose
+  `layer` and `key` statistics cannot match, and the read returns every resolution and variable, so an indicator or
+  zoom change reads nothing more. The domain is `[p02, p98]` of the layer, period, resolution and indicator, never
+  the loaded cells. `legend()` reports the resolution the map's zoom draws (`zoomend`), its ramp, and `min`/`max` as
+  `stats`.
+
+**Measured** (2026-10-23, Node 26 on the Mac mini M4 Pro, `node packages/map/fixtures/h3release/measure.mjs`; local
+files through a Range-honouring fetch unless said; read = fetch and decode, build = hexagons, geojson-vt, MVT):
+
+| what | tile | requests | bytes read | row groups read / skipped | cells | read + build ms |
+|---|---|--:|--:|--:|--:|--:|
+| the synthetic fixture, res 3 (41,162 cells, 5 groups of 10,240) | z4 California, cold | 3 | 197,651 | 2 / 3 | 931 | 30.6 + 7.2 |
+| the same | the next z4 tile, warm | 0 | 0 | 0 / 3 | 931 | 1.8 + 3.1 |
+| the same | all 256 z4 tiles, one reader | 5 | 330,220 | 5 | ≤ 1,315 | mean 1.3, p95 3.0, max 7.6 |
+| the synthetic fixture, res 5 (3 groups of 2,048) | z6 Fiji on the seam, cold | 1 | 65,536 (the whole file is the tail) | 1 / 2 | 1,519 | 5.3 + 6.1 |
+| obis-h3 v20261012 `all/res=3` as published (747 kB, 1 group) | z4 California, cold | 2 | 778,850 | 1 / 0 | 918 | 52.9 + 8.1 |
+| the same, sorted by cell_id in groups of 10,240 (771 kB, 4 groups) | z4 California, cold | 3 | 464,129 | 2 / 2 | 918 | 46.8 + 8.3 |
+| v20261012 `all/res=5` as published (7.87 MB, 6 groups of up to 122,880, unsorted) | z6 Fiji, cold | 4 | 2,501,472 | 3 / 3 | 639 | 181.5 + 6.5 |
+| the same, sorted, groups of 10,240 (8.09 MB, 67 groups) | z6 Fiji, cold | 4 | 367,098 | 3 / 64 | 639 | 32.6 + 5.2 |
+| v20261012 `all/res=5` as published | z9 California at res 5, cold | 3 | 2,174,529 | 2 / 4 | 195 | 110.1 + 0.5 |
+| the same, sorted | z9 California at res 5, cold | 2 | 226,780 | 1 / 66 | 195 | 10.9 + 0.6 |
+| v20261012 over HTTP from S3 us-east-1, res 7 split by res-3 parent | z9 California, cold | 4 | 53,970 | 4 / 0 | 662 | 405 + 1.6 |
+
+So on today's unsorted release the provider is correct but reads whole groups of 122,880 rows; the sorted layout of
+obisindicators 0.11 cuts a cold z6 tile from 2.5 MB to 0.37 MB and a z9 res-5 tile from 2.2 MB to 0.23 MB, for 2.9%
+more bytes on disk (res 5: 8.09 against 7.87 MB). The res-3 file is small enough that a world view reads it whole
+either way. Tile building stays under 10 ms; a cold tile's time is the fetch.
+
+**What the provider assumes of the release** (obisindicators 0.11, step 3 of the week 4 plan, must honour):
+
+1. Every layer file is sorted by `cell_id` (BIGINT, the H3 index) and has row-group statistics (min, max) on it;
+   `h3:layout.row_group_rows` is informative only (the reader prunes by the statistics it finds).
+2. One file holds one resolution: all of a file's cells share it.
+3. The value columns are those of `table:columns` (numeric, not `h3` or `cell_id`); a NULL is a missing value. The
+   same names in every layer and period (`n` may be BIGINT or DOUBLE).
+4. Paths are `h3:layout.template` (all time) or the period set's own `template`, with `{res}` and the set's
+   `placeholder`; a set's `values` are written in the path as listed (`decade=1990s` or `decade=1990`), and a value
+   appears in one set only (or the caller names the grain).
+5. At a resolution in `h3:layout.parent_res`, files are `parent_template` with `{parent}` the hex id of the parent at
+   that resolution. A layer at that resolution is either split (no whole file) or whole (no parent files); the reader
+   costs one extra request per layer and resolution to learn which. Periods with their own `template` are never split.
+6. A missing file answers 403 or 404 (S3, R2), and every object answers a suffix range (`Range: bytes=-N`) with 206
+   and `Content-Range`, exposed by CORS (`Access-Control-Expose-Headers: Content-Range`, as the bucket does today).
+7. `stats.parquet` keeps today's columns (`layer, key, rank, decade, res, variable, min, p02, p50, p98, max,
+   n_cells`) plus `year` for the year layers; `layer` is `all|eov|taxon` for all time and `<grain>_<layer>` for a
+   period (`decade_all`, `year_eov`); `key` is `''` (not NULL) for `all`, `rank` `''` outside taxa; the period column
+   is named by the grain and holds the year of the period (1990 for `1990s`), NULL for all time. Sorted by `layer,
+   key`, so the legend reads only its row groups; smaller row groups than today's 122,880 would make that read small
+   (today the first group of the 2.18 MB file holds `all`, `eov` and half the taxa).
+8. The collection names `stats.parquet` as an asset `stats`, its `self` link is absolute (or the reader is given the
+   base), and the heads are ordinary taxon layers under `taxon/rank=<rank>/taxon=<name>/` (`h3:heads.layer: taxon`).
+
+The h3j PMTiles form (`h3Slot` with `{ url }`) stays for single-value archives.
 
 ### The basemap
 
@@ -197,8 +313,22 @@ over that `gridSlot` +3.6 kB, `cogSlot` +3.4 kB (+21.6 kB with `pointValue` and 
 `h3Slot` +3.4 kB, all three +5.8 kB; the COG protocol 112.6 kB on the first `cog://`; the h3 worker chunk 76.4 kB.
 
 `npm run size` measures the gzipped sum of `dist/**/*.js` (comments included, before an app minifies): 26 014 B on
-2026-10-23 at 0.2.0, 27 203 B with 0.2.1's fixes, budget 39 000 B (about 1.5×). Every module counts, the h3 worker module and the COG and geotiff code
-included.
+2026-10-23 at 0.2.0, 27 203 B with 0.2.1's fixes, 28 589 B at 0.2.3, budget 39 000 B (about 1.5×). Every module counts,
+the h3 worker module and the COG and geotiff code included.
+
+**0.3.0 raises the package budget to 48 000 B**: 41 877 B measured, +13.3 kB for the seven modules of the release
+provider (`h3Bits`, `h3Zoom`, `h3ReleaseLayer`, `h3Release`, `h3Parquet`, `h3Stats`, `parquetFile`), comment-heavy as
+the rest. What an app pays eagerly for `h3ReleaseSlot` is +5.2 kB minified over the base (h3Slot: +3.0 kB): the zoom
+table moved to `h3Zoom.ts` so the slot does not pull h3-js onto the main thread (it did, +61.6 kB, before the move); the
+reader runs in the worker and the legend reader is a lazy chunk of 20.9 kB (hyparquet's reader and fzstd).
+
+**The h3 worker chunk is measured on its own line** (`scripts/h3-worker-size.mjs`: `src/h3Worker.ts` bundled with
+rolldown, minified, gzip -9, one chunk; also `src/h3Worker.size.test.ts`): 76 808 B at 0.2.3, **100 215 B** at 0.3.0, budget
+**110 000 B**. The growth is hyparquet's reader (16.7 kB bundled alone: its metadata path imports the geoparquet, wkb
+and bloom modules unconditionally, so it does not tree-shake further), fzstd (3.4 kB, the release's ZSTD) and the
+reader (about 3 kB). The week 4 plan held 100 kB as provisional ("measure, then set"); 110 000 is about 10% over the
+measure. The atlas's static path and its 150 KB runtime-worker budget do not change: the chunk loads from the OBIS
+layer's lazy chunk by a second `setupMapLibre({ h3WorkerUrl })`.
 
 What an app pays, bundled and minified with its dependencies (rolldown, gzip -9, `maplibre-gl` and `pmtiles`
 external, 2026-10-23):
@@ -209,7 +339,8 @@ external, 2026-10-23):
 | + `gridSlot` | 4.5 kB | the same |
 | + `cogSlot`, `legendFromStac`, `pointValue`, `overviewHistogram` | 22.2 kB (geotiff's core) | the protocol; geotiff's decoders (LERC, ZSTD, deflate ...) only for files that use them |
 | + `h3Slot` | 3.9 kB | the tile builder (h3-js, geojson-vt, vt-pbf) only for an in-memory table |
-| `@oceanmetrics/map/h3-worker` (in MapLibre's worker) | 76.4 kB | spike 1 measured 68.7 kB for the same code |
+| + `h3ReleaseSlot` | 9.0 kB (base + 5.2) | the legend reader (hyparquet, fzstd) 20.9 kB on the first legend |
+| `@oceanmetrics/map/h3-worker` (in MapLibre's worker) | 100.2 kB (0.3.0, with the release reader; 76.4 kB at 0.2.x) | spike 1 measured 68.7 kB for the h3j code |
 | `buildH3jArchive` (producers) | 65.2 kB | |
 
 ## Tests
@@ -220,7 +351,13 @@ changing only the expected layers, the ramp stop counts, squares from a 2×2 lat
 categorical legend, the 3857 guard, a legend from a synthetic STAC asset, a histogram and point values from an
 in-memory GeoTIFF written with geotiff.js, the cog url, the h3 regression tests (tolerance 0 at z1, the unwrap and the
 strip on the 55 crossing cells in `fixtures/h3/crossing55.json`, the lookup missing no cell, the resolution table),
-an archive read back through `pmtiles`, and the consumer check's regressions (`water-inland` on protomaps-shaped tiles,
+an archive read back through `pmtiles`, the release provider over the synthetic release in `fixtures/h3release/`
+(`build.mjs` writes it with h3-js and the DuckDB CLI: cell-sorted files with small row groups, the decade and year sets,
+a res-6 split by res-2 parent, a whole taxon file, the 55 crossing cells, `stats.parquet`; served by a fetch that answers
+as S3 does): file resolution per period set, the zoom to res to path table, row-group pruning (a tile under one of three
+groups reads one), the cache (a second tile fetches nothing), the parent split and the whole-file fallback, the
+multi-indicator MVT round trip, the crossing-55 seam, the legend's quantiles against the file, the slot's update rules on
+a stand-in map, the bit-arithmetic parents against h3-js, and the worker chunk's size, and the consumer check's regressions (`water-inland` on protomaps-shaped tiles,
 `carryLayers` across a style change, `basemapLayerIds` as the clear rule, a relative archive url made absolute).
 
 ## Licence
