@@ -63,7 +63,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && chmod +x dist/cli.js",
     "prepack": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --root ../.. packages/catalog"
