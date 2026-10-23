@@ -111,7 +111,7 @@ The tests run in workerd (`@cloudflare/vitest-plugin`) over the real local KV, w
 the catalog files in `test/fixtures/`), a fixed clock and a fake Analytics Engine; storage is reset after each test.
 `scripts/schema-validator.mjs` compiles the `alerts-subscription` schema with ajv into standalone code in
 `test/generated/` (git-ignored; workerd refuses code generated at run time), and the tests validate every `sub:`
-record written. `scripts/no-addresses.mjs` fails on any address in this folder but `alerts@mail.oceanmetrics.io` and
+record written. `scripts/no-addresses.mjs` fails on any address in this folder but `alerts@oceanmetrics.io`, `ben@oceanmetrics.io` (the public contact) and
 RFC 2606 examples, with a seeded fault. Locally: put a throwaway `ALERTS_KEY="$(openssl rand -base64 32)"` in
 `.dev.vars` (git-ignored), `npx wrangler dev --test-scheduled`, then `curl localhost:8787/__scheduled?cron=0+*+*+*+*`.
 
@@ -122,7 +122,7 @@ RFC 2606 examples, with a seeded fault. Locally: put a throwaway `ALERTS_KEY="$(
 2. **Done 2026-10-23**: deployed in log mode (no secret), `npx wrangler deploy` from `workers/alerts/` on the mini.
    `curl <base>/v1/health` says `provider: log, keyed: false`; the POST routes answer 503 until step 3. (A first
    request right after a deploy may get Cloudflare's error 1042 for a few seconds while workers.dev catches up.)
-3. **BEN-DOES** the secrets, from `~/.config/oceanmetrics/alerts.env` on the mini (mode 600, never in a repo or chat,
+3. **Done 2026-10-23 for `ALERTS_KEY`** (generated into `alerts.env` and put on the Worker from the laptop). The secrets, from `~/.config/oceanmetrics/alerts.env` on the mini (mode 600, never in a repo or chat,
    the `r2.env` pattern), each with `wrangler secret put <NAME>` reading stdin, e.g.
    `set -a; . ~/.config/oceanmetrics/alerts.env; set +a; printf %s "$ALERTS_KEY" | npx wrangler secret put ALERTS_KEY`:
    - `ALERTS_KEY`: `openssl rand -base64 32`, made once. **Keep a copy in `alerts.env` and never rotate it casually**:
@@ -131,20 +131,21 @@ RFC 2606 examples, with a seeded fault. Locally: put a throwaway `ALERTS_KEY="$(
    - `TURNSTILE_SECRET`: the widget for `oceanmetrics.io` and `localhost` (dashboard, Turnstile). The site key is public
      and goes in the alerts form page. Until it is set the check is skipped and every subscribe answer says
      `x-om-turnstile: skipped`.
-   - `RESEND_KEY`: a sending-only key scoped to `mail.oceanmetrics.io` (step 4).
+   - `RESEND_KEY`: a sending-only key for `oceanmetrics.io` (step 4).
    - `RESEND_WEBHOOK_SECRET` (optional, `whsec_…`): Resend dashboard, Webhooks, endpoint
      `<base>/v1/provider-events`, events `email.bounced` and `email.complained`.
-   - `REPLY_TO` (optional): a var or secret, never committed.
-4. **BEN-DOES** Resend (D1, the free plan): an account on Ben's oceanmetrics.io address; add the domain
-   `mail.oceanmetrics.io` (region us-east-1); publish the records the dashboard shows, at Squarespace (authoritative)
-   and in the pending Cloudflare zone, both, so the nameserver switch drops nothing:
-   - DKIM: TXT `resend._domainkey.mail` = the `p=…` key from the dashboard;
-   - the bounce (return-path) domain: MX `send.mail` → `feedback-smtp.us-east-1.amazonses.com` priority 10, and TXT
-     `send.mail` = `v=spf1 include:amazonses.com ~all` (take the exact values from the dashboard);
-   - DMARC: the root `_dmarc.oceanmetrics.io` covers the subdomain; DKIM signs as `mail.oceanmetrics.io`, so it aligns.
-   Verify in the dashboard, then create the sending-only key (step 3).
-5. Switch: set `PROVIDER = "resend"` in `wrangler.toml` (or `--var PROVIDER:resend`) and deploy. Smoke: subscribe
-   Ben's own address through the alerts page, confirm, wait for the next cron with a change; Gmail "Show original"
+   - Not secrets, vars in `wrangler.toml`: `FROM` (`Ocean Metrics alerts <alerts@oceanmetrics.io>`, the sender; the
+     resend provider uses `env.FROM`, a test asserts it) and `REPLY_TO` (`ben@oceanmetrics.io`, the public contact). Both
+     are overridable with `--var FROM:...` at deploy.
+4. **Done 2026-10-23** Resend (D1, the free plan): the domain is verified as the root `oceanmetrics.io` (not
+   `mail.oceanmetrics.io`), so mail comes from `alerts@oceanmetrics.io`. Resend's auto-setup added the records at
+   Cloudflare: DKIM TXT `resend._domainkey` and the `send`/`rsend` return-path records. DMARC is the root `_dmarc`
+   record, and DKIM signs as `oceanmetrics.io`, so it aligns. **BEN-DOES** only the sending key (below).
+5. **BEN-DOES** Switch (the one remaining step): in Resend, API keys, create a key with the *Sending access* permission
+   for `oceanmetrics.io`; put `RESEND_KEY=re_...` in `~/.config/oceanmetrics/alerts.env`; from `workers/alerts/` run
+   `grep RESEND_KEY ~/.config/oceanmetrics/alerts.env | cut -d= -f2- | npx wrangler secret put RESEND_KEY`; set
+   `PROVIDER = "resend"` in `wrangler.toml` and `npx wrangler deploy`. Then Ben subscribes himself at
+   `https://oceanmetrics.io/alerts/`, confirms from the mail. Smoke: wait for the next cron with a change; Gmail "Show original"
    reads SPF, DKIM and DMARC PASS; `curl <base>/v1/health` says `provider: resend, turnstile: on, keyed: true`.
 6. Later (D9): once the zone is active, uncomment the `routes` custom domain `alerts.oceanmetrics.io`, set
    `API_BASE` to it, and change the pages' `om-alerts-api` meta. Mails sent before keep working: the old workers.dev

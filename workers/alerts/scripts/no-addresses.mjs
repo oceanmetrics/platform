@@ -6,7 +6,7 @@ import { join, relative } from 'node:path'
 const ROOT = new URL('..', import.meta.url).pathname
 const SKIP = new Set(['node_modules', 'dist', '.wrangler', 'generated'])
 const ADDRESS = /[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g
-const ALLOWED = (a) => /@(example\.(org|com|net)|[a-z0-9-]+\.example\.(org|com|net))$/i.test(a) || a.toLowerCase() === 'alerts@mail.oceanmetrics.io'
+const ALLOWED = (a) => /@(example\.(org|com|net)|[a-z0-9-]+\.example\.(org|com|net))$/i.test(a) || ['alerts@oceanmetrics.io', 'ben@oceanmetrics.io'].includes(a.toLowerCase())
 
 export function offending(text) {
   return [...text.matchAll(ADDRESS)].map((m) => m[0]).filter((a) => !ALLOWED(a))
@@ -14,7 +14,7 @@ export function offending(text) {
 
 // the seeded fault: a real-looking address is caught, the allowed ones are not
 const seeded = ['someone', 'mailbox.test.io'].join('@')
-if (offending(`x ${seeded} y`).length !== 1 || offending('a@example.org alerts@mail.oceanmetrics.io b@sub.example.com').length) {
+if (offending(`x ${seeded} y`).length !== 1 || offending('a@example.org alerts@oceanmetrics.io ben@oceanmetrics.io b@sub.example.com').length) {
   console.error('no-addresses: the pattern no longer catches a seeded address')
   process.exit(1)
 }

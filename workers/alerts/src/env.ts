@@ -16,13 +16,13 @@ export interface Env {
   CHANGES_BASE?: string
   /** the From of every mail */
   FROM?: string
-  /** optional Reply-To */
+  /** Reply-To (the public contact, ben@oceanmetrics.io, in wrangler.toml); unset sends none */
   REPLY_TO?: string
   /** extra allowed Origins, comma separated (oceanmetrics.io and localhost are always allowed) */
   ALLOWED_ORIGINS?: string
   /** secret: base64 of at least 32 random bytes; the AES-GCM, HMAC and token keys are derived from it (HKDF) */
   ALERTS_KEY?: string
-  /** secret: the Resend API key (sending only, scoped to mail.oceanmetrics.io) */
+  /** secret: the Resend API key (sending only, for oceanmetrics.io) */
   RESEND_KEY?: string
   /** secret: Turnstile; when unset the check is skipped and the response says so (`x-om-turnstile: skipped`) */
   TURNSTILE_SECRET?: string
@@ -42,7 +42,7 @@ export const DEFAULTS = {
   SITE: 'https://oceanmetrics.io',
   API_BASE: 'https://om-alerts.ben-f07.workers.dev',
   CHANGES_BASE: 'https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/indicators/',
-  FROM: 'Ocean Metrics alerts <alerts@mail.oceanmetrics.io>',
+  FROM: 'Ocean Metrics alerts <alerts@oceanmetrics.io>',
 } as const
 
 export const site = (env: Env) => (env.SITE ?? DEFAULTS.SITE).replace(/\/+$/, '')

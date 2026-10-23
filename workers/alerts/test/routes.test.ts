@@ -52,7 +52,7 @@ describe('POST /v1/subscribe', () => {
     expect(r.mails).toHaveLength(1)
     const m = r.mails[0]
     expect(m.to).toBe(EMAIL)
-    expect(m.from).toBe('Ocean Metrics alerts <alerts@mail.oceanmetrics.io>')
+    expect(m.from).toBe('Ocean Metrics alerts <alerts@oceanmetrics.io>')
     expect(m.subject).toBe('Confirm your Ocean Metrics alert')
     expect(m.text).toMatch(/https:\/\/oceanmetrics\.io\/alerts\/confirm\/#t=[A-Za-z0-9_-]{43}\n/)
     expect(m.text).toContain('each series’ lead indicator at the national marine sanctuaries')
@@ -110,6 +110,19 @@ describe('POST /v1/subscribe', () => {
     expect(supp.status).toBe(202)
     expect(await supp.json()).toEqual({ ok: true, status: 'pending', expires_in: 172800 })
     expect(r.mails).toHaveLength(n)
+  })
+
+  it('the resend provider sends from env.FROM and replies to env.REPLY_TO, whatever they are set to', async () => {
+    const r = rig({ FROM: 'Test Sender <sender@example.org>', REPLY_TO: 'reply@example.org' })
+    await call(r, '/v1/subscribe', { email: EMAIL })
+    expect(r.mails).toHaveLength(1)
+    expect(r.mails[0].from).toBe('Test Sender <sender@example.org>')
+    expect(r.mails[0].reply_to).toBe('reply@example.org')
+    // no REPLY_TO, no reply_to; no FROM, the default sender at the root domain
+    const d = rig()
+    await call(d, '/v1/subscribe', { email: EMAIL })
+    expect(d.mails[0].from).toBe('Ocean Metrics alerts <alerts@oceanmetrics.io>')
+    expect(d.mails[0].reply_to).toBeUndefined()
   })
 
   it('a provider failure is a 502, so the page can say the mail did not go', async () => {

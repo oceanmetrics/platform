@@ -16,8 +16,8 @@ PROVIDER     = "log"                                                         # l
 SITE         = "https://oceanmetrics.io"                                     # the static pages: /alerts/, /alerts/confirm/, /alerts/manage/, /alerts/unsubscribe/
 API_BASE     = "https://om-alerts.ben-f07.workers.dev"                       # this Worker's public url (the List-Unsubscribe target)
 CHANGES_BASE = "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/indicators/"   # changes/latest.json, changes/<date>.json, indicators.json
-FROM         = "Ocean Metrics alerts <alerts@mail.oceanmetrics.io>"
-# REPLY_TO   = ""        # optional; set it as a var on the mini, never committed
+FROM         = "Ocean Metrics alerts <alerts@oceanmetrics.io>"             # the sender: the root domain is verified at Resend (DKIM resend._domainkey, return path send)
+REPLY_TO     = "ben@oceanmetrics.io"                                       # the public contact; replies to an alert reach a person
 
 [[kv_namespaces]]
 binding = "ALERTS"
