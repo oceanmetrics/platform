@@ -6,5 +6,6 @@ import path from 'node:path'
 const args = process.argv.slice(2)
 const files = d => fs.readdirSync(d, { recursive: true }).filter(f => fs.statSync(path.join(d, f)).isFile()).sort()
 const rec = { tool: 'aws', args }
+if (args[0] === 's3' && args[1] === 'cp' && fs.existsSync(args[2])) { rec.files = [args[3].split('/').slice(3).join('/')]; rec.text = [fs.readFileSync(args[2]).subarray(0, 200).toString('base64')] }
 if (args[0] === 's3' && args[1] === 'sync' && fs.existsSync(args[2])) { rec.files = files(args[2]); rec.text = rec.files.map(f => fs.readFileSync(path.join(args[2], f)).subarray(0, 200).toString('base64')) }
 fs.appendFileSync(process.env.OM_FAKE_LOG, JSON.stringify(rec) + '\n')

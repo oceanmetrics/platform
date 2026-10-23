@@ -175,6 +175,7 @@ upload_group() {
     [ -n "$cache" ] && args+=(--header-upload "Cache-Control: $cache")
     [ -n "$enc" ] && args+=(--header-upload "Content-Encoding: $enc")
     [ -n "$dry" ] && args+=(--dry-run)
+    [ -n "$prefix" ] || args+=(--no-traverse)   # the bucket root: a HEAD per file, not a listing of the whole bucket
     echo "r2  ${ctype:-(guessed)}  $n files -> r2:$R2_BUCKET$sub/${dry:+  (dry run)}"
     "$RCLONE" "${args[@]}"
   else
@@ -185,7 +186,19 @@ upload_group() {
     [ -n "$enc" ] && args+=(--content-encoding "$enc")
     [ -n "$dry" ] && args+=(--dryrun)
     echo "s3  ${ctype:-(guessed)}  $n files -> s3://$S3_BUCKET$sub/${dry:+  (dry run)}"
-    "$AWS" "${args[@]}"
+    if [ -n "$prefix" ]; then
+      "$AWS" "${args[@]}"
+    else   # the bucket root: `s3 sync` would list the whole bucket; the few root keys are copied one by one
+      local f
+      while IFS= read -r f; do
+        args=(s3 cp "$f" "s3://$S3_BUCKET/${f#"$stage"/}" --no-progress)
+        [ -n "$ctype" ] && args+=(--content-type "$ctype")
+        [ -n "$cache" ] && args+=(--cache-control "$cache")
+        [ -n "$enc" ] && args+=(--content-encoding "$enc")
+        [ -n "$dry" ] && args+=(--dryrun)
+        "$AWS" "${args[@]}"
+      done < <(find -L "$stage" -type f | LC_ALL=C sort)
+    fi
   fi
 }
 

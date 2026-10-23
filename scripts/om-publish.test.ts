@@ -27,7 +27,7 @@ function run(args: string[], env: Record<string, string> = {}) {
   const calls = readFileSync(log, 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l) as Call)
   return { code: r.status, out: r.stdout, err: r.stderr, calls }
 }
-const uploads = (calls: Call[]) => calls.filter(c => (c.tool === 'aws' && c.args[1] === 'sync') || (c.tool === 'rclone' && c.args[0] === 'copy' && c.files))
+const uploads = (calls: Call[]) => calls.filter(c => (c.tool === 'aws' && (c.args[1] === 'sync' || c.args[1] === 'cp') && c.files) || (c.tool === 'rclone' && c.args[0] === 'copy' && c.files))
 const store = (c: Call) => c.tool === 'aws' ? 's3' : 'r2'
 const typeOf = (c: Call) => c.tool === 'aws' ? c.args[c.args.indexOf('--content-type') + 1]
   : c.args.find((a, i) => c.args[i - 1] === '--header-upload' && a.startsWith('Content-Type: '))?.slice(14)
@@ -191,7 +191,12 @@ describe('om-publish.sh: upload', () => {
     expect(u.map(typeOf)).toEqual(['text/html; charset=utf-8', 'text/html; charset=utf-8'])
     expect(u[0].args[1]).toMatch(/\/g\d+$/)
     expect(u[0].args[2]).toBe('r2:oceanmetrics-io-public-enam')
-    expect(u[1].args[3]).toBe('s3://oceanmetrics.io-public')
+    expect(u[0].args).toContain('--no-traverse')                  // no listing of the whole bucket
+    // S3: `s3 cp` of the one key, never `s3 sync` against the bucket root (it would list every object)
+    expect(u[1].args.slice(0, 2)).toEqual(['s3', 'cp'])
+    expect(u[1].args[3]).toBe('s3://oceanmetrics.io-public/index.html')
+    expect(r.calls.some(c => c.tool === 'aws' && c.args[1] === 'sync')).toBe(false)
+    expect(u[1].args).toEqual(expect.arrayContaining(['--cache-control', 'no-cache', '--content-type', 'text/html; charset=utf-8']))
     expect(r.out).toContain('r2:oceanmetrics-io-public-enam/')
     expect(r.out).not.toContain('//  ')
     for (const c of u) expect(c.args.some(a => a.startsWith('--delete'))).toBe(false)

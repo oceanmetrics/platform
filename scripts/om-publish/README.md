@@ -44,7 +44,8 @@ A prefix is required: the bucket root is not published here, so a stray `om-publ
 `gazetteer/` and `indicators/`. One explicit exception: the prefix `/` (and nothing else) takes the exact key
 `index.html` (`ROOT_KEYS` in the script), the root browse page that `places/scripts/build_browse_pages.py --root`
 writes. Any other key under `/` (`README.md`, `gazetteer/index.html`, `index.html.bak`, `xindex.html`), a folder holding
-anything else, or `--keep-history` at the root stops with exit 2 before any call. The rule is a list of keys, not a
+anything else, or `--keep-history` at the root stops with exit 2 before any call. At the root S3 is written with `aws s3 cp` per key and R2 with `rclone copy --no-traverse`: an `aws s3 sync` against the
+bucket root lists every object of the bucket (a dry run of it ran for minutes). The rule is a list of keys, not a
 pattern; to allow another root file, add its exact name to `ROOT_KEYS` with a test.
 
 ## Staging speed
