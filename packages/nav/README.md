@@ -19,7 +19,8 @@ defineNav()                                 // or defineNav('om-platform-bar') f
 </om-nav>
 ```
 
-No framework, no external font or stylesheet, no network request. 4.9 kB gzip bundled and minified (see Size).
+No framework, no external font or stylesheet, no network request (unless the page turns analytics on with `data-ga`,
+see Analytics). 5.8 kB gzip bundled and minified (see Size).
 
 ## API
 
@@ -37,6 +38,8 @@ No framework, no external font or stylesheet, no network request. 4.9 kB gzip bu
 | `label` | `Ocean Metrics` | the wordmark text and the accessible names ("`<label>` home", the nav landmark). With the default, the wordmark is the brand's two textures, "Ocean" and "Metrics" |
 | `theme` | absent | `light` or `dark` pins the bar's scheme. Absent: the page's `<html data-theme>` (watched, so a theme toggle is followed), else `prefers-color-scheme` |
 | `collapse-at` | `860` | the bar's width in px below which it collapses to the mark, the app's controls and a menu button (390 px is a phone) |
+| `data-ga` | absent | a GA4 measurement id (`G-…`): the bar loads Google Analytics for the page, once (see Analytics). Absent, empty or malformed: nothing loads |
+| `data-ga-keep` | absent | comma-separated query or hash keys whose plain value is kept in the page_location GA receives (`view`) |
 
 The default items:
 
@@ -99,7 +102,7 @@ om-nav:not(:defined) { display: block; min-height: 48px; }
 ## Integration
 
 Nothing here edits the apps or the site; each makes its own change. Once 0.1.0 is on npm, each adds
-`"@oceanmetrics/nav": "^0.1.0"`.
+`"@oceanmetrics/nav": "^0.1.0"` (`^0.2.0` for `data-ga`).
 
 ### 1. A Svelte app (places web)
 
@@ -228,6 +231,55 @@ The import is dynamic and behind the flag, so the marinesensitivity build's stat
 <om-nav current="places" changes-href="https://oceanmetrics.io/indicators/#changes"></om-nav>
 ```
 
+## Analytics
+
+One loader for every Ocean Metrics page (0.2.0), off unless the page passes an id. **No id is written in any repo**:
+each consumer reads a build variable and sets the attribute only when it is set.
+
+| consumer | variable (GitHub repository variable) | how it reaches the bar |
+|---|---|---|
+| places `web/` | `VITE_GA_ID` | `import.meta.env.VITE_GA_ID` -> `<om-nav data-ga>` |
+| indicators `viewer/` | `VITE_GA_ID` | `navAttrs()` -> `<om-nav data-ga data-ga-keep="view">` |
+| atlas, the oceanmetrics instance | `VITE_GA_ID` | `<om-nav data-ga>` (the instance with the bar; an instance without it keeps its own module) |
+| the site (Hugo) | `GA_ID` | `deploy.yml` sets `HUGO_PARAMS_GA_ID`; `header.html` writes `data-ga` from `site.Params.ga_id` |
+| workflows notebooks (Quarto) | `GA_ID` in the render shell | a pre-render script writes the header include with `installGa()` from this package's `ga` subpath |
+
+```html
+<om-nav current="places" data-ga="G-XXXXXXXXXX"></om-nav>
+```
+
+```ts
+import { installGa } from '@oceanmetrics/nav/ga'   // or from '@oceanmetrics/nav'; the bar calls it for data-ga
+installGa(id, { anonymize: true, pageView: 'history', keep: [] })  // the defaults; true when it loaded, else false
+```
+
+What it does, once per page (`window.__om_ga` holds the id; a second bar or call does nothing):
+
+- appends `<script async src="https://www.googletagmanager.com/gtag/js?id=<id>">` and the standard `dataLayer`/`gtag`;
+  the id must match `^G-[A-Z0-9]{4,16}$` (nothing else can reach the script url);
+- `gtag('config', id, { anonymize_ip: true, allow_google_signals: false, allow_ad_personalization_signals: false,
+  send_page_view: false, page_location, page_title })`, then its own `page_view`;
+- `pageView: 'history'` (the default): wraps `history.pushState`/`replaceState` and listens to `popstate` and
+  `hashchange`; each time the rebuilt location changes it sets the new `page_location`/`page_title` and sends a
+  `page_view` (a task later, after the router's title update). `'load'`: the first page_view only; `false`: none.
+- `page_location` is rebuilt, never the live href: origin + path, plus only the `keep` keys whose value is 1 to 40 of
+  `[A-Za-z0-9_.-]`. A query or a fragment (an atlas place polygon `#pl=`, a report title, a place search `?q=`) never
+  reaches Google. `page_title` is the document title.
+- nothing loads when `window.__om_ga_disabled` is truthy (set it before the bar loads), when `navigator.doNotTrack`
+  (or `window.doNotTrack`) is `"1"`, or when Global Privacy Control is on.
+
+**The GA4 property setting that must stay OFF.** In the `oceanmetrics.io` property: Admin -> Data streams -> the web
+stream -> Enhanced measurement (gear) -> **"Page changes based on browser history events": Off.** When on, gtag.js hooks
+`pushState`/`replaceState` itself and sends a page_view with the live URL, fragment and query included, around this
+helper; the helper sends those page views itself. The rest of enhanced measurement (scrolls, outbound clicks, site
+search, downloads) may stay on: those hits carry the config's rebuilt `page_location`. Site search reads the query of
+the live URL; turn it off too unless a query key is meant to be collected. The atlas's `docs/analytics.md` has the
+network-panel check (`dl` never holds `#`).
+
+`test/ga.test.ts` runs the rules on a stubbed page (the id rule, once, the escape, Do Not Track, the config fields,
+the location rule, history page views, and the history-event leak: a page opened and moved with a polygon, a title and
+a search in its url sends none of them); `test/element-ga.test.ts` the attribute in happy-dom.
+
 ## The mark and the glyphs
 
 `src/glyphs.ts` is generated, never typed: `npm run glyphs -w packages/nav` reads the published brand kit from the site
@@ -240,9 +292,11 @@ site checkout).
 
 ## Size
 
-`npm run size` has two lines: `nav`, the summed `dist/**/*.js` (7,776 B gzip at 0.1.0 with comments, budget 12,000), and
-`nav/define`, what a page fetches: `src/define.ts` bundled alone and minified (4,947 B, budget 6,000, the 0.1.0
-target; `test/size.test.ts` holds it too). The mark is 1,100 B of it. The week 5 plan's 3 kB holds only without the
+`npm run size` has two lines: `nav`, the summed `dist/**/*.js` (9,307 B gzip at 0.2.0 with comments, 7,776 at 0.1.0;
+budget 12,000), and `nav/define`, what a page fetches: `src/define.ts` bundled alone and minified (5,777 B at 0.2.0,
+4,947 at 0.1.0; budget 6,000, the 0.1.0 target; `test/size.test.ts` holds it too). The analytics loader is 830 B of it
+(`src/ga.ts` alone: 1,463 B minified, 876 gzip), small enough to ride in the bar, so `@oceanmetrics/nav/ga` is a
+convenience for a page without the bar, not a split. The mark is 1,100 B of it. The week 5 plan's 3 kB holds only without the
 inline mark (an `<img>` of the mark would not take the page's theme), so the budget is the target, 6 kB.
 
 ## Licence

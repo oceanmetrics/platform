@@ -58,8 +58,9 @@ Rscript packages/status/fixtures/ecoidx/build_iea_sd_fixtures.R ~/Github/noaa-ie
   over DuckDB-WASM (a peer; the app passes its module to `connectBrowser`), `runPreview` (the chunked live preview: 90 days
   or 100,000 values a request, `onChunk` in time order, abortable) and `sliceSource` for `@oceanmetrics/map`'s `gridSlot`.
   The SQL strings are generated into `src/sqlTemplates.ts` by `scripts/sql-templates.mjs` at build; a test fails when stale.
-- **`nav` is the one bar of the apps and the site** (0.1.0, decision D7): `<om-nav>`, a framework-free custom element
-  in Shadow DOM. The rules are pure in `items.ts` (items, search url, collapse, scheme); colour values live only in
+- **`nav` is the one bar of the apps and the site** (0.2.0, decision D7): `<om-nav>`, a framework-free custom element
+  in Shadow DOM. Since 0.2.0 it is also the one analytics loader (`src/ga.ts`, `data-ga`, `@oceanmetrics/nav/ga`): no
+  GA id in any repo, every hit a rebuilt `page_location` (README "Analytics"). The rules are pure in `items.ts` (items, search url, collapse, scheme); colour values live only in
   `tokens.ts` (each role: `--om-nav-<role>`, then the host's semantic token, then the brand light-dark() pair); the mark
   and glyphs are generated into `src/glyphs.ts` by `packages/nav/scripts/glyphs.mjs` from the site checkout's brand kit
   (a test fails when stale). The element tests run in happy-dom (`// @vitest-environment happy-dom`); `dist/index.js`

@@ -1,6 +1,7 @@
 // <om-nav>: the one bar of the Ocean Metrics apps and site (decision D7). framework-free, Shadow DOM, styled by the
 // brand tokens the host already defines (custom properties reach into the shadow root). the rules are in items.ts;
 // this file renders them and wires the search, the menu button, the collapse and the theme.
+import { installGa } from './ga.js'
 import { GLYPH, MARK_RING, MARK_SPARK } from './glyphs.js'
 import { COLLAPSE_AT, HOME_HREF, SEARCH_HREF, esc, isNarrow, parseItems, safeHref, schemeOf, searchUrl } from './items.js'
 import type { NavItem } from './items.js'
@@ -22,7 +23,7 @@ const list = (cls: string, items: NavItem[], current: string | null) =>
     `<li><a href="${esc(safeHref(i.href))}"${i.id === current ? ' aria-current="page"' : ''}>${esc(i.label)}</a></li>`).join('')}</ul>` : ''
 
 export class OmNav extends Base {
-  static observedAttributes = ['current', 'items', 'changes-href', 'search-href', 'home-href', 'mark', 'label', 'nosearch', 'theme', 'collapse-at']
+  static observedAttributes = ['current', 'items', 'changes-href', 'search-href', 'home-href', 'mark', 'label', 'nosearch', 'theme', 'collapse-at', 'data-ga']
 
   #bar?: HTMLElement
   #width = 0
@@ -30,6 +31,7 @@ export class OmNav extends Base {
   #mo?: MutationObserver
 
   connectedCallback() {
+    this.#ga()
     this.render()
     this.#resize(this.getBoundingClientRect().width || globalThis.innerWidth || 0)
     if (typeof ResizeObserver !== 'undefined') {
@@ -48,6 +50,7 @@ export class OmNav extends Base {
   }
 
   attributeChangedCallback(name: string) {
+    if (name === 'data-ga') return this.#ga()
     if (!this.#bar) return
     if (name === 'theme') this.#scheme()
     else if (name === 'collapse-at') this.#resize(this.#width)
@@ -100,6 +103,12 @@ export class OmNav extends Base {
     if (!url) return
     const detail: NavSearchDetail = { q: text.trim(), url }
     if (this.dispatchEvent(new CustomEvent('om-nav-search', { detail, bubbles: true, composed: true, cancelable: true }))) location.assign(url)
+  }
+
+  // `data-ga="G-…"`: google analytics for the page, once (installGa guards); `data-ga-keep="view,…"` keeps those keys
+  #ga() {
+    const id = this.isConnected && this.getAttribute('data-ga')
+    if (id) installGa(id, { keep: (this.getAttribute('data-ga-keep') || '').split(',').filter(Boolean) })
   }
 
   #scheme() {

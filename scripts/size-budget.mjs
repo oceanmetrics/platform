@@ -25,6 +25,7 @@ const ROOT = new URL('../packages/', import.meta.url).pathname
 // catalog 0.5.1: 13_896 on 2026-10-23: /storage lands (2_679 alone, mostly comments; under 1 kB minified), budget unchanged.
 // nav: 7_776 on 2026-10-23 (0.1.0: the element, its stylesheet, the theme file, the rules, the mark and three glyphs,
 // comments counted), so 12_000; what a page fetches is the bundled line below (4_947, the 6 kB target).
+// nav 0.2.0: 9_307 on 2026-10-23 (the analytics loader ga.js lands; define 5_777), budget unchanged.
 const BUDGET = { places: 18_000, status: 12_000, map: 48_000, catalog: 15_000, engine: 40_000, nav: 12_000 }
 
 // files a browser never loads, left out of a package's measure: catalog's validator (ajv) and CLI are Node only,

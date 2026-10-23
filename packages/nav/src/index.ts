@@ -4,3 +4,5 @@ export { COLLAPSE_AT, DEFAULT_ITEMS, HOME_HREF, SEARCH_HREF, SITE, isNarrow, par
 export type { NavItem, Scheme } from './items.js'
 export { TOKENS, tokenDecl } from './tokens.js'
 export type { Role } from './tokens.js'
+export { GA_ID_RE, GA_SRC, gaAllowed, gaLocation, installGa } from './ga.js'
+export type { GaOptions, GaWindow } from './ga.js'

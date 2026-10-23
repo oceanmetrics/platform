@@ -1,7 +1,7 @@
 {
   "name": "@oceanmetrics/nav",
-  "version": "0.1.0",
-  "description": "the one navigation bar of the Ocean Metrics apps and site: a framework-free <om-nav> custom element (mark, the three doors, place search, what changed, docs, the app's own controls)",
+  "version": "0.2.0",
+  "description": "the one navigation bar of the Ocean Metrics apps and site: a framework-free <om-nav> custom element (mark, the three doors, place search, what changed, docs, the app's own controls) and the one analytics loader, off unless a page passes an id",
   "keywords": [
     "ocean",
     "navigation",
@@ -32,6 +32,10 @@
     "./define": {
       "types": "./dist/define.d.ts",
       "default": "./dist/define.js"
+    },
+    "./ga": {
+      "types": "./dist/ga.d.ts",
+      "default": "./dist/ga.js"
     },
     "./package.json": "./package.json"
   },
