@@ -15,7 +15,7 @@ crons = ["0 * * * *"]   # hourly: read changes/latest.json, mail the subscribers
 PROVIDER     = "resend"                                                         # log | resend (resend needs the RESEND_KEY secret)
 SITE         = "https://oceanmetrics.io"                                     # the static pages: /alerts/, /alerts/confirm/, /alerts/manage/, /alerts/unsubscribe/
 API_BASE     = "https://om-alerts.ben-f07.workers.dev"                       # this Worker's public url (the List-Unsubscribe target)
-CHANGES_BASE = "https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/indicators/"   # changes/latest.json, changes/<date>.json, indicators.json
+CHANGES_BASE = "https://storage.oceanmetrics.io/indicators/"                  # changes/latest.json, changes/<date>.json, indicators.json (the storage host since the cutover of 2026-10-23)
 FROM         = "Ocean Metrics alerts <alerts@oceanmetrics.io>"             # the sender: the root domain is verified at Resend (DKIM resend._domainkey, return path send)
 REPLY_TO     = "ben@oceanmetrics.io"                                       # the public contact; replies to an alert reach a person
 

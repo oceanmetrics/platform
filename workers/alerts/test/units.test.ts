@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { b64url, decrypt, encrypt, hmacHex, keys, manageToken, normalise, readManageToken } from '../src/crypto'
+import { changesBase, DEFAULTS } from '../src/env'
 import type { Env } from '../src/env'
 import { verifySvix } from '../src/events'
 import { originAllowed } from '../src/http'
@@ -9,6 +10,7 @@ import { readCadence, readKinds, readRules, readTitle, validEmail, watchWords } 
 import c21 from './fixtures/changes-2026-10-21.json'
 import c23 from './fixtures/changes-2026-10-23.json'
 import { KEY, OTHER_KEY } from './helpers'
+import wrangler from '../wrangler.toml?raw'
 
 const ENV = { SITE: 'https://oceanmetrics.io', API_BASE: 'https://alerts.example.org' } as Env
 
@@ -156,6 +158,15 @@ describe('Resend webhooks (Svix signatures)', () => {
     expect(await verifySvix(secret, h(await sign('msg_1', String(Number(ts) - 600), body), String(Number(ts) - 600)), body, now)).toBe(false)
     expect(await verifySvix('whsec_' + btoa('another secret of 32 bytes......'), h(sig), body, now)).toBe(false)
     expect(b64url(new Uint8Array([251, 255]))).toBe('-_8')
+  })
+})
+
+describe('where the changes are read', () => {
+  it('regression 2026-10-23: CHANGES_BASE is the storage host (was path-style S3 before the cutover), default and var', () => {
+    expect(DEFAULTS.CHANGES_BASE).toBe('https://storage.oceanmetrics.io/indicators/')
+    expect(changesBase({} as Env)).toBe('https://storage.oceanmetrics.io/indicators/')
+    expect(wrangler).toMatch(/^CHANGES_BASE\s*=\s*"https:\/\/storage\.oceanmetrics\.io\/indicators\/"/m)
+    expect(wrangler).not.toMatch(/s3\.us-east-1/)
   })
 })
 

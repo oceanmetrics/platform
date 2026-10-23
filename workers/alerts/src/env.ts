@@ -1,4 +1,5 @@
 // bindings, vars and the KV layout ----
+import { DEFAULT_INDICATORS_BASE } from '@oceanmetrics/catalog/cards'
 
 /** the Worker's bindings (wrangler.toml) and secrets (`wrangler secret put`) */
 export interface Env {
@@ -41,7 +42,8 @@ export const defaultDeps = (): Deps => ({ fetch: (input, init) => fetch(input, i
 export const DEFAULTS = {
   SITE: 'https://oceanmetrics.io',
   API_BASE: 'https://om-alerts.ben-f07.workers.dev',
-  CHANGES_BASE: 'https://s3.us-east-1.amazonaws.com/oceanmetrics.io-public/indicators/',
+  // the indicators root on the storage rule's default host (storage.oceanmetrics.io since catalog 0.6.0, the cutover of 2026-10-23)
+  CHANGES_BASE: DEFAULT_INDICATORS_BASE,
   FROM: 'Ocean Metrics alerts <alerts@oceanmetrics.io>',
 } as const
 

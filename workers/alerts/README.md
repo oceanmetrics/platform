@@ -149,7 +149,8 @@ RFC 2606 examples, with a seeded fault. Locally: put a throwaway `ALERTS_KEY="$(
    reads SPF, DKIM and DMARC PASS; `curl <base>/v1/health` says `provider: resend, turnstile: on, keyed: true`.
 6. Later (D9): once the zone is active, uncomment the `routes` custom domain `alerts.oceanmetrics.io`, set
    `API_BASE` to it, and change the pages' `om-alerts-api` meta. Mails sent before keep working: the old workers.dev
-   URL stays up. When the storage Worker serves `storage.oceanmetrics.io/indicators/`, `CHANGES_BASE` may move there.
+   URL stays up. `CHANGES_BASE` moved to `storage.oceanmetrics.io/indicators/` after the storage cutover of 2026-10-23 (its default is
+   catalog's `DEFAULT_INDICATORS_BASE`).
 
 **Cost: $0 at pilot size.** Workers Free (100,000 requests a day, cron included, 10 ms CPU an invocation); KV free
 (100,000 reads and 1,000 writes a day: a subscribe is about 5 writes, a confirm 4, a digest 2 plus one per
