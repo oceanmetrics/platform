@@ -88,8 +88,7 @@ After step 3 works for `status` and the other five have their entries:
 1. npmjs.com -> Access Tokens: **revoke** the granular token (it expires 2027-01-20 anyway).
 2. On the mini: delete the `_authToken` line from `~/.npmrc`, and delete `~/.config/oceanmetrics/npm.env`.
 3. Per package, set "Require two-factor authentication and disallow tokens" (Settings -> Publishing access).
-4. `CLAUDE.md`, the README and the `scripts/publish.sh` header say the token path is retired once the token is revoked;
-   after the revocation, delete `scripts/publish.sh` or reduce it to a pointer to this page.
+4. Done 2026-10-24: Ben revoked the token and deleted its env file; `scripts/publish.sh` is a pointer to this page and exits 2.
 
 ## The fallback (retired once Ben revokes the token)
 
