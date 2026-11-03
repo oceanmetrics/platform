@@ -37,9 +37,13 @@ Exit codes: 0 ok, 1 a tool failed, 2 usage or a missing file, 3 an immutable key
 Environment: `OM_STORE`, `OM_S3_BUCKET`, `OM_R2_BUCKET`, `OM_RCLONE` (the wrapper; a missing one stops with its name),
 `OM_AWS`, `OM_CATALOG_CLI` (`packages/catalog/dist/cli.js`), `OM_HISTORY_DATE`.
 
-**Before the cutover, R2 is still the hourly mirror of S3.** `~/.config/oceanmetrics/r2sync.sh` runs `rclone sync`
-per prefix, which deletes on R2 what S3 lacks: it would delete every `_history/` copy at its next run. Until the mirror
-becomes the nightly `rclone check` (week 6 step 1), it needs `--filter '- _history/**'`, or `--keep-history` waits.
+**Before the cutover, R2 is still the hourly mirror of S3.** `~/.config/oceanmetrics/r2sync.sh` (launchd
+`io.oceanmetrics.r2sync`, in no repo) runs `rclone copy --checksum` per prefix with `--filter '- _history/**'`. It ran
+`rclone sync` until 2026-11-03. Sync deletes on R2 what S3 lacks, and om-publish writes R2 before S3, so a mirror run
+during a publish deleted the new R2 files that S3 did not have yet (obis-h3 v20261101: R2 held 60,862 of 236,073 files
+at the count check, and the guard held back `latest.json`). `copy` never deletes. A deletion on S3 therefore no longer
+reaches R2: a prune is a separate, reviewed `rclone delete` on both stores. The mirror becomes the nightly
+`rclone check` at week 6 step 1.
 
 ## Immutable keys
 
@@ -166,7 +170,7 @@ script's order (manifest last) through `--last` or the order of its lines.
 | workflows `aquamaps_eov.qmd` (upload chunk; **switched 2026-10-23**) | `aws s3 sync dir_out atlas/aquamaps_eov/ --delete`, then a read-back check | `rewrite` with the explicit file list, no deletes (see the notebook's text): `system2(P, c("--really", "--keep-history", "--last", "collection.json", "--include", ..., dir_out, "atlas/aquamaps_eov"))` |
 | workflows `R/eov_share.R` | no upload: `base_url` path-style S3, written into the EOV Items | `base_url = "https://storage.oceanmetrics.io/atlas/aquamaps_eov"` at the cutover (R has no twin; one constant) |
 | platform `scripts/basemap/build_gebco.sh` (step upload; **switched 2026-10-23**; versioned keys added the same day, map 0.3.5) | `aws s3 cp` per `.pmtiles` to `$S3_DEST` (an `S3_ENDPOINT` for R2) | per set `$P --really --include '*.pmtiles' "$OUT/gebco" basemap/gebco/v$V` and `"$OUT/osm" basemap/osm/v$V` (`$V` = `BASEMAP_VERSION` or the newest archive's date: an edge-immutable `v<digits>/` folder), then the unversioned keys for map <= 0.3.4: `$P --really --include 'gebco/*.pmtiles' --include 'osm/*.pmtiles' "$OUT" basemap` (the work files under `$OUT/work` are also `.pmtiles`, hence the two globs; `UPLOAD_MODE=--dry-run` lists) |
-| `~/.config/oceanmetrics/r2sync.sh` (launchd, in no repo) | `rclone sync s3: r2:` per prefix every 6 hours | not replaced: it becomes the nightly `rclone check --one-way --checksum` (week 6 step 1); meanwhile `--filter '- _history/**'` |
+| `~/.config/oceanmetrics/r2sync.sh` (launchd, in no repo) | `rclone copy s3: r2:` per prefix every hour, with `--filter '- _history/**'` (`rclone sync` until 2026-11-03, when it deleted a publish's R2 files mid-upload) | not replaced: it becomes the nightly `rclone check --one-way --checksum` (week 6 step 1) |
 | MarineSensitivity/workflows `stage_publish.qmd` and nine more | `marine-atlas/` (44 of the 72 GB) | MST's repo, with Ben's approval |
 
 **What changes in behaviour.** Three writers sync with `--delete` today: indicators `values/`, the erddap-places
