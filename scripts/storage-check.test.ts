@@ -40,6 +40,7 @@ function healthy(): Rule[] {
     ok('/marine-atlas/$', { 'content-type': 'text/html; charset=utf-8' }),
     ok('/marine-atlas/stac/catalog.json$', { 'content-type': 'application/json' }),
     part('/marine-atlas/tables/cog_3857.parquet$', 'application/vnd.apache.parquet'),
+    ok('/marine-atlas/v7/app/boot.json$', { 'content-type': 'application/json', 'content-encoding': 'gzip' }),
     { match: '/backups/', status: 404, headers: CORS },
     { match: '/atlas-restricted/x$', status: 403, headers: CORS },
     { match: '/unlisted/gazetteer/mr_eez/places.parquet$', status: 403, headers: CORS },
@@ -82,15 +83,15 @@ describe('storage-check.sh: a healthy host', () => {
     const r = run([H, '--key', 'k1'])
     expect(r.code).toBe(0)
     const ids = r.out.split('\n').map(l => l.split(/\s+/)[0]).filter(s => /^\d+[a-d]?$/.test(s))
-    expect(ids).toEqual(['1', '2', '3', '4a', '4b', '4c', '5a', '5b', '6a', '6b', '7a', '7b', '7c', '8a', '8b', '8c', '8d', '9', '10', '11', '12'])
+    expect(ids).toEqual(['1', '2', '3', '4a', '4b', '4c', '5a', '5b', '6a', '6b', '7a', '7b', '7c', '7d', '8a', '8b', '8c', '8d', '9', '10', '11', '12'])
     expect(r.out).not.toContain('FAIL ')
-    expect(r.out).toContain(`${H.slice(8)}: 21 PASS, 0 FAIL, 0 SKIP`)
+    expect(r.out).toContain(`${H.slice(8)}: 22 PASS, 0 FAIL, 0 SKIP`)
   })
   it('asks for exactly the paths of the plan, with the ranges, and never follows a redirect', () => {
     const r = run([H + '/'])
     const gets = r.calls.filter(c => c.method === 'GET').map(c => c.url.replace(H + '/', ''))
     for (const p of ['gazetteer/index/layers.json', 'basemap/gebco/far.pmtiles', 'indicators/feeds/place=NMS:CINMS.xml', 'atlas/aquamaps_eov/score_risk_3857.tif',
-      'obis-h3/latest.json', 'marine-atlas/', 'marine-atlas/tables/cog_3857.parquet', 'backups/', 'backups/msens_20260623.sql.gz', 'atlas-restricted/x',
+      'obis-h3/latest.json', 'marine-atlas/', 'marine-atlas/tables/cog_3857.parquet', 'marine-atlas/v7/app/boot.json', 'backups/', 'backups/msens_20260623.sql.gz', 'atlas-restricted/x',
       'unlisted/gazetteer/mr_eez/places.parquet']) expect(gets).toContain(p)
     expect(r.calls.filter(c => c.url.endsWith('places_index.parquet') && c.sent.range === 'bytes=0-16383').length).toBe(6)
     expect(r.calls.every(c => !c.args.includes('-L') && !c.args.includes('--location'))).toBe(true)
@@ -160,15 +161,15 @@ describe('storage-check.sh: the Caddy before the cutover', () => {
   it('10: every request a 302 is a FAIL that counts them; nothing else passes', () => {
     const r = run([H], caddy)
     expect(r.code).toBe(1)
-    expect(row(r.out, '10')).toMatch(/FAIL 23 of 23 \(302 x23\)/)
+    expect(row(r.out, '10')).toMatch(/FAIL 24 of 24 \(302 x24\)/)
     expect(row(r.out, '1')).toMatch(/FAIL status 302 \(want 200\)/)
     expect(row(r.out, '8a')).toMatch(/FAIL status 302 \(want 404\)/)
     expect(row(r.out, '9')).toMatch(/FAIL status 302/)
     expect(row(r.out, '11')).toMatch(/FAIL status 302 \(want 206\)/)
   })
-  it('10: one redirect among the 23 requests is enough, and a 301 counts too', () => {
+  it('10: one redirect among the 24 requests is enough, and a 301 counts too', () => {
     const r = run([H], broken({ match: 'obis-h3/latest.json$', status: 301 }))
-    expect(row(r.out, '10')).toMatch(/FAIL 1 of 23 \(301 x1\)/)
+    expect(row(r.out, '10')).toMatch(/FAIL 1 of 24 \(301 x1\)/)
   })
   it('no answer at all (connection refused) is status 000, not a crash', () => {
     const r = run([H], [{ match: '.', status: 0, fail: true }])
@@ -238,7 +239,7 @@ describe('storage-check.sh: --compare', () => {
     expect(r.code).toBe(1)
     expect(r.out).toMatch(/check\s+new\.example\s+old\.example/)
     expect(row(r.out, '1')).toMatch(/PASS\s+FAIL status 302/)
-    expect(r.out).toContain('https://new.example: 20 PASS, 0 FAIL, 1 SKIP')
+    expect(r.out).toContain('https://new.example: 21 PASS, 0 FAIL, 1 SKIP')
     expect(r.out).toMatch(/https:\/\/old\.example: 0 PASS, 2\d FAIL, 1 SKIP|https:\/\/old\.example: \d PASS, \d+ FAIL, 1 SKIP/)
     expect(r.calls.some(c => c.url.startsWith(A))).toBe(true)
     expect(r.calls.some(c => c.url.startsWith(B))).toBe(true)
