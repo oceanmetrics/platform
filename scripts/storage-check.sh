@@ -89,6 +89,7 @@ ROWS='1|layers.json, keyless|gazetteer/index/layers.json||200|application/json|a
 7a|marine-atlas/ index|marine-atlas/||200|text/html||
 7b|marine-atlas stac catalog|marine-atlas/stac/catalog.json||200|-||
 7c|marine-atlas parquet range|marine-atlas/tables/cog_3857.parquet|0-16383|206|-|content-range|
+7d|marine-atlas gzip-at-rest json keeps Content-Encoding (2026-11-09: the mirror had dropped it, the MST atlas lenses read empty)|marine-atlas/v7/app/boot.json||200|-|content-encoding|
 8a|backups/ closed|backups/||404|-||
 8b|backups dump closed|backups/msens_20260623.sql.gz||404|-||
 8c|atlas-restricted, no key|atlas-restricted/x||403|-||
