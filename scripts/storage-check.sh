@@ -58,6 +58,8 @@ probe() {
   [ -z "$range" ]  || args=("${args[@]}" -H "Range: bytes=$range")
   [ -z "$origin" ] || args=("${args[@]}" -H "Origin: $origin")
   if [ -n "$acrh" ]; then args=("${args[@]}" -H "Access-Control-Request-Method: GET" -H "Access-Control-Request-Headers: $acrh"); fi
+  # a row that requires content-encoding asks for gzip as a browser does; without it the edge decodes once and drops the header
+  [ -z "${P_ACCEPT:-}" ] || args=("${args[@]}" -H "Accept-Encoding: $P_ACCEPT")
   : > "$TMP/hdr"
   local out t
   out=$("$CURL" "${args[@]}" "$url" 2>/dev/null </dev/null) || true
@@ -105,7 +107,9 @@ run_host() {
     [ -n "$id" ] || continue
     url="$host/$path"
     if [ "$org" = ORIGIN ]; then org=$ORIGIN; else org=""; fi
+    case ",$need," in *,content-encoding,*) P_ACCEPT=gzip ;; *) P_ACCEPT= ;; esac
     probe GET "$url" "$range" "$org"
+    P_ACCEPT=
     fails=""
     case "|$want|" in
       *"|$P_CODE|"*)
